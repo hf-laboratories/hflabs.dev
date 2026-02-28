@@ -38,6 +38,12 @@
     return `/inquiry/?${params.toString()}`;
   };
 
+  const buildDetailsUrl = (productId) => {
+    const params = new URLSearchParams();
+    params.set("product", productId);
+    return `/products/details/?${params.toString()}`;
+  };
+
   const normalizeProduct = (rawProduct, index) => {
     if (!rawProduct || typeof rawProduct !== "object") {
       return null;
@@ -53,23 +59,14 @@
 
     const tagline = typeof rawProduct.tagline === "string" ? rawProduct.tagline.trim() : "";
     const summary = typeof rawProduct.summary === "string" ? rawProduct.summary.trim() : "";
+    const details = typeof rawProduct.details === "string" ? rawProduct.details.trim() : "";
     const status = typeof rawProduct.status === "string" ? rawProduct.status.trim() : "Planned";
     const category = typeof rawProduct.category === "string" ? rawProduct.category.trim() : "General";
     const badges = Array.isArray(rawProduct.badges)
       ? rawProduct.badges.filter((badge) => typeof badge === "string" && badge.trim().length > 0)
       : [];
 
-    const links = Array.isArray(rawProduct.links)
-      ? rawProduct.links
-          .filter((link) => link && typeof link === "object")
-          .map((link) => ({
-            label: typeof link.label === "string" && link.label.trim().length > 0 ? link.label.trim() : "Link",
-            url: typeof link.url === "string" ? link.url.trim() : ""
-          }))
-          .filter((link) => link.url.length > 0)
-      : [];
-
-    return { id, name, tagline, summary, status, category, badges, links };
+    return { id, name, tagline, summary, details, status, category, badges };
   };
 
   const renderProduct = (product) => {
@@ -103,15 +100,12 @@
     }
 
     const links = createElement("div", "product-links");
-    for (const link of product.links) {
-      const anchor = createElement("a", "", link.label);
-      anchor.href = link.url;
-      anchor.target = "_blank";
-      anchor.rel = "noreferrer";
-      links.appendChild(anchor);
-    }
 
-    const inquiryLink = createElement("a", "secondary-link", "Inquire");
+    const detailsLink = createElement("a", "secondary-link", "Details");
+    detailsLink.href = buildDetailsUrl(product.id);
+    links.appendChild(detailsLink);
+
+    const inquiryLink = createElement("a", "", "Inquire");
     inquiryLink.href = buildInquiryUrl(product.id);
     links.appendChild(inquiryLink);
 

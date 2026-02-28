@@ -6,9 +6,10 @@ Public website for HF Labs, hosted with GitHub Pages.
 - Landing page: `index.html`
 - Papers page: `papers/index.html`
 - Products page: `products/index.html`
+- Product details page: `products/details/index.html`
 - Inquiry page: `inquiry/index.html`
 - Product catalog data: `data/products.json`
-- Runtime scripts: `assets/products.js`, `assets/inquiry.js`
+- Runtime scripts: `assets/products.js`, `assets/inquiry.js`, `assets/product-details.js`
 - Inquiry storage automation: `.github/workflows/stash-inquiry-submissions.yml`
 - Inquiry inbox folder: `inquiries/inbox/`
 - Styling: `assets/styles.css`

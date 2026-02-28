@@ -7,13 +7,14 @@
       "name": "IPUServices",
       "tagline": "Composable accelerator and service orchestration stack.",
       "summary": "A modular platform for orchestration, feature serving, sidecar extensions, and hardware-accelerated workflows.",
+      "details": "IPUServices is a composable platform for integrating accelerator-aware services with practical operational tooling. It combines service orchestration, feature pipelines, and extension points so teams can evolve workloads without rebuilding infrastructure from scratch.\n\nThe project is built to support iterative experimentation and production handoff, with strong emphasis on modular deployment boundaries, contract-driven interfaces, and scalable runtime behavior.",
       "status": "Live",
       "category": "Platform",
       "badges": ["C#", ".NET", "gRPC"],
       "links": [
         {
-          "label": "Repository",
-          "url": "https://github.com/hf-laboratories/IPUServices"
+          "label": "Papers",
+          "url": "https://hflabs.dev/papers/"
         }
       ]
     },
@@ -22,13 +23,14 @@
       "name": "AutoML Canvas",
       "tagline": "Visual experiment design and model flow tooling.",
       "summary": "Canvas-based authoring for experiment configuration, model workflows, and reproducible iterative runs.",
+      "details": "AutoML Canvas provides a visual workspace for building and refining experiment pipelines through an interactive node-and-canvas experience. It is intended to make experimentation more transparent, reproducible, and collaboration-friendly.\n\nThe project focuses on fast iteration loops: users can compare configurations, track flow changes, and move from exploratory setup to repeatable execution with minimal friction.",
       "status": "Beta",
       "category": "Applications",
       "badges": ["WinForms", "Visualization", "UX"],
       "links": [
         {
-          "label": "HF Labs Site",
-          "url": "https://hflabs.dev/"
+          "label": "Papers",
+          "url": "https://hflabs.dev/papers/"
         }
       ]
     },
@@ -37,6 +39,7 @@
       "name": "Query Accelerator Service",
       "tagline": "Low-latency query acceleration pipeline.",
       "summary": "Runtime service focused on high-throughput query handling and integration with accelerator-oriented execution plans.",
+      "details": "Query Accelerator Service is designed for latency-sensitive query paths where throughput and predictable response times are both critical. It provides runtime components that can route, optimize, and execute requests with accelerator-aware planning.\n\nThe service emphasizes integration flexibility so that data products and upstream clients can adopt performance improvements incrementally while keeping clear operational observability boundaries.",
       "status": "Research",
       "category": "Services",
       "badges": ["API", "Performance", "Distributed"],
@@ -52,13 +55,14 @@
       "name": "HyperSwarm",
       "tagline": "Adaptive multi-swarm orchestration for advanced optimization workflows.",
       "summary": "A research project focused on high-scale swarm coordination, dynamic strategy selection, and accelerator-aware scheduling.",
+      "details": "HyperSwarm explores coordinated multi-swarm optimization for large search spaces where single-strategy methods can stall or overfit local structures. It combines adaptive strategy switching, shared state hints, and staged exploration/exploitation policies.\n\nThe project is aimed at workloads that benefit from distributed search intelligence and hardware-aware scheduling, with practical emphasis on measurable convergence behavior and robust tuning under changing constraints.",
       "status": "Research",
       "category": "Algorithms",
       "badges": ["Swarm", "Optimization", "R&D"],
       "links": [
         {
-          "label": "Inquiry",
-          "url": "https://hflabs.dev/inquiry/?product=hyperswarm&source=/products/"
+          "label": "Papers",
+          "url": "https://hflabs.dev/papers/"
         }
       ]
     }

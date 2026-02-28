@@ -3,20 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HF Labs</title>
-    <meta name="description" content="HF Labs — accepted papers, preprints, and research updates." />
+    <title>HF Labs Product Details</title>
+    <meta name="description" content="Detailed product descriptions for HF Labs projects." />
     <link rel="stylesheet" href="/assets/styles.css" />
+    <script src="/assets/product-details.js" defer></script>
   </head>
   <body>
-    <header class="site-header">
+    <header class="site-header compact">
       <div class="container center">
         <img
-          class="brand-logo"
+          class="brand-logo small"
           src="/assets/hf-labs-logo.png"
           alt="HF Laboratories logo"
           loading="eager"
           decoding="async"
         />
+        <h1>Product Details</h1>
         <nav class="nav-links" aria-label="Primary">
           <a href="/">Home</a>
           <a href="/papers/">Papers</a>
@@ -26,22 +28,12 @@
       </div>
     </header>
 
-    <main class="container home-main">
-      <section class="card">
-        <h2>Latest status</h2>
-        <p>
-          We’re setting this page up now. Once papers are accepted, they’ll appear in the papers directory with links, abstracts, and citation details.
-        </p>
-      </section>
-
-      <section class="card">
-        <h2>How this will be used</h2>
-        <ul>
-          <li>Accepted papers with venue and year</li>
-          <li>Preprint links and code repositories</li>
-          <li>Short summaries for quick reading</li>
-        </ul>
-      </section>
+    <main class="container inquiry-layout">
+      <p class="products-state loading" data-detail-state aria-live="polite">Loading product details…</p>
+      <section data-product-detail></section>
+      <noscript>
+        <p class="empty-note">JavaScript is required to load product details on this page.</p>
+      </noscript>
     </main>
 
     <footer class="site-footer">
