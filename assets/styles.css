@@ -223,8 +223,106 @@ a {
   font-size: 0.8rem;
 }
 
+.product-links a.secondary-link {
+  background: #171a24;
+  color: var(--text);
+  border: 1px solid #2c3245;
+}
+
+.inquiry-layout {
+  margin-bottom: 0.8rem;
+}
+
+.inquiry-form {
+  display: block;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field-span-2 {
+  grid-column: span 2;
+}
+
+.field span {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #dce1ff;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  background: #0d0f16;
+  color: var(--text);
+  border: 1px solid #2a2d38;
+  border-radius: 8px;
+  padding: 0.5rem 0.6rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(111, 124, 255, 0.2);
+}
+
+.validation-note {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.error-list {
+  margin: 0.75rem 0 0;
+  padding-left: 1.1rem;
+  color: #ffadad;
+}
+
+.error-list[hidden] {
+  display: none;
+}
+
+.inquiry-actions {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.action-button {
+  background: linear-gradient(120deg, var(--accent), #95a0ff);
+  color: #080b1d;
+  border: 0;
+  border-radius: 10px;
+  padding: 0.55rem 0.9rem;
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
 .empty-note {
   color: var(--muted);
+}
+
+code {
+  color: #c8d2ff;
 }
 
 ul {
@@ -243,8 +341,13 @@ ul {
 
 @media (max-width: 820px) {
   .home-main,
-  .products-grid {
+  .products-grid,
+  .field-grid {
     grid-template-columns: 1fr;
+  }
+
+  .field-span-2 {
+    grid-column: span 1;
   }
 
   .brand-logo {

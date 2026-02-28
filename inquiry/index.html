@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HF Labs Inquiry</title>
+    <meta
+      name="description"
+      content="Submit an HF Labs product inquiry with structured fields and automated repository stashing."
+    />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    <script src="/assets/inquiry.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header compact">
+      <div class="container center">
+        <img
+          class="brand-logo small"
+          src="/assets/hf-labs-logo.png"
+          alt="HF Laboratories logo"
+          loading="eager"
+          decoding="async"
+        />
+        <h1>Product Inquiry</h1>
+        <nav class="nav-links">
+          <a href="/">Home</a>
+          <a href="/products/">Products</a>
+          <a href="/papers/">Papers</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container inquiry-layout">
+      <section class="card">
+        <h2>Structured inquiry submission</h2>
+        <p>
+          This form captures product context, validates field formats, and prepares a submission that is
+          automatically stashed into the repository inbox.
+        </p>
+        <p class="products-state" data-source-display aria-live="polite">Loading source context…</p>
+      </section>
+
+      <form class="card inquiry-form" data-inquiry-form novalidate>
+        <input type="hidden" name="sourcePage" data-source-input />
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Product *</span>
+            <select name="productId" data-product-select required>
+              <option value="">Select a product</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Inquiry type *</span>
+            <select name="inquiryType" required>
+              <option value="">Select one</option>
+              <option value="Demo Request">Demo Request</option>
+              <option value="Pricing">Pricing</option>
+              <option value="Integration">Integration</option>
+              <option value="Support">Support</option>
+              <option value="Partnership">Partnership</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Budget band *</span>
+            <select name="budgetBand" required>
+              <option value="">Select one</option>
+              <option value="Unknown">Unknown</option>
+              <option value="Under 10k">Under 10k</option>
+              <option value="10k to 50k">10k to 50k</option>
+              <option value="50k to 250k">50k to 250k</option>
+              <option value="Over 250k">Over 250k</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Timeline *</span>
+            <select name="timeline" required>
+              <option value="">Select one</option>
+              <option value="Immediate">Immediate</option>
+              <option value="This Quarter">This Quarter</option>
+              <option value="Next Quarter">Next Quarter</option>
+              <option value="Exploring">Exploring</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Preferred follow-up *</span>
+            <select name="preferredContact" required>
+              <option value="">Select one</option>
+              <option value="Email">Email</option>
+              <option value="GitHub">GitHub</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Name *</span>
+            <input name="name" type="text" maxlength="120" required />
+          </label>
+
+          <label class="field">
+            <span>Organization</span>
+            <input name="organization" type="text" maxlength="120" />
+          </label>
+
+          <label class="field">
+            <span>Email *</span>
+            <input name="email" type="text" maxlength="120" required />
+          </label>
+
+          <label class="field field-span-2">
+            <span>Subject *</span>
+            <input name="subject" type="text" maxlength="120" required />
+          </label>
+
+          <label class="field field-span-2">
+            <span>Inquiry message *</span>
+            <textarea name="message" rows="7" maxlength="600" required></textarea>
+            <small class="validation-note">
+              Allowed special characters: space, dash (<code>-</code>), underscore (<code>_</code>), period
+              (<code>.</code>), comma (<code>,</code>), and at-sign (<code>@</code>).
+            </small>
+          </label>
+        </div>
+
+        <ul class="error-list" data-form-errors hidden></ul>
+        <p class="products-state" data-submit-status aria-live="polite"></p>
+
+        <div class="inquiry-actions">
+          <button type="submit" class="action-button">Submit inquiry</button>
+        </div>
+      </form>
+
+      <section class="card">
+        <h2>How submission stashing works</h2>
+        <p>
+          On submit, you’ll be redirected to a prefilled GitHub issue. Once posted, automation stores the inquiry
+          as a JSON file under <code>inquiries/inbox/</code> in this repository.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container center">
+        <p>© HF Labs</p>
+      </div>
+    </footer>
+  </body>
+</html>

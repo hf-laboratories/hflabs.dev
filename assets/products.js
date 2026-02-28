@@ -31,6 +31,13 @@
     return element;
   };
 
+  const buildInquiryUrl = (productId) => {
+    const params = new URLSearchParams();
+    params.set("product", productId);
+    params.set("source", window.location.pathname || "/products/");
+    return `/inquiry/?${params.toString()}`;
+  };
+
   const normalizeProduct = (rawProduct, index) => {
     if (!rawProduct || typeof rawProduct !== "object") {
       return null;
@@ -95,18 +102,20 @@
       card.appendChild(badgeList);
     }
 
-    if (product.links.length > 0) {
-      const links = createElement("div", "product-links");
-      for (const link of product.links) {
-        const anchor = createElement("a", "", link.label);
-        anchor.href = link.url;
-        anchor.target = "_blank";
-        anchor.rel = "noreferrer";
-        links.appendChild(anchor);
-      }
-      card.appendChild(links);
+    const links = createElement("div", "product-links");
+    for (const link of product.links) {
+      const anchor = createElement("a", "", link.label);
+      anchor.href = link.url;
+      anchor.target = "_blank";
+      anchor.rel = "noreferrer";
+      links.appendChild(anchor);
     }
 
+    const inquiryLink = createElement("a", "secondary-link", "Inquire");
+    inquiryLink.href = buildInquiryUrl(product.id);
+    links.appendChild(inquiryLink);
+
+    card.appendChild(links);
     return card;
   };
 

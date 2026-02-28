@@ -1,0 +1,225 @@
+name: Stash inquiry submissions
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  stash:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Parse and stash inquiry payload
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const marker = "<!-- inquiry-submission:v1 -->";
+            const issue = context.payload.issue;
+            const body = issue.body || "";
+
+            if (!body.includes(marker)) {
+              core.info("Issue is not an inquiry submission; skipping.");
+              return;
+            }
+
+            const shortPattern = /^[A-Za-z0-9 _\-\.,@]{1,120}$/;
+            const messagePattern = /^[A-Za-z0-9 _\-\.,@\r\n]{1,600}$/;
+            const emailPattern = /^[A-Za-z0-9._,-]+@[A-Za-z0-9._-]+\.[A-Za-z0-9._-]+$/;
+            const productIdPattern = /^[A-Za-z0-9_-]{1,80}$/;
+            const sourcePagePattern = /^[A-Za-z0-9/_\-.]{1,200}$/;
+
+            const inquiryTypes = new Set([
+              "Demo Request",
+              "Pricing",
+              "Integration",
+              "Support",
+              "Partnership",
+              "Other"
+            ]);
+
+            const budgetBands = new Set([
+              "Unknown",
+              "Under 10k",
+              "10k to 50k",
+              "50k to 250k",
+              "Over 250k"
+            ]);
+
+            const timelines = new Set([
+              "Immediate",
+              "This Quarter",
+              "Next Quarter",
+              "Exploring"
+            ]);
+
+            const contactMethods = new Set(["Email", "GitHub"]);
+
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issueNumber = issue.number;
+
+            const commentAndClose = async (message, reason = "not_planned") => {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: issueNumber,
+                body: message
+              });
+
+              await github.rest.issues.update({
+                owner,
+                repo,
+                issue_number: issueNumber,
+                state: "closed",
+                state_reason: reason
+              });
+            };
+
+            const trim = (value) => typeof value === "string" ? value.trim() : "";
+
+            const jsonMatch = body.match(/```json\s*([\s\S]*?)\s*```/i);
+            if (!jsonMatch) {
+              await commentAndClose("⚠️ Inquiry payload not found in issue body. Expected a JSON block.");
+              return;
+            }
+
+            let payload;
+            try {
+              payload = JSON.parse(jsonMatch[1]);
+            } catch (error) {
+              await commentAndClose(`⚠️ Inquiry payload JSON is invalid: ${error.message}`);
+              return;
+            }
+
+            const inquiry = payload && typeof payload === "object" ? payload.inquiry || {} : {};
+            const source = payload && typeof payload === "object" ? payload.source || {} : {};
+
+            const normalized = {
+              productId: trim(inquiry.productId),
+              inquiryType: trim(inquiry.inquiryType),
+              budgetBand: trim(inquiry.budgetBand),
+              timeline: trim(inquiry.timeline),
+              preferredContact: trim(inquiry.preferredContact),
+              name: trim(inquiry.name),
+              organization: trim(inquiry.organization),
+              email: trim(inquiry.email),
+              subject: trim(inquiry.subject),
+              message: trim(inquiry.message)
+            };
+
+            const errors = [];
+
+            if (!productIdPattern.test(normalized.productId)) {
+              errors.push("Invalid or missing productId.");
+            }
+
+            if (!inquiryTypes.has(normalized.inquiryType)) {
+              errors.push("Invalid inquiryType value.");
+            }
+
+            if (!budgetBands.has(normalized.budgetBand)) {
+              errors.push("Invalid budgetBand value.");
+            }
+
+            if (!timelines.has(normalized.timeline)) {
+              errors.push("Invalid timeline value.");
+            }
+
+            if (!contactMethods.has(normalized.preferredContact)) {
+              errors.push("Invalid preferredContact value.");
+            }
+
+            if (!shortPattern.test(normalized.name)) {
+              errors.push("Invalid name value.");
+            }
+
+            if (normalized.organization && !shortPattern.test(normalized.organization)) {
+              errors.push("Invalid organization value.");
+            }
+
+            if (!shortPattern.test(normalized.subject)) {
+              errors.push("Invalid subject value.");
+            }
+
+            if (!emailPattern.test(normalized.email)) {
+              errors.push("Invalid email format.");
+            }
+
+            if (!messagePattern.test(normalized.message)) {
+              errors.push("Invalid message value.");
+            }
+
+            const sourcePage = trim(source.sourcePage) || "/products/";
+            const spawnedFromProduct = trim(source.spawnedFromProduct) || normalized.productId;
+
+            if (!sourcePagePattern.test(sourcePage)) {
+              errors.push("Invalid sourcePage value.");
+            }
+
+            if (!productIdPattern.test(spawnedFromProduct)) {
+              errors.push("Invalid spawnedFromProduct value.");
+            }
+
+            if (errors.length > 0) {
+              await commentAndClose(`⚠️ Inquiry validation failed:\n- ${errors.join("\n- ")}`);
+              return;
+            }
+
+            const now = new Date();
+            const yyyy = String(now.getUTCFullYear());
+            const mm = String(now.getUTCMonth() + 1).padStart(2, "0");
+            const dd = String(now.getUTCDate()).padStart(2, "0");
+            const hh = String(now.getUTCHours()).padStart(2, "0");
+            const min = String(now.getUTCMinutes()).padStart(2, "0");
+            const sec = String(now.getUTCSeconds()).padStart(2, "0");
+            const ms = String(now.getUTCMilliseconds()).padStart(3, "0");
+
+            const productSlug = normalized.productId.toLowerCase().replace(/[^a-z0-9_-]+/g, "-");
+            const filePath = `inquiries/inbox/${yyyy}/${mm}/${dd}/${hh}${min}${sec}${ms}-issue-${issueNumber}-${productSlug}.json`;
+
+            const stored = {
+              schemaVersion: "inquiry.v1",
+              storedAtUtc: now.toISOString(),
+              issue: {
+                number: issueNumber,
+                title: issue.title || "",
+                url: issue.html_url || "",
+                author: issue.user && issue.user.login ? issue.user.login : ""
+              },
+              source: {
+                spawnedFromProduct,
+                sourcePage,
+                inquiryPage: trim(source.inquiryPage) || "/inquiry/",
+                referrer: trim(source.referrer)
+              },
+              inquiry: normalized
+            };
+
+            const content = Buffer.from(JSON.stringify(stored, null, 2)).toString("base64");
+
+            await github.rest.repos.createOrUpdateFileContents({
+              owner,
+              repo,
+              branch: context.payload.repository.default_branch,
+              path: filePath,
+              message: `stash inquiry #${issueNumber} (${normalized.productId})`,
+              content
+            });
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: issueNumber,
+              body: `✅ Inquiry stashed successfully to \`${filePath}\`.`
+            });
+
+            await github.rest.issues.update({
+              owner,
+              repo,
+              issue_number: issueNumber,
+              state: "closed",
+              state_reason: "completed"
+            });
