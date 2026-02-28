@@ -1,0 +1,90 @@
+:root {
+  --bg: #0f1220;
+  --card: #171b2f;
+  --text: #ebeeff;
+  --muted: #b8c0ea;
+  --accent: #7f8cff;
+  --accent-2: #5ae0c8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, Segoe UI, system-ui, -apple-system, sans-serif;
+  background: radial-gradient(circle at top, #1a1f38 0%, var(--bg) 45%);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.container {
+  width: min(960px, 92vw);
+  margin: 0 auto;
+}
+
+.site-header {
+  padding: 4.5rem 0 2rem;
+}
+
+.site-header.compact {
+  padding-top: 2.5rem;
+}
+
+.kicker {
+  color: var(--accent-2);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+h1 {
+  margin: 0.3rem 0 0.8rem;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.2;
+}
+
+.subtitle {
+  color: var(--muted);
+  max-width: 42rem;
+}
+
+.nav-links {
+  margin-top: 1.2rem;
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+
+a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.nav-links a {
+  background: linear-gradient(120deg, var(--accent), #97a0ff);
+  color: #0c1025;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.card,
+.paper-card {
+  background: color-mix(in oklab, var(--card), black 8%);
+  border: 1px solid #2a3158;
+  border-radius: 14px;
+  padding: 1.2rem 1.2rem;
+  margin: 1rem 0;
+}
+
+ul {
+  padding-left: 1.2rem;
+}
+
+.site-footer {
+  padding: 2rem 0 3rem;
+  color: var(--muted);
+}
