@@ -46,6 +46,21 @@
           "url": "https://hflabs.dev/papers/"
         }
       ]
+    },
+    {
+      "id": "hyperswarm",
+      "name": "HyperSwarm",
+      "tagline": "Adaptive multi-swarm orchestration for advanced optimization workflows.",
+      "summary": "A research project focused on high-scale swarm coordination, dynamic strategy selection, and accelerator-aware scheduling.",
+      "status": "Research",
+      "category": "Algorithms",
+      "badges": ["Swarm", "Optimization", "R&D"],
+      "links": [
+        {
+          "label": "Inquiry",
+          "url": "https://hflabs.dev/inquiry/?product=hyperswarm&source=/products/"
+        }
+      ]
     }
   ]
 }
