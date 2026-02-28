@@ -41,9 +41,6 @@ body {
   display: block;
   width: min(520px, 88vw);
   margin: 0 auto 1.1rem;
-  border-radius: 14px;
-  border: 1px solid #2a2f3f;
-  box-shadow: 0 0 0 1px #12131a, 0 12px 30px rgba(0, 0, 0, 0.45);
 }
 
 .brand-logo.small {
