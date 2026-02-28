@@ -1,10 +1,11 @@
 :root {
-  --bg: #0f1220;
-  --card: #171b2f;
-  --text: #ebeeff;
-  --muted: #b8c0ea;
-  --accent: #7f8cff;
-  --accent-2: #5ae0c8;
+  --bg: #000000;
+  --card: #0f0f10;
+  --text: #f2f4ff;
+  --muted: #b8bfd9;
+  --accent: #6f7cff;
+  --accent-2: #59e3ca;
+  --border: #23252b;
 }
 
 * {
@@ -14,7 +15,7 @@
 body {
   margin: 0;
   font-family: Inter, Segoe UI, system-ui, -apple-system, sans-serif;
-  background: radial-gradient(circle at top, #1a1f38 0%, var(--bg) 45%);
+  background: var(--bg);
   color: var(--text);
   line-height: 1.6;
 }
@@ -24,36 +25,47 @@ body {
   margin: 0 auto;
 }
 
+.center {
+  text-align: center;
+}
+
 .site-header {
-  padding: 4.5rem 0 2rem;
+  padding: 3.5rem 0 2rem;
 }
 
 .site-header.compact {
-  padding-top: 2.5rem;
+  padding-top: 2.25rem;
 }
 
-.kicker {
-  color: var(--accent-2);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 700;
-  font-size: 0.8rem;
+.brand-logo {
+  display: block;
+  width: min(520px, 88vw);
+  margin: 0 auto 1.1rem;
+  border-radius: 14px;
+  border: 1px solid #2a2f3f;
+  box-shadow: 0 0 0 1px #12131a, 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+
+.brand-logo.small {
+  width: min(380px, 80vw);
 }
 
 h1 {
-  margin: 0.3rem 0 0.8rem;
+  margin: 0.25rem 0 0.7rem;
   font-size: clamp(2rem, 4vw, 3rem);
   line-height: 1.2;
 }
 
 .subtitle {
   color: var(--muted);
-  max-width: 42rem;
+  max-width: 46rem;
+  margin: 0 auto;
 }
 
 .nav-links {
   margin-top: 1.2rem;
   display: flex;
+  justify-content: center;
   gap: 0.9rem;
   flex-wrap: wrap;
 }
@@ -64,19 +76,19 @@ a {
 }
 
 .nav-links a {
-  background: linear-gradient(120deg, var(--accent), #97a0ff);
-  color: #0c1025;
-  padding: 0.6rem 0.9rem;
+  background: linear-gradient(120deg, var(--accent), #95a0ff);
+  color: #080b1d;
+  padding: 0.6rem 0.95rem;
   border-radius: 10px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .card,
 .paper-card {
-  background: color-mix(in oklab, var(--card), black 8%);
-  border: 1px solid #2a3158;
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 14px;
-  padding: 1.2rem 1.2rem;
+  padding: 1.2rem;
   margin: 1rem 0;
 }
 
