@@ -1,0 +1,51 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2026-02-28",
+  "products": [
+    {
+      "id": "ipuservices",
+      "name": "IPUServices",
+      "tagline": "Composable accelerator and service orchestration stack.",
+      "summary": "A modular platform for orchestration, feature serving, sidecar extensions, and hardware-accelerated workflows.",
+      "status": "Live",
+      "category": "Platform",
+      "badges": ["C#", ".NET", "gRPC"],
+      "links": [
+        {
+          "label": "Repository",
+          "url": "https://github.com/hf-laboratories/IPUServices"
+        }
+      ]
+    },
+    {
+      "id": "automl-canvas",
+      "name": "AutoML Canvas",
+      "tagline": "Visual experiment design and model flow tooling.",
+      "summary": "Canvas-based authoring for experiment configuration, model workflows, and reproducible iterative runs.",
+      "status": "Beta",
+      "category": "Applications",
+      "badges": ["WinForms", "Visualization", "UX"],
+      "links": [
+        {
+          "label": "HF Labs Site",
+          "url": "https://hflabs.dev/"
+        }
+      ]
+    },
+    {
+      "id": "query-accelerator",
+      "name": "Query Accelerator Service",
+      "tagline": "Low-latency query acceleration pipeline.",
+      "summary": "Runtime service focused on high-throughput query handling and integration with accelerator-oriented execution plans.",
+      "status": "Research",
+      "category": "Services",
+      "badges": ["API", "Performance", "Distributed"],
+      "links": [
+        {
+          "label": "Papers",
+          "url": "https://hflabs.dev/papers/"
+        }
+      ]
+    }
+  ]
+}

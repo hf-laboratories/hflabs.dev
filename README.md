@@ -5,6 +5,9 @@ Public website for HF Labs, hosted with GitHub Pages.
 ## What’s included
 - Landing page: `index.html`
 - Papers page: `papers/index.html`
+- Products page: `products/index.html`
+- Product catalog data: `data/products.json`
+- Runtime loader script: `assets/products.js`
 - Styling: `assets/styles.css`
 - Custom domain config: `CNAME` (`hflabs.dev`)
 
@@ -15,3 +18,6 @@ Public website for HF Labs, hosted with GitHub Pages.
 
 ## Updating papers
 Edit `papers/index.html` and add entries for each accepted paper with links to preprint/code.
+
+## Updating products
+Edit `data/products.json` and add or update objects in `products[]`. The products page loads this file asynchronously at runtime.

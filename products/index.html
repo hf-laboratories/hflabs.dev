@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HF Labs Products</title>
+    <meta
+      name="description"
+      content="HF Labs product catalog loaded at runtime from a versioned data file."
+    />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    <script src="/assets/products.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header compact">
+      <div class="container center">
+        <img
+          class="brand-logo small"
+          src="/assets/hf-labs-logo.png"
+          alt="HF Laboratories logo"
+          loading="eager"
+          decoding="async"
+        />
+        <h1>Products</h1>
+        <nav class="nav-links">
+          <a href="/">Home</a>
+          <a href="/papers/">Papers</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card products-intro">
+        <h2>Runtime product catalog</h2>
+        <p>
+          Products are loaded asynchronously from <code>/data/products.json</code> so new entries can be
+          added later without editing this page.
+        </p>
+      </section>
+
+      <p class="products-state loading" data-products-state aria-live="polite">Loading products…</p>
+      <section class="products-grid" data-products-grid></section>
+      <noscript>
+        <p class="empty-note">JavaScript is required to load products on this page.</p>
+      </noscript>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container center">
+        <p>© HF Labs</p>
+      </div>
+    </footer>
+  </body>
+</html>
