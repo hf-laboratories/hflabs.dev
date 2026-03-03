@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0",
-  "updatedAt": "2026-02-28",
+  "version": "1.1.0",
+  "updatedAt": "2026-03-02",
   "products": [
     {
       "id": "ipuservices",
@@ -65,6 +65,41 @@
           "url": "https://hflabs.dev/papers/"
         }
       ]
+    }
+  ],
+  "portfolio": [
+    {
+      "id": "levelzero-dotnet",
+      "name": "LevelZero.NET",
+      "tagline": "Managed .NET wrapper for Intel Level Zero GPU compute.",
+      "summary": "Open-source GPU compute wrapper with .NET APIs and SPIR-V kernel integration patterns.",
+      "status": "Live",
+      "category": "Open Source",
+      "badges": ["C#", ".NET", "GPU"],
+      "sourceUrl": "https://github.com/hf-laboratories/LevelZero.NET",
+      "downloadUrl": "https://github.com/hf-laboratories/LevelZero.NET/archive/refs/heads/main.zip"
+    },
+    {
+      "id": "interactive-pnn-decision-matrix",
+      "name": "Interactive Probabilistic Neural Network Decision Matrix",
+      "tagline": "Interactive probabilistic model visualization in HTML/CSS/JavaScript.",
+      "summary": "Free interactive decision matrix demo project suitable for browser-based experimentation.",
+      "status": "Live",
+      "category": "Free Software",
+      "badges": ["HTML", "CSS", "JavaScript"],
+      "sourceUrl": "https://github.com/hf-laboratories/Interactive-Probabilistic-Neural-Network-Decision-Matrix",
+      "downloadUrl": "https://github.com/hf-laboratories/Interactive-Probabilistic-Neural-Network-Decision-Matrix/archive/refs/heads/main.zip"
+    },
+    {
+      "id": "copilot-instructions-workflows",
+      "name": "Copilot Instructions Initiated Workflows",
+      "tagline": "Copilot-driven workflow automation examples.",
+      "summary": "Public PowerShell workflow examples for instruction-driven development automation.",
+      "status": "Live",
+      "category": "Open Source",
+      "badges": ["PowerShell", "Automation", "CI"],
+      "sourceUrl": "https://github.com/hf-laboratories/Copilot_Instructions_initiated_workflows",
+      "downloadUrl": "https://github.com/hf-laboratories/Copilot_Instructions_initiated_workflows/archive/refs/heads/main.zip"
     }
   ]
 }
