@@ -7,9 +7,11 @@ Public website for HF Labs, hosted with GitHub Pages.
 - Papers page: `papers/index.html`
 - Products page: `products/index.html`
 - Product details page: `products/details/index.html`
+- Documentation wiki page: `wiki/index.html`
 - Inquiry page: `inquiry/index.html`
 - Product catalog data: `data/products.json`
-- Runtime scripts: `assets/products.js`, `assets/inquiry.js`, `assets/product-details.js`
+- Documentation markdown source: `docs/index.md` and files under `docs/`
+- Runtime scripts: `assets/products.js`, `assets/inquiry.js`, `assets/product-details.js`, `assets/wiki.js`
 - Inquiry storage automation: `.github/workflows/stash-inquiry-submissions.yml`
 - Inquiry inbox folder: `inquiries/inbox/`
 - Styling: `assets/styles.css`
@@ -26,6 +28,12 @@ Edit `papers/index.html` and add entries for each accepted paper with links to p
 
 ## Updating products
 Edit `data/products.json` and add or update objects in `products[]`. The products page loads this file asynchronously at runtime.
+
+## Updating docs wiki content
+1. Add or update markdown files under `docs/`.
+2. Keep `docs/index.md` as the entry point.
+3. Use relative markdown links between docs (for example `./releases/index.md`).
+4. Open `/wiki/` or `/wiki/?page=/docs/<path>.md` to view rendered docs.
 
 ## Inquiry submission flow
 1. A user clicks **Inquire** on a product card, which opens `/inquiry/?product=<id>&source=<path>`.
