@@ -13,6 +13,7 @@ This docs section is rendered by `/wiki/` and loads Markdown files directly from
 
 ## Navigation
 
+- [Swarm Bench High Scores](./benchmarks/swarm-bench-high-scores.md)
 - [Release notes index](./releases/index.md)
 
 ## Tips
