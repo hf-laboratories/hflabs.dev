@@ -21,37 +21,60 @@ This page tracks swarm benchmark highs with a strict provenance rule: every valu
 **Primary source cohort:** `training_results/lit_bench_v4_20260221_221116/summary.csv`  
 **Integrated 360D row source:** `s360_gw_big.json` (standalone run, not one of the 44 v4 sweep rows)
 
-| Function | Dim | Best Error | Iters Spent | Swarm Pop | FE Used | CEC Budget | FE/CEC | Verdict | Cohort |
-|---|---:|---:|---:|---:|---:|---:|---:|---|---|
-| Sphere | 10D | 0.0 | 13 | 50 | 650 | 100,000 | 0.65% | Matches | v4 |
-| Sphere | 30D | 0.0 | 21 | 60 | 1,260 | 300,000 | 0.42% | Matches | v4 |
-| Sphere | 50D | 8.28e-11 | 225 | 80 | 18,000 | 500,000 | 3.60% | Exceeds | v4 |
-| Sphere | 360D | 1.1107845805920074e-07 | 3000 | 400 | 1,200,000 | 3,600,000 | 33.33% | Recorded (1e-07 class) | standalone |
-| Rastrigin | 10D | 3.27e-11 | 97 | 50 | 4,850 | 100,000 | 4.85% | Matches | v4 |
-| Rastrigin | 30D | 4.67e-11 | 196 | 60 | 11,760 | 300,000 | 3.92% | Exceeds | v4 |
-| Rastrigin | 50D | 2.56e-11 | 297 | 80 | 23,760 | 500,000 | 4.75% | Exceeds | v4 |
-| Ackley | 10D | 1.18e-10 | 300 | 50 | 15,000 | 100,000 | 15.00% | Matches | v4 |
-| Ackley | 30D | 8.13e-11 | 231 | 60 | 13,860 | 300,000 | 4.62% | Exceeds | v4 |
-| Ackley | 50D | 8.22e-11 | 353 | 80 | 28,240 | 500,000 | 5.65% | Exceeds | v4 |
-| Griewank | 10D | 0.0 | 25 | 50 | 1,250 | 100,000 | 1.25% | Matches | v4 |
-| Griewank | 30D | 9.21e-11 | 151 | 60 | 9,060 | 300,000 | 3.02% | Exceeds | v4 |
-| Griewank | 50D | 5.51e-11 | 217 | 80 | 17,360 | 500,000 | 3.47% | Exceeds | v4 |
-| Levy | 10D | 7.58e-11 | 133 | 50 | 6,650 | 100,000 | 6.65% | Matches | v4 |
-| Levy | 30D | 5.36e-11 | 281 | 60 | 16,860 | 300,000 | 5.62% | Exceeds | v4 |
-| Levy | 50D | 3.19 | 800 | 80 | 64,000 | 500,000 | 12.80% | Behind | v4 |
-| Rosenbrock | 10D | 4.12 | 300 | 50 | 15,000 | 100,000 | 15.00% | Behind | v4 |
-| Rosenbrock | 30D | 24.00 | 500 | 60 | 30,000 | 300,000 | 10.00% | Competitive | v4 |
-| Rosenbrock | 50D | 41.71 | 800 | 80 | 64,000 | 500,000 | 12.80% | Exceeds | v4 |
-| Schwefel | 10D | 2332 | 300 | 50 | 15,000 | 100,000 | 15.00% | Behind | v4 |
-| Schwefel | 30D | 9102 | 500 | 60 | 30,000 | 300,000 | 10.00% | Behind | v4 |
-| Schwefel | 50D | 17030 | 800 | 80 | 64,000 | 500,000 | 12.80% | Behind | v4 |
-| Zakharov | 10D | 4.33e-11 | 82 | 50 | 4,100 | 100,000 | 4.10% | Exceeds | v4 |
-| Zakharov | 30D | 8.57e-11 | 500 | 130 | 65,000 | 300,000 | 21.67% | Exceeds | v4 |
-| Zakharov | 50D | 5.96e-07 | 800 | 180 | 144,000 | 500,000 | 28.80% | Behind | v4 |
-| Michalewicz | 10D | 5.39 | 300 | 50 | 15,000 | 100,000 | 15.00% | Behind | v4 |
-| Michalewicz | 30D | 1.08 | 500 | 60 | 30,000 | 300,000 | 10.00% | Competitive | v4 |
-| Michalewicz | 50D | 1.57 | 800 | 80 | 64,000 | 500,000 | 12.80% | Competitive | v4 |
-| ZDT1 / ZDT2 / ZDT3 | 30D | 0.0 | 1 | 60 | 60 | N/A | N/A | Matches | v4 |
+**Verdict color legend**
+- <span style="display:inline-block;width:12px;height:12px;background:#1b324a;border-radius:2px;vertical-align:middle;"></span> Matches
+- <span style="display:inline-block;width:12px;height:12px;background:#1b3d2a;border-radius:2px;vertical-align:middle;"></span> Exceeds
+- <span style="display:inline-block;width:12px;height:12px;background:#4a3a1b;border-radius:2px;vertical-align:middle;"></span> Competitive
+- <span style="display:inline-block;width:12px;height:12px;background:#4a1f1f;border-radius:2px;vertical-align:middle;"></span> Behind
+- <span style="display:inline-block;width:12px;height:12px;background:#2b234f;border-radius:2px;vertical-align:middle;"></span> Recorded (1e-07 class)
+
+<table>
+  <thead>
+    <tr>
+      <th>Function</th>
+      <th>Dim</th>
+      <th>Best Error</th>
+      <th>Iters Spent</th>
+      <th>Swarm Pop</th>
+      <th>FE Used</th>
+      <th>CEC Budget</th>
+      <th>FE/CEC</th>
+      <th>Verdict</th>
+      <th>Cohort</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="background-color:#1b324a;"><td>Sphere</td><td>10D</td><td>0.0</td><td>13</td><td>50</td><td>650</td><td>100,000</td><td>0.65%</td><td>Matches</td><td>v4</td></tr>
+    <tr style="background-color:#1b324a;"><td>Sphere</td><td>30D</td><td>0.0</td><td>21</td><td>60</td><td>1,260</td><td>300,000</td><td>0.42%</td><td>Matches</td><td>v4</td></tr>
+    <tr style="background-color:#1b3d2a;"><td>Sphere</td><td>50D</td><td>8.28e-11</td><td>225</td><td>80</td><td>18,000</td><td>500,000</td><td>3.60%</td><td>Exceeds</td><td>v4</td></tr>
+    <tr style="background-color:#2b234f;"><td>Sphere</td><td>360D</td><td>1.1107845805920074e-07</td><td>3000</td><td>400</td><td>1,200,000</td><td>3,600,000</td><td>33.33%</td><td>Recorded (1e-07 class)</td><td>standalone</td></tr>
+    <tr style="background-color:#1b324a;"><td>Rastrigin</td><td>10D</td><td>3.27e-11</td><td>97</td><td>50</td><td>4,850</td><td>100,000</td><td>4.85%</td><td>Matches</td><td>v4</td></tr>
+    <tr style="background-color:#1b3d2a;"><td>Rastrigin</td><td>30D</td><td>4.67e-11</td><td>196</td><td>60</td><td>11,760</td><td>300,000</td><td>3.92%</td><td>Exceeds</td><td>v4</td></tr>
+    <tr style="background-color:#1b3d2a;"><td>Rastrigin</td><td>50D</td><td>2.56e-11</td><td>297</td><td>80</td><td>23,760</td><td>500,000</td><td>4.75%</td><td>Exceeds</td><td>v4</td></tr>
+    <tr style="background-color:#1b324a;"><td>Ackley</td><td>10D</td><td>1.18e-10</td><td>300</td><td>50</td><td>15,000</td><td>100,000</td><td>15.00%</td><td>Matches</td><td>v4</td></tr>
+    <tr style="background-color:#1b3d2a;"><td>Ackley</td><td>30D</td><td>8.13e-11</td><td>231</td><td>60</td><td>13,860</td><td>300,000</td><td>4.62%</td><td>Exceeds</td><td>v4</td></tr>
+    <tr style="background-color:#1b3d2a;"><td>Ackley</td><td>50D</td><td>8.22e-11</td><td>353</td><td>80</td><td>28,240</td><td>500,000</td><td>5.65%</td><td>Exceeds</td><td>v4</td></tr>
+    <tr style="background-color:#1b324a;"><td>Griewank</td><td>10D</td><td>0.0</td><td>25</td><td>50</td><td>1,250</td><td>100,000</td><td>1.25%</td><td>Matches</td><td>v4</td></tr>
+    <tr style="background-color:#1b3d2a;"><td>Griewank</td><td>30D</td><td>9.21e-11</td><td>151</td><td>60</td><td>9,060</td><td>300,000</td><td>3.02%</td><td>Exceeds</td><td>v4</td></tr>
+    <tr style="background-color:#1b3d2a;"><td>Griewank</td><td>50D</td><td>5.51e-11</td><td>217</td><td>80</td><td>17,360</td><td>500,000</td><td>3.47%</td><td>Exceeds</td><td>v4</td></tr>
+    <tr style="background-color:#1b324a;"><td>Levy</td><td>10D</td><td>7.58e-11</td><td>133</td><td>50</td><td>6,650</td><td>100,000</td><td>6.65%</td><td>Matches</td><td>v4</td></tr>
+    <tr style="background-color:#1b3d2a;"><td>Levy</td><td>30D</td><td>5.36e-11</td><td>281</td><td>60</td><td>16,860</td><td>300,000</td><td>5.62%</td><td>Exceeds</td><td>v4</td></tr>
+    <tr style="background-color:#4a1f1f;"><td>Levy</td><td>50D</td><td>3.19</td><td>800</td><td>80</td><td>64,000</td><td>500,000</td><td>12.80%</td><td>Behind</td><td>v4</td></tr>
+    <tr style="background-color:#4a1f1f;"><td>Rosenbrock</td><td>10D</td><td>4.12</td><td>300</td><td>50</td><td>15,000</td><td>100,000</td><td>15.00%</td><td>Behind</td><td>v4</td></tr>
+    <tr style="background-color:#4a3a1b;"><td>Rosenbrock</td><td>30D</td><td>24.00</td><td>500</td><td>60</td><td>30,000</td><td>300,000</td><td>10.00%</td><td>Competitive</td><td>v4</td></tr>
+    <tr style="background-color:#1b3d2a;"><td>Rosenbrock</td><td>50D</td><td>41.71</td><td>800</td><td>80</td><td>64,000</td><td>500,000</td><td>12.80%</td><td>Exceeds</td><td>v4</td></tr>
+    <tr style="background-color:#4a1f1f;"><td>Schwefel</td><td>10D</td><td>2332</td><td>300</td><td>50</td><td>15,000</td><td>100,000</td><td>15.00%</td><td>Behind</td><td>v4</td></tr>
+    <tr style="background-color:#4a1f1f;"><td>Schwefel</td><td>30D</td><td>9102</td><td>500</td><td>60</td><td>30,000</td><td>300,000</td><td>10.00%</td><td>Behind</td><td>v4</td></tr>
+    <tr style="background-color:#4a1f1f;"><td>Schwefel</td><td>50D</td><td>17030</td><td>800</td><td>80</td><td>64,000</td><td>500,000</td><td>12.80%</td><td>Behind</td><td>v4</td></tr>
+    <tr style="background-color:#1b3d2a;"><td>Zakharov</td><td>10D</td><td>4.33e-11</td><td>82</td><td>50</td><td>4,100</td><td>100,000</td><td>4.10%</td><td>Exceeds</td><td>v4</td></tr>
+    <tr style="background-color:#1b3d2a;"><td>Zakharov</td><td>30D</td><td>8.57e-11</td><td>500</td><td>130</td><td>65,000</td><td>300,000</td><td>21.67%</td><td>Exceeds</td><td>v4</td></tr>
+    <tr style="background-color:#4a1f1f;"><td>Zakharov</td><td>50D</td><td>5.96e-07</td><td>800</td><td>180</td><td>144,000</td><td>500,000</td><td>28.80%</td><td>Behind</td><td>v4</td></tr>
+    <tr style="background-color:#4a1f1f;"><td>Michalewicz</td><td>10D</td><td>5.39</td><td>300</td><td>50</td><td>15,000</td><td>100,000</td><td>15.00%</td><td>Behind</td><td>v4</td></tr>
+    <tr style="background-color:#4a3a1b;"><td>Michalewicz</td><td>30D</td><td>1.08</td><td>500</td><td>60</td><td>30,000</td><td>300,000</td><td>10.00%</td><td>Competitive</td><td>v4</td></tr>
+    <tr style="background-color:#4a3a1b;"><td>Michalewicz</td><td>50D</td><td>1.57</td><td>800</td><td>80</td><td>64,000</td><td>500,000</td><td>12.80%</td><td>Competitive</td><td>v4</td></tr>
+    <tr style="background-color:#1b324a;"><td>ZDT1 / ZDT2 / ZDT3</td><td>30D</td><td>0.0</td><td>1</td><td>60</td><td>60</td><td>N/A</td><td>N/A</td><td>Matches</td><td>v4</td></tr>
+  </tbody>
+</table>
 
 > Budget formulas: **FE = Swarm Pop × Iters Spent**; **CEC Budget = 10,000 × D** (single-objective CEC baseline).
 
