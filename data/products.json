@@ -1,6 +1,6 @@
 {
   "version": "1.1.0",
-  "updatedAt": "2026-03-02",
+  "updatedAt": "2026-03-05",
   "products": [
     {
       "id": "ipuservices",
@@ -59,6 +59,70 @@
       "status": "Research",
       "category": "Algorithms",
       "badges": ["Swarm", "Optimization", "R&D"],
+      "links": [
+        {
+          "label": "Papers",
+          "url": "https://hflabs.dev/papers/"
+        }
+      ]
+    },
+    {
+      "id": "poplar-cpp-api-wrapper",
+      "name": "PoplarCppApiWrapper",
+      "tagline": "C++ integration layer for Poplar-oriented accelerator workflows.",
+      "summary": "A C++ wrapper and interop surface for connecting Poplar-based compute graphs to service-facing orchestration paths.",
+      "details": "PoplarCppApiWrapper provides a focused C++ API layer intended to simplify integration of Poplar-centric workloads into broader service architectures. It supports practical interop and deployment patterns where accelerator kernels, runtime coordination, and host-side orchestration need to work together cleanly.\n\nThe project is designed for teams that want repeatable integration points between C++ accelerator code and higher-level platform services without over-coupling runtime boundaries.",
+      "status": "Research",
+      "category": "Integrations",
+      "badges": ["C++", "Poplar", "Interop"],
+      "links": [
+        {
+          "label": "Papers",
+          "url": "https://hflabs.dev/papers/"
+        }
+      ]
+    },
+    {
+      "id": "sql-ipu-bridge",
+      "name": "SQL-IPU Bridge",
+      "tagline": "Hybrid SQL acceleration bridge with microservice and SQL Server CLR execution paths.",
+      "summary": "A dual-path SQL integration stack offering both microservice-based offload and SQLServerCLR in-database acceleration adapters.",
+      "details": "SQL-IPU Bridge provides two deployment modes for SQL workloads: a microservice architecture for decoupled orchestration and a SQLServerCLR path for in-engine integration where appropriate. This allows teams to select integration boundaries based on governance, latency targets, and operational controls.\n\nThe project focuses on practical SQL acceleration adoption by combining familiar database workflows with IPU-aware execution strategies.",
+      "status": "Research",
+      "category": "Services",
+      "badges": ["SQL", "Microservice", "SQLServerCLR"],
+      "links": [
+        {
+          "label": "Papers",
+          "url": "https://hflabs.dev/papers/"
+        }
+      ]
+    },
+    {
+      "id": "postgresql-ipu-query-accelerator",
+      "name": "PostGresIPUQueryAccelerator",
+      "tagline": "PostgreSQL-oriented query acceleration for high-throughput analytical paths.",
+      "summary": "A PostgreSQL integration project for IPU-assisted query planning and execution on latency-sensitive and throughput-heavy workloads.",
+      "details": "PostGresIPUQueryAccelerator explores PostgreSQL query acceleration through IPU-aware planning and selective execution offload. It is designed to fit into existing PostgreSQL-centered data architectures while incrementally introducing acceleration features.\n\nThe project emphasizes clear observability and staged adoption so teams can evaluate performance gains without disruptive migration requirements.",
+      "status": "Research",
+      "category": "Services",
+      "badges": ["PostgreSQL", "Query", "Acceleration"],
+      "links": [
+        {
+          "label": "Papers",
+          "url": "https://hflabs.dev/papers/"
+        }
+      ]
+    },
+    {
+      "id": "snn-brain-model-simulator",
+      "name": "SNN with Brain Model",
+      "tagline": "Interactive spiking neural simulation with large-scale neuron control on consumer hardware.",
+      "summary": "An SNN and brain-model project supporting user perturbation control over more than 16,000 individual neurons and seizure scenario simulation with propagation modeling.",
+      "details": "SNN with Brain Model is an interactive simulation environment for spiking neural network research and experimentation. It is built to operate on consumer hardware while exposing fine-grained control over more than 16,000 individual neurons, including direct user perturbation workflows for controlled experiments.\n\nThe project also includes seizure scenario simulation capabilities with propagation modeling to support repeatable study of dynamic network behavior under varying perturbation patterns. Intended for research and educational workflows.",
+      "status": "Research",
+      "category": "Applications",
+      "badges": ["SNN", "Brain Model", "Simulation"],
       "links": [
         {
           "label": "Papers",
