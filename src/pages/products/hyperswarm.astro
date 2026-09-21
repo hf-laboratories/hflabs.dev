@@ -1,0 +1,1317 @@
+---
+// src/pages/products/hyperswarm.astro
+import Layout from '../../layouts/Layout.astro';
+import SwarmTilesGallery from '../../components/SwarmTilesGallery.astro';
+
+const capabilities = [
+  {
+    icon: "🐝",
+    title: "Broad algorithm coverage",
+    tagline: "35 Optimizers across 4 Families",
+    desc: "12 core swarm algorithms (PSO, Ant Colony, Bee Colony, Bat, Grey Wolf, Fish School, Firefly, Glowworm, Cuckoo, Krill Herd, Synchronizing Firefly, OfBatsAndBeacons), 14 hybrid metaheuristics, and 6 advanced global search routines.",
+    color: "#818cf8"
+  },
+  {
+    icon: "🎯",
+    title: "Multi-objective search",
+    tagline: "Pareto & Hypervolume Precision",
+    desc: "MOPSO and NSGA-III-style PSO with real-time non-dominated sorting, Pareto frontier preservation, and GPU-accelerated Monte Carlo hypervolume measurement.",
+    color: "#38bdf8"
+  },
+  {
+    icon: "👑",
+    title: "Fleet & Director coordination",
+    tagline: "Dynamic Subswarm Budget Allocation",
+    desc: "Run heterogeneous swarms as coordinated ensembles. Director components plan subswarm launches, assign authority dynamically, and route workload across distributed hardware fabrics.",
+    color: "#f59e0b"
+  },
+  {
+    icon: "🧠",
+    title: "Self-adaptation & learning",
+    tagline: "25+ Controllers & Diversity Feedback",
+    desc: "Fuzzy inertia control, topology learning, landscape analysis, entropy-based diversity tracking, early stopping, and automatic perturbation restart strategies.",
+    color: "#10b981"
+  },
+  {
+    icon: "🕸️",
+    title: "Stigmergy & shared memory",
+    tagline: "Indirect Trace Communication",
+    desc: "Indirect pheromone-like coordination through shared trace buffers, episodic policy memory, and warm cache stores so repeated searches don't start from scratch.",
+    color: "#ec4899"
+  },
+  {
+    icon: "📊",
+    title: "Characterization & visualization",
+    tagline: "Desktop & Hosted Real-Time Profilers",
+    desc: "Deep runtime profiling, convergence trajectory monitors, spatial particle distribution visualizers, and detailed diagnostic logs explaining search decisions.",
+    color: "#06b6d4"
+  },
+  {
+    icon: "⚡",
+    title: "Hardware acceleration",
+    tagline: "10 Intel Level Zero GPU Offload Targets",
+    desc: "Native Level Zero SPIR-V / zebin kernel offloads for ACO transitions, CMA-ES covariance, DE mutation, dominance matrix checks, N-body repulsion, and pairwise distances.",
+    color: "#f43f5e"
+  },
+  {
+    icon: "🤖",
+    title: "Feeds AutoMLApp",
+    tagline: "Autonomous Pipeline Tuning Backend",
+    desc: "Acts as the pluggable search engine behind AutoMLApp's hyperparameter exploration, balancing model architecture performance against telemetry cost signals.",
+    color: "#a855f7"
+  }
+];
+
+const algorithmTaxonomy = [
+  {
+    category: "Core Swarm Optimizers",
+    count: 12,
+    badge: "Population Metaheuristics",
+    color: "#818cf8",
+    items: [
+      { name: "Particle Swarm Optimization (PSO)", desc: "Classical and inertia-weighted velocity update models with global/local best tracking." },
+      { name: "Ant Colony Optimization (ACO)", desc: "Pheromone trail deposition and probabilistic path construction with GPU offload." },
+      { name: "Artificial Bee Colony (ABC)", desc: "Employed, onlooker, and scout bee foraging phases for multimodal landscapes." },
+      { name: "Bat Algorithm (BA)", desc: "Echolocation, pulse emission frequency, and loudness attenuation tuning." },
+      { name: "Grey Wolf Optimizer (GWO)", desc: "Alpha, Beta, Delta, and Omega hierarchical leadership hunting behavior." },
+      { name: "Artificial Fish School (AFSA)", desc: "Praying, swarming, chasing, and leaping behaviors for dense search." },
+      { name: "Firefly Algorithm (FA)", desc: "Light intensity flashing, attractiveness decay, and brightness distance attraction." },
+      { name: "Glowworm Swarm (GSO)", desc: "Luciferin-induced variable neighborhood search for simultaneous multimodal peak capture." },
+      { name: "Cuckoo Search (CS)", desc: "Lévy flights and parasitic egg replacement mechanisms for scale-invariant exploration." },
+      { name: "Krill Herd (KH)", desc: "Movement induced by other individuals, foraging activity, and random directional diffusion." },
+      { name: "Synchronizing Firefly", desc: "Coupled phase-oscillator synchrony with spatial coordinate updates." },
+      { name: "OfBatsAndBeaconsSwarm", desc: "Specialized hybrid acoustic-beacon navigation swarm with directional beacon vectors." }
+    ]
+  },
+  {
+    category: "Hybrid Metaheuristics",
+    count: 14,
+    badge: "Cross-Disciplinary Hybrids",
+    color: "#38bdf8",
+    items: [
+      { name: "PSO + Differential Evolution (PSO-DE)", desc: "Velocity vectors combined with vector differences and binomial crossovers." },
+      { name: "PSO + Grey Wolf (PSO-GWO)", desc: "Wolf pack leadership guiding velocity acceleration bounds." },
+      { name: "PSO + Ant Colony (PSO-ACO)", desc: "Continuous particle trajectory informed by discrete pheromone graphs." },
+      { name: "PSO + Firefly (PSO-FA)", desc: "Luminescence attraction applied to inertia-weighted particles." },
+      { name: "PSO + Simulated Annealing (PSO-SA)", desc: "Boltzmann probability criteria preventing local stagnation." },
+      { name: "PSO + Tabu Search (PSO-TS)", desc: "Tabu memory lists preventing revisited fitness basins." },
+      { name: "PSO + CMA-ES", desc: "Covariance matrix adaptation applied to sub-clusters of swarm particles." },
+      { name: "ABC + DE", desc: "Bee colony scout mutations replaced by differential vector shifts." },
+      { name: "ACO + Genetic Algorithm (ACO-GA)", desc: "Chromosome crossover applied to high-pheromone tour solutions." },
+      { name: "BCO + PSO", desc: "Bee colony foraging informing particle personal best memories." },
+      { name: "DE + Sequential Quadratic (DE-SQP)", desc: "Global DE exploration transitioning into local SQP gradient polishing." },
+      { name: "FA + Cuckoo Search (FA-CS)", desc: "Flashing attractiveness enhanced with heavy-tailed Lévy flight leaps." },
+      { name: "GWO + Whale Optimizer (GWO-WOA)", desc: "Encircling pack hunts combined with spiral bubble-net foraging maneuvers." },
+      { name: "Memetic PSO", desc: "Individual particles execute localized line-search polishing at each iteration." }
+    ]
+  },
+  {
+    category: "Advanced Metaheuristics & MO",
+    count: 9,
+    badge: "High-Dimensional & Pareto",
+    color: "#f59e0b",
+    items: [
+      { name: "Iterated Local Search (ILS)", desc: "Perturbation and local neighborhood search cycles for combinatorial spaces." },
+      { name: "MAP-Elites", desc: "Multi-dimensional Archive of Phenotypic Elites illuminating diverse behavioral niches." },
+      { name: "Parallel Tempering", desc: "Replica exchange across heated energy levels to traverse rugged objective barriers." },
+      { name: "GRASP", desc: "Greedy Randomized Adaptive Search Procedure for complex routing and scheduling." },
+      { name: "Lagrangian Relaxation", desc: "Dual constraint relaxation for heavily bounded optimization constraints." },
+      { name: "Augmented Lagrangian Swarm", desc: "Penalty parameter updates enforcing hard non-linear equality/inequality boundaries." },
+      { name: "Multi-Objective PSO (MOPSO)", desc: "External archive of Pareto-optimal non-dominated leaders with crowding distance." },
+      { name: "NSGA-III-Style PSO", desc: "Reference-point-based non-dominated particle sorting for 3+ objective tasks." },
+      { name: "General Multi-Objective Swarm", desc: "Pluggable dominance comparator with dynamic hypervolume contribution tracking." }
+    ]
+  }
+];
+
+const featureCategories = [
+  { name: "Convergence Tracking & Metrics", count: 40, color: "#38bdf8", desc: "Rate of change, stagnation detectors, diversity metrics, momentum gauges, and trajectory audits." },
+  { name: "Self-Adaptive Controllers", count: 33, color: "#10b981", desc: "Fuzzy logic inertia tuners, adaptive mutation rates, topology adaptation, and auto-temperature schedulers." },
+  { name: "Ensemble & Multi-Swarm", count: 13, color: "#818cf8", desc: "Subswarm partitioning, migration managers, island models, and inter-swarm genetic exchange." },
+  { name: "Director & Coordination", count: 11, color: "#f59e0b", desc: "Dynamic budget allocator, supervisor authority matrices, task routing, and convergence arbitration." },
+  { name: "Stigmergy & Policy Memory", count: 11, color: "#ec4899", desc: "Pheromone grid diffusion, episodic history recall, replay buffers, and warm-start caches." },
+  { name: "Topologies & Neighborhoods", count: 11, color: "#06b6d4", desc: "Global best, Ring, Von Neumann, Random Geometric, Scale-Free, Multi-Swarm, Dynamic, and Dimension-Adaptive." },
+  { name: "Multi-Objective & Pareto", count: 10, color: "#f43f5e", desc: "Non-dominated ranking, crowding distance, IGD+, hypervolume calculation, and reference-point niching." },
+  { name: "Spatial Indexing & Partitions", count: 3, color: "#a855f7", desc: "KD-Tree spatial clustering, Voronoi particle partitioning, and neighbor lookups." }
+];
+
+const hardwareOffloads = [
+  { target: "ACO Transitions", kernel: "pairwise_distance, fitness_kernel", desc: "GPU-accelerated tour edge selection and pheromone matrix updates." },
+  { target: "CMA-ES Covariance", kernel: "exchange_weights, tile_placement", desc: "Parallel matrix inversion and multivariate normal perturbation sampling." },
+  { target: "DE Mutation & Crossover", kernel: "fitness_kernel, rastrigin_fitness", desc: "Vector difference and binomial crossover computed across SIMD workgroups." },
+  { target: "Dominance Matrix Checks", kernel: "dominance_matrix", desc: "O(N²) all-to-all Pareto non-domination comparison performed in a single kernel launch." },
+  { target: "Firefly Flashing & Distance", kernel: "firefly_attraction, pairwise_distance", desc: "Quadratic distance attenuation and attractiveness updates parallelized across GPU threads." },
+  { target: "Hypervolume Calculation", kernel: "monte_carlo_hypervolume", desc: "High-throughput Monte Carlo sampling for multi-objective frontier hypervolume estimation." },
+  { target: "N-Body & Swarm Repulsion", kernel: "nbody_repulsion", desc: "Inter-particle electrostatic collision avoidance and diversity dispersion forces." },
+  { target: "PSO Velocity Update", kernel: "pso_velocity", desc: "Direct SIMD velocity and position updates across millions of particles per millisecond." }
+];
+---
+
+<Layout 
+  title="HyperSwarm Optimization Suite • Swarm & Metaheuristic Engines | HF Labs" 
+  description="HyperSwarm is a high-performance .NET library of 35 swarm and metaheuristic optimizers, ensembles, Director coordination, and Intel Level Zero GPU kernels.">
+  
+  <!-- Breadcrumb Bar -->
+  <div class="product-top-bar">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Overview</a>
+        <span class="sep">/</span>
+        <a href="/products">Products</a>
+        <span class="sep">/</span>
+        <span class="curr">HyperSwarm Optimization Suite</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="product-hero">
+    <div class="container">
+      <div class="hero-badge-row">
+        <span class="badge badge-purple">35 Optimizer Modes</span>
+        <span class="badge badge-cyan">Level Zero GPU Acceleration</span>
+        <span class="badge badge-amber">Director Ensembles</span>
+        <span class="badge badge-emerald">2,500+ Automated Tests</span>
+      </div>
+
+      <h1 class="hero-title">HyperSwarm Optimization Suite</h1>
+      <p class="hero-lead">
+        Swarm optimization, from a single algorithm to a coordinated fleet.
+      </p>
+      <p class="hero-subhead">
+        A .NET library of swarm and metaheuristic optimizers, with the tooling to run them, measure them, and watch them converge.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#algorithms" class="btn-primary" style="padding:12px 24px; font-size:14px;">
+          Explore 35 Optimizers &darr;
+        </a>
+        <a href="#hardware" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
+          GPU Acceleration Specs &darr;
+        </a>
+        <a href="#features" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
+          123+ Registered Features &darr;
+        </a>
+        <a href="/products/automlapp" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
+          AutoMLApp Integration &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Metric Strip -->
+  <section class="stats-strip-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-num">35</span>
+          <span class="stat-label">Total Optimizers</span>
+          <span class="stat-detail">12 Core, 14 Hybrids, 9 Advanced &amp; MO</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">123+</span>
+          <span class="stat-label">Registered Features</span>
+          <span class="stat-detail">Explicit Feature Registry &amp; Reflection</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">10</span>
+          <span class="stat-label">GPU Offload Classes</span>
+          <span class="stat-detail">Compiled Level Zero SPIR-V / Zebin</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">~2,500</span>
+          <span class="stat-label">Test Methods</span>
+          <span class="stat-detail">Across 191 Test Suites in .NET</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Intro Narrative Section -->
+  <section class="intro-section">
+    <div class="container">
+      <div class="intro-card">
+        <div class="intro-glow"></div>
+        <div class="intro-content">
+          <div class="intro-tag">
+            <span class="badge badge-purple">SYSTEM ARCHITECTURE</span>
+          </div>
+          <h2 class="intro-heading">Population-Based Optimization for Hard Search Problems</h2>
+          <p class="intro-text">
+            <strong>HyperSwarm</strong> is a collection of population-based optimizers for hard search problems: hyperparameter tuning, scheduling, routing, and continuous and multi-objective design spaces.
+          </p>
+          <p class="intro-text">
+            It ships the classic algorithms, hybrids that combine them, and a coordination layer that runs several swarms together and decides which ones deserve more budget. Characterization and visualization tools sit alongside the algorithms, so you can see why a run behaved the way it did.
+          </p>
+          <div class="intro-callout-grid">
+            <div class="callout-pill">
+              <span class="callout-icon">👑</span>
+              <div>
+                <strong>Director Ensembles</strong>
+                <p>Allocates compute budget dynamically to high-performing subswarms.</p>
+              </div>
+            </div>
+            <div class="callout-pill">
+              <span class="callout-icon">⚡</span>
+              <div>
+                <strong>Level Zero Compute</strong>
+                <p>Offloads velocity updates, dominance checks, and hypervolume to Intel GPUs.</p>
+              </div>
+            </div>
+            <div class="callout-pill">
+              <span class="callout-icon">🤖</span>
+              <div>
+                <strong>AutoML Engine</strong>
+                <p>Powers telemetry-aware architecture exploration inside AutoMLApp.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 Core Capabilities Grid -->
+  <section id="capabilities" class="capabilities-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-cyan">DEEP CAPABILITIES</span>
+        <h2 class="section-title">End-to-End Optimization Architecture</h2>
+        <p class="section-subtitle">
+          From single-particle mathematical operators to self-organizing multi-swarm ensembles across hardware backends.
+        </p>
+      </div>
+
+      <div class="capabilities-grid">
+        {capabilities.map((cap) => (
+          <div class="cap-card" style={`--cap-accent: ${cap.color};`}>
+            <div class="cap-header">
+              <div class="cap-icon-box" style={`background: ${cap.color}15; border-color: ${cap.color}40;`}>
+                <span class="cap-icon">{cap.icon}</span>
+              </div>
+              <div>
+                <h3 class="cap-title">{cap.title}</h3>
+                <span class="cap-tagline" style={`color: ${cap.color};`}>{cap.tagline}</span>
+              </div>
+            </div>
+            <p class="cap-desc">{cap.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Algorithm Catalog (35 Optimizers Visual Blueprint) -->
+  <section id="algorithms" class="algorithms-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-purple">ALGORITHM VISUAL BLUEPRINT</span>
+        <h2 class="section-title">The 35 Optimizer Modes</h2>
+        <p class="section-subtitle">
+          Comprehensive visual inventory across 12 Core Swarms, 14 Hybrids, 6 Advanced Metaheuristics, and 3 Multi-Objective engines in <code>SwarmAlgorithms</code>.
+        </p>
+      </div>
+
+      <!-- 35 Swarm Optimizer Tiles Visual Blueprint -->
+      <div style="margin-bottom: 48px;">
+        <SwarmTilesGallery />
+      </div>
+
+      <div class="algo-families-container">
+        {algorithmTaxonomy.map((family) => (
+          <div class="family-block">
+            <div class="family-header">
+              <div class="family-title-wrap">
+                <h3 class="family-title">{family.category}</h3>
+                <span class="family-badge" style={`color:${family.color}; background:${family.color}15; border:1px solid ${family.color}40;`}>
+                  {family.count} Algorithms
+                </span>
+              </div>
+              <span class="family-tagline">{family.badge}</span>
+            </div>
+
+            <div class="algo-items-grid">
+              {family.items.map((algo) => (
+                <div class="algo-item-card">
+                  <div class="algo-name-row">
+                    <span class="algo-name">{algo.name}</span>
+                  </div>
+                  <p class="algo-desc">{algo.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Topologies & Controllers Summary Card -->
+      <div class="topologies-card">
+        <div class="top-row">
+          <div>
+            <span class="badge badge-emerald">TOPOLOGY ARCHITECTURES (8 CLASSES)</span>
+            <h3 style="font-size:20px; font-weight:800; color:#f8fafc; margin-top:8px;">Communication Neighborhoods</h3>
+          </div>
+          <div class="top-stat">
+            <span style="font-family:var(--font-mono); font-size:12px; color:var(--text-secondary);">Self-Adaptive Controllers:</span>
+            <strong style="color:var(--accent-emerald); font-size:14px; margin-left:6px;">~25 Specialized Tuners</strong>
+          </div>
+        </div>
+        <div class="topo-pill-grid">
+          <span class="topo-pill">🌐 Global Best</span>
+          <span class="topo-pill">⭕ Ring (LBest)</span>
+          <span class="topo-pill">📐 Von Neumann Grid</span>
+          <span class="topo-pill">📍 Random Geometric</span>
+          <span class="topo-pill">🕸️ Scale-Free (Barabási-Albert)</span>
+          <span class="topo-pill">🏝️ Multi-Swarm Island</span>
+          <span class="topo-pill">🔄 Dynamic Re-linking</span>
+          <span class="topo-pill">📏 Dimension-Adaptive</span>
+        </div>
+        <p style="font-size:13px; color:var(--text-secondary); margin-top:14px; line-height:1.6;">
+          Topology learning dynamically shifts particle neighborhood connectivity based on entropy measurements and landscape variance, preventing early collapse into deceptive local optima.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 123 Registered Features Breakdown -->
+  <section id="features" class="features-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-emerald">FEATURE INVENTORY</span>
+        <h2 class="section-title">123 Distinct Registered Features</h2>
+        <p class="section-subtitle">
+          Every capability is tagged with a distinct GUID/ID in the system registry, with reflection discovering additional plugin features at runtime.
+        </p>
+      </div>
+
+      <div class="feature-categories-grid">
+        {featureCategories.map((cat) => (
+          <div class="feature-cat-card" style={`--cat-color: ${cat.color};`}>
+            <div class="cat-header">
+              <div class="cat-count-badge" style={`background:${cat.color}15; color:${cat.color}; border:1px solid ${cat.color}40;`}>
+                {cat.count}
+              </div>
+              <h4 class="cat-name">{cat.name}</h4>
+            </div>
+            <p class="cat-desc">{cat.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Hardware Acceleration & Level Zero GPU Section -->
+  <section id="hardware" class="hardware-section">
+    <div class="container">
+      <div class="hardware-card">
+        <div class="hw-header">
+          <div class="hw-title-row">
+            <span class="badge badge-rose">NATIVE SUBSTRATE</span>
+            <span class="hw-tag">Intel Level Zero API</span>
+          </div>
+          <h2 class="hw-title">Hardware Acceleration &amp; Compiled GPU Kernels</h2>
+          <p class="hw-subhead">
+            HyperSwarm executes mathematical hotspots directly on Intel Xe / Arc / Data Center Max GPUs via LevelZero.NET C ABI shims.
+          </p>
+        </div>
+
+        <div class="hw-grid">
+          <div class="hw-table-wrap">
+            <table class="hw-table">
+              <thead>
+                <tr>
+                  <th>Offload Target (10 Classes)</th>
+                  <th>Compiled GPU Kernel</th>
+                  <th>Mathematical Operation</th>
+                </tr>
+              </thead>
+              <tbody>
+                {hardwareOffloads.map((hw) => (
+                  <tr>
+                    <td class="target-name"><strong>{hw.target}</strong></td>
+                    <td class="kernel-code"><code>{hw.kernel}</code></td>
+                    <td class="op-desc">{hw.desc}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Code Block: C# Swarm Execution Example -->
+        <div class="code-preview-block" style="margin-top:28px;">
+          <div class="code-header">
+            <span class="code-title">HyperSwarm Director Ensemble Invocation with Level Zero GPU Offload</span>
+            <span class="code-lang">C# / .NET 10</span>
+          </div>
+          <pre class="code-content"><code>// Build Director Ensemble with GPU acceleration and adaptive diversity budget
+var ensemble = new SwarmDirectorBuilder()
+    .WithSubSwarm("pso_exploratory", SwarmMode.PSO, size: 200, topology: Topology.ScaleFree)
+    .WithSubSwarm("cuckoo_levy", SwarmMode.CuckooSearch, size: 80, topology: Topology.Ring)
+    .WithSubSwarm("mopso_pareto", SwarmMode.MOPSO, size: 150, topology: Topology.Dynamic)
+    .WithAcceleration(options => 
+    &#123;
+        options.UseLevelZeroBackend = true;
+        options.PreferredDevice = DeviceSelector.IntelDiscreteGpu;
+        options.OffloadTargets = OffloadTarget.VelocityUpdate | OffloadTarget.DominanceMatrix | OffloadTarget.MonteCarloHypervolume;
+    &#125;)
+    .WithSelfAdaptation(adapt => 
+    &#123;
+        adapt.TrackDiversityEntropy = true;
+        adapt.DynamicRestartThreshold = 0.04;
+    &#125;)
+    .Build();
+
+var report = await ensemble.OptimizeAsync(objectiveFunc, searchBounds, CancellationToken.None);
+Console.WriteLine($"Global Best Fitness: &#123;report.BestFitness&#125; (Evaluated &#123;report.TotalEvaluations&#125; points across &#123;report.SubSwarmCount&#125; swarms)");</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Status & Engineering Section -->
+  <section class="status-section">
+    <div class="container">
+      <div class="status-box-main">
+        <div class="status-top">
+          <span class="badge badge-emerald">STATUS: ACTIVE DEVELOPMENT</span>
+          <span class="status-pill"><span class="pulse-dot"></span> Production Ready Library &amp; Coordination Layer</span>
+        </div>
+        <h3 style="font-size:22px; font-weight:800; color:#f8fafc; margin-top:10px; margin-bottom:12px;">
+          Implementation Maturity &amp; Test Suite
+        </h3>
+        <p style="font-size:15px; color:var(--text-secondary); line-height:1.65; max-width:850px;">
+          The algorithms and coordination layer are fully implemented and verified against approximately <strong>2,500 test methods across 191 test files</strong>. HyperSwarm provides the high-performance search backend powering <strong>AutoMLApp</strong>'s hyperparameter tuning and runs in harmony with <strong>SwarmDev</strong>'s intent pipelines.
+        </p>
+
+        <div class="bottom-links-grid">
+          <a href="/products/automlapp" class="bottom-link-card">
+            <span class="link-icon">🤖</span>
+            <div>
+              <strong>AutoMLApp Visual Editor</strong>
+              <p>Visual canvas for hyperparameter search and hardware deployment.</p>
+            </div>
+          </a>
+          <a href="/products/swarmdev" class="bottom-link-card">
+            <span class="link-icon">🐝</span>
+            <div>
+              <strong>SwarmDev Deterministic Pipeline</strong>
+              <p>Deterministic prompt-to-plan engine with wavescan bridge.</p>
+            </div>
+          </a>
+          <a href="/products/ht-graphrag" class="bottom-link-card">
+            <span class="link-icon">🚀</span>
+            <div>
+              <strong>Hypertensor GraphRAG</strong>
+              <p>SIMD in-memory property graph with FastMCP agent context.</p>
+            </div>
+          </a>
+          <a href="/docs#swarm-benchmark" class="bottom-link-card">
+            <span class="link-icon">📖</span>
+            <div>
+              <strong>Operator Manuals</strong>
+              <p>Detailed command-line benchmark invocation and metrics docs.</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .product-top-bar {
+    background: rgba(15, 23, 42, 0.6);
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 0;
+    font-size: 13px;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .breadcrumb a {
+    color: var(--text-secondary);
+  }
+
+  .breadcrumb a:hover {
+    color: var(--accent-blue);
+  }
+
+  .breadcrumb .sep {
+    color: var(--border-color);
+  }
+
+  .breadcrumb .curr {
+    color: var(--text-primary);
+  }
+
+  /* Hero */
+  .product-hero {
+    padding: 70px 0 45px;
+    position: relative;
+  }
+
+  .hero-badge-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .badge-purple {
+    background: rgba(129, 140, 248, 0.12);
+    color: var(--accent-purple);
+    border: 1px solid rgba(129, 140, 248, 0.3);
+  }
+
+  .badge-cyan {
+    background: rgba(56, 189, 248, 0.12);
+    color: var(--accent-blue);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+  }
+
+  .badge-emerald {
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--accent-emerald);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .badge-amber {
+    background: rgba(245, 158, 11, 0.12);
+    color: var(--accent-amber);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+  }
+
+  .badge-rose {
+    background: rgba(244, 63, 94, 0.12);
+    color: var(--accent-rose);
+    border: 1px solid rgba(244, 63, 94, 0.3);
+  }
+
+  .hero-title {
+    font-size: 46px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: #f8fafc;
+    margin-bottom: 14px;
+    line-height: 1.1;
+  }
+
+  .hero-lead {
+    font-size: 20px;
+    font-weight: 600;
+    color: #e2e8f0;
+    line-height: 1.45;
+    margin-bottom: 12px;
+    max-width: 840px;
+  }
+
+  .hero-subhead {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 32px;
+    max-width: 800px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* Stats Strip */
+  .stats-strip-section {
+    padding: 10px 0 40px;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  @media (max-width: 900px) {
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 500px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .stat-card {
+    background: #090d1a;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 20px 24px;
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  .stat-card:hover {
+    border-color: var(--accent-purple);
+    background: #0d1326;
+  }
+
+  .stat-num {
+    display: block;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--accent-purple);
+    font-family: var(--font-mono);
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 2px;
+  }
+
+  .stat-detail {
+    display: block;
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+  }
+
+  /* Intro Section */
+  .intro-section {
+    padding: 20px 0 60px;
+  }
+
+  .intro-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .intro-glow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(129, 140, 248, 0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .intro-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .intro-tag {
+    margin-bottom: 16px;
+  }
+
+  .intro-heading {
+    font-size: 26px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 16px;
+  }
+
+  .intro-text {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    max-width: 900px;
+  }
+
+  .intro-text strong {
+    color: #f1f5f9;
+  }
+
+  .intro-callout-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 28px;
+  }
+
+  @media (max-width: 850px) {
+    .intro-callout-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .callout-pill {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .callout-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .callout-pill strong {
+    font-size: 13.5px;
+    color: #f1f5f9;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .callout-pill p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Capabilities */
+  .capabilities-section {
+    padding: 60px 0 70px;
+    background: #060911;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .section-header {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 48px;
+  }
+
+  .section-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-top: 10px;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+
+  .section-subtitle {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .capabilities-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+
+  @media (max-width: 1100px) {
+    .capabilities-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .capabilities-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cap-card {
+    background: #0a0f1d;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: all 0.25s ease;
+  }
+
+  .cap-card:hover {
+    border-color: var(--cap-accent);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  }
+
+  .cap-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .cap-icon-box {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .cap-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 2px;
+  }
+
+  .cap-tagline {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    display: block;
+  }
+
+  .cap-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Algorithms Section */
+  .algorithms-section {
+    padding: 70px 0;
+  }
+
+  .algo-families-container {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    margin-bottom: 40px;
+  }
+
+  .family-block {
+    background: #080c18;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+  }
+
+  .family-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 16px;
+  }
+
+  .family-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .family-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #f8fafc;
+  }
+
+  .family-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .family-tagline {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .algo-items-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  @media (max-width: 950px) {
+    .algo-items-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .algo-items-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .algo-item-card {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    transition: all 0.2s;
+  }
+
+  .algo-item-card:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(15, 23, 42, 0.9);
+  }
+
+  .algo-name-row {
+    margin-bottom: 6px;
+  }
+
+  .algo-name {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+
+  .algo-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Topologies Card */
+  .topologies-card {
+    background: #0a0f1e;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+  }
+
+  .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .topo-pill-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .topo-pill {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #6ee7b7;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+
+  /* 123 Features Section */
+  .features-section {
+    padding: 60px 0 70px;
+    background: #060911;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .feature-categories-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+
+  @media (max-width: 1000px) {
+    .feature-categories-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 550px) {
+    .feature-categories-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .feature-cat-card {
+    background: #080c18;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    transition: all 0.2s;
+  }
+
+  .feature-cat-card:hover {
+    border-color: var(--cat-color);
+    background: #0d1326;
+  }
+
+  .cat-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .cat-count-badge {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .cat-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #f8fafc;
+  }
+
+  .cat-desc {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+
+  /* Hardware Section */
+  .hardware-section {
+    padding: 70px 0;
+  }
+
+  .hardware-card {
+    background: #080c18;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 36px;
+  }
+
+  .hw-header {
+    margin-bottom: 24px;
+  }
+
+  .hw-title-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .hw-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent-rose);
+    background: rgba(244, 63, 94, 0.1);
+    border: 1px solid rgba(244, 63, 94, 0.3);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .hw-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 8px;
+  }
+
+  .hw-subhead {
+    font-size: 15px;
+    color: var(--text-secondary);
+  }
+
+  .hw-table-wrap {
+    overflow-x: auto;
+  }
+
+  .hw-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    text-align: left;
+  }
+
+  .hw-table th {
+    background: #0f172a;
+    color: #94a3b8;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .hw-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .hw-table tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .target-name {
+    color: #f1f5f9;
+  }
+
+  .kernel-code code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #f43f5e;
+    background: rgba(244, 63, 94, 0.1);
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  .op-desc {
+    color: var(--text-secondary);
+  }
+
+  /* Code Block */
+  .code-preview-block {
+    background: #050811;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .code-header {
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .code-title {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #94a3b8;
+  }
+
+  .code-lang {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--accent-purple);
+  }
+
+  .code-content {
+    padding: 16px 20px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.65;
+    color: #e2e8f0;
+    overflow-x: auto;
+  }
+
+  /* Status Section */
+  .status-section {
+    padding: 20px 0 70px;
+  }
+
+  .status-box-main {
+    background: linear-gradient(180deg, #0f172a 0%, #070a13 100%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 36px;
+  }
+
+  .status-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .status-pill {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent-emerald);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-emerald);
+    box-shadow: 0 0 8px var(--accent-emerald);
+  }
+
+  .bottom-links-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  @media (max-width: 950px) {
+    .bottom-links-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 500px) {
+    .bottom-links-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .bottom-link-card {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .bottom-link-card:hover {
+    border-color: var(--accent-purple);
+    background: rgba(129, 140, 248, 0.08);
+  }
+
+  .link-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .bottom-link-card strong {
+    font-size: 13.5px;
+    color: #f1f5f9;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .bottom-link-card p {
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 640px) {
+    .hero-title {
+      font-size: 34px;
+    }
+    .hero-lead {
+      font-size: 17px;
+    }
+  }
+</style>

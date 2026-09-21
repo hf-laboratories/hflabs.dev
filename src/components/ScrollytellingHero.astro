@@ -6,73 +6,115 @@
   <div class="container">
     <div class="hero-intro">
       <div class="badge" style="background:rgba(56,189,248,0.15); color:var(--accent-blue); border:1px solid rgba(56,189,248,0.3); margin-bottom:16px;">
-        Next-Generation Systems Architecture
+        HFLabs Monorepo Architecture
       </div>
       <h1 class="hero-title">
         High-Assurance Systems, <span class="text-gradient">SIMD Vector Cognition</span> &amp; Swarm Metaheuristics.
       </h1>
       <p class="hero-subtitle">
-        Explore the unified HFLabs technology stack: from sub-millisecond in-memory GraphRAG and autonomous swarm optimization to bare-metal Intel Level Zero GPU compute.
+        Explore the primary engineering divisions of HFLabs: in-memory GraphRAG &amp; swarm optimization, heterogeneous ML &amp; query acceleration, and bare-metal Intel Level Zero / Poplar native substrates.
       </p>
-      <div style="display:flex; gap:12px; margin-top:24px; flex-wrap:wrap;">
-        <a href="#divisions" class="btn-primary">Explore 6 Divisions &rarr;</a>
+      <div style="display:flex; gap:12px; margin-top:24px; flex-wrap:wrap; justify-content:center;">
+        <a href="#divisions" class="btn-primary">Explore 3 Divisions &rarr;</a>
         <a href="/wiki" class="btn-secondary">Open Polyglot Matrix</a>
       </div>
     </div>
 
     <!-- Scrollytelling Viewport -->
     <div class="scrolly-container">
-      <!-- Left: Scrolling Narrative Steps -->
+      <!-- Left: Division Narrative Cards -->
       <div class="scrolly-narrative">
-        <div class="narrative-card active" data-step="1">
-          <div class="step-num">01 / GRAPH COGNITION</div>
-          <h3>In-Memory Hypertensor GraphRAG &amp; SIMD Vectors</h3>
+        <!-- Division 01 -->
+        <div class="narrative-card active" data-division="1">
+          <div class="div-header-row">
+            <span class="div-tag">DIVISION 01</span>
+            <span class="div-sub-badge">Vector &amp; Swarm Engines</span>
+          </div>
+          <h3>Cognition &amp; Swarm Intelligence</h3>
           <p>
-            Traditional RAG flattens codebase context into disconnected text chunks. HFLabs In-Memory Hypertensor GraphRAG indexes entire workspace topologies into high-dimensional SIMD vector spaces with typed semantic relation edges.
+            In-memory graph retrieval, SIMD vector search, and multi-algorithm swarm optimization. Keeps the entire graph resident in RAM to eliminate disk-bound lookups, powering agent reasoning through FastMCP and desktop visualization HUDs.
           </p>
+          <div class="proj-pill-list">
+            <span class="proj-pill">Hypertensor GraphRAG</span>
+            <span class="proj-pill">HyperSwarm Suite</span>
+            <span class="proj-pill">SwarmDev</span>
+          </div>
           <ul class="step-metrics">
-            <li><strong>&lt; 0.8 ms</strong> 2-hop traversal latency</li>
-            <li><strong>128-dim</strong> SIMD AVX-512 vector index</li>
-            <li><strong>FastMCP</strong> in-process memory residency</li>
+            <li>
+              <span>2-Hop Traversal</span>
+              <strong>0.15–1.95 ms</strong>
+            </li>
+            <li>
+              <span>SIMD Vectors</span>
+              <strong>128-d Default</strong>
+            </li>
+            <li>
+              <span>MCP Connectivity</span>
+              <strong>65+ FastMCP Tools</strong>
+            </li>
           </ul>
         </div>
 
-        <div class="narrative-card" data-step="2">
-          <div class="step-num">02 / METAHEURISTIC SWARM</div>
-          <h3>HyperSwarm Optimization Suite &amp; SwarmDev</h3>
+        <!-- Division 02 -->
+        <div class="narrative-card" data-division="2">
+          <div class="div-header-row">
+            <span class="div-tag" style="color:var(--accent-cyan);">DIVISION 02</span>
+            <span class="div-sub-badge" style="color:var(--accent-cyan); border-color:rgba(6,182,212,0.3);">ML &amp; Query Engines</span>
+          </div>
+          <h3>Machine Learning &amp; Acceleration</h3>
           <p>
-            Complex optimization spaces require multi-algorithm cooperation. The HyperSwarm Director monitors population entropy, working alongside the SwarmML App and SwarmDev workbench for automated hyperparameter search and algorithmic analysis.
+            Spiking and graph-based ML, heterogeneous accelerator orchestration, and IPU-offloaded SQL. A unified gRPC service coordinates execution envelopes across IPU (Poplar), CUDA, OpenCL, Level Zero, FPGA, and DMA/RDMA backends.
           </p>
+          <div class="proj-pill-list">
+            <span class="proj-pill">HFLabs ML Suite</span>
+            <span class="proj-pill">Accelerator Layer</span>
+            <span class="proj-pill">IPU SQL Accel (MVP)</span>
+          </div>
           <ul class="step-metrics">
-            <li><strong>SwarmML</strong> automated hyperparameter tuning</li>
-            <li><strong>SwarmDev</strong> algorithmic benchmark suite</li>
-            <li><strong>Dynamic</strong> Director authority switching</li>
+            <li>
+              <span>ML Substrates</span>
+              <strong>SNN &amp; KGE</strong>
+            </li>
+            <li>
+              <span>Accelerator Fabric</span>
+              <strong>Unified gRPC</strong>
+            </li>
+            <li>
+              <span>Query Engine</span>
+              <strong>IPU SQL Offload</strong>
+            </li>
           </ul>
         </div>
 
-        <div class="narrative-card" data-step="3">
-          <div class="step-num">03 / HARDWARE SUBSTRATE</div>
-          <h3>LevelZero.NET &amp; L0 Kernel Catalog</h3>
+        <!-- Division 03 -->
+        <div class="narrative-card" data-division="3">
+          <div class="div-header-row">
+            <span class="div-tag" style="color:var(--accent-rose);">DIVISION 03</span>
+            <span class="div-sub-badge" style="color:var(--accent-rose); border-color:rgba(244,63,94,0.3);">Bare Metal &amp; Interop</span>
+          </div>
+          <h3>Hardware &amp; Native Substrates</h3>
           <p>
-            No heavy vendor wrappers. LevelZero.NET communicates directly with the Intel Level Zero native C ABI, dispatching the curated L0 Kernel Catalog of precompiled zebin compute kernels onto Iris Xe and Arc GPUs.
+            Intel Level Zero interop, precompiled kernels, Graphcore Poplar bindings, and header-to-binding generation. Direct C ABI shims, zero-overhead C# P/Invoke, and 26 OpenCL C kernels precompiled into native zebins across 11 Intel targets.
           </p>
+          <div class="proj-pill-list">
+            <span class="proj-pill">LevelZero.NET</span>
+            <span class="proj-pill">L0 Kernel Catalog</span>
+            <span class="proj-pill">Poplar.NET</span>
+            <span class="proj-pill">Abigen</span>
+          </div>
           <ul class="step-metrics">
-            <li><strong>18+</strong> native GPU zebin kernels in L0 Catalog</li>
-            <li><strong>tgllp</strong> Iris Xe GT2 hardware validation</li>
-            <li><strong>Direct ABI</strong> zero-overhead C# P/Invoke</li>
-          </ul>
-        </div>
-
-        <div class="narrative-card" data-step="4">
-          <div class="step-num">04 / ACCELERATION &amp; INTEROP</div>
-          <h3>Accelerator, IPU SQL, Poplar.NET &amp; ABIGen</h3>
-          <p>
-            Unified compute orchestration via the Accelerator fabric, hardware-level IPU SQL Query Acceleration for high-throughput streaming, low-level Poplar.NET hardware driver shims, and compile-time ABIGen code synthesis.
-          </p>
-          <ul class="step-metrics">
-            <li><strong>IPU SQL</strong> relational streaming speedup</li>
-            <li><strong>Poplar.NET</strong> Graphcore IPU hardware shims</li>
-            <li><strong>ABIGen</strong> automated native interop synthesis</li>
+            <li>
+              <span>L0 Domain Wrappers</span>
+              <strong>16 Handlers</strong>
+            </li>
+            <li>
+              <span>Kernel Catalog</span>
+              <strong>26 Zebin/SPIR-V</strong>
+            </li>
+            <li>
+              <span>Hardware Targets</span>
+              <strong>11 Intel Targets</strong>
+            </li>
           </ul>
         </div>
       </div>
@@ -82,40 +124,69 @@
         <div class="visualizer-card">
           <div class="visualizer-header">
             <span class="status-dot"></span>
-            <span id="visualizerModeLabel" class="visualizer-title">GraphRAG SIMD Vector Substrate</span>
-            <span id="visualizerStepBadge" class="visualizer-badge">STAGE 01</span>
+            <span id="visualizerModeLabel" class="visualizer-title">Cognition &amp; Swarm Intelligence</span>
+            <span id="visualizerDivisionBadge" class="visualizer-badge">DIVISION 01</span>
           </div>
 
-          <!-- Dynamic Visualizer Canvas / Graphic -->
+          <!-- Dynamic Visualizer Topology Diagram -->
           <div id="visualizerDisplay" class="visualizer-content">
-            <div class="diagram-box mode-1">
-              <div class="topo-diagram">
-                <div class="node n-core">HFLabs Core</div>
-                <div class="edge e1"></div>
-                <div class="node n-simd">128d SIMD Index</div>
-                <div class="edge e2"></div>
-                <div class="node n-rag">GraphRAG Node</div>
-                <div class="edge e3"></div>
-                <div class="node n-mcp">FastMCP Bridge</div>
+            <!-- Dynamic Diagram Nodes Container -->
+            <div id="diagramContainer" class="diagram-mesh div-mode-1">
+              <div class="diagram-grid">
+                <div class="diagram-node node-primary" id="node1">
+                  <span class="node-icon">🧠</span>
+                  <div class="node-text">
+                    <span class="node-title">Hypertensor GraphRAG</span>
+                    <span class="node-sub">In-Memory Typed Store</span>
+                  </div>
+                </div>
+                <div class="diagram-link link-h" id="link1">
+                  <span class="link-pulse"></span>
+                </div>
+                <div class="diagram-node node-secondary" id="node2">
+                  <span class="node-icon">⚡</span>
+                  <div class="node-text">
+                    <span class="node-title">SIMD TensorPrimitives</span>
+                    <span class="node-sub">128-d Vector Cosine</span>
+                  </div>
+                </div>
+                <div class="diagram-node node-secondary" id="node3">
+                  <span class="node-icon">🐝</span>
+                  <div class="node-text">
+                    <span class="node-title">HyperSwarm Suite</span>
+                    <span class="node-sub">Director Authority</span>
+                  </div>
+                </div>
+                <div class="diagram-link link-h" id="link2">
+                  <span class="link-pulse"></span>
+                </div>
+                <div class="diagram-node node-primary" id="node4">
+                  <span class="node-icon">🔌</span>
+                  <div class="node-text">
+                    <span class="node-title">FastMCP Server</span>
+                    <span class="node-sub">65+ Agent Tools</span>
+                  </div>
+                </div>
               </div>
-              <div class="terminal-preview">
-                <code>[GraphRAG SIMD] Traversal complete: 2 hops in 0.74 ms (128d AVX-512)</code>
-              </div>
+            </div>
+
+            <div class="terminal-preview">
+              <code id="terminalText">[Cognition &amp; Swarm] Hypertensor GraphRAG: 2-hop traversal in 0.15 ms | SIMD 128d | FastMCP 65+ tools active</code>
             </div>
           </div>
 
           <div class="visualizer-footer">
             <div class="footer-stat">
-              <span class="stat-lbl">Memory Regime</span>
-              <span id="statRegime" class="stat-val">SIMD AVX-512</span>
+              <span id="statLbl1" class="stat-lbl">Graph Residency</span>
+              <span id="statVal1" class="stat-val">In-Memory RAM</span>
             </div>
             <div class="footer-stat">
-              <span class="stat-lbl">Throughput</span>
-              <span id="statThroughput" class="stat-val">12,400 qps</span>
+              <span id="statLbl2" class="stat-lbl">Vector Engine</span>
+              <span id="statVal2" class="stat-val">SIMD TensorPrimitives</span>
             </div>
             <div class="footer-stat">
-              <span class="stat-lbl">Assurance</span>
-              <span id="statAssurance" class="stat-val">Deterministic</span>
+              <span id="statLbl3" class="stat-lbl">Agent Protocol</span>
+              <span id="statVal3" class="stat-val">FastMCP (65+ Tools)</span>
             </div>
           </div>
         </div>
@@ -167,54 +238,94 @@
   .scrolly-narrative {
     display: flex;
     flex-direction: column;
-    gap: 48px;
-    padding: 40px 0;
+    gap: 36px;
+    padding: 20px 0;
   }
 
   .narrative-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
-    padding: 32px;
+    padding: 28px;
     transition: all 0.3s ease;
-    opacity: 0.45;
+    opacity: 0.55;
+    cursor: pointer;
+  }
+
+  .narrative-card:hover {
+    opacity: 0.85;
+    border-color: rgba(56, 189, 248, 0.4);
   }
 
   .narrative-card.active {
     opacity: 1;
     border-color: var(--accent-blue);
     box-shadow: 0 10px 30px rgba(56, 189, 248, 0.15);
-    transform: translateX(8px);
+    transform: translateX(6px);
   }
 
-  .step-num {
+  .div-header-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .div-tag {
     font-family: var(--font-mono);
     font-size: 11px;
-    font-weight: 700;
+    font-weight: 800;
     color: var(--accent-blue);
-    text-transform: uppercase;
-    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  .div-sub-badge {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 2px 8px;
+    border-radius: 4px;
   }
 
   .narrative-card h3 {
     font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 12px;
+    font-weight: 800;
+    margin-bottom: 10px;
     color: var(--text-primary);
   }
 
   .narrative-card p {
-    font-size: 14px;
+    font-size: 13.5px;
     color: var(--text-secondary);
     line-height: 1.6;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+  }
+
+  .proj-pill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+
+  .proj-pill {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    background: rgba(56, 189, 248, 0.08);
+    color: #bae6fd;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    padding: 3px 8px;
+    border-radius: 4px;
   }
 
   .step-metrics {
     list-style: none;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+    gap: 10px;
     background: rgba(11, 15, 25, 0.6);
     border-radius: var(--radius-sm);
     padding: 12px;
@@ -222,22 +333,23 @@
   }
 
   .step-metrics li {
-    font-size: 11px;
+    font-size: 10px;
     color: var(--text-muted);
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
   }
 
   .step-metrics strong {
-    font-size: 15px;
+    font-size: 13.5px;
     color: var(--accent-emerald);
     font-family: var(--font-mono);
+    font-weight: 700;
   }
 
   .scrolly-sticky {
     position: sticky;
-    top: 100px;
+    top: 90px;
     height: fit-content;
   }
 
@@ -252,7 +364,7 @@
   .visualizer-header {
     background: rgba(15, 23, 42, 0.95);
     border-bottom: 1px solid var(--border-color);
-    padding: 12px 18px;
+    padding: 14px 18px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -264,11 +376,12 @@
     border-radius: 50%;
     background: #10b981;
     box-shadow: 0 0 8px #10b981;
+    flex-shrink: 0;
   }
 
   .visualizer-title {
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 13.5px;
+    font-weight: 700;
     color: var(--text-primary);
     flex-grow: 1;
   }
@@ -276,62 +389,126 @@
   .visualizer-badge {
     font-family: var(--font-mono);
     font-size: 10px;
+    font-weight: 700;
     background: rgba(56, 189, 248, 0.15);
     color: var(--accent-blue);
-    padding: 2px 8px;
+    padding: 3px 8px;
     border-radius: 4px;
+    border: 1px solid rgba(56, 189, 248, 0.3);
   }
 
   .visualizer-content {
-    min-height: 280px;
-    padding: 24px;
+    min-height: 310px;
+    padding: 22px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    background: radial-gradient(circle at center, rgba(30, 41, 59, 0.4) 0%, rgba(9, 14, 26, 0.9) 100%);
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 18px;
+    background: radial-gradient(circle at center, rgba(30, 41, 59, 0.35) 0%, rgba(9, 14, 26, 0.95) 100%);
   }
 
-  .topo-diagram {
-    display: flex;
-    align-items: center;
+  .diagram-mesh {
+    width: 100%;
+  }
+
+  .diagram-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: auto auto;
     gap: 12px;
-    margin-bottom: 16px;
-    justify-content: center;
+    align-items: center;
   }
 
-  .topo-diagram .node {
-    background: rgba(30, 41, 59, 0.8);
-    border: 1px solid rgba(56, 189, 248, 0.4);
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: 600;
-    font-family: var(--font-mono);
+  .diagram-node {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+  }
+
+  .diagram-node.node-primary {
+    border-color: rgba(56, 189, 248, 0.5);
+    background: rgba(15, 23, 42, 0.95);
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.08);
+  }
+
+  .node-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .node-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    overflow: hidden;
+  }
+
+  .node-title {
+    font-size: 12px;
+    font-weight: 700;
     color: #f8fafc;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .topo-diagram .edge {
-    width: 24px;
+  .node-sub {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .diagram-link {
     height: 2px;
-    background: #38bdf8;
+    background: rgba(56, 189, 248, 0.3);
     position: relative;
+    overflow: hidden;
+  }
+
+  .link-h {
+    width: 32px;
+  }
+
+  .link-pulse {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 12px;
+    background: var(--accent-blue);
+    box-shadow: 0 0 6px var(--accent-blue);
+    animation: linkPulseAnim 1.6s infinite linear;
+  }
+
+  @keyframes linkPulseAnim {
+    0% { left: -10px; }
+    100% { left: 40px; }
   }
 
   .terminal-preview {
     background: #04060c;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
     padding: 10px 14px;
     font-size: 11px;
-    color: #a5b4fc;
+    color: #93c5fd;
     font-family: var(--font-mono);
+    overflow-x: auto;
+    white-space: pre-wrap;
+    line-height: 1.5;
   }
 
   .visualizer-footer {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     border-top: 1px solid var(--border-color);
-    background: rgba(15, 23, 42, 0.8);
+    background: rgba(15, 23, 42, 0.9);
     padding: 12px 18px;
   }
 
@@ -342,17 +519,20 @@
   }
 
   .stat-lbl {
-    font-size: 10px;
+    font-size: 9.5px;
     text-transform: uppercase;
     color: var(--text-muted);
     font-family: var(--font-mono);
   }
 
   .stat-val {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--text-primary);
     font-family: var(--font-mono);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   @media (max-width: 960px) {
@@ -366,76 +546,154 @@
     .hero-title {
       font-size: 32px;
     }
+    .diagram-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+    }
+    .diagram-link {
+      display: none;
+    }
   }
 </style>
 
 <script>
-  // Interactive Scrollytelling step observer
-  const steps = document.querySelectorAll('.narrative-card');
-  const titleEl = document.getElementById('visualizerModeLabel');
-  const badgeEl = document.getElementById('visualizerStepBadge');
-  const statRegime = document.getElementById('statRegime');
-  const statThroughput = document.getElementById('statThroughput');
-  const statAssurance = document.getElementById('statAssurance');
-
-  const configs = {
+  // Division configuration dictionary
+  const divisionConfigs = {
     1: {
-      title: 'Hypertensor GraphRAG & SIMD Vectors',
-      badge: 'STAGE 01',
-      regime: 'SIMD AVX-512',
-      throughput: '12,400 qps',
-      assurance: 'Deterministic',
-      terminal: '[GraphRAG SIMD] Traversal complete: 2 hops in 0.74 ms (128d AVX-512)'
+      title: 'Cognition & Swarm Intelligence',
+      badge: 'DIVISION 01',
+      badgeColor: '#38bdf8',
+      nodes: [
+        { icon: '🧠', title: 'Hypertensor GraphRAG', sub: 'In-Memory Typed Store' },
+        { icon: '⚡', title: 'SIMD TensorPrimitives', sub: '128-d Vector Cosine' },
+        { icon: '🐝', title: 'HyperSwarm Suite', sub: 'Director Authority' },
+        { icon: '🔌', title: 'FastMCP Server', sub: '65+ Agent Tools' }
+      ],
+      terminal: '[Cognition & Swarm] Hypertensor GraphRAG: 2-hop traversal in 0.15 ms | SIMD 128d | FastMCP 65+ tools active',
+      stats: [
+        { lbl: 'Graph Residency', val: 'In-Memory RAM' },
+        { lbl: 'Vector Engine', val: 'SIMD TensorPrimitives' },
+        { lbl: 'Agent Protocol', val: 'FastMCP (65+ Tools)' }
+      ]
     },
     2: {
-      title: 'HyperSwarm & SwarmDev / SwarmML',
-      badge: 'STAGE 02',
-      regime: 'Multi-Algorithm',
-      throughput: 'SwarmML & Dev',
-      assurance: 'Adaptive Authority',
-      terminal: '[SwarmDev] SwarmML hyperparameter search converged | Director active'
+      title: 'Machine Learning & Acceleration',
+      badge: 'DIVISION 02',
+      badgeColor: '#06b6d4',
+      nodes: [
+        { icon: '🧬', title: 'HFLabs ML Suite', sub: 'Spiking NN & KGE' },
+        { icon: '⚡', title: 'Accelerator gRPC', sub: 'Plan Envelope Fabric' },
+        { icon: '🎛️', title: 'Heterogeneous Backends', sub: 'IPU / L0 / CUDA / FPGA' },
+        { icon: '🗄️', title: 'IPU SQL Acceleration', sub: 'Postgres & CLR Offload' }
+      ],
+      terminal: '[ML & Acceleration] gRPC plan envelope dispatched across IPU (Poplar) & Level Zero | SQL aggregate offloaded',
+      stats: [
+        { lbl: 'ML Architecture', val: 'Spiking & Graph ML' },
+        { lbl: 'Acceleration Fabric', val: 'Unified gRPC Plan' },
+        { lbl: 'Query Offload', val: 'IPU SQL Bridge (MVP)' }
+      ]
     },
     3: {
-      title: 'LevelZero.NET & L0 Kernel Catalog',
-      badge: 'STAGE 03',
-      regime: 'Intel Iris Xe GT2',
-      throughput: '18 Zebin Kernels',
-      assurance: 'Hardware ABI Clean',
-      terminal: '[LevelZero.NET] Executed L0 Catalog kernel on tgllp in 0.042 ms'
-    },
-    4: {
-      title: 'Accelerator, IPU SQL, Poplar.NET & ABIGen',
-      badge: 'STAGE 04',
-      regime: 'IPU & Hardware Interop',
-      throughput: 'Sub-ms Query Accel',
-      assurance: 'Synthesized ABI',
-      terminal: '[Accelerator] IPU SQL streaming active | Poplar.NET shims loaded via ABIGen'
+      title: 'Hardware & Native Substrates',
+      badge: 'DIVISION 03',
+      badgeColor: '#f43f5e',
+      nodes: [
+        { icon: '⚙️', title: 'Abigen Clang Engine', sub: 'C ABI Shim Generator' },
+        { icon: '📦', title: 'Native C ABI Shim', sub: 'Zero-Overhead P/Invoke' },
+        { icon: '🖥️', title: 'LevelZero.NET', sub: '16 Domain Wrappers' },
+        { icon: '⚡', title: 'L0 Kernel Catalog', sub: '26 Precompiled Zebins' }
+      ],
+      terminal: '[Hardware Substrate] LevelZero.NET initialized | 26 kernels precompiled across 11 Intel targets (Iris Xe to Panther Lake)',
+      stats: [
+        { lbl: 'Native Interop', val: 'Managed C# P/Invoke' },
+        { lbl: 'GPU Kernels', val: '26 Zebin & SPIR-V' },
+        { lbl: 'Intel Targets', val: '11 Hardware Targets' }
+      ]
     }
   };
 
+  const cards = document.querySelectorAll('.narrative-card');
+  const titleEl = document.getElementById('visualizerModeLabel');
+  const badgeEl = document.getElementById('visualizerDivisionBadge');
+  const terminalEl = document.getElementById('terminalText');
+  const statLbl1 = document.getElementById('statLbl1');
+  const statVal1 = document.getElementById('statVal1');
+  const statLbl2 = document.getElementById('statLbl2');
+  const statVal2 = document.getElementById('statVal2');
+  const statLbl3 = document.getElementById('statLbl3');
+  const statVal3 = document.getElementById('statVal3');
+
+  function updateDivisionDisplay(divId) {
+    const cfg = divisionConfigs[divId];
+    if (!cfg) return;
+
+    if (titleEl) titleEl.textContent = cfg.title;
+    if (badgeEl) {
+      badgeEl.textContent = cfg.badge;
+      badgeEl.style.color = cfg.badgeColor;
+      badgeEl.style.borderColor = `${cfg.badgeColor}4D`;
+      badgeEl.style.background = `${cfg.badgeColor}1A`;
+    }
+
+    if (terminalEl) terminalEl.textContent = cfg.terminal;
+
+    // Update diagram nodes
+    const node1 = document.getElementById('node1');
+    const node2 = document.getElementById('node2');
+    const node3 = document.getElementById('node3');
+    const node4 = document.getElementById('node4');
+
+    const nodeEls = [node1, node2, node3, node4];
+    cfg.nodes.forEach((n, idx) => {
+      const el = nodeEls[idx];
+      if (el) {
+        const icon = el.querySelector('.node-icon');
+        const title = el.querySelector('.node-title');
+        const sub = el.querySelector('.node-sub');
+        if (icon) icon.textContent = n.icon;
+        if (title) title.textContent = n.title;
+        if (sub) sub.textContent = n.sub;
+      }
+    });
+
+    // Update stats
+    if (statLbl1 && statVal1 && cfg.stats[0]) {
+      statLbl1.textContent = cfg.stats[0].lbl;
+      statVal1.textContent = cfg.stats[0].val;
+    }
+    if (statLbl2 && statVal2 && cfg.stats[1]) {
+      statLbl2.textContent = cfg.stats[1].lbl;
+      statVal2.textContent = cfg.stats[1].val;
+    }
+    if (statLbl3 && statVal3 && cfg.stats[2]) {
+      statLbl3.textContent = cfg.stats[2].lbl;
+      statVal3.textContent = cfg.stats[2].val;
+    }
+  }
+
+  // Click handler
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      cards.forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      const divId = card.getAttribute('data-division');
+      updateDivisionDisplay(divId);
+    });
+  });
+
+  // Scroll observer
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        steps.forEach(s => s.classList.remove('active'));
+        cards.forEach(c => c.classList.remove('active'));
         entry.target.classList.add('active');
-
-        const stepId = entry.target.getAttribute('data-step');
-        const cfg = configs[stepId];
-        if (cfg && titleEl && badgeEl && statRegime && statThroughput && statAssurance) {
-          titleEl.textContent = cfg.title;
-          badgeEl.textContent = cfg.badge;
-          statRegime.textContent = cfg.regime;
-          statThroughput.textContent = cfg.throughput;
-          statAssurance.textContent = cfg.assurance;
-
-          const term = document.querySelector('.terminal-preview code');
-          if (term) term.textContent = cfg.terminal;
-        }
+        const divId = entry.target.getAttribute('data-division');
+        updateDivisionDisplay(divId);
       }
     });
   }, {
-    threshold: 0.6
+    threshold: 0.55
   });
 
-  steps.forEach(s => observer.observe(s));
+  cards.forEach(card => observer.observe(card));
 </script>

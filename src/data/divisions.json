@@ -36,6 +36,12 @@
     "color": "#06b6d4",
     "projects": [
       {
+        "name": "AutoMLApp",
+        "description": "Windows node-graph editor (.NET 10/WinForms) for composing, validating and running ML and accelerator pipelines. Visual front end for IPUServices with 185+ node types, F7 validation, and pluggable HyperSwarm backend.",
+        "path": "src/HFLabs/Products/AutoMLApp",
+        "status": "Production Desktop"
+      },
+      {
         "name": "HFLabs Machine Learning Suite",
         "description": "Spiking neural networks, contextual and intergraph inference, and knowledge-graph embeddings (KGE). It also has hyperparameter optimization (Bayesian, Hyperband, BOHB, ASHA-BOHB, TuRBO) and a Level Zero LLM inference engine with graph-constrained beam decoding.",
         "path": "src/HFLabs/Libraries/ML",

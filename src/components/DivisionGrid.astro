@@ -48,6 +48,27 @@ import divisions from '../data/divisions.json';
                       </a>
                     </div>
                   )}
+                  {p.name.includes("HyperSwarm") && (
+                    <div style="margin-top:8px;">
+                      <a href="/products/hyperswarm" class="btn-primary" style="font-size:11px; padding:4px 10px; display:inline-flex; align-items:center; gap:4px;">
+                        HyperSwarm Product Page &rarr;
+                      </a>
+                    </div>
+                  )}
+                  {p.name.includes("SwarmDev") && (
+                    <div style="margin-top:8px;">
+                      <a href="/products/swarmdev" class="btn-primary" style="font-size:11px; padding:4px 10px; display:inline-flex; align-items:center; gap:4px;">
+                        SwarmDev Product Page &rarr;
+                      </a>
+                    </div>
+                  )}
+                  {p.name.includes("AutoMLApp") && (
+                    <div style="margin-top:8px;">
+                      <a href="/products/automlapp" class="btn-primary" style="font-size:11px; padding:4px 10px; display:inline-flex; align-items:center; gap:4px;">
+                        AutoMLApp Product Page &rarr;
+                      </a>
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>

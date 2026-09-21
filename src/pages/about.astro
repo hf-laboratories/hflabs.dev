@@ -1,0 +1,926 @@
+---
+// src/pages/about.astro
+import Layout from '../layouts/Layout.astro';
+
+const timeline = [
+  {
+    year: "2020",
+    badge: "RESEARCH GENESIS",
+    title: "Self-Taught Machine Learning & Systems Foundations",
+    desc: "Began deep-dive self-directed research into machine learning algorithms, distributed computing, heuristic optimization, and low-level systems programming."
+  },
+  {
+    year: "Late 2024",
+    badge: "FOUNDING HF LABS",
+    title: "Architecture & Library Suite Inception",
+    desc: "Formalized HF Labs as an independent systems laboratory. Began active development of the core native library suite, SIMD vector primitives, LevelZero.NET interop, and in-memory graph engines."
+  },
+  {
+    year: "2025 – Present",
+    badge: "SWARM ECOSYSTEM",
+    title: "HyperSwarm & Downstream Product Family",
+    desc: "Pioneered HyperSwarm for multi-agent swarm coordination. Shipped Hypertensor GraphRAG, SwarmBench, Swarm AutoML, and Swarm Dev across open-core and high-assurance commercial tiers."
+  }
+];
+
+const swarmProducts = [
+  {
+    id: "hyperswarm",
+    name: "HyperSwarm",
+    role: "CORE FRAMEWORK",
+    badge: "Flagship",
+    color: "#38bdf8",
+    icon: "⚡",
+    desc: "A decentralized multi-agent and swarm coordination framework. Employs bi-directional swarm sharding, emergent consensus protocols, and sub-millisecond inter-agent communication without external broker bottlenecks."
+  },
+  {
+    id: "swarmbench",
+    name: "SwarmBench",
+    role: "EVALUATION ENGINE",
+    badge: "Downstream Suite",
+    color: "#818cf8",
+    icon: "📊",
+    desc: "Rigorous benchmarking and empirical evaluation harness for multi-agent topologies. Measures communication overhead, convergence velocity, decision latency, and reasoning fidelity under synthetic failure modes."
+  },
+  {
+    id: "swarm-automl",
+    name: "Swarm AutoML",
+    role: "OPTIMIZATION MESH",
+    badge: "Downstream Suite",
+    color: "#10b981",
+    icon: "🧬",
+    desc: "Decentralized automated machine learning suite. Uses swarm metaheuristics for automated neural architecture search, hyperparameter optimization, and dynamic pipeline configuration across heterogeneous compute targets."
+  },
+  {
+    id: "swarm-dev",
+    name: "Swarm Dev",
+    role: "DEVELOPER ACCELERATION",
+    badge: "Downstream Suite",
+    color: "#f59e0b",
+    icon: "🛠️",
+    desc: "Developer-centric swarm orchestration environment. Integrates Roslyn AST semantic topology, continuous DAG task queues, and automated multi-agent code analysis to accelerate large-scale software refactoring."
+  }
+];
+
+const offGridMetrics = [
+  { label: "Power Source", val: "100% Off-Grid Solar", sub: "Dedicated Photovoltaic Array" },
+  { label: "Energy Storage", val: "LiFePO4 Battery Bank", sub: "Continuous 24/7 Autonomy" },
+  { label: "Compute Hardware", val: "Bare-Metal Node Cluster", sub: "Custom Thermal & Power Tuning" },
+  { label: "Architecture", val: "Zero Cloud Reliance", sub: "Local-First In-Memory Compute" }
+];
+---
+
+<Layout 
+  title="About Alix & HF Labs — Independent ML Research & Off-Grid Systems Lab" 
+  description="Alix is an independent ML researcher and solo builder behind HF Labs (hflabs.dev), building HyperSwarm and high-performance agentic systems on a self-built off-grid setup.">
+  
+  <!-- Top Breadcrumb -->
+  <div class="about-top-bar">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Overview</a>
+        <span class="sep">/</span>
+        <span class="curr">About HF Labs</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="about-hero">
+    <div class="container">
+      <div class="hero-badge-row">
+        <span class="badge badge-cyan">Independent Research</span>
+        <span class="badge badge-emerald">Solo Founder</span>
+        <span class="badge badge-amber">Off-Grid Infrastructure</span>
+      </div>
+
+      <h1 class="hero-title">
+        High-Assurance Systems,<br />
+        <span class="gradient-text">Engineered from Bare Metal to Swarms</span>
+      </h1>
+      
+      <p class="hero-lead">
+        HF Labs (<a href="https://hflabs.dev" class="highlight-link">hflabs.dev</a>) is an independent machine learning and systems research laboratory founded and led by <strong class="text-white">Alix</strong>. We build high-performance computing libraries, sub-millisecond in-memory graph topologies, and the <strong class="text-white">HyperSwarm</strong> multi-agent coordination ecosystem.
+      </p>
+    </div>
+  </section>
+
+  <!-- Narrative Grid: Founder & Off-Grid Setup -->
+  <section class="narrative-section">
+    <div class="container">
+      <div class="narrative-grid">
+        <!-- Story Card: The Founder -->
+        <div class="narrative-card founder-card">
+          <div class="card-glow-top" style="background: radial-gradient(circle, rgba(56,189,248,0.2) 0%, transparent 70%);"></div>
+          <div class="card-header">
+            <span class="card-icon-tag">🧑‍💻</span>
+            <div>
+              <span class="eyebrow-tag">SOLO FOUNDER &amp; RESEARCHER</span>
+              <h2 class="card-title">Alix</h2>
+            </div>
+          </div>
+          <div class="card-body">
+            <p>
+              Operating as a solo builder and independent researcher, Alix has been self-taught in machine learning since <strong>2020</strong>. Rather than following standard enterprise abstraction layers, the research path focused deeply on first-principles computing: hardware execution models, SIMD vector instruction sets, compile-time memory safety, and decentralized metaheuristics.
+            </p>
+            <p>
+              Starting in <strong>late 2024</strong>, Alix synthesized these research foundations into the current production-grade product and library suite that powers HF Labs today — bridging ultra-low-level Intel Level Zero GPU kernels with high-level multi-agent graph topologies.
+            </p>
+            <div class="founder-meta-strip">
+              <div class="meta-item">
+                <span class="meta-lbl">Role</span>
+                <span class="meta-val">Founder &amp; Lead Researcher</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-lbl">Lab Domain</span>
+                <span class="meta-val">hflabs.dev</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-lbl">Direct Contact</span>
+                <span class="meta-val"><a href="mailto:alix@hflabs.dev">alix@hflabs.dev</a></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Story Card: Off-Grid Infrastructure -->
+        <div class="narrative-card offgrid-card">
+          <div class="card-glow-top" style="background: radial-gradient(circle, rgba(16,185,129,0.2) 0%, transparent 70%);"></div>
+          <div class="card-header">
+            <span class="card-icon-tag">☀️</span>
+            <div>
+              <span class="eyebrow-tag" style="color:var(--accent-emerald);">FOUNDING INFRASTRUCTURE</span>
+              <h2 class="card-title">Built &amp; Run Off-Grid</h2>
+            </div>
+          </div>
+          <div class="card-body">
+            <p>
+              A core part of the HF Labs founding narrative and ethos is physical and computational sovereignty: the research lab and its primary compute cluster run entirely on a <strong>self-built off-grid setup</strong>.
+            </p>
+            <p>
+              Powered by dedicated solar photovoltaic arrays, lithium-iron battery banks, and custom bare-metal servers, HF Labs operates independently of commercial utility grids and managed cloud monopolies. This physical reality directly informs our software architecture: zero unnecessary network hops, extreme energy efficiency, and deterministic in-memory execution.
+            </p>
+            
+            <div class="offgrid-stats-grid">
+              {offGridMetrics.map((m) => (
+                <div class="offgrid-stat-box">
+                  <span class="stat-lbl">{m.label}</span>
+                  <span class="stat-val">{m.val}</span>
+                  <span class="stat-sub">{m.sub}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Focus: HyperSwarm & Downstream Products -->
+  <section class="swarm-ecosystem-section">
+    <div class="container">
+      <div class="section-heading">
+        <span class="badge badge-purple">SWARM INTELLIGENCE</span>
+        <h2 class="section-title">The HyperSwarm Product Family</h2>
+        <p class="section-desc">
+          At the center of HF Labs’ research is <strong>HyperSwarm</strong> — a high-velocity coordination paradigm for multi-agent collectives, accompanied by specialized downstream toolchains for benchmarking, auto-tuning, and developer orchestration.
+        </p>
+      </div>
+
+      <div class="swarm-grid">
+        {swarmProducts.map((p) => (
+          <div class="swarm-card" id={`product-${p.id}`} style={`--card-accent: ${p.color};`}>
+            <div class="swarm-card-header">
+              <div class="icon-bubble" style={`background: ${p.color}18; border-color: ${p.color}40;`}>
+                <span class="product-icon">{p.icon}</span>
+              </div>
+              <div class="product-meta">
+                <span class="product-role">{p.role}</span>
+                <h3 class="product-name">{p.name}</h3>
+              </div>
+              <span class="product-badge" style={`color: ${p.color}; background: ${p.color}12; border-color: ${p.color}35;`}>
+                {p.badge}
+              </span>
+            </div>
+            <p class="swarm-card-desc">{p.desc}</p>
+            <div class="swarm-card-footer" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <span class="tech-indicator">
+                <span class="dot" style={`background: ${p.color}; box-shadow: 0 0 6px ${p.color};`}></span>
+                Active Architecture
+              </span>
+              {p.id === 'hyperswarm' && (
+                <a href="/products/hyperswarm" class="btn-primary" style="font-size:11px; padding:4px 10px; text-decoration:none;">
+                  Explore HyperSwarm &rarr;
+                </a>
+              )}
+              {p.id === 'swarm-automl' && (
+                <a href="/products/automlapp" class="btn-primary" style="font-size:11px; padding:4px 10px; text-decoration:none;">
+                  Explore AutoMLApp &rarr;
+                </a>
+              )}
+              {p.id === 'swarm-dev' && (
+                <a href="/products/swarmdev" class="btn-primary" style="font-size:11px; padding:4px 10px; text-decoration:none;">
+                  Explore SwarmDev &rarr;
+                </a>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline & Evolution -->
+  <section class="timeline-section">
+    <div class="container">
+      <div class="section-heading">
+        <span class="badge badge-cyan">MILESTONES</span>
+        <h2 class="section-title">Research &amp; Engineering Timeline</h2>
+        <p class="section-desc">
+          From independent exploration to a full-stack high-assurance systems laboratory.
+        </p>
+      </div>
+
+      <div class="timeline-wrapper">
+        {timeline.map((item, idx) => (
+          <div class="timeline-item">
+            <div class="timeline-marker">
+              <span class="timeline-year">{item.year}</span>
+              <div class="timeline-node"></div>
+              {idx < timeline.length - 1 && <div class="timeline-line"></div>}
+            </div>
+            <div class="timeline-content">
+              <span class="timeline-badge">{item.badge}</span>
+              <h3 class="timeline-title">{item.title}</h3>
+              <p class="timeline-desc">{item.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Architectural Principles -->
+  <section class="principles-section">
+    <div class="container">
+      <div class="principles-box">
+        <div class="principles-header">
+          <span class="badge badge-amber">ETHOS &amp; PHILOSOPHY</span>
+          <h2 class="principles-title">Guiding Principles of HF Labs</h2>
+        </div>
+        
+        <div class="principles-grid">
+          <div class="principle-item">
+            <span class="p-num">01</span>
+            <h4>First-Principles Systems Engineering</h4>
+            <p>We avoid bloated runtime abstractions. Every algorithm is profiled down to hardware cache lines, SIMD registers, and native GPU command queues.</p>
+          </div>
+          <div class="principle-item">
+            <span class="p-num">02</span>
+            <h4>Deterministic, In-Memory Cognition</h4>
+            <p>AI agent memory belongs in high-throughput RAM graphs, not high-latency external relational networks. Sub-millisecond hops are the standard.</p>
+          </div>
+          <div class="principle-item">
+            <span class="p-num">03</span>
+            <h4>Physical &amp; Digital Sovereignty</h4>
+            <p>From our off-grid solar energy harvesting to our open-core codebase distribution, we build resilient systems that operate autonomously without vendor capture.</p>
+          </div>
+          <div class="principle-item">
+            <span class="p-num">04</span>
+            <h4>Rigorous Verification &amp; Invariants</h4>
+            <p>High-assurance systems require mathematical ground truth. We build formal invariant checkers, signed checkpoints, and deterministic benchmark harnesses.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact & Collaboration CTA -->
+  <section class="about-cta-section">
+    <div class="container">
+      <div class="cta-inner-card">
+        <div class="cta-content">
+          <span class="badge badge-emerald">DIRECT INQUIRIES</span>
+          <h2>Connect with Alix &amp; HF Labs</h2>
+          <p>
+            For research collaborations, commercial licensing, high-assurance deployments, or technical inquiries regarding HyperSwarm and Hypertensor GraphRAG:
+          </p>
+          <div class="cta-actions">
+            <a href="mailto:alix@hflabs.dev" class="btn-primary" style="padding:12px 24px;">
+              Email alix@hflabs.dev &rarr;
+            </a>
+            <a href="/products/ht-graphrag" class="btn-secondary" style="padding:12px 24px;">
+              Explore HT GraphRAG &darr;
+            </a>
+            <a href="https://github.com/hf-laboratories/IPUServices" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="padding:12px 24px;">
+              GitHub Repository
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .about-top-bar {
+    background: rgba(15, 23, 42, 0.6);
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 0;
+    font-size: 13px;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .breadcrumb a {
+    color: var(--text-secondary);
+  }
+
+  .breadcrumb a:hover {
+    color: var(--accent-blue);
+  }
+
+  .breadcrumb .sep {
+    color: var(--border-color);
+  }
+
+  .breadcrumb .curr {
+    color: var(--text-primary);
+  }
+
+  /* Hero */
+  .about-hero {
+    padding: 70px 0 50px;
+    position: relative;
+  }
+
+  .hero-badge-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .badge-cyan {
+    background: rgba(56, 189, 248, 0.12);
+    color: var(--accent-blue);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+  }
+
+  .badge-emerald {
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--accent-emerald);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .badge-amber {
+    background: rgba(245, 158, 11, 0.12);
+    color: var(--accent-amber);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+  }
+
+  .badge-purple {
+    background: rgba(129, 140, 248, 0.12);
+    color: var(--accent-purple);
+    border: 1px solid rgba(129, 140, 248, 0.3);
+  }
+
+  .hero-title {
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    color: #f8fafc;
+    margin-bottom: 20px;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #34d399 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-lead {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 820px;
+  }
+
+  .highlight-link {
+    color: var(--accent-blue);
+    font-family: var(--font-mono);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .text-white {
+    color: #f8fafc;
+  }
+
+  /* Narrative Grid */
+  .narrative-section {
+    padding: 30px 0 60px;
+  }
+
+  .narrative-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+
+  @media (max-width: 900px) {
+    .narrative-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .narrative-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .card-glow-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 140px;
+    pointer-events: none;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-icon-tag {
+    font-size: 28px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .eyebrow-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--accent-blue);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .card-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #f8fafc;
+  }
+
+  .card-body {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    color: var(--text-secondary);
+    font-size: 14.5px;
+    line-height: 1.65;
+  }
+
+  .card-body strong {
+    color: #f1f5f9;
+  }
+
+  .founder-meta-strip {
+    margin-top: 10px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .meta-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+  }
+
+  .meta-lbl {
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+  }
+
+  .meta-val {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: #f1f5f9;
+  }
+
+  .meta-val a {
+    color: var(--accent-blue);
+  }
+
+  /* Off-grid Stats Grid */
+  .offgrid-stats-grid {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .offgrid-stat-box {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .stat-lbl {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .stat-val {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent-emerald);
+  }
+
+  .stat-sub {
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+
+  /* Swarm Section */
+  .swarm-ecosystem-section {
+    padding: 70px 0;
+    background: rgba(6, 9, 17, 0.7);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .section-heading {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 48px;
+  }
+
+  .section-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-top: 10px;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+
+  .section-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .swarm-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 800px) {
+    .swarm-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .swarm-card {
+    background: #090e1a;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: all 0.25s ease;
+    position: relative;
+  }
+
+  .swarm-card:hover {
+    border-color: var(--card-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  }
+
+  .swarm-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .icon-bubble {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .product-meta {
+    flex-grow: 1;
+  }
+
+  .product-role {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    display: block;
+  }
+
+  .product-name {
+    font-size: 18px;
+    font-weight: 800;
+    color: #f1f5f9;
+  }
+
+  .product-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid;
+    text-transform: uppercase;
+  }
+
+  .swarm-card-desc {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    flex-grow: 1;
+  }
+
+  .swarm-card-footer {
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .tech-indicator {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .tech-indicator .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  /* Timeline */
+  .timeline-section {
+    padding: 70px 0;
+  }
+
+  .timeline-wrapper {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .timeline-item {
+    display: flex;
+    gap: 28px;
+    position: relative;
+  }
+
+  .timeline-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90px;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .timeline-year {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--accent-blue);
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .timeline-node {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #0284c7;
+    border: 3px solid #070a13;
+    box-shadow: 0 0 10px #38bdf8;
+    z-index: 2;
+  }
+
+  .timeline-line {
+    position: absolute;
+    top: 36px;
+    bottom: -32px;
+    width: 2px;
+    background: rgba(56, 189, 248, 0.2);
+  }
+
+  .timeline-content {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 20px 24px;
+    flex-grow: 1;
+  }
+
+  .timeline-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent-amber);
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    padding: 2px 6px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+
+  .timeline-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 6px;
+  }
+
+  .timeline-desc {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+
+  /* Principles */
+  .principles-section {
+    padding: 40px 0 70px;
+  }
+
+  .principles-box {
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.8) 0%, rgba(7, 10, 19, 0.95) 100%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+  }
+
+  .principles-header {
+    margin-bottom: 32px;
+  }
+
+  .principles-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-top: 8px;
+  }
+
+  .principles-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+
+  @media (max-width: 800px) {
+    .principles-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .principle-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .p-num {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--accent-blue);
+    opacity: 0.6;
+  }
+
+  .principle-item h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+
+  .principle-item p {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* CTA */
+  .about-cta-section {
+    padding: 20px 0 60px;
+  }
+
+  .cta-inner-card {
+    background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.15) 0%, rgba(15, 23, 42, 0.8) 70%);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: var(--radius-lg);
+    padding: 48px 32px;
+    text-align: center;
+  }
+
+  .cta-content {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .cta-content h2 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #f8fafc;
+  }
+
+  .cta-content p {
+    font-size: 14.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .cta-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  @media (max-width: 640px) {
+    .hero-title {
+      font-size: 32px;
+    }
+    .hero-lead {
+      font-size: 16px;
+    }
+    .principles-box {
+      padding: 24px;
+    }
+    .cta-inner-card {
+      padding: 32px 18px;
+    }
+  }
+</style>

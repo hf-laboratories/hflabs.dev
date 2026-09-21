@@ -11,6 +11,7 @@ const products = [
     tagline: "In-memory typed property-graph store with hybrid dense and BM25 retrieval, SIMD TensorPrimitives, and FastMCP agent context.",
     status: "Production Ready",
     href: "/products/ht-graphrag",
+    buttonText: "View Product & Licensing Tiers →",
     features: [
       "In-memory typed property-graph store with dense & BM25 retrieval",
       "SIMD TensorPrimitives with optional Level Zero GPU offload",
@@ -19,18 +20,51 @@ const products = [
     ]
   },
   {
+    id: "swarmdev",
+    name: "SwarmDev",
+    badge: "Deterministic Pipeline",
+    badgeColor: "#f59e0b",
+    tagline: "A deterministic pipeline that turns a natural-language request into an inspectable plan with a diagnostic trail at every step.",
+    status: "Production Library",
+    href: "/products/swarmdev",
+    buttonText: "Explore SwarmDev Product Page →",
+    features: [
+      "6 explicit stages: Classify, Analyze, Graph, Route, Normalize, Emit",
+      "Deterministic core with full regression testability",
+      "Optional kGNN graph reasoning & HyperSwarm wavescan bridge",
+      "Structured telemetry sidecar and hard policy interception gates"
+    ]
+  },
+  {
+    id: "automlapp",
+    name: "AutoMLApp",
+    badge: "Node-Graph Editor",
+    badgeColor: "#06b6d4",
+    tagline: "Design ML pipelines on a canvas. Run them on your hardware with 185+ node types across 25+ domains.",
+    status: "Active Desktop App",
+    href: "/products/automlapp",
+    buttonText: "Explore AutoMLApp Product Page →",
+    features: [
+      "185+ node types across 25+ domains (Data, ONNX, IPU, SNN, Swarm, FPGA)",
+      "Topologically sorted plan compilation with domain-specific step handlers",
+      "F7 instant invariant validation (cycles, orphans, duplicate IDs, types)",
+      "Pluggable HyperSwarm-backed AutoML & telemetry-aware cost scoring"
+    ]
+  },
+  {
     id: "hyperswarm",
     name: "HyperSwarm Optimization Suite",
     badge: "Swarm Metaheuristics",
     badgeColor: "#818cf8",
-    tagline: "Swarm optimization framework covering core, hybrid, advanced and multi-objective algorithms with Director ensembles.",
-    status: "Production Ready",
-    href: "/docs#swarm-benchmark",
+    tagline: "Swarm optimization, from a single algorithm to a coordinated fleet. 35 optimizer modes with Intel Level Zero GPU kernels.",
+    status: "Active Development",
+    href: "/products/hyperswarm",
+    buttonText: "Explore HyperSwarm Product Page →",
     features: [
-      "Director-managed subswarm ensembles & diversity monitoring",
-      "Pareto-sorting threshold tuning & desktop visualizer",
-      "SwarmDev deterministic prompt-to-workflow pipeline",
-      "Optional kGNN reasoning and wavescan analysis layers"
+      "35 optimizers: 12 core swarm models, 14 hybrids, 9 advanced & multi-objective",
+      "Director ensembles with dynamic budget & authority assignment",
+      "10 GPU offload classes with compiled Level Zero SPIR-V / Zebin kernels",
+      "123+ registered features & ~2,500 tests across 191 test suites"
     ]
   },
   {
@@ -108,7 +142,7 @@ const products = [
 
           <div class="card-footer">
             <a href={p.href} class="btn-primary" style="width:100%; text-align:center; padding:10px 16px; font-size:13px;">
-              {p.id === 'ht-graphrag' ? 'View Product & Licensing Tiers →' : 'View Documentation & Guides →'}
+              {p.buttonText || 'View Documentation & Guides →'}
             </a>
           </div>
         </div>

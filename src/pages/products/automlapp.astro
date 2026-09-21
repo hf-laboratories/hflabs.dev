@@ -1,0 +1,1286 @@
+---
+// src/pages/products/automlapp.astro
+import Layout from '../../layouts/Layout.astro';
+
+const capabilities = [
+  {
+    icon: "🎨",
+    title: "Node-graph editor",
+    tagline: "185+ Node Types • 25+ Domains",
+    desc: "Drag and drop across 25+ domains including data pipelines, ONNX, IPU, spiking networks, swarm, FPGA, RDMA, feature store, and sidecar. Typed connectors reject incompatible links in real time as you draw them.",
+    color: "#38bdf8"
+  },
+  {
+    icon: "⚡",
+    title: "Execution engine",
+    tagline: "Topological Sorting & Domain Handlers",
+    desc: "Canvas graphs compile automatically into topologically sorted execution plans with domain-specific step handlers dispatched directly to host accelerators or remote clusters.",
+    color: "#06b6d4"
+  },
+  {
+    icon: "✅",
+    title: "Instant validation (F7)",
+    tagline: "Comprehensive Invariant Checking",
+    desc: "A single keypress (F7) runs static analysis checking for cycles, missing dependencies, duplicate IDs, orphaned nodes, and port type mismatches, immediately flagging defects on canvas.",
+    color: "#10b981"
+  },
+  {
+    icon: "🌉",
+    title: "Integration bridges",
+    tagline: "28 Native Subsystem Connectors",
+    desc: "Around 28 specialized bridges connect canvas nodes directly to HyperSwarm, ONNX runtime, spiking neural networks, SwarmDev deterministic pipelines, the telemetry sidecar, and hardware engines.",
+    color: "#818cf8"
+  },
+  {
+    icon: "🌊",
+    title: "HyperSwarm-backed AutoML",
+    tagline: "Cost & Score-Aware Architecture Search",
+    desc: "Hyperparameter search executes on HyperSwarm through a pluggable backend where candidates define model family, depth, learning rate, batch size, and dataset. A telemetry-aware engine balances accuracy against compute cost signals.",
+    color: "#f59e0b"
+  },
+  {
+    icon: "🎛️",
+    title: "Workspaces & panels",
+    tagline: "40+ Subcanvases & Specialized Tooling",
+    desc: "Experiment, admin, and data-catalog zones with 40+ subcanvas types and dedicated side panels for hyperparameters, IPU tile connections, cluster setups, deployments, observability, model registries, and test runners.",
+    color: "#ec4899"
+  },
+  {
+    icon: "📦",
+    title: "Portable pipelines",
+    tagline: "Two-Way JSON Interop",
+    desc: "Export and import standardized pipeline JSON schemas fully compatible with the web pipeline manager, IPUServices daemons, and command-line execution runners.",
+    color: "#a855f7"
+  },
+  {
+    icon: "🛠️",
+    title: "Editing fundamentals",
+    tagline: "Productive Desktop Ergonomics",
+    desc: "Full undo/redo stack, automatic force-directed graph layout, project state persistence, execution run histories, and diffable step checkpoints.",
+    color: "#64748b"
+  },
+  {
+    icon: "🛡️",
+    title: "Tiered entitlements",
+    tagline: "Granular Feature Access",
+    desc: "Node availability, accelerator targets, and advanced swarm algorithms can be dynamically filtered and partitioned by organization license tier.",
+    color: "#14b8a6"
+  }
+];
+
+const domains = [
+  { name: "Data Pipelines", count: "24 Nodes", icon: "📊" },
+  { name: "ONNX & Tensor", count: "18 Nodes", icon: "🧠" },
+  { name: "IPU & Poplar", count: "16 Nodes", icon: "⚡" },
+  { name: "Spiking Networks", count: "12 Nodes", icon: "⚡" },
+  { name: "HyperSwarm Search", count: "15 Nodes", icon: "🌊" },
+  { name: "FPGA & RDMA", count: "10 Nodes", icon: "🔌" },
+  { name: "Feature Store", count: "8 Nodes", icon: "🗄️" },
+  { name: "Sidecar & Telemetry", count: "14 Nodes", icon: "📡" }
+];
+---
+
+<Layout 
+  title="AutoMLApp • Visual ML & Hardware Pipeline Editor | HF Labs" 
+  description="AutoMLApp is the Windows node-graph editor for composing, validating and running machine-learning and accelerator pipelines inside IPUServices.">
+  
+  <!-- Top Breadcrumb Bar -->
+  <div class="product-top-bar">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Overview</a>
+        <span class="sep">/</span>
+        <a href="/products">Products</a>
+        <span class="sep">/</span>
+        <span class="curr">AutoMLApp</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="product-hero">
+    <div class="container">
+      <div class="hero-badge-row">
+        <span class="badge badge-cyan">Visual Node-Graph Editor</span>
+        <span class="badge badge-purple">.NET 10 / WinForms</span>
+        <span class="badge badge-emerald">IPUServices Front End</span>
+        <span class="badge badge-amber">HyperSwarm AutoML</span>
+      </div>
+
+      <h1 class="hero-title">AutoMLApp</h1>
+      <p class="hero-lead">
+        Design ML pipelines on a canvas. Run them on your hardware.
+      </p>
+      <p class="hero-subhead">
+        A Windows node-graph editor for composing, validating and running machine-learning and accelerator pipelines.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#capabilities" class="btn-primary" style="padding:12px 24px; font-size:14px;">
+          Explore Capabilities (9 Features) &darr;
+        </a>
+        <a href="#canvas-mockup" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
+          Interactive Canvas Architecture &darr;
+        </a>
+        <a href="#status" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
+          Runtime Status &amp; Roadmap &rarr;
+        </a>
+        <a href="/products/swarmdev" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
+          SwarmDev Integration
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Node Graph Canvas Visual Preview -->
+  <section id="canvas-mockup" class="canvas-preview-section">
+    <div class="container">
+      <div class="canvas-window">
+        <!-- Title Bar -->
+        <div class="window-titlebar">
+          <div class="window-left">
+            <span class="win-circle close"></span>
+            <span class="win-circle min"></span>
+            <span class="win-circle max"></span>
+            <span class="win-title">AutoMLApp v10.0 • Graph: <code>exp_hybrid_ipu_swarm_v4.aml</code></span>
+          </div>
+          <div class="window-right">
+            <span class="f7-pill"><kbd>F7</kbd> Validation: PASSED (0 cycles, 0 orphaned)</span>
+            <span class="win-tag">Runtime: .NET 10 x64</span>
+          </div>
+        </div>
+
+        <!-- Canvas Workspace Area -->
+        <div class="canvas-workspace">
+          <!-- Left Palette -->
+          <div class="canvas-palette">
+            <div class="palette-header">Node Library (185)</div>
+            <div class="palette-group">
+              <span class="group-title">Data Ingestion</span>
+              <div class="palette-item"><span>📥</span> ParquetReader</div>
+              <div class="palette-item"><span>🗄️</span> FeatureStoreRef</div>
+            </div>
+            <div class="palette-group">
+              <span class="group-title">Cognition &amp; Model</span>
+              <div class="palette-item"><span>🧠</span> ONNXSessionNode</div>
+              <div class="palette-item"><span>🐝</span> SwarmDevRouter</div>
+              <div class="palette-item"><span>⚡</span> SpikingLifLayer</div>
+            </div>
+            <div class="palette-group">
+              <span class="group-title">Compute &amp; Backend</span>
+              <div class="palette-item"><span>⚡</span> IPUTileClusterNode</div>
+              <div class="palette-item"><span>🌊</span> HyperSwarmSearch</div>
+            </div>
+          </div>
+
+          <!-- Main Graph Area -->
+          <div class="canvas-main-grid">
+            <div class="graph-nodes-container">
+              <!-- Node 1: Ingestion -->
+              <div class="canvas-node n-blue" style="top: 30px; left: 30px;">
+                <div class="node-head">
+                  <span>📥 FeatureStoreStream</span>
+                  <span class="node-status-dot ready"></span>
+                </div>
+                <div class="node-ports">
+                  <div class="port-in"><span class="p-dot"></span> cfg:URI</div>
+                  <div class="port-out">out:TensorBatch <span class="p-dot"></span></div>
+                </div>
+              </div>
+
+              <!-- Node 2: SwarmDev Router -->
+              <div class="canvas-node n-amber" style="top: 170px; left: 30px;">
+                <div class="node-head">
+                  <span>🐝 SwarmDev Router</span>
+                  <span class="node-status-dot active"></span>
+                </div>
+                <div class="node-ports">
+                  <div class="port-in"><span class="p-dot"></span> prompt:Text</div>
+                  <div class="port-out">plan:SubGraph <span class="p-dot"></span></div>
+                </div>
+              </div>
+
+              <!-- Node 3: HyperSwarm AutoML Optimizer -->
+              <div class="canvas-node n-purple" style="top: 40px; left: 290px;">
+                <div class="node-head">
+                  <span>🌊 HyperSwarmAutoML</span>
+                  <span class="node-status-dot active"></span>
+                </div>
+                <div class="node-ports">
+                  <div class="port-in"><span class="p-dot"></span> data:TensorBatch</div>
+                  <div class="port-in"><span class="p-dot"></span> search:Space</div>
+                  <div class="port-out">best:Candidate <span class="p-dot"></span></div>
+                </div>
+              </div>
+
+              <!-- Node 4: IPU Hardware Cluster -->
+              <div class="canvas-node n-cyan" style="top: 200px; left: 290px;">
+                <div class="node-head">
+                  <span>⚡ IPUTileCluster (Bow)</span>
+                  <span class="node-status-dot ready"></span>
+                </div>
+                <div class="node-ports">
+                  <div class="port-in"><span class="p-dot"></span> graph:Poplar</div>
+                  <div class="port-out">exec:Telemetry <span class="p-dot"></span></div>
+                </div>
+              </div>
+
+              <!-- Node 5: Output & Telemetry Sidecar -->
+              <div class="canvas-node n-emerald" style="top: 100px; left: 560px;">
+                <div class="node-head">
+                  <span>📡 TelemetrySidecar</span>
+                  <span class="node-status-dot ready"></span>
+                </div>
+                <div class="node-ports">
+                  <div class="port-in"><span class="p-dot"></span> metrics:MetricsFrame</div>
+                  <div class="port-out">emit:AuditStream <span class="p-dot"></span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="window-statusbar">
+          <span>Nodes: 5 | Links: 6 | Topo Order: [1, 2] &rarr; [3, 4] &rarr; [5]</span>
+          <span>Target Hardware: IPU Bow-Pod16 + Xeon Host</span>
+          <span style="color:var(--accent-emerald);">Engine: Connected (IPUServices Daemon)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Intro Narrative Section -->
+  <section class="intro-section">
+    <div class="container">
+      <div class="intro-card">
+        <div class="intro-glow"></div>
+        <div class="intro-content">
+          <div class="intro-tag">
+            <span class="badge badge-cyan">VISUAL ARCHITECTURE</span>
+          </div>
+          <h2 class="intro-heading">The Visual Front End for IPUServices</h2>
+          <p class="intro-text">
+            <strong>AutoMLApp</strong> is the visual front end for <strong>IPUServices</strong>. Instead of wiring configuration files by hand or writing fragile glue code, you drag nodes onto a canvas, connect typed ports, and compile the graph into an execution plan.
+          </p>
+          <p class="intro-text">
+            It unifies data pipelines, model deployment, accelerator configuration, real-time telemetry and hyperparameter search in one comprehensive, high-productivity desktop workspace.
+          </p>
+          <div class="intro-callout-grid">
+            <div class="callout-pill">
+              <span class="callout-icon">🖱️</span>
+              <div>
+                <strong>Typed Connectors</strong>
+                <p>Real-time visual link rejection prevents invalid data bindings as you draw connections.</p>
+              </div>
+            </div>
+            <div class="callout-pill">
+              <span class="callout-icon">⚡</span>
+              <div>
+                <strong>Topological Compilation</strong>
+                <p>Compiles graph geometry into optimal step execution orders with domain handlers.</p>
+              </div>
+            </div>
+            <div class="callout-pill">
+              <span class="callout-icon">📊</span>
+              <div>
+                <strong>Telemetry-Aware Search</strong>
+                <p>HyperSwarm balances raw model accuracy directly against hardware compute costs.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Node Domains Strip -->
+  <section class="domains-section">
+    <div class="container">
+      <div class="domains-header">
+        <span class="badge badge-purple">EXTENSIVE LIBRARY</span>
+        <h3 class="domains-title">185 Node Types Across 25+ Specialized Domains</h3>
+      </div>
+      <div class="domains-grid">
+        {domains.map(d => (
+          <div class="domain-card">
+            <span class="domain-icon">{d.icon}</span>
+            <div class="domain-info">
+              <span class="domain-name">{d.name}</span>
+              <span class="domain-count">{d.count}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Capabilities Section (9 core items) -->
+  <section id="capabilities" class="capabilities-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-emerald">COMPLETE CAPABILITIES</span>
+        <h2 class="section-title">End-to-End Visual Engineering Features</h2>
+        <p class="section-subtitle">
+          Engineered for high-assurance ML workflows, hardware accelerators, and deterministic agent orchestration.
+        </p>
+      </div>
+
+      <div class="capabilities-grid">
+        {capabilities.map((cap) => (
+          <div class="cap-card" style={`--cap-accent: ${cap.color};`}>
+            <div class="cap-header">
+              <div class="cap-icon-box" style={`background: ${cap.color}15; border-color: ${cap.color}40;`}>
+                <span class="cap-icon">{cap.icon}</span>
+              </div>
+              <div>
+                <h3 class="cap-title">{cap.title}</h3>
+                <span class="cap-tagline" style={`color: ${cap.color};`}>{cap.tagline}</span>
+              </div>
+            </div>
+            <p class="cap-desc">{cap.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Status & Implementation Details Section -->
+  <section id="status" class="status-section">
+    <div class="container">
+      <div class="status-card">
+        <div class="status-badge-row">
+          <span class="badge badge-amber">ENGINEERING STATUS</span>
+          <span class="status-indicator-pill">
+            <span class="pulse-dot"></span> Active Desktop Integration
+          </span>
+        </div>
+
+        <h2 class="status-title">Runtime Status &amp; Subsystem Maturity</h2>
+        
+        <p class="status-statement">
+          <strong>Status:</strong> Windows desktop app (<strong>.NET 10, WinForms</strong>). The pipeline editor, validation (<kbd>F7</kbd>), and HyperSwarm backend are working. Stage-by-stage run progression and tile telemetry are currently simulated, and the telemetry-first AutoML engine is a proof of concept.
+        </p>
+
+        <div class="status-details-grid">
+          <div class="status-box">
+            <div class="status-header-line">
+              <span class="status-tag working">WORKING</span>
+              <h4>Pipeline Canvas &amp; Graph Editor</h4>
+            </div>
+            <p>185 node types, port connection type checking, drag-and-drop wiring, and serialization into standard JSON pipelines.</p>
+          </div>
+          <div class="status-box">
+            <div class="status-header-line">
+              <span class="status-tag working">WORKING</span>
+              <h4>Validation Engine (F7) &amp; HyperSwarm</h4>
+            </div>
+            <p>Cycle detection, orphaned node tagging, and pluggable HyperSwarm backend candidate execution (family, depth, learning rate, batch size, dataset).</p>
+          </div>
+          <div class="status-box">
+            <div class="status-header-line">
+              <span class="status-tag poc">SIMULATED / PROOF OF CONCEPT</span>
+              <h4>Telemetry &amp; Stage Progression</h4>
+            </div>
+            <p>Stage-by-stage run progression and hardware tile telemetry are simulated. The cost-weighted telemetry-first AutoML engine operates as an active PoC.</p>
+          </div>
+        </div>
+
+        <!-- Code Preview: Standard Pipeline JSON Structure -->
+        <div class="code-preview-block">
+          <div class="code-header">
+            <span class="code-title">AutoMLApp Portable Pipeline Schema Example</span>
+            <span class="code-lang">JSON / PipelineContract v1</span>
+          </div>
+          <pre class="code-content"><code>&#123;
+  "$schema": "https://hflabs.dev/schemas/pipeline_schema.json",
+  "pipelineId": "pip_hybrid_accelerator_swarm_01",
+  "version": "1.0.0",
+  "targetRuntime": "IPUServices.NET10",
+  "nodes": [
+    &#123;
+      "id": "node_01",
+      "type": "Ingestion.FeatureStoreRef",
+      "domain": "DataPipelines",
+      "config": &#123; "dataset": "kge_triples_v2", "batchSize": 256 &#125;,
+      "outputs": [&#123; "port": "out", "type": "TensorBatch" &#125;]
+    &#125;,
+    &#123;
+      "id": "node_02",
+      "type": "SwarmDev.IntentRouterNode",
+      "domain": "Cognition",
+      "config": &#123; "schemaVersion": "v1.2", "policyGating": "Strict" &#125;,
+      "outputs": [&#123; "port": "plan", "type": "SubGraph" &#125;]
+    &#125;,
+    &#123;
+      "id": "node_03",
+      "type": "AutoML.HyperSwarmSearchNode",
+      "domain": "SwarmOptimization",
+      "config": &#123; "evaluator": "CostAwarePareto", "subSwarms": 4 &#125;,
+      "inputs": [
+        &#123; "port": "data", "sourceNode": "node_01", "sourcePort": "out" &#125;,
+        &#123; "port": "plan", "sourceNode": "node_02", "sourcePort": "plan" &#125;
+      ]
+    &#125;
+  ]
+&#125;</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="bottom-cta-section">
+    <div class="container">
+      <div class="bottom-cta-box">
+        <h2>Explore the IPUServices Visual &amp; Compute Stack</h2>
+        <p>
+          Discover how AutoMLApp orchestrates Hypertensor GraphRAG, SwarmDev pipelines, and heterogeneous hardware accelerators.
+        </p>
+        <div class="cta-btns">
+          <a href="/products/swarmdev" class="btn-primary" style="padding:12px 24px;">
+            SwarmDev Pipeline &rarr;
+          </a>
+          <a href="/products/ht-graphrag" class="btn-secondary" style="padding:12px 24px;">
+            Hypertensor GraphRAG
+          </a>
+          <a href="/products" class="btn-secondary" style="padding:12px 24px;">
+            All Products Catalog
+          </a>
+          <a href="/docs#accelerator-interop" class="btn-secondary" style="padding:12px 24px;">
+            Accelerator Specs
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .product-top-bar {
+    background: rgba(15, 23, 42, 0.6);
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 0;
+    font-size: 13px;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .breadcrumb a {
+    color: var(--text-secondary);
+  }
+
+  .breadcrumb a:hover {
+    color: var(--accent-blue);
+  }
+
+  .breadcrumb .sep {
+    color: var(--border-color);
+  }
+
+  .breadcrumb .curr {
+    color: var(--text-primary);
+  }
+
+  /* Hero */
+  .product-hero {
+    padding: 70px 0 45px;
+    position: relative;
+  }
+
+  .hero-badge-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .badge-cyan {
+    background: rgba(56, 189, 248, 0.12);
+    color: var(--accent-blue);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+  }
+
+  .badge-emerald {
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--accent-emerald);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .badge-amber {
+    background: rgba(245, 158, 11, 0.12);
+    color: var(--accent-amber);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+  }
+
+  .badge-purple {
+    background: rgba(129, 140, 248, 0.12);
+    color: var(--accent-purple);
+    border: 1px solid rgba(129, 140, 248, 0.3);
+  }
+
+  .hero-title {
+    font-size: 46px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: #f8fafc;
+    margin-bottom: 14px;
+    line-height: 1.1;
+  }
+
+  .hero-lead {
+    font-size: 20px;
+    font-weight: 600;
+    color: #e2e8f0;
+    line-height: 1.45;
+    margin-bottom: 12px;
+    max-width: 840px;
+  }
+
+  .hero-subhead {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 32px;
+    max-width: 800px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* Interactive Canvas Mockup Visual */
+  .canvas-preview-section {
+    padding: 10px 0 50px;
+  }
+
+  .canvas-window {
+    background: #060913;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+  }
+
+  .window-titlebar {
+    background: #0f172a;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .window-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .win-circle {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .win-circle.close { background: #ef4444; }
+  .win-circle.min { background: #f59e0b; }
+  .win-circle.max { background: #10b981; }
+
+  .win-title {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: #cbd5e1;
+    margin-left: 8px;
+  }
+
+  .win-title code {
+    color: #38bdf8;
+  }
+
+  .window-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .f7-pill {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .f7-pill kbd {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-weight: 700;
+  }
+
+  .win-tag {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: #94a3b8;
+  }
+
+  .canvas-workspace {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    min-height: 340px;
+    background: #080c18;
+  }
+
+  @media (max-width: 800px) {
+    .canvas-workspace {
+      grid-template-columns: 1fr;
+    }
+    .canvas-palette {
+      display: none;
+    }
+  }
+
+  .canvas-palette {
+    background: rgba(15, 23, 42, 0.85);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 14px;
+    font-size: 12px;
+  }
+
+  .palette-header {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 800;
+    color: #94a3b8;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  .palette-group {
+    margin-bottom: 12px;
+  }
+
+  .group-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .palette-item {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #cbd5e1;
+    padding: 3px 6px;
+    border-radius: 3px;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .palette-item:hover {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+  }
+
+  .canvas-main-grid {
+    position: relative;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+    background-size: 20px 20px;
+    padding: 20px;
+    overflow-x: auto;
+  }
+
+  .graph-nodes-container {
+    position: relative;
+    min-width: 780px;
+    height: 300px;
+  }
+
+  .canvas-node {
+    position: absolute;
+    width: 210px;
+    background: #0f172a;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+
+  .canvas-node:hover {
+    transform: translateY(-2px);
+  }
+
+  .canvas-node.n-blue { border-top: 3px solid #38bdf8; }
+  .canvas-node.n-amber { border-top: 3px solid #f59e0b; }
+  .canvas-node.n-purple { border-top: 3px solid #818cf8; }
+  .canvas-node.n-cyan { border-top: 3px solid #06b6d4; }
+  .canvas-node.n-emerald { border-top: 3px solid #10b981; }
+
+  .node-head {
+    background: rgba(255, 255, 255, 0.04);
+    padding: 6px 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .node-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .node-status-dot.ready { background: #10b981; }
+  .node-status-dot.active { background: #38bdf8; }
+
+  .node-ports {
+    padding: 8px 10px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: #94a3b8;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .port-in, .port-out {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .port-out {
+    justify-content: flex-end;
+  }
+
+  .p-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #38bdf8;
+    display: inline-block;
+  }
+
+  .window-statusbar {
+    background: #090d1a;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 8px 16px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #94a3b8;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* Intro Section */
+  .intro-section {
+    padding: 20px 0 60px;
+  }
+
+  .intro-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .intro-glow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .intro-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .intro-tag {
+    margin-bottom: 16px;
+  }
+
+  .intro-heading {
+    font-size: 26px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 16px;
+  }
+
+  .intro-text {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    max-width: 900px;
+  }
+
+  .intro-text strong {
+    color: #f1f5f9;
+  }
+
+  .intro-callout-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 28px;
+  }
+
+  @media (max-width: 850px) {
+    .intro-callout-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .callout-pill {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .callout-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .callout-pill strong {
+    font-size: 13.5px;
+    color: #f1f5f9;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .callout-pill p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Domains Strip */
+  .domains-section {
+    padding: 30px 0 60px;
+  }
+
+  .domains-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .domains-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #f1f5f9;
+    margin-top: 8px;
+  }
+
+  .domains-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+
+  @media (max-width: 900px) {
+    .domains-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 500px) {
+    .domains-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .domain-card {
+    background: #080c18;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s;
+  }
+
+  .domain-card:hover {
+    border-color: var(--accent-blue);
+    background: #0b1122;
+  }
+
+  .domain-icon {
+    font-size: 20px;
+  }
+
+  .domain-name {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+
+  .domain-count {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent-blue);
+  }
+
+  /* Capabilities */
+  .capabilities-section {
+    padding: 60px 0 70px;
+    background: #060911;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .section-header {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 48px;
+  }
+
+  .section-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-top: 10px;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+
+  .section-subtitle {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .capabilities-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+
+  @media (max-width: 1000px) {
+    .capabilities-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 650px) {
+    .capabilities-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cap-card {
+    background: #0a0f1d;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.25s ease;
+  }
+
+  .cap-card:hover {
+    border-color: var(--cap-accent);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  }
+
+  .cap-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .cap-icon-box {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-md);
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .cap-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 2px;
+  }
+
+  .cap-tagline {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    display: block;
+  }
+
+  .cap-desc {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Status Section */
+  .status-section {
+    padding: 70px 0;
+  }
+
+  .status-card {
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(7, 10, 19, 0.95) 100%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+  }
+
+  .status-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .status-indicator-pill {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-amber);
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-amber);
+    box-shadow: 0 0 8px var(--accent-amber);
+    animation: pulseGlow 2s infinite ease-in-out;
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+
+  .status-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 14px;
+  }
+
+  .status-statement {
+    font-size: 16px;
+    color: #e2e8f0;
+    line-height: 1.6;
+    margin-bottom: 28px;
+    max-width: 840px;
+  }
+
+  .status-statement strong {
+    color: #38bdf8;
+  }
+
+  .status-statement kbd {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: #34d399;
+  }
+
+  .status-details-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 32px;
+  }
+
+  @media (max-width: 850px) {
+    .status-details-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .status-box {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 18px;
+  }
+
+  .status-header-line {
+    margin-bottom: 8px;
+  }
+
+  .status-tag {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+
+  .status-tag.working {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .status-tag.poc {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+  }
+
+  .status-box h4 {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 6px;
+  }
+
+  .status-box p {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+
+  /* Code Block */
+  .code-preview-block {
+    background: #050811;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .code-header {
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .code-title {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #94a3b8;
+  }
+
+  .code-lang {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--accent-blue);
+  }
+
+  .code-content {
+    padding: 16px 20px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.65;
+    color: #e2e8f0;
+    overflow-x: auto;
+  }
+
+  /* CTA */
+  .bottom-cta-section {
+    padding: 20px 0 70px;
+  }
+
+  .bottom-cta-box {
+    background: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.12) 0%, rgba(15, 23, 42, 0.75) 80%);
+    border: 1px solid rgba(6, 182, 212, 0.25);
+    border-radius: var(--radius-lg);
+    padding: 44px 28px;
+    text-align: center;
+  }
+
+  .bottom-cta-box h2 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 10px;
+  }
+
+  .bottom-cta-box p {
+    font-size: 14.5px;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto 24px;
+    line-height: 1.6;
+  }
+
+  .cta-btns {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 640px) {
+    .hero-title {
+      font-size: 34px;
+    }
+    .hero-lead {
+      font-size: 17px;
+    }
+    .intro-card, .status-card {
+      padding: 24px;
+    }
+  }
+</style>

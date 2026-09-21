@@ -1,0 +1,1162 @@
+---
+// SubGraphMatrix.astro
+import subgraphsData from '../data/subgraphs.json';
+
+const { summary, tiers } = subgraphsData;
+---
+
+<section id="subgraphs" class="subgraphs-section">
+  <div class="container-wide">
+    <!-- Header Banner -->
+    <div class="matrix-header">
+      <div class="matrix-badge-row">
+        <span class="spatial-badge">SPATIAL SUBGRAPH MAP</span>
+        <span class="count-badge">51 ARCHITECTURAL TILES</span>
+      </div>
+      <h2 class="matrix-title">{summary.title}</h2>
+      <p class="matrix-subtitle">
+        <span class="sub-highlight">{summary.subtitle}</span>
+      </p>
+      <div class="matrix-meta-bar">
+        <span class="pass-info">{summary.meta}</span>
+        <div class="tier-nav-buttons">
+          <button class="filter-btn active" data-tier-filter="all">All 51 Sub-Graphs</button>
+          <button class="filter-btn" data-tier-filter="free">Free (10)</button>
+          <button class="filter-btn" data-tier-filter="pro">Pro (14)</button>
+          <button class="filter-btn" data-tier-filter="high-assurance">High Assurance (27)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tiers Container -->
+    <div class="tiers-wrapper">
+      {tiers.map((tier) => (
+        <div class="tier-group" id={`tier-group-${tier.id}`} data-tier={tier.id}>
+          <div class="tier-section-bar" style={`--tier-col: ${tier.color}; --tier-accent: ${tier.accentColor}`}>
+            <span class="tier-pipe" style={`background: ${tier.color}; box-shadow: 0 0 10px ${tier.color};`}></span>
+            <h3 class="tier-header-title">{tier.name} <span class="tier-count-dash">—</span> <span class="tier-badge-pill" style={`color: ${tier.color}; border-color: ${tier.color}4D; background: ${tier.color}15;`}>{tier.badge}</span></h3>
+          </div>
+
+          <div class="tiles-grid">
+            {tier.subgraphs.map((g) => (
+              <div class={`subgraph-tile type-${g.type} theme-${g.theme || g.diagramType}`} data-subgraph-id={g.id} style={`--accent-glow: ${tier.color};`}>
+                <div class="tile-inner">
+                  <!-- Visual canvas / diagram display -->
+                  <div class="tile-visual">
+                    {g.id === 'agent-memory' && (
+                      <div class="vis-canvas vis-agent-memory">
+                        <div class="memory-orb">
+                          <div class="orb-core"></div>
+                          <div class="orb-ring ring-1"></div>
+                          <div class="orb-ring ring-2"></div>
+                          <div class="radial-spokes"></div>
+                        </div>
+                        <span class="vis-watermark">AGENT MEMORY</span>
+                      </div>
+                    )}
+
+                    {g.id === 'codebase-topology' && (
+                      <div class="vis-canvas vis-codebase-topology">
+                        <div class="wireframe-terrain">
+                          <svg viewBox="0 0 160 90" class="terrain-svg">
+                            <path d="M 10,75 L 35,55 L 60,65 L 85,35 L 110,50 L 135,25 L 150,45" fill="none" stroke="#38bdf8" stroke-width="1.5" />
+                            <path d="M 10,75 L 35,45 L 70,30 L 95,20 L 125,40 L 150,30" fill="none" stroke="#818cf8" stroke-width="1" stroke-dasharray="2,2" />
+                            <path d="M 10,85 L 45,70 L 80,60 L 115,55 L 150,65" fill="none" stroke="#06b6d4" stroke-width="1" />
+                            <line x1="85" y1="35" x2="85" y2="85" stroke="rgba(56,189,248,0.4)" stroke-width="1" stroke-dasharray="1,2" />
+                            <circle cx="85" cy="35" r="3" fill="#38bdf8" />
+                            <circle cx="135" cy="25" r="3" fill="#f59e0b" />
+                          </svg>
+                        </div>
+                        <span class="vis-watermark">CODEBASE TOPOLOGY</span>
+                      </div>
+                    )}
+
+                    {g.id === 'github-provenance' && (
+                      <div class="vis-canvas vis-github-provenance">
+                        <div class="shield-badge-ui">
+                          <div class="cyber-shield">
+                            <span class="shield-icon">🛡️</span>
+                          </div>
+                          <div class="pipeline-links">
+                            <span class="pipe-node active"></span>
+                            <span class="pipe-line"></span>
+                            <span class="pipe-node"></span>
+                          </div>
+                        </div>
+                        <span class="vis-watermark">GITHUB PROVENANCE</span>
+                      </div>
+                    )}
+
+                    {g.id === 'continuous-tasks' && (
+                      <div class="vis-canvas vis-continuous-tasks">
+                        <div class="dag-pipeline-vis">
+                          <div class="dag-column">
+                            <span class="dag-node completed"></span>
+                            <span class="dag-node active-pulse"></span>
+                          </div>
+                          <div class="dag-line-group">
+                            <svg viewBox="0 0 80 40">
+                              <path d="M 10,12 L 40,20 L 70,28" stroke="#10b981" stroke-width="1.5" fill="none" />
+                              <path d="M 10,28 L 40,20 L 70,12" stroke="#38bdf8" stroke-width="1.5" fill="none" />
+                            </svg>
+                          </div>
+                          <div class="dag-column">
+                            <span class="dag-node pending"></span>
+                            <span class="dag-node pending"></span>
+                          </div>
+                        </div>
+                        <span class="vis-watermark">CONTINUOUS TASKS</span>
+                      </div>
+                    )}
+
+                    {g.id === 'agent-blender' && (
+                      <div class="vis-canvas vis-agent-blender">
+                        <div class="cyber-avatar">
+                          <div class="avatar-wireframe">
+                            <div class="head-poly"></div>
+                            <div class="torso-mesh"></div>
+                            <div class="blend-rings"></div>
+                          </div>
+                        </div>
+                        <span class="vis-watermark">AGENT BLENDER</span>
+                      </div>
+                    )}
+
+                    {g.id === 'code-semantics' && (
+                      <div class="vis-canvas vis-code-semantics">
+                        <div class="ast-core-blast">
+                          <div class="ast-sun"></div>
+                          <div class="blast-radius-ring"></div>
+                          <div class="ast-sparks"></div>
+                        </div>
+                        <span class="vis-watermark">CODE SEMANTICS</span>
+                      </div>
+                    )}
+
+                    {g.id === 'directive-sync' && (
+                      <div class="vis-canvas vis-directive-sync">
+                        <div class="dual-agent-bridge">
+                          <div class="agent-box a">AGENT A</div>
+                          <div class="sync-stream">
+                            <span class="sync-dot d1"></span>
+                            <span class="sync-dot d2"></span>
+                          </div>
+                          <div class="agent-box b">AGENT B</div>
+                        </div>
+                        <span class="vis-watermark">DIRECTIVE SYNC</span>
+                      </div>
+                    )}
+
+                    {g.id === 'skill-blender' && (
+                      <div class="vis-canvas vis-skill-blender">
+                        <div class="fusion-reactor">
+                          <div class="fusion-plasma"></div>
+                          <div class="skill-orbits"></div>
+                          <span class="skill-label-gold">SKILL</span>
+                        </div>
+                        <span class="vis-watermark">SKILL BLENDER</span>
+                      </div>
+                    )}
+
+                    {g.id === 'hardware-topology' && (
+                      <div class="vis-canvas vis-hw-topology">
+                        <div class="hw-pcb-grid">
+                          <div class="numa-socket s1">NUMA 0</div>
+                          <div class="pcie-bus">PCIe Gen5</div>
+                          <div class="numa-socket s2">NUMA 1</div>
+                        </div>
+                        <span class="vis-watermark">HARDWARE TOPOLOGY</span>
+                      </div>
+                    )}
+
+                    {g.id === 'level-0-acceleration' && (
+                      <div class="vis-canvas vis-level-zero">
+                        <div class="l0-execution-core">
+                          <div class="l0-chip">LEVEL 0</div>
+                          <div class="l0-glow-rays"></div>
+                        </div>
+                        <span class="vis-watermark">LEVEL 0 ACCELERATION</span>
+                      </div>
+                    )}
+
+                    {g.id === 'multi-domain-ontology' && (
+                      <div class="vis-canvas vis-ontology">
+                        <div class="pyramid-structure">
+                          <div class="pyr-level top"></div>
+                          <div class="pyr-level mid"></div>
+                          <div class="pyr-level base"></div>
+                        </div>
+                        <span class="vis-watermark">MULTI-DOMAIN ONTOLOGY</span>
+                      </div>
+                    )}
+
+                    {g.id === 'bess-sharding' && (
+                      <div class="vis-canvas vis-bess">
+                        <div class="bess-neon-core">
+                          <div class="bess-hexagon"></div>
+                          <div class="bess-pulse-nodes"></div>
+                        </div>
+                        <span class="vis-watermark">BESS SHARDING</span>
+                      </div>
+                    )}
+
+                    {g.id === 'formal-invariants' && (
+                      <div class="vis-canvas vis-formal-invariants">
+                        <div class="proof-card">
+                          <code>PROOF CONTRACT<br/>∀x ∈ G: Inv(x) ⇒ □Valid</code>
+                        </div>
+                        <span class="vis-watermark">FORMAL INVARIANTS</span>
+                      </div>
+                    )}
+
+                    {g.id === 'pixie-swarm-mesh' && (
+                      <div class="vis-canvas vis-pixie-swarm">
+                        <div class="pixie-organic-mesh">
+                          <div class="biolum-cap"></div>
+                          <div class="mesh-filaments"></div>
+                        </div>
+                        <span class="vis-watermark">PIXIE SWARM MESH</span>
+                      </div>
+                    )}
+
+                    {g.id === 'dynamic-world-model' && (
+                      <div class="vis-canvas vis-world-model">
+                        <div class="world-orbit-system">
+                          <div class="world-planet"></div>
+                          <div class="orbit-path">
+                            <span class="satellite-node"></span>
+                          </div>
+                        </div>
+                        <span class="vis-watermark">DYNAMIC WORLD MODEL</span>
+                      </div>
+                    )}
+
+                    {g.id === 'sovereign-air-gap' && (
+                      <div class="vis-canvas vis-air-gap">
+                        <div class="mls-clearance-box">
+                          <span class="mls-tag unclass">UNCLASSIFIED</span>
+                          <span class="mls-tag secret">SECRET</span>
+                          <span class="mls-tag topsecret">TOP SECRET</span>
+                        </div>
+                        <span class="vis-watermark">SOVEREIGN AIR-GAP</span>
+                      </div>
+                    )}
+
+                    {g.id === 'sbom-provenance' && (
+                      <div class="vis-canvas vis-sbom">
+                        <div class="sbom-ledger-ui">
+                          <div class="spdx-row"><span class="sig-valid">✓</span> SPDX-2.3</div>
+                          <div class="spdx-row"><span class="sig-valid">✓</span> CYCLONEDX</div>
+                          <div class="spdx-row"><span class="sig-valid">✓</span> SHA256 ROOT</div>
+                        </div>
+                        <span class="vis-watermark">SBOM PROVENANCE</span>
+                      </div>
+                    )}
+
+                    {g.id === 'capability-sandbox' && (
+                      <div class="vis-canvas vis-sandbox">
+                        <div class="sandbox-barrier">
+                          <div class="sandbox-inner-core">SECCOMP</div>
+                          <div class="isolation-wall"></div>
+                        </div>
+                        <span class="vis-watermark">CAPABILITY SANDBOX</span>
+                      </div>
+                    )}
+
+                    {g.id === 'threat-surface' && (
+                      <div class="vis-canvas vis-threat">
+                        <div class="threat-radar-scope">
+                          <div class="radar-sweep"></div>
+                          <span class="threat-blip b1"></span>
+                          <span class="threat-blip b2"></span>
+                        </div>
+                        <span class="vis-watermark">THREAT SURFACE</span>
+                      </div>
+                    )}
+
+                    {g.id === 'compiler-mlir' && (
+                      <div class="vis-canvas vis-mlir">
+                        <div class="mlir-pipeline">
+                          <span class="mlir-pill">AST</span>
+                          <span class="mlir-arrow">→</span>
+                          <span class="mlir-pill highlight">MLIR</span>
+                          <span class="mlir-arrow">→</span>
+                          <span class="mlir-pill">LLVM</span>
+                        </div>
+                        <span class="vis-watermark">COMPILER &amp; MLIR</span>
+                      </div>
+                    )}
+
+                    {g.id === 'cognitive-bias' && (
+                      <div class="vis-canvas vis-bias">
+                        <div class="bias-gauge">
+                          <div class="gauge-arc"></div>
+                          <div class="gauge-needle"></div>
+                          <span class="gauge-label">DRIFT: 0.002%</span>
+                        </div>
+                        <span class="vis-watermark">COGNITIVE BIAS</span>
+                      </div>
+                    )}
+
+                    {g.id === 'formulaic-reasoning' && (
+                      <div class="vis-canvas vis-formula">
+                        <div class="math-proof-box">
+                          <code>lim<sub>t→∞</sub> V(x) = 0<br/>||x - x*|| &lt; ε</code>
+                        </div>
+                        <span class="vis-watermark">FORMULAIC REASONING</span>
+                      </div>
+                    )}
+
+                    {g.id === 'cost-carbon' && (
+                      <div class="vis-canvas vis-carbon">
+                        <div class="grid-carbon-map">
+                          <div class="world-dots"></div>
+                          <span class="carbon-metric">12 gCO2/kWh</span>
+                        </div>
+                        <span class="vis-watermark">COST &amp; CARBON</span>
+                      </div>
+                    )}
+
+                    {g.id === 'regulatory-compliance' && (
+                      <div class="vis-canvas vis-compliance">
+                        <div class="compliance-badges-grid">
+                          <span class="reg-chip">ISO 26262</span>
+                          <span class="reg-chip">DO-178C</span>
+                          <span class="reg-chip">EU AI ACT</span>
+                          <span class="reg-chip">NIST 800-53</span>
+                        </div>
+                        <span class="vis-watermark">REGULATORY COMPLIANCE</span>
+                      </div>
+                    )}
+
+                    {/* Generic Schematic Diagram Renderers for all structural Sub-Graphs */}
+                    {g.type === 'diagram' && (
+                      <div class="vis-canvas vis-diagram">
+                        <svg viewBox="0 0 160 100" class="schematic-svg">
+                          {g.diagramType === 'tree' && (
+                            <g stroke="#38bdf8" stroke-width="1.5" fill="none">
+                              <circle cx="80" cy="20" r="5" fill="#38bdf8" />
+                              <circle cx="45" cy="55" r="4" fill="#06b6d4" />
+                              <circle cx="115" cy="55" r="4" fill="#06b6d4" />
+                              <circle cx="30" cy="85" r="3" fill="#10b981" />
+                              <circle cx="60" cy="85" r="3" fill="#10b981" />
+                              <circle cx="100" cy="85" r="3" fill="#10b981" />
+                              <circle cx="130" cy="85" r="3" fill="#10b981" />
+                              <line x1="80" y1="25" x2="45" y2="51" />
+                              <line x1="80" y1="25" x2="115" y2="51" />
+                              <line x1="45" y1="59" x2="30" y2="82" />
+                              <line x1="45" y1="59" x2="60" y2="82" />
+                              <line x1="115" y1="59" x2="100" y2="82" />
+                              <line x1="115" y1="59" x2="130" y2="82" />
+                            </g>
+                          )}
+
+                          {g.diagramType === 'cards' && (
+                            <g stroke="#38bdf8" stroke-width="1.2" fill="rgba(15,23,42,0.8)">
+                              <rect x="25" y="15" width="45" height="30" rx="3" />
+                              <rect x="85" y="15" width="50" height="30" rx="3" />
+                              <rect x="40" y="55" width="80" height="35" rx="3" stroke="#818cf8" />
+                              <line x1="47" y1="45" x2="65" y2="55" stroke="rgba(56,189,248,0.5)" />
+                              <line x1="110" y1="45" x2="95" y2="55" stroke="rgba(56,189,248,0.5)" />
+                            </g>
+                          )}
+
+                          {g.diagramType === 'schema' && (
+                            <g stroke="#38bdf8" stroke-width="1.2" fill="rgba(15,23,42,0.8)">
+                              <rect x="20" y="15" width="50" height="28" rx="2" />
+                              <rect x="90" y="15" width="50" height="28" rx="2" />
+                              <rect x="55" y="60" width="50" height="28" rx="2" stroke="#10b981" />
+                              <path d="M 45,43 L 45,50 L 70,50 L 70,60" stroke="#10b981" fill="none" />
+                              <path d="M 115,43 L 115,50 L 90,50 L 90,60" stroke="#10b981" fill="none" />
+                            </g>
+                          )}
+
+                          {g.diagramType === 'cluster' && (
+                            <g fill="none">
+                              <circle cx="80" cy="50" r="35" stroke="rgba(56,189,248,0.3)" stroke-dasharray="2,3" />
+                              <circle cx="80" cy="50" r="6" fill="#38bdf8" />
+                              <circle cx="55" cy="35" r="3.5" fill="#10b981" />
+                              <circle cx="105" cy="35" r="3.5" fill="#10b981" />
+                              <circle cx="60" cy="68" r="3.5" fill="#10b981" />
+                              <circle cx="100" cy="68" r="3.5" fill="#10b981" />
+                              <circle cx="120" cy="50" r="2.5" fill="#818cf8" />
+                              <circle cx="40" cy="50" r="2.5" fill="#818cf8" />
+                            </g>
+                          )}
+
+                          {g.diagramType === 'frame' && (
+                            <g stroke="#38bdf8" stroke-width="1.2" fill="none">
+                              <rect x="30" y="20" width="100" height="60" rx="3" stroke="rgba(56,189,248,0.6)" stroke-dasharray="3,3" />
+                              <circle cx="55" cy="40" r="4" fill="#38bdf8" />
+                              <circle cx="105" cy="40" r="4" fill="#38bdf8" />
+                              <circle cx="80" cy="65" r="5" fill="#10b981" />
+                              <line x1="55" y1="40" x2="80" y2="65" stroke="rgba(56,189,248,0.4)" />
+                              <line x1="105" y1="40" x2="80" y2="65" stroke="rgba(56,189,248,0.4)" />
+                            </g>
+                          )}
+
+                          {g.diagramType === 'crossed' && (
+                            <g stroke="#38bdf8" stroke-width="1.5" fill="none">
+                              <circle cx="50" cy="30" r="4" fill="#38bdf8" />
+                              <circle cx="110" cy="30" r="4" fill="#38bdf8" />
+                              <circle cx="50" cy="70" r="4" fill="#06b6d4" />
+                              <circle cx="110" cy="70" r="4" fill="#06b6d4" />
+                              <line x1="50" y1="30" x2="110" y2="70" stroke="#f43f5e" stroke-width="1.5" />
+                              <line x1="50" y1="70" x2="110" y2="30" stroke="#10b981" stroke-width="1.5" stroke-dasharray="2,2" />
+                            </g>
+                          )}
+
+                          {g.diagramType === 'tri-cluster' && (
+                            <g fill="none">
+                              <circle cx="50" cy="40" r="18" stroke="#818cf8" stroke-width="1" />
+                              <circle cx="110" cy="40" r="18" stroke="#38bdf8" stroke-width="1" />
+                              <circle cx="80" cy="75" r="18" stroke="#f43f5e" stroke-width="1" />
+                              <circle cx="48" cy="38" r="2.5" fill="#818cf8" />
+                              <circle cx="55" cy="44" r="2.5" fill="#818cf8" />
+                              <circle cx="108" cy="38" r="2.5" fill="#38bdf8" />
+                              <circle cx="115" cy="44" r="2.5" fill="#38bdf8" />
+                              <circle cx="78" cy="73" r="2.5" fill="#f43f5e" />
+                              <circle cx="84" cy="78" r="2.5" fill="#f43f5e" />
+                            </g>
+                          )}
+
+                          {g.diagramType === 'nested-box' && (
+                            <g stroke="#38bdf8" stroke-width="1.2" fill="rgba(15,23,42,0.6)">
+                              <rect x="25" y="15" width="50" height="70" rx="3" stroke="#38bdf8" />
+                              <rect x="85" y="15" width="50" height="70" rx="3" stroke="#818cf8" />
+                              <circle cx="45" cy="35" r="2" fill="#38bdf8" />
+                              <circle cx="55" cy="55" r="2" fill="#38bdf8" />
+                              <circle cx="105" cy="35" r="2" fill="#818cf8" />
+                              <circle cx="115" cy="55" r="2" fill="#818cf8" />
+                            </g>
+                          )}
+
+                          {g.diagramType === 'bdi-flow' && (
+                            <g stroke="#38bdf8" stroke-width="1" fill="rgba(15,23,42,0.8)">
+                              <rect x="35" y="12" width="90" height="18" rx="2" stroke="#38bdf8" />
+                              <rect x="35" y="40" width="90" height="18" rx="2" stroke="#f59e0b" />
+                              <rect x="35" y="68" width="90" height="18" rx="2" stroke="#10b981" />
+                              <text x="80" y="24" fill="#38bdf8" font-size="8" text-anchor="middle" font-family="monospace">BELIEF</text>
+                              <text x="80" y="52" fill="#f59e0b" font-size="8" text-anchor="middle" font-family="monospace">DESIRE</text>
+                              <text x="80" y="80" fill="#10b981" font-size="8" text-anchor="middle" font-family="monospace">INTENTION</text>
+                            </g>
+                          )}
+
+                          {g.diagramType?.startsWith('plane-') && (
+                            <g stroke="#38bdf8" stroke-width="1.2" fill="none">
+                              {/* Isometric Layer Stack */}
+                              <polygon points="80,15 140,32 80,48 20,32" stroke="rgba(56,189,248,0.3)" />
+                              <polygon points="80,32 140,48 80,64 20,48" stroke="rgba(56,189,248,0.5)" />
+                              <polygon points="80,50 140,66 80,82 20,66" stroke="#38bdf8" fill="rgba(56,189,248,0.1)" />
+                              <circle cx="80" cy="66" r="3" fill="#38bdf8" />
+                              <circle cx="60" cy="60" r="2.5" fill="#818cf8" />
+                              <circle cx="100" cy="72" r="2.5" fill="#818cf8" />
+                            </g>
+                          )}
+
+                          {g.diagramType === 'pattern-grid' && (
+                            <g stroke="#38bdf8" stroke-width="1.2" fill="none">
+                              <rect x="30" y="20" width="40" height="40" rx="3" stroke="#38bdf8" />
+                              <rect x="90" y="40" width="40" height="40" rx="3" stroke="#f59e0b" />
+                              <circle cx="50" cy="40" r="4" fill="#38bdf8" />
+                              <circle cx="110" cy="60" r="4" fill="#f59e0b" />
+                              <line x1="50" y1="40" x2="110" y2="60" stroke="#818cf8" stroke-dasharray="2,2" />
+                            </g>
+                          )}
+
+                          {g.diagramType === 'matrix-heatmap' && (
+                            <g>
+                              <rect x="35" y="15" width="22" height="22" fill="#38bdf8" opacity="0.8" />
+                              <rect x="60" y="15" width="22" height="22" fill="#38bdf8" opacity="0.3" />
+                              <rect x="85" y="15" width="22" height="22" fill="#38bdf8" opacity="0.9" />
+                              <rect x="35" y="40" width="22" height="22" fill="#38bdf8" opacity="0.2" />
+                              <rect x="60" y="40" width="22" height="22" fill="#38bdf8" opacity="0.85" />
+                              <rect x="85" y="40" width="22" height="22" fill="#38bdf8" opacity="0.4" />
+                              <rect x="35" y="65" width="22" height="22" fill="#38bdf8" opacity="0.95" />
+                              <rect x="60" y="65" width="22" height="22" fill="#38bdf8" opacity="0.5" />
+                              <rect x="85" y="65" width="22" height="22" fill="#38bdf8" opacity="0.8" />
+                            </g>
+                          )}
+
+                          {g.diagramType === 'kge-nodes' && (
+                            <g stroke="#f59e0b" stroke-width="1.5" fill="none">
+                              <circle cx="45" cy="45" r="5" fill="#f59e0b" />
+                              <circle cx="115" cy="45" r="5" fill="#38bdf8" />
+                              <line x1="50" y1="45" x2="110" y2="45" stroke="#f59e0b" stroke-dasharray="2,2" />
+                              <polygon points="105,42 110,45 105,48" fill="#f59e0b" />
+                              <text x="80" y="38" fill="#f59e0b" font-size="7" text-anchor="middle" font-family="monospace">r = t - h</text>
+                            </g>
+                          )}
+
+                          {g.diagramType === 'multihop-path' && (
+                            <g stroke="#f59e0b" stroke-width="1.5" fill="none">
+                              <circle cx="30" cy="50" r="4" fill="#38bdf8" />
+                              <circle cx="70" cy="30" r="4" fill="#f59e0b" />
+                              <circle cx="100" cy="70" r="4" fill="#f59e0b" />
+                              <circle cx="135" cy="40" r="4" fill="#10b981" />
+                              <line x1="34" y1="48" x2="66" y2="32" stroke="#38bdf8" />
+                              <line x1="74" y1="34" x2="96" y2="66" stroke="#f59e0b" />
+                              <line x1="104" y1="67" x2="131" y2="43" stroke="#10b981" />
+                            </g>
+                          )}
+
+                          {g.diagramType === 'checkpoint-gate' && (
+                            <g fill="none">
+                              <rect x="35" y="25" width="90" height="50" rx="3" stroke="#f59e0b" stroke-width="1.5" fill="rgba(15,23,42,0.8)" />
+                              <text x="80" y="46" fill="#f59e0b" font-size="8" font-weight="bold" text-anchor="middle" font-family="monospace">CHECKPOINT GATE</text>
+                              <text x="80" y="58" fill="#10b981" font-size="7" text-anchor="middle" font-family="monospace">[LOCKED &amp; AUDITED]</text>
+                            </g>
+                          )}
+
+                          {g.diagramType === 'grounded-triple' && (
+                            <g fill="none">
+                              <circle cx="80" cy="50" r="28" stroke="#10b981" stroke-width="1.5" fill="rgba(16,185,129,0.08)" />
+                              <path d="M 68,50 L 76,58 L 92,42" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                              <text x="80" y="88" fill="#10b981" font-size="7" text-anchor="middle" font-family="monospace">100% GROUNDED</text>
+                            </g>
+                          )}
+
+                          {g.diagramType === 'bess-path' && (
+                            <g stroke="#f43f5e" stroke-width="1.5" fill="none">
+                              <circle cx="40" cy="50" r="4" fill="#f43f5e" />
+                              <circle cx="80" cy="35" r="4" fill="#f59e0b" />
+                              <circle cx="120" cy="50" r="4" fill="#38bdf8" />
+                              <path d="M 44,50 Q 80,10 116,50" stroke="#f43f5e" stroke-dasharray="2,2" />
+                              <line x1="44" y1="50" x2="76" y2="35" stroke="#f59e0b" />
+                              <line x1="84" y1="35" x2="116" y2="50" stroke="#38bdf8" />
+                            </g>
+                          )}
+
+                          {g.diagramType === 'tape-dag' && (
+                            <g stroke="#f59e0b" stroke-width="1.5" fill="none">
+                              <path d="M 25,60 L 55,60 L 55,35 L 85,35 L 85,60 L 115,60 L 115,35 L 135,35" stroke="#f59e0b" />
+                              <circle cx="25" cy="60" r="3" fill="#38bdf8" />
+                              <circle cx="55" cy="35" r="3" fill="#f59e0b" />
+                              <circle cx="85" cy="60" r="3" fill="#f59e0b" />
+                              <circle cx="115" cy="35" r="3" fill="#10b981" />
+                            </g>
+                          )}
+
+                          {g.diagramType === 'federation-planes' && (
+                            <g stroke="#f59e0b" stroke-width="1.2" fill="none">
+                              <polygon points="80,15 140,28 80,41 20,28" stroke="#38bdf8" />
+                              <polygon points="80,42 140,55 80,68 20,55" stroke="#f59e0b" />
+                              <polygon points="80,69 140,82 80,95 20,82" stroke="#10b981" />
+                              <line x1="80" y1="28" x2="80" y2="82" stroke="rgba(245,158,11,0.6)" stroke-dasharray="2,2" />
+                            </g>
+                          )}
+
+                          {g.diagramType === 'orchestration-bus' && (
+                            <g stroke="#f59e0b" stroke-width="1.5" fill="none">
+                              <circle cx="80" cy="50" r="6" fill="#f59e0b" />
+                              <circle cx="35" cy="50" r="4" fill="#38bdf8" />
+                              <circle cx="125" cy="50" r="4" fill="#38bdf8" />
+                              <line x1="39" y1="50" x2="74" y2="50" stroke="#38bdf8" />
+                              <line x1="86" y1="50" x2="121" y2="50" stroke="#38bdf8" />
+                              <circle cx="60" cy="25" r="3" fill="#10b981" />
+                              <circle cx="100" cy="25" r="3" fill="#10b981" />
+                              <line x1="60" y1="28" x2="77" y2="46" stroke="#10b981" />
+                              <line x1="100" y1="28" x2="83" y2="46" stroke="#10b981" />
+                            </g>
+                          )}
+
+                          {g.diagramType === 'blackboard-state' && (
+                            <g stroke="#f59e0b" stroke-width="1.2" fill="rgba(15,23,42,0.85)">
+                              <rect x="50" y="20" width="60" height="60" rx="3" stroke="#f59e0b" />
+                              <line x1="60" y1="35" x2="100" y2="35" stroke="rgba(245,158,11,0.6)" />
+                              <line x1="60" y1="50" x2="100" y2="50" stroke="rgba(245,158,11,0.6)" />
+                              <line x1="60" y1="65" x2="90" y2="65" stroke="rgba(245,158,11,0.6)" />
+                              <circle cx="25" cy="50" r="4" fill="#38bdf8" />
+                              <circle cx="135" cy="50" r="4" fill="#38bdf8" />
+                              <line x1="29" y1="50" x2="50" y2="50" stroke="#38bdf8" stroke-dasharray="2,2" />
+                              <line x1="110" y1="50" x2="131" y2="50" stroke="#38bdf8" stroke-dasharray="2,2" />
+                            </g>
+                          )}
+
+                          {g.diagramType === 'safety-shield' && (
+                            <g fill="none">
+                              <polygon points="80,18 120,32 120,62 80,85 40,62 40,32" stroke="#f59e0b" stroke-width="1.5" fill="rgba(245,158,11,0.08)" />
+                              <path d="M 68,52 L 76,60 L 92,44" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </g>
+                          )}
+
+                          {g.diagramType === 'ledger-bars' && (
+                            <g stroke="none">
+                              <rect x="35" y="25" width="85" height="8" rx="2" fill="#f59e0b" />
+                              <rect x="35" y="42" width="65" height="8" rx="2" fill="#38bdf8" />
+                              <rect x="35" y="59" width="45" height="8" rx="2" fill="#10b981" />
+                              <rect x="35" y="76" width="75" height="8" rx="2" fill="#f43f5e" />
+                            </g>
+                          )}
+                        </svg>
+                        <span class="vis-watermark">{g.name}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <!-- Tile Label Footer -->
+                  <div class="tile-footer">
+                    <div class="tile-header-bar">
+                      <span class="tile-icon">{g.icon}</span>
+                      <h4 class="tile-name">{g.name}</h4>
+                    </div>
+                    {g.subname && <span class="tile-subname">{g.subname}</span>}
+                    <p class="tile-desc">{g.desc}</p>
+                    <div class="tile-meta-tag">
+                      <span class="tech-spec">{g.tech}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Footnote -->
+    <div class="matrix-footnote">
+      <div class="footnote-content">
+        <span class="footnote-icon">ℹ️</span>
+        <p>{summary.footnote}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .subgraphs-section {
+    padding: 90px 0 110px;
+    background: #060911;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .container-wide {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .matrix-header {
+    text-align: center;
+    max-width: 960px;
+    margin: 0 auto 56px;
+  }
+
+  .matrix-badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .spatial-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--accent-blue);
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+
+  .count-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-amber);
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+
+  .matrix-title {
+    font-size: 38px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: #f8fafc;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .matrix-subtitle {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+  }
+
+  .sub-highlight {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: #bae6fd;
+    font-weight: 600;
+  }
+
+  .matrix-meta-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 10px 18px;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .pass-info {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .tier-nav-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-btn:hover {
+    background: rgba(56, 189, 248, 0.12);
+    color: #bae6fd;
+    border-color: rgba(56, 189, 248, 0.3);
+  }
+
+  .filter-btn.active {
+    background: var(--accent-blue);
+    color: #040813;
+    border-color: var(--accent-blue);
+    font-weight: 700;
+  }
+
+  /* Tier Groups */
+  .tiers-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+  }
+
+  .tier-group {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .tier-section-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .tier-pipe {
+    width: 4px;
+    height: 22px;
+    border-radius: 2px;
+    display: inline-block;
+  }
+
+  .tier-header-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: #f1f5f9;
+    font-family: var(--font-mono);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-transform: uppercase;
+  }
+
+  .tier-count-dash {
+    color: var(--text-muted);
+  }
+
+  .tier-badge-pill {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid;
+  }
+
+  /* Subgraph Tiles Grid */
+  .tiles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+
+  @media (min-width: 1200px) {
+    .tiles-grid {
+      grid-template-columns: repeat(7, 1fr);
+    }
+  }
+
+  .subgraph-tile {
+    background: #090e1a;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+  }
+
+  .subgraph-tile:hover {
+    border-color: var(--accent-glow, #38bdf8);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7), 0 0 16px rgba(56, 189, 248, 0.15);
+  }
+
+  .tile-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  /* Visual Canvas */
+  .tile-visual {
+    height: 115px;
+    background: #04060c;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .vis-canvas {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .vis-watermark {
+    position: absolute;
+    bottom: 4px;
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.25);
+    text-transform: uppercase;
+    pointer-events: none;
+    text-align: center;
+    width: 100%;
+    padding: 0 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Custom Visuals */
+  .vis-agent-memory .memory-orb {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #38bdf8 0%, #0369a1 70%, transparent 100%);
+    box-shadow: 0 0 20px #38bdf8;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: orbPulse 3s infinite ease-in-out;
+  }
+
+  @keyframes orbPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 15px #38bdf8; }
+    50% { transform: scale(1.08); box-shadow: 0 0 25px #38bdf8, 0 0 40px rgba(56, 189, 248, 0.4); }
+  }
+
+  .vis-agent-blender .avatar-wireframe {
+    width: 40px;
+    height: 52px;
+    border: 1px solid #38bdf8;
+    border-radius: 4px;
+    box-shadow: 0 0 12px #38bdf8;
+    position: relative;
+    background: rgba(56, 189, 248, 0.08);
+  }
+
+  .vis-code-semantics .ast-sun {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #f97316 0%, #dc2626 80%);
+    box-shadow: 0 0 22px #ea580c;
+  }
+
+  .vis-skill-blender .fusion-plasma {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #f59e0b 0%, #b45309 80%);
+    box-shadow: 0 0 24px #f59e0b;
+  }
+
+  .skill-label-gold {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-size: 8px;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 0 0 4px #000;
+  }
+
+  .vis-hw-topology .hw-pcb-grid {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 8px;
+    color: #10b981;
+  }
+
+  .numa-socket {
+    border: 1px solid #10b981;
+    background: rgba(16, 185, 129, 0.15);
+    padding: 3px 5px;
+    border-radius: 2px;
+  }
+
+  .pcie-bus {
+    color: var(--text-muted);
+    font-size: 7px;
+  }
+
+  .vis-level-zero .l0-chip {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 800;
+    background: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+    border: 1px solid #f59e0b;
+    padding: 5px 10px;
+    border-radius: 3px;
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.3);
+  }
+
+  .vis-bess .bess-hexagon {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #ec4899;
+    box-shadow: 0 0 16px #ec4899;
+    border-radius: 6px;
+    transform: rotate(45deg);
+    background: rgba(236, 72, 153, 0.1);
+  }
+
+  .vis-air-gap .mls-clearance-box {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-family: var(--font-mono);
+    font-size: 7.5px;
+    font-weight: 700;
+  }
+
+  .mls-tag.unclass { color: #10b981; }
+  .mls-tag.secret { color: #f59e0b; }
+  .mls-tag.topsecret { color: #f43f5e; font-weight: 800; text-shadow: 0 0 6px rgba(244, 63, 94, 0.6); }
+
+  .vis-threat .threat-radar-scope {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid #f43f5e;
+    box-shadow: 0 0 12px rgba(244, 63, 94, 0.3);
+    position: relative;
+    background: rgba(244, 63, 94, 0.08);
+  }
+
+  .vis-compliance .compliance-badges-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+  }
+
+  .reg-chip {
+    font-family: var(--font-mono);
+    font-size: 7px;
+    color: #93c5fd;
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    padding: 2px 4px;
+    border-radius: 2px;
+    text-align: center;
+  }
+
+  .proof-card {
+    font-family: var(--font-mono);
+    font-size: 7px;
+    color: #fbbf24;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    padding: 4px 6px;
+    border-radius: 3px;
+    text-align: center;
+  }
+
+  .math-proof-box code {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    color: #34d399;
+  }
+
+  .schematic-svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Tile Footer Info */
+  .tile-footer {
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-grow: 1;
+    background: #090e1a;
+  }
+
+  .tile-header-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .tile-icon {
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .tile-name {
+    font-size: 11.5px;
+    font-weight: 800;
+    color: #f1f5f9;
+    font-family: var(--font-mono);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  .tile-subname {
+    font-size: 9.5px;
+    font-family: var(--font-mono);
+    color: var(--accent-purple);
+    font-weight: 700;
+  }
+
+  .tile-desc {
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .tile-meta-tag {
+    margin-top: auto;
+    padding-top: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .tech-spec {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--text-muted);
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Footnote */
+  .matrix-footnote {
+    margin-top: 56px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px dashed rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+  }
+
+  .footnote-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .footnote-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .footnote-content p {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 768px) {
+    .matrix-title {
+      font-size: 28px;
+    }
+    .tiles-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .matrix-meta-bar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<script>
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const tierGroups = document.querySelectorAll('.tier-group');
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const selectedTier = btn.getAttribute('data-tier-filter');
+
+      tierGroups.forEach((group) => {
+        const groupTier = group.getAttribute('data-tier');
+        if (selectedTier === 'all' || groupTier === selectedTier) {
+          (group as HTMLElement).style.display = 'flex';
+        } else {
+          (group as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

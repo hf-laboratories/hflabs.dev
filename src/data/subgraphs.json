@@ -1,0 +1,500 @@
+{
+  "summary": {
+    "title": "51 FEATURE SUB-GRAPHS",
+    "subtitle": "Hypertensor GraphRAG — 10 FREE | 14 PRO | 27 HIGH ASSURANCE",
+    "meta": "17 tiles generated from the spatial map in this pass",
+    "footnote": "Tier assignment reflects the launch baseline (sales gate 0); features cascade to lower tiers at commercial milestones. Internal bundles are omitted."
+  },
+  "tiers": [
+    {
+      "id": "free",
+      "name": "FREE TIER",
+      "count": 10,
+      "color": "#10b981",
+      "accentColor": "#38bdf8",
+      "badge": "10 SUB-GRAPHS",
+      "subgraphs": [
+        {
+          "id": "agent-memory",
+          "name": "AGENT MEMORY",
+          "type": "tile",
+          "theme": "cyan-orb",
+          "desc": "Local single-developer in-memory store for conversational and agent-working memory.",
+          "tech": "RAM-Resident Adjacency Index",
+          "icon": "🧠"
+        },
+        {
+          "id": "codebase-topology",
+          "name": "CODEBASE TOPOLOGY",
+          "type": "tile",
+          "theme": "terrain-mesh",
+          "desc": "3D wireframe topology and multi-hop symbol relational graph of the repository.",
+          "tech": "Bi-directional In-Memory Adjacency",
+          "icon": "🌐"
+        },
+        {
+          "id": "github-provenance",
+          "name": "GITHUB PROVENANCE",
+          "subname": "DIRECTIVE SYNC",
+          "type": "tile",
+          "theme": "shield-sync",
+          "desc": "Cryptographic commit and PR lineage tracking with directive/playbook symlink sync.",
+          "tech": "Git Commit Lineage + SHA256 Sync",
+          "icon": "🛡️"
+        },
+        {
+          "id": "continuous-tasks",
+          "name": "CONTINUOUS TASKS",
+          "type": "tile",
+          "theme": "pipeline-dag",
+          "desc": "Real-time task DAG queue with active node pipeline state monitors.",
+          "tech": "Continuous DAG Task Queue",
+          "icon": "⚡"
+        },
+        {
+          "id": "workspace-topology",
+          "name": "WORKSPACE TOPOLOGY",
+          "type": "diagram",
+          "diagramType": "tree",
+          "desc": "Hierarchical filesystem and workspace structure graph.",
+          "tech": "Filesystem Hierarchy Graph",
+          "icon": "🌳"
+        },
+        {
+          "id": "workspace-forms-layout",
+          "name": "WORKSPACE FORMS & LAYOUT",
+          "type": "diagram",
+          "diagramType": "cards",
+          "desc": "UI component hierarchies, layout trees, and form descriptor schemas.",
+          "tech": "Layout & Form Schemas",
+          "icon": "📐"
+        },
+        {
+          "id": "workspace-classes-er",
+          "name": "WORKSPACE CLASSES & ER",
+          "type": "diagram",
+          "diagramType": "schema",
+          "desc": "Class hierarchy, entity-relationship diagrams, and interface implementations.",
+          "tech": "Class & ER Schema Mapping",
+          "icon": "🗂️"
+        },
+        {
+          "id": "workspace-aggregate",
+          "name": "WORKSPACE AGGREGATE",
+          "type": "diagram",
+          "diagramType": "cluster",
+          "desc": "Multi-module dependency aggregation and project reference bounds.",
+          "tech": "Dependency Clustered Aggregates",
+          "icon": "📦"
+        },
+        {
+          "id": "workspace-snapshot",
+          "name": "WORKSPACE SNAPSHOT",
+          "type": "diagram",
+          "diagramType": "frame",
+          "desc": "Point-in-time immutable state snapshots of workspace graph state.",
+          "tech": "Zero-Copy Graph State Snapshots",
+          "icon": "📸"
+        },
+        {
+          "id": "cross-graph-consistency",
+          "name": "CROSS-GRAPH CONSISTENCY",
+          "type": "diagram",
+          "diagramType": "crossed",
+          "desc": "Graph consistency linting, dangling reference detection, and cyclic dependency checks.",
+          "tech": "Graph Linter & Conflict Engine",
+          "icon": "⚖️"
+        }
+      ]
+    },
+    {
+      "id": "pro",
+      "name": "PRO TIER",
+      "count": 14,
+      "color": "#38bdf8",
+      "accentColor": "#818cf8",
+      "badge": "14 SUB-GRAPHS",
+      "subgraphs": [
+        {
+          "id": "agent-blender",
+          "name": "AGENT BLENDER",
+          "type": "tile",
+          "theme": "cyan-avatar",
+          "desc": "Multi-agent persona synthesis, context blending, and collaborative prompt fusion.",
+          "tech": "Multi-Agent Topology Blending",
+          "icon": "🤖"
+        },
+        {
+          "id": "code-semantics",
+          "name": "CODE SEMANTICS",
+          "type": "tile",
+          "theme": "roslyn-ast",
+          "desc": "Roslyn AST semantic graph, symbol call graphs, and blast-radius impact analysis.",
+          "tech": "Roslyn Compiler Platform AST",
+          "icon": "🔥"
+        },
+        {
+          "id": "directive-sync",
+          "name": "DIRECTIVE SYNC",
+          "type": "tile",
+          "theme": "dual-pipe",
+          "desc": "Dual-agent pipeline flow with real-time directive and playbook synchronization.",
+          "tech": "Active Data Flow Link + Symlink Engine",
+          "icon": "🔄"
+        },
+        {
+          "id": "skill-blender",
+          "name": "SKILL BLENDER",
+          "type": "tile",
+          "theme": "fusion-core",
+          "desc": "Dynamic skill capability aggregation, tool routing matrices, and prompt template blending.",
+          "tech": "Skill Matrix & Dynamic Tool Router",
+          "icon": "✨"
+        },
+        {
+          "id": "community-detection",
+          "name": "COMMUNITY DETECTION",
+          "type": "diagram",
+          "diagramType": "tri-cluster",
+          "desc": "Louvain and Leiden community modularity algorithms for codebase grouping.",
+          "tech": "Louvain & Leiden Modularity",
+          "icon": "🔮"
+        },
+        {
+          "id": "hierarchical-clustering",
+          "name": "HIERARCHICAL CLUSTERING",
+          "type": "diagram",
+          "diagramType": "nested-box",
+          "desc": "Multi-tier hierarchical clustering of functional domains and packages.",
+          "tech": "Hierarchical Leiden Partitioning",
+          "icon": "📊"
+        },
+        {
+          "id": "agent-bdi",
+          "name": "AGENT BDI",
+          "type": "diagram",
+          "diagramType": "bdi-flow",
+          "desc": "Belief-Desire-Intention cognitive model representation with state updates.",
+          "tech": "Belief-Desire-Intention Graph",
+          "icon": "🎯"
+        },
+        {
+          "id": "stack-l0",
+          "name": "STACK L0 - TOPOLOGY BASELINE",
+          "type": "diagram",
+          "diagramType": "plane-l0",
+          "desc": "Baseline structural topology plane representing core AST and entity links.",
+          "tech": "Isometric Structural Baseline Plane",
+          "icon": "📐"
+        },
+        {
+          "id": "stack-l1",
+          "name": "STACK L1 - TARGET MINDMAP",
+          "type": "diagram",
+          "diagramType": "plane-l1",
+          "desc": "Goal-oriented semantic mindmap plane projected onto topological AST.",
+          "tech": "Goal Projection Semantic Plane",
+          "icon": "🗺️"
+        },
+        {
+          "id": "stack-l2",
+          "name": "STACK L2 - PROJECT GROUPINGS",
+          "type": "diagram",
+          "diagramType": "plane-l2",
+          "desc": "Logical project boundary and namespace encapsulation layer.",
+          "tech": "Encapsulation Boundary Plane",
+          "icon": "📦"
+        },
+        {
+          "id": "stack-l3",
+          "name": "STACK L3 - RULES GRAPH",
+          "type": "diagram",
+          "diagramType": "plane-l3",
+          "desc": "Architectural rules, lint constraints, and policy validation graph plane.",
+          "tech": "Policy & Invariant Rule Plane",
+          "icon": "📜"
+        },
+        {
+          "id": "stack-l4",
+          "name": "STACK L4 - CHANGES GRAPH",
+          "type": "diagram",
+          "diagramType": "plane-l4",
+          "desc": "Delta diff projections, pending refactoring paths, and staging graph.",
+          "tech": "Differential Mutation Graph Plane",
+          "icon": "🔀"
+        },
+        {
+          "id": "pattern-composition",
+          "name": "PATTERN COMPOSITION",
+          "type": "diagram",
+          "diagramType": "pattern-grid",
+          "desc": "Design pattern detection, template substitution, and structural composition.",
+          "tech": "Structural Pattern Subgraph Matching",
+          "icon": "🧩"
+        },
+        {
+          "id": "feature-interaction-map",
+          "name": "FEATURE INTERACTION MAP",
+          "type": "diagram",
+          "diagramType": "matrix-heatmap",
+          "desc": "Pairwise feature cross-talk and side-effect interaction matrix heatmap.",
+          "tech": "2D Interaction Affinity Heatmap",
+          "icon": "▦"
+        }
+      ]
+    },
+    {
+      "id": "high-assurance",
+      "name": "HIGH ASSURANCE",
+      "count": 27,
+      "color": "#f59e0b",
+      "accentColor": "#f43f5e",
+      "badge": "27 SUB-GRAPHS",
+      "subgraphs": [
+        {
+          "id": "hardware-topology",
+          "name": "HARDWARE TOPOLOGY",
+          "type": "tile",
+          "theme": "hw-mesh",
+          "desc": "NUMA node affinity, PCIe interconnect topology, pinned host RAM, and fabric mapping.",
+          "tech": "Hardware NUMA / Fabric Topology Substrate",
+          "icon": "🖧"
+        },
+        {
+          "id": "level-0-acceleration",
+          "name": "LEVEL 0 ACCELERATION",
+          "type": "tile",
+          "theme": "l0-core",
+          "desc": "Intel Level Zero native GPU compute kernel dispatch with precompiled zebin catalog.",
+          "tech": "Direct Level Zero Native C ABI",
+          "icon": "⚡"
+        },
+        {
+          "id": "multi-domain-ontology",
+          "name": "MULTI-DOMAIN ONTOLOGY",
+          "type": "tile",
+          "theme": "pyramid-kge",
+          "desc": "Hierarchical multi-domain knowledge ontology pyramid with typed hyper-edges.",
+          "tech": "Multi-Tier Categorical Knowledge Graph",
+          "icon": "🔺"
+        },
+        {
+          "id": "bess-sharding",
+          "name": "BESS SHARDING",
+          "type": "tile",
+          "theme": "bess-core",
+          "desc": "Bi-directional Evolutionary Swarm Sharding for distributed multi-million node graphs.",
+          "tech": "BESS Graph Partitioning Engine",
+          "icon": "💠"
+        },
+        {
+          "id": "formal-invariants",
+          "name": "FORMAL INVARIANTS",
+          "type": "tile",
+          "theme": "proof-contract",
+          "desc": "Hoare-logic proof contracts, inductive invariant checkers, and metamodel guarantees.",
+          "tech": "Formal Invariant Theorem Prover",
+          "icon": "📜"
+        },
+        {
+          "id": "pixie-swarm-mesh",
+          "name": "PIXIE SWARM MESH",
+          "type": "tile",
+          "theme": "pixie-swarm",
+          "desc": "Bioluminescent decentralized agent mesh with emergent reasoning and topology discovery.",
+          "tech": "Decentralized Agent Mesh Swarm",
+          "icon": "🍄"
+        },
+        {
+          "id": "dynamic-world-model",
+          "name": "DYNAMIC WORLD MODEL",
+          "type": "tile",
+          "theme": "world-sphere",
+          "desc": "Spatiotemporal predictive world model for simulation, rollouts, and state estimation.",
+          "tech": "Predictive Latent World Model",
+          "icon": "🪐"
+        },
+        {
+          "id": "kge-link-prediction",
+          "name": "KGE LINK PREDICTION",
+          "type": "diagram",
+          "diagramType": "kge-nodes",
+          "desc": "Knowledge graph embedding (TransE, RotatE, ComplEx) vector link prediction.",
+          "tech": "TransE / RotatE Vector Space Projections",
+          "icon": "🔗"
+        },
+        {
+          "id": "multihop-reasoning",
+          "name": "MULTIHOP REASONING",
+          "type": "diagram",
+          "diagramType": "multihop-path",
+          "desc": "Graph-constrained beam search with sub-millisecond multi-hop relational inference.",
+          "tech": "Graph-Constrained Beam Search",
+          "icon": "🛤️"
+        },
+        {
+          "id": "invariant-checkpoints",
+          "name": "INVARIANT CHECKPOINTS",
+          "type": "diagram",
+          "diagramType": "checkpoint-gate",
+          "desc": "Cryptographically signed and audited invariant checkpoints with rollback guarantees.",
+          "tech": "Locked & Audited Checkpoint Gates",
+          "icon": "🔒"
+        },
+        {
+          "id": "grounding-verifier",
+          "name": "GROUNDING VERIFIER",
+          "type": "diagram",
+          "diagramType": "grounded-triple",
+          "desc": "100% grounded triple verification auditing LLM completions against graph memory.",
+          "tech": "100% Grounded Triple Verifier",
+          "icon": "✅"
+        },
+        {
+          "id": "bess-reasoning",
+          "name": "BESS REASONING",
+          "type": "diagram",
+          "diagramType": "bess-path",
+          "desc": "Swarm-guided graph exploration and evolutionary path optimization.",
+          "tech": "Evolutionary Swarm Path Search",
+          "icon": "🧬"
+        },
+        {
+          "id": "tape-planning",
+          "name": "TAPE PLANNING",
+          "type": "diagram",
+          "diagramType": "tape-dag",
+          "desc": "Task-Adaptive Prediction & Explanation planning structured as action-perception DAGs.",
+          "tech": "Action-Perception Planning DAG",
+          "icon": "📈"
+        },
+        {
+          "id": "intergraph-federation",
+          "name": "INTERGRAPH FEDERATION",
+          "type": "diagram",
+          "diagramType": "federation-planes",
+          "desc": "Cross-boundary zero-copy federation between independent domain knowledge graphs.",
+          "tech": "Cross-Boundary Graph Federation Protocol",
+          "icon": "🌐"
+        },
+        {
+          "id": "sovereign-air-gap",
+          "name": "SOVEREIGN AIR-GAP",
+          "type": "tile",
+          "theme": "mls-shield",
+          "desc": "Bell-LaPadula Multi-Level Security (MLS) with strict classification enforcement (UNCLASSIFIED / SECRET / TOP SECRET).",
+          "tech": "Bell-LaPadula MLS + FIPS HMAC-SHA256",
+          "icon": "🏛️"
+        },
+        {
+          "id": "sbom-provenance",
+          "name": "SBOM PROVENANCE",
+          "type": "tile",
+          "theme": "sbom-grid",
+          "desc": "Software Bill of Materials (SPDX / CycloneDX) cryptographic lineage and supply chain graph.",
+          "tech": "Cryptographic Supply Chain Provenance",
+          "icon": "📋"
+        },
+        {
+          "id": "capability-sandbox",
+          "name": "CAPABILITY SANDBOX",
+          "type": "tile",
+          "theme": "sandbox-portal",
+          "desc": "Seccomp/eBPF-enforced capability barriers restricting tool execution and memory isolation.",
+          "tech": "Hardened Capability Containment Barrier",
+          "icon": "🛡️"
+        },
+        {
+          "id": "threat-surface",
+          "name": "THREAT SURFACE",
+          "type": "tile",
+          "theme": "threat-radar",
+          "desc": "Dynamic attack surface analyzer, prompt injection detection, and vulnerability graph.",
+          "tech": "Automated Attack Surface & Threat Matrix",
+          "icon": "⚠️"
+        },
+        {
+          "id": "compiler-mlir",
+          "name": "COMPILER & MLIR",
+          "type": "tile",
+          "theme": "mlir-compiler",
+          "desc": "Multi-Level Intermediate Representation (MLIR) graph compilation to native target binaries.",
+          "tech": "MLIR Dialect Lowering & JIT Engine",
+          "icon": "⚙️"
+        },
+        {
+          "id": "cognitive-bias",
+          "name": "COGNITIVE BIAS",
+          "type": "tile",
+          "theme": "bias-radar",
+          "desc": "Cognitive bias and hallucination intensity radar tracking semantic drift in real-time.",
+          "tech": "Hallucination Intensity & Bias Monitor",
+          "icon": "🎯"
+        },
+        {
+          "id": "formulaic-reasoning",
+          "name": "FORMULAIC REASONING",
+          "type": "tile",
+          "theme": "formulaic-math",
+          "desc": "Asymptotic convergence guarantees, numerical stability bounds, and Lyapunov proofs.",
+          "tech": "Asymptotic Convergence Theorem Prover",
+          "icon": "🔢"
+        },
+        {
+          "id": "cost-carbon",
+          "name": "COST & CARBON",
+          "type": "tile",
+          "theme": "green-grid",
+          "desc": "Global electrical grid tracking, carbon intensity routing, and GPU cost optimization.",
+          "tech": "Regional Electrical Grid & Carbon Router",
+          "icon": "🌱"
+        },
+        {
+          "id": "regulatory-compliance",
+          "name": "REGULATORY COMPLIANCE",
+          "type": "tile",
+          "theme": "compliance-hud",
+          "desc": "Formal audit gates for ISO 26262 ASIL-D, DO-178C Level A, EU AI Act, and NIST SP 800-53.",
+          "tech": "DO-178C / ISO 26262 / EU AI Act Auditor",
+          "icon": "⚖️"
+        },
+        {
+          "id": "agentic-orchestration",
+          "name": "AGENTIC ORCHESTRATION",
+          "type": "diagram",
+          "diagramType": "orchestration-bus",
+          "desc": "Centralized orchestrator authority managing task dispatch and sub-agent consensus.",
+          "tech": "Centralized Swarm Orchestration Bus",
+          "icon": "👑"
+        },
+        {
+          "id": "agent-blackboard",
+          "name": "AGENT BLACKBOARD",
+          "type": "diagram",
+          "diagramType": "blackboard-state",
+          "desc": "Shared global architectural blackboard state for multi-agent asynchronous consensus.",
+          "tech": "Shared Blackboard Architectural State",
+          "icon": "📋"
+        },
+        {
+          "id": "agent-safety-governance",
+          "name": "AGENT SAFETY & GOVERNANCE",
+          "type": "diagram",
+          "diagramType": "safety-shield",
+          "desc": "Real-time policy interception and hard safety invariants on all agent-generated code.",
+          "tech": "Hard Real-Time Policy Interception Gate",
+          "icon": "🛡️"
+        },
+        {
+          "id": "agent-ledger-quotas",
+          "name": "AGENT LEDGER & QUOTAS",
+          "type": "diagram",
+          "diagramType": "ledger-bars",
+          "desc": "Cryptographic immutable decision ledger with per-agent rate limits and token quotas.",
+          "tech": "Immutable Decision Ledger & Quota Gate",
+          "icon": "📊"
+        }
+      ]
+    }
+  ]
+}

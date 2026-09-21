@@ -2,6 +2,7 @@
 // src/pages/products/ht-graphrag.astro
 import Layout from '../../layouts/Layout.astro';
 import LicenseTierCard from '../../components/LicenseTierCard.astro';
+import SubGraphMatrix from '../../components/SubGraphMatrix.astro';
 
 const metrics = [
   { label: "2-hop traversal", value: "0.15–1.95 ms", detail: "1k nodes up to 25k nodes / 100k edges, measured" },
@@ -83,7 +84,10 @@ const features = [
       </p>
 
       <div class="hero-actions">
-        <a href="#licensing" class="btn-primary" style="padding:12px 24px; font-size:14px;">
+        <a href="#subgraphs" class="btn-primary" style="padding:12px 24px; font-size:14px;">
+          51 Feature Sub-Graphs &darr;
+        </a>
+        <a href="#licensing" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
           View Licensing Tiers &darr;
         </a>
         <a href="#quickstart" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
@@ -131,6 +135,9 @@ const features = [
       </div>
     </div>
   </section>
+
+  <!-- 51 Feature Sub-Graphs Spatial Map -->
+  <SubGraphMatrix />
 
   <!-- Dedicated License Items Section -->
   <LicenseTierCard 
