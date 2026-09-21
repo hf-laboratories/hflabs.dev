@@ -13,6 +13,13 @@ const {
   title = "Hypertensor GraphRAG Licensing Tiers",
   subtitle = "Tiered runtime limits, SIMD vector dimension allowances, topological capacity, and cryptographic governance for HT GraphRAG deployments."
 } = Astro.props;
+
+const labelMap: Record<string, string> = {
+  validatedBound: "Validated Bound",
+  vectorDimensions: "SIMD Vectors",
+  traversalLatency: "2-Hop Traversal",
+  workers: "Worker Pool"
+};
 ---
 
 <section id="licensing" class="licensing-section">
@@ -44,7 +51,7 @@ const {
             <ul>
               {Object.entries(t.limits).map(([k, v]) => (
                 <li>
-                  <span class="limit-key">{k}</span>
+                  <span class="limit-key">{labelMap[k] || k.replace(/([A-Z])/g, ' $1').trim()}</span>
                   <span class="limit-val">{v}</span>
                 </li>
               ))}

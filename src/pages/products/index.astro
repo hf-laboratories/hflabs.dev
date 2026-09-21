@@ -5,17 +5,17 @@ import Layout from '../../layouts/Layout.astro';
 const products = [
   {
     id: "ht-graphrag",
-    name: "In-Memory Hypertensor GraphRAG & SIMD Vectors",
-    badge: "Flagship Product",
+    name: "Hypertensor GraphRAG",
+    badge: "Vector & Graph Engine",
     badgeColor: "#38bdf8",
-    tagline: "Sub-millisecond multi-hop graph reasoning, 128-dim SIMD vector embeddings, FastMCP host, and zero-copy topological memory.",
+    tagline: "In-memory typed property-graph store with hybrid dense and BM25 retrieval, SIMD TensorPrimitives, and FastMCP agent context.",
     status: "Production Ready",
     href: "/products/ht-graphrag",
     features: [
-      "< 0.8 ms multi-hop graph traversal",
-      "128d & 512d SIMD AVX-512 float index",
-      "FastMCP SSE agent host bridge",
-      "Tiered Open-Core & Commercial Licensing"
+      "In-memory typed property-graph store with dense & BM25 retrieval",
+      "SIMD TensorPrimitives with optional Level Zero GPU offload",
+      "65+ tool FastMCP server & desktop HUD for agent context",
+      "Tiered Open-Core and Commercial licensing"
     ]
   },
   {
@@ -23,14 +23,14 @@ const products = [
     name: "HyperSwarm Optimization Suite",
     badge: "Swarm Metaheuristics",
     badgeColor: "#818cf8",
-    tagline: "Integrated swarm metaheuristics with dynamic Director authority, entropy monitoring, and autonomous threshold tuning.",
+    tagline: "Swarm optimization framework covering core, hybrid, advanced and multi-objective algorithms with Director ensembles.",
     status: "Production Ready",
     href: "/docs#swarm-benchmark",
     features: [
-      "Dynamic Director authority switching",
-      "270-case CEC benchmark matrix sweeps",
-      "SwarmML hyperparameter optimization",
-      "SwarmDev algorithmic workbench"
+      "Director-managed subswarm ensembles & diversity monitoring",
+      "Pareto-sorting threshold tuning & desktop visualizer",
+      "SwarmDev deterministic prompt-to-workflow pipeline",
+      "Optional kGNN reasoning and wavescan analysis layers"
     ]
   },
   {
@@ -38,29 +38,29 @@ const products = [
     name: "LevelZero.NET & L0 Kernel Catalog",
     badge: "GPU Substrate",
     badgeColor: "#f43f5e",
-    tagline: "Direct Intel Level Zero GPU compute interop with zero-overhead C# P/Invoke bindings and precompiled zebin kernel catalog.",
+    tagline: "Managed .NET wrapper for Intel Level Zero GPU compute with 26 precompiled OpenCL C kernels across 11 Intel hardware targets.",
     status: "Production Ready",
     href: "/docs#levelzero-net",
     features: [
-      "Zero-overhead C# native P/Invoke",
-      "18+ precompiled Iris Xe GT2 & Arc zebins",
-      "Direct ABI probes & hardware validation",
-      "Raw SPIR-V module compilation toolchain"
+      "16 domain kernel wrappers (fitness, PSO, SNN/STDP, N-body, dominance)",
+      "26 precompiled OpenCL C kernel sources in SPIR-V & native zebin",
+      "11 Intel targets: Iris Xe (tgllp), Arc, Meteor/Arrow/Lunar/Panther Lake, GPU Max",
+      "Typed shared-memory buffers & automatic device detection"
     ]
   },
   {
     id: "accelerator-stack",
-    name: "Accelerator & IPU SQL Query Acceleration",
-    badge: "Compute Acceleration",
+    name: "Accelerator & Heterogeneous Engines",
+    badge: "Compute Orchestration",
     badgeColor: "#34d399",
-    tagline: "High-performance compute orchestration fabric, database query acceleration, Poplar.NET IPU shims, and ABIGen synthesizers.",
+    tagline: "Unified hardware-accelerator layer, IPU SQL query acceleration, Poplar.NET IPU shims, and Abigen C/C++ binding generator.",
     status: "Production Ready",
     href: "/docs#accelerator-interop",
     features: [
-      "Near-zero wait task DAG execution",
-      "Sub-millisecond relational scan offloading",
-      "Graphcore IPU hardware shims via Poplar.NET",
-      "Compile-time automated ABI synthesis"
+      "gRPC plan execution across IPU, CUDA, OpenCL, Level Zero, FPGA, DMA/RDMA",
+      "IPU SQL query acceleration for PostgreSQL & SQL Server CLR (aggregates & distance)",
+      "Poplar.NET managed .NET wrapper for Graphcore Poplar/PopART",
+      "Abigen libclang-driven C ABI shim and C# binding synthesizer"
     ]
   }
 ];

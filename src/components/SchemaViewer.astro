@@ -6,13 +6,29 @@ import schemas from '../data/schemas.json';
 <section id="schemas" class="schemas-section">
   <div class="container">
     <div class="section-header">
-      <div class="badge" style="background:rgba(52,211,153,0.15); color:var(--accent-emerald); border:1px solid rgba(52,211,153,0.3); margin-bottom:12px;">
-        Published JSON Schemas
+      <div class="header-badges">
+        <div class="badge" style="background:rgba(52,211,153,0.15); color:var(--accent-emerald); border:1px solid rgba(52,211,153,0.3);">
+          Published JSON Schemas
+        </div>
+        <div class="badge construction-badge">
+          <span class="construction-icon">🚧</span> UNDER CONSTRUCTION
+        </div>
       </div>
       <h2 class="section-title">Open-Standard API &amp; Data Schemas</h2>
       <p class="section-desc">
         Formal JSON Schemas powering REST endpoints, dataset registry catalogs, and telemetry interchange. Publicly accessible and versioned.
       </p>
+
+      <!-- Under Construction Notification Banner -->
+      <div class="construction-banner">
+        <div class="construction-banner-header">
+          <span class="pulse-dot"></span>
+          <strong>Under Construction:</strong> Schema registry catalogs, automated migration pipelines, and draft schema specifications are currently undergoing standardization.
+        </div>
+        <p class="construction-banner-sub">
+          Status: Schema Ingestion &amp; Catalog Migration in Progress
+        </p>
+      </div>
     </div>
 
     <div class="schemas-layout">
@@ -78,6 +94,77 @@ import schemas from '../data/schemas.json';
     text-align: center;
     max-width: 800px;
     margin: 0 auto 48px;
+  }
+
+  .header-badges {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+
+  .construction-badge {
+    background: rgba(245, 158, 11, 0.15) !important;
+    color: var(--accent-amber) !important;
+    border: 1px solid rgba(245, 158, 11, 0.4) !important;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .construction-icon {
+    font-size: 13px;
+  }
+
+  .construction-banner {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(15, 23, 42, 0.6) 100%);
+    border: 1px dashed rgba(245, 158, 11, 0.4);
+    border-radius: var(--radius-md);
+    padding: 14px 20px;
+    margin: 0 auto 28px;
+    max-width: 720px;
+    text-align: left;
+  }
+
+  .construction-banner-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: #fef3c7;
+    line-height: 1.5;
+  }
+
+  .construction-banner-header strong {
+    color: var(--accent-amber);
+  }
+
+  .pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-amber);
+    box-shadow: 0 0 8px var(--accent-amber);
+    flex-shrink: 0;
+    display: inline-block;
+    animation: pulseGlow 2s infinite ease-in-out;
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+
+  .construction-banner-sub {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    margin-top: 6px;
+    padding-left: 18px;
   }
 
   .section-title {

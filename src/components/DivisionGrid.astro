@@ -37,7 +37,7 @@ import divisions from '../data/divisions.json';
                 <li class="project-item">
                   <div class="proj-name-status">
                     <span class="proj-name">{p.name}</span>
-                    <span class={`proj-status status-${p.status.toLowerCase()}`}>{p.status}</span>
+                    <span class={`proj-status status-${p.status.toLowerCase().replace(/\s+/g, '-')}`}>{p.status}</span>
                   </div>
                   <p class="proj-desc">{p.description}</p>
                   <code class="proj-path">{p.path}</code>
@@ -187,6 +187,8 @@ import divisions from '../data/divisions.json';
   .status-published { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
   .status-validated { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
   .status-verified { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+  .status-mvp { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+  .status-in-development { background: rgba(129, 140, 248, 0.15); color: #818cf8; }
   .status-quarantined { background: rgba(244, 63, 94, 0.15); color: #fb7185; }
 
   .proj-desc {

@@ -4,24 +4,24 @@
     "name": "Cognition & Swarm Intelligence",
     "icon": "🚀",
     "badge": "Vector & Swarm Engines",
-    "tagline": "Sub-millisecond graph reasoning, SIMD embeddings, and autonomous multi-algorithm swarm optimization.",
+    "tagline": "In-memory graph retrieval, SIMD vector search, and multi-algorithm swarm optimization.",
     "color": "#38bdf8",
     "projects": [
       {
-        "name": "In-Memory Hypertensor GraphRAG & SIMD Vectors",
-        "description": "Sub-millisecond multi-hop graph reasoning, 128-dim SIMD AVX-512 vector index, FastMCP agent host, and zero-copy topological memory.",
+        "name": "Hypertensor GraphRAG",
+        "description": "In-memory typed property-graph store with hybrid dense and BM25 retrieval. Dense search uses SIMD TensorPrimitives, with optional Level Zero GPU offload. It gives agents multi-hop graph context through a 65+ tool FastMCP server and a desktop HUD.",
         "path": "src/HFLabs/Products/HypertensorGraphRAG",
         "status": "Production"
       },
       {
         "name": "HyperSwarm Optimization Suite",
-        "description": "Integrated swarm metaheuristics with dynamic Director authority, entropy monitoring, and autonomous threshold tuning across multi-algorithm optimizers.",
+        "description": "Swarm optimization framework covering core, hybrid, advanced and multi-objective algorithms. It has Director-managed subswarm ensembles, convergence and diversity monitoring, Pareto-sorting threshold tuning, and a desktop visualizer.",
         "path": "src/HFLabs/Products/HyperSwarmOptimizationSuite",
         "status": "Production"
       },
       {
-        "name": "SwarmML App and SwarmDev",
-        "description": "Swarm development workbench, hyperparameter search engine, automated ML optimization host, and algorithmic performance analysis suite.",
+        "name": "SwarmDev",
+        "description": "Deterministic prompt-to-workflow pipeline. It does intent classification, planning, knowledge-graph construction, frame routing, policy-gated normalization and diagnostics. Optional kGNN reasoning and wavescan layers are opt-in.",
         "path": "src/HFLabs/Products/SwarmDev",
         "status": "Production"
       }
@@ -32,26 +32,26 @@
     "name": "Machine Learning & Acceleration",
     "icon": "🧠",
     "badge": "ML & Query Engines",
-    "tagline": "High-throughput compute orchestration, neuromorphic graph models, and hardware-accelerated database queries.",
+    "tagline": "Spiking and graph-based ML, heterogeneous accelerator orchestration, and IPU-offloaded SQL.",
     "color": "#06b6d4",
     "projects": [
       {
         "name": "HFLabs Machine Learning Suite",
-        "description": "Spiking neuromorphic models, contextual inference, intergraph reasoning, KGE embeddings, hyperparameter optimization, and LLM services.",
+        "description": "Spiking neural networks, contextual and intergraph inference, and knowledge-graph embeddings (KGE). It also has hyperparameter optimization (Bayesian, Hyperband, BOHB, ASHA-BOHB, TuRBO) and a Level Zero LLM inference engine with graph-constrained beam decoding.",
         "path": "src/HFLabs/Libraries/ML",
         "status": "Production"
       },
       {
         "name": "Accelerator",
-        "description": "High-performance compute orchestration fabric, near-zero wait task DAG execution engine, and low-latency pipeline acceleration.",
-        "path": "src/HFLabs/Libraries/Accelerator",
+        "description": "Unified hardware-accelerator layer. A gRPC service executes plan envelopes across IPU (Poplar), CUDA, OpenCL, Level Zero, FPGA and DMA/RDMA backends. It includes backend discovery and scoring, a compiled-graph cache, and a KV-cache tier.",
+        "path": "src/HFLabs/Hardware/Accelerator",
         "status": "Production"
       },
       {
-        "name": "IPU SQL Query Acceleration",
-        "description": "Hardware-accelerated database query engine, Postgres streaming bridges, columnar filter acceleration, and sub-millisecond relational scan offloading.",
+        "name": "IPU SQL Query Acceleration (MVP)",
+        "description": "A PostgreSQL extension and a SQL Server CLR bridge offload aggregates (COUNT, SUM, AVG, MIN, MAX) and vector distance ops (cosine, dot, L2) to the IPU through a gRPC microservice. Arrow columnar transport and the planner cost model are still planned.",
         "path": "src/HFLabs/Products/QueryAccel",
-        "status": "Production"
+        "status": "MVP"
       }
     ]
   },
@@ -60,31 +60,31 @@
     "name": "Hardware & Native Substrates",
     "icon": "⚡",
     "badge": "Bare Metal & Interop",
-    "tagline": "Direct GPU compute interop, precompiled kernel catalogs, Graphcore IPU hardware shims, and automated ABI synthesis.",
+    "tagline": "Intel Level Zero interop, precompiled kernels, Graphcore Poplar bindings, and header-to-binding generation.",
     "color": "#f43f5e",
     "projects": [
       {
         "name": "LevelZero.NET",
-        "description": "Direct Intel Level Zero GPU compute interop with zero-overhead C# P/Invoke bindings and native ABI probes.",
+        "description": "Managed .NET wrapper for Intel Level Zero GPU compute with an HFLabs ABI shim and typed shared-memory buffers. It has 16 domain kernel wrappers (fitness, PSO, SNN/STDP, N-body, dominance and others) and automatic device detection. It needs an Intel Level Zero driver.",
         "path": "src/HFLabs/Hardware/LevelZero.NET",
         "status": "Production"
       },
       {
         "name": "L0 Kernel Catalog",
-        "description": "Curated suite of 18+ precompiled Iris Xe GT2 (tgllp) and Arc GPU zebin kernels, SPIR-V modules, and hardware fitness evaluators.",
-        "path": "src/HFLabs/Hardware/KernelCatalog",
+        "description": "26 OpenCL C kernel sources for swarm optimization, multi-objective, GraphRAG vector search and LLM workloads. They are precompiled to SPIR-V and native zebin for 11 Intel targets, from Iris Xe (tgllp) through Arc, Meteor/Arrow/Lunar/Panther Lake and Data Center GPU Max.",
+        "path": "LevelZero.NET/LevelZero.Kernels",
         "status": "Production"
       },
       {
-        "name": "Poplar.NET",
-        "description": "Low-level Poplar hardware driver shims and custom kernel interop for Graphcore IPU architectures without heavy vendor SDK overhead.",
+        "name": "Poplar.NET (in development)",
+        "description": "C ABI shim and managed .NET wrapper for Graphcore Poplar/PopART. It covers devices, graph construction, inference and training sessions, optimizers, and safe native handles. It requires the Graphcore Poplar SDK, which isn't included.",
         "path": "src/HFLabs/Hardware/Poplar.NET",
-        "status": "Production"
+        "status": "In Development"
       },
       {
-        "name": "ABIGen",
-        "description": "Automated ABI code generator, native C/C++ interop builder, struct layout synthesizer, and compile-time P/Invoke binding generator.",
-        "path": "src/HFLabs/DevTools/ABIGen",
+        "name": "Abigen",
+        "description": "libclang-driven generator that reads C/C++ headers and emits a C ABI shim plus C# bindings. It has export, naming and ownership policies, opaque-handle support, unsupported-API analysis, and lock/manifest tracking. A Windows desktop front end is included.",
+        "path": "src/HFLabs/DevTools/CodeGen/Abigen.Core, src/HFLabs/Products/Abigen.Desktop",
         "status": "Production"
       }
     ]
