@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/swarm_benchmark_telemetry_schema.1.0.0.json",
+  "title": "Swarm Benchmark Telemetry Event",
+  "type": "object",
+  "required": ["schemaVersion", "type", "runId", "timestamp"],
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "1.0.0" },
+    "type": { "type": "string" },
+    "runId": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "iteration": { "type": "integer", "minimum": 0 },
+    "bestFitness": { "type": "number" },
+    "exploration": { "type": "number" },
+    "exploitation": { "type": "number" },
+    "stagnation": { "type": "number" },
+    "diversity": { "type": "number" },
+    "swarmMode": { "type": "string" }
+  },
+  "additionalProperties": true
+}

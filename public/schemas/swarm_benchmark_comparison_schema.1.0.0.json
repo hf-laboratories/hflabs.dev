@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/swarm_benchmark_comparison_schema.1.0.0.json",
+  "title": "Swarm Benchmark Comparison",
+  "type": "object",
+  "required": ["schemaVersion", "comparisonId", "results"],
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "1.0.0" },
+    "comparisonId": { "type": "string" },
+    "results": { "type": "object" },
+    "statistics": { "type": "object" }
+  },
+  "additionalProperties": true
+}

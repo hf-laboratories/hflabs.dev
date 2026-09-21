@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://hflabs.io/schemas/pattern-remediation-report.schema.json",
+  "title": "Pattern Remediation Report",
+  "description": "Report documenting automated remediation attempts for detected anti-patterns",
+  "type": "object",
+  "required": ["generatedAt", "whatIf", "severity", "totalIssues", "results"],
+  "properties": {
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when remediation was executed"
+    },
+    "whatIf": {
+      "type": "boolean",
+      "description": "Whether this was a dry-run (no files modified)"
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["error", "warning", "info", "all"],
+      "description": "Severity threshold used for filtering issues"
+    },
+    "patternIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^PAT-[A-Z]+-\\d{3}$"
+      },
+      "description": "Optional list of specific pattern IDs targeted for remediation"
+    },
+    "totalIssues": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total number of issues attempted to remediate"
+    },
+    "issuesFixed": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of issues successfully remediated (at least one file fixed)"
+    },
+    "issuesSkipped": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of issues skipped (no automatic remediation available or applicable)"
+    },
+    "issuesFailed": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of issues where remediation failed with errors"
+    },
+    "results": {
+      "type": "array",
+      "description": "Detailed results for each issue remediation attempt",
+      "items": {
+        "type": "object",
+        "required": ["issueId", "severity", "status", "filesAttempted", "filesFixed", "filesSkipped", "timestamp"],
+        "properties": {
+          "issueId": {
+            "type": "string",
+            "description": "Unique identifier for the issue (e.g., 'async-void-methods')"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["error", "warning", "info"],
+            "description": "Severity level of the issue"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["success", "partial", "skipped", "failed", "no-strategy"],
+            "description": "Overall status of remediation attempt"
+          },
+          "filesAttempted": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of files where remediation was attempted"
+          },
+          "filesFixed": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of files successfully fixed"
+          },
+          "filesSkipped": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of files skipped (wildcard patterns or not applicable)"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Error messages encountered during remediation"
+          },
+          "recommendation": {
+            "type": "string",
+            "description": "Manual remediation recommendation if automatic fix not available"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When this remediation was attempted"
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional metadata about the remediation run",
+      "properties": {
+        "repo": {
+          "type": "string",
+          "description": "Repository name"
+        },
+        "branch": {
+          "type": "string",
+          "description": "Git branch where remediation was executed"
+        },
+        "executor": {
+          "type": "string",
+          "description": "User or system that executed remediation"
+        },
+        "catalogVersion": {
+          "type": "string",
+          "description": "Version of the pattern catalog used"
+        }
+      }
+    }
+  }
+}

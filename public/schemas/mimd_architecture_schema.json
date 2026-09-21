@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MIMD Architecture Schema Overlay",
+  "type": "object",
+  "properties": {
+    "graph": {
+      "type": "object",
+      "properties": {
+        "node": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "gc_mimd_config": {
+                "type": "object",
+                "properties": {
+                  "vertex_type": { 
+                    "type": "string",
+                    "enum": ["Standard", "VertexParallel", "WorkerFarm"] 
+                  },
+                  "worker_count": { "type": "integer" },
+                  "synchronization_type": { 
+                    "type": "string", 
+                    "enum": ["Barrier", "LockStep", "Asynchronous"] 
+                  },
+                  "partitioning_strategy": { 
+                    "type": "string", 
+                    "enum": ["Balanced", "MemoryOptimized", "ThroughputOptimized"] 
+                  }
+                },
+                "required": ["vertex_type"]
+              }
+            }
+          }
+        },
+        "gc_mimd_graph_config": {
+          "type": "object",
+          "properties": {
+            "worker_mapping_strategy": { 
+              "type": "string", 
+              "enum": ["RoundRobin", "TileAffinity", "AdaptivePlacement"] 
+            },
+            "enable_cooperative_multitasking": { "type": "boolean" },
+            "cooperative_scheduling_policy": { 
+              "type": "string", 
+              "enum": ["PriorityBased", "FairShare", "FCFS"] 
+            }
+          }
+        }
+      }
+    }
+  }
+}

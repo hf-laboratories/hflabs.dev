@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/swarm_benchmark_run_schema.1.0.0.json",
+  "title": "Swarm Benchmark Run",
+  "type": "object",
+  "required": ["schemaVersion", "runId", "timestamp", "algorithm", "function", "dimensions", "maxIterations", "swarmSize"],
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "1.0.0" },
+    "runId": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "algorithm": { "type": "string" },
+    "function": { "type": "string" },
+    "dimensions": { "type": "integer", "minimum": 1 },
+    "maxIterations": { "type": "integer", "minimum": 1 },
+    "swarmSize": { "type": "integer", "minimum": 1 },
+    "features": { "type": "array", "items": { "type": "string" } },
+    "topology": { "type": "string" },
+    "seedStrategy": { "type": "string" },
+    "environment": { "type": "object" }
+  },
+  "additionalProperties": true
+}

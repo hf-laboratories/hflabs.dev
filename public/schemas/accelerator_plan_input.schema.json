@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hf-laboratories.github.io/IPUServices/schemas/accelerator-plan-input.schema.json",
+  "title": "Accelerator Plan Input",
+  "description": "JSON schema for the minimal plan fragment consumed by PlanJsonPlaceholder.Parse(). Maps to protobuf PlanEnvelope (accel_plan.proto) with PlanVersion=1.",
+  "type": "object",
+  "properties": {
+    "mode": {
+      "type": "string",
+      "description": "Execution mode. Set to 'vector' for vector operations (DOT, COSINE, L2). Omit or set to null for aggregate mode.",
+      "enum": ["vector"],
+      "default": null
+    },
+    "operation": {
+      "type": "string",
+      "description": "Operation to perform. Aggregate mode: SUM, COUNT, MIN, MAX, AVG. Vector mode: DOT, COSINE, L2.",
+      "examples": ["SUM", "COUNT", "MIN", "MAX", "AVG", "DOT", "COSINE", "L2"]
+    },
+    "agg": {
+      "type": "object",
+      "description": "Aggregate configuration. Only used in aggregate mode (mode != 'vector').",
+      "properties": {
+        "col": {
+          "type": "integer",
+          "description": "1-based PostgreSQL attribute number for the aggregate target column.",
+          "minimum": 1,
+          "default": 1
+        }
+      }
+    },
+    "columns": {
+      "type": "array",
+      "description": "Array of column descriptors referenced by the plan. Maps to Plan.columns in protobuf.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "attno": {
+            "type": "integer",
+            "description": "1-based PostgreSQL attribute number.",
+            "minimum": 1
+          }
+        },
+        "required": ["attno"]
+      }
+    },
+    "predicate": {
+      "type": "array",
+      "description": "Optional filter clauses applied with AND semantics before aggregation. Maps to Plan.predicate.clauses in protobuf.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "attno": {
+            "type": "integer",
+            "description": "1-based PostgreSQL attribute number of the column to filter.",
+            "minimum": 1
+          },
+          "op": {
+            "type": "string",
+            "description": "Comparison operator.",
+            "enum": ["=", "<", "<=", ">", ">=", "<>"]
+          },
+          "val": {
+            "type": "number",
+            "description": "Constant right-hand side value for the comparison (float64)."
+          }
+        },
+        "required": ["attno", "op", "val"]
+      }
+    }
+  },
+  "examples": [
+    {
+      "operation": "SUM",
+      "agg": { "col": 2 },
+      "columns": [{ "attno": 1 }, { "attno": 2 }],
+      "predicate": [{ "attno": 1, "op": ">", "val": 10.0 }]
+    },
+    {
+      "mode": "vector",
+      "operation": "COSINE",
+      "columns": [{ "attno": 1 }, { "attno": 2 }]
+    }
+  ]
+}

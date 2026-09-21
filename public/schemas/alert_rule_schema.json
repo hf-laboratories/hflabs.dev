@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hflabs.dev/schemas/alert_rule_schema.json",
+  "title": "IPUServices Alert Rule",
+  "description": "Schema for alert rule definitions used by the AlertsController CRUD API.",
+  "type": "object",
+  "required": ["name", "metricName", "operator", "thresholdValue"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the rule. Auto-generated if omitted on create.",
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable rule name.",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "description": {
+      "type": ["string", "null"],
+      "description": "Optional description of the alert rule.",
+      "maxLength": 2048
+    },
+    "enabled": {
+      "type": "boolean",
+      "description": "Whether the rule is actively evaluated.",
+      "default": true
+    },
+    "severity": {
+      "type": "string",
+      "description": "Severity level of alerts produced by this rule.",
+      "enum": ["Info", "Warning", "Error", "Critical"],
+      "default": "Warning"
+    },
+    "conditionType": {
+      "type": "string",
+      "description": "Type of condition evaluated by the rule.",
+      "enum": ["Threshold", "RateOfChange", "Absence", "Anomaly"],
+      "default": "Threshold"
+    },
+    "metricName": {
+      "type": "string",
+      "description": "Name of the metric to evaluate (e.g. 'cpu_percent', 'memory_used_bytes', 'ipu_temperature').",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_./-]*$"
+    },
+    "operator": {
+      "type": "string",
+      "description": "Comparison operator for threshold conditions.",
+      "enum": ["GreaterThan", "GreaterThanOrEqual", "LessThan", "LessThanOrEqual", "Equal", "NotEqual"],
+      "default": "GreaterThan"
+    },
+    "thresholdValue": {
+      "type": "number",
+      "description": "Threshold value for comparison."
+    },
+    "forDurationSeconds": {
+      "type": "integer",
+      "description": "Duration the condition must hold before firing (seconds).",
+      "minimum": 0,
+      "maximum": 86400,
+      "default": 60
+    },
+    "cooldownSeconds": {
+      "type": "integer",
+      "description": "Minimum seconds between repeated firings of the same rule.",
+      "minimum": 0,
+      "maximum": 604800,
+      "default": 300
+    },
+    "tags": {
+      "type": ["object", "null"],
+      "description": "Free-form key-value tags for grouping and filtering rules.",
+      "additionalProperties": { "type": "string" }
+    },
+    "labels": {
+      "type": ["object", "null"],
+      "description": "Labels attached to alerts produced by this rule.",
+      "additionalProperties": { "type": "string" }
+    },
+    "notifyWebhooks": {
+      "type": ["array", "null"],
+      "description": "Webhook URLs to notify when the rule fires.",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "createdAt": {
+      "type": ["string", "null"],
+      "description": "ISO 8601 timestamp of rule creation (read-only, set by server).",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "name": "High CPU Alert",
+      "description": "Fires when CPU usage exceeds 90% for 2 minutes.",
+      "enabled": true,
+      "severity": "Warning",
+      "conditionType": "Threshold",
+      "metricName": "cpu_percent",
+      "operator": "GreaterThan",
+      "thresholdValue": 90,
+      "forDurationSeconds": 120,
+      "cooldownSeconds": 300,
+      "labels": { "team": "infrastructure", "component": "host" }
+    },
+    {
+      "name": "IPU Temperature Critical",
+      "description": "Fires when IPU temperature exceeds 85°C.",
+      "enabled": true,
+      "severity": "Critical",
+      "conditionType": "Threshold",
+      "metricName": "ipu_temperature",
+      "operator": "GreaterThan",
+      "thresholdValue": 85,
+      "forDurationSeconds": 30,
+      "cooldownSeconds": 60,
+      "notifyWebhooks": ["https://hooks.example.com/alerts"],
+      "tags": { "device": "ipu" }
+    },
+    {
+      "name": "Low Disk Space",
+      "enabled": true,
+      "severity": "Error",
+      "conditionType": "Threshold",
+      "metricName": "disk_free_percent",
+      "operator": "LessThan",
+      "thresholdValue": 10,
+      "forDurationSeconds": 300,
+      "cooldownSeconds": 900
+    }
+  ]
+}

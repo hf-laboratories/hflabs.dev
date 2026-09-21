@@ -1,0 +1,17 @@
+{
+  "gc_multi_ipu_config": {
+    "ipu_count": 2,
+    "replication_factor": 1,
+    "pipeline_stages": [
+      {
+        "ipu_id": 0,
+        "nodes": []
+      },
+      {
+        "ipu_id": 1,
+        "nodes": []
+      }
+    ],
+    "data_parallel_regions": []
+  }
+}

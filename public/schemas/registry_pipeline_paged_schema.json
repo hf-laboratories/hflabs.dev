@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pipelines (Paged)",
+  "description": "Paged response envelope with Pipeline items",
+  "allOf": [
+    { "$ref": "paged_response_schema.json" },
+    {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": { "$ref": "registry_pipeline_schema.json" }
+        }
+      }
+    }
+  ]
+}

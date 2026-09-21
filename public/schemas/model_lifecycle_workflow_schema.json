@@ -1,0 +1,579 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Model Lifecycle Workflow Schema",
+  "description": "Schema for defining model lifecycle management workflows in the IPU model registry",
+  "type": "object",
+  "required": ["workflow_info", "stages", "transitions"],
+  "properties": {
+    "workflow_info": {
+      "type": "object",
+      "required": ["workflow_id", "name", "version"],
+      "properties": {
+        "workflow_id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_-]+$",
+          "description": "Unique workflow identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable workflow name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Workflow description and purpose"
+        },
+        "version": {
+          "type": "string",
+          "description": "Workflow definition version"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_by": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "workflow_type": {
+          "type": "string",
+          "enum": ["development", "release", "hotfix", "experimental", "custom"],
+          "description": "Type of lifecycle workflow"
+        },
+        "target_models": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Model types this workflow applies to"
+        },
+        "active": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "stages": {
+      "type": "object",
+      "description": "Workflow stages definition",
+      "patternProperties": {
+        "^[a-zA-Z0-9_-]+$": {
+          "$ref": "#/definitions/workflow_stage"
+        }
+      }
+    },
+    "transitions": {
+      "type": "array",
+      "description": "Allowed transitions between stages",
+      "items": {
+        "$ref": "#/definitions/stage_transition"
+      }
+    },
+    "automation": {
+      "$ref": "#/definitions/workflow_automation"
+    },
+    "notifications": {
+      "$ref": "#/definitions/notification_config"
+    },
+    "metrics": {
+      "$ref": "#/definitions/workflow_metrics"
+    },
+    "compliance": {
+      "$ref": "#/definitions/compliance_requirements"
+    }
+  },
+  "definitions": {
+    "workflow_stage": {
+      "type": "object",
+      "required": ["stage_id", "name", "type"],
+      "properties": {
+        "stage_id": {
+          "type": "string",
+          "description": "Unique stage identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable stage name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Stage description and purpose"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["development", "validation", "testing", "review", "deployment", "monitoring", "retirement"],
+          "description": "Stage category"
+        },
+        "entry_criteria": {
+          "$ref": "#/definitions/stage_criteria"
+        },
+        "exit_criteria": {
+          "$ref": "#/definitions/stage_criteria"
+        },
+        "required_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/stage_action"
+          }
+        },
+        "optional_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/stage_action"
+          }
+        },
+        "automated_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/automated_action"
+          }
+        },
+        "approval_requirements": {
+          "$ref": "#/definitions/approval_requirements"
+        },
+        "timeout": {
+          "type": "object",
+          "properties": {
+            "duration": { "type": "string", "description": "ISO 8601 duration" },
+            "action": { "type": "string", "enum": ["escalate", "auto_approve", "auto_reject", "notify"] }
+          }
+        },
+        "rollback_allowed": {
+          "type": "boolean",
+          "default": true
+        },
+        "parallel_execution": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether actions in this stage can run in parallel"
+        },
+        "stage_metadata": {
+          "type": "object",
+          "description": "Additional stage-specific metadata"
+        }
+      }
+    },
+    "stage_criteria": {
+      "type": "object",
+      "properties": {
+        "conditions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "condition_id": { "type": "string" },
+              "type": { "type": "string", "enum": ["metric", "approval", "test_result", "time_based", "custom"] },
+              "operator": { "type": "string", "enum": ["equals", "not_equals", "greater_than", "less_than", "contains", "regex", "exists"] },
+              "value": { "type": ["string", "number", "boolean"] },
+              "required": { "type": "boolean", "default": true },
+              "description": { "type": "string" }
+            }
+          }
+        },
+        "logical_operator": {
+          "type": "string",
+          "enum": ["AND", "OR"],
+          "default": "AND",
+          "description": "How to combine multiple conditions"
+        },
+        "custom_validator": {
+          "type": "string",
+          "description": "Custom validation script or function"
+        }
+      }
+    },
+    "stage_action": {
+      "type": "object",
+      "required": ["action_id", "name", "type"],
+      "properties": {
+        "action_id": {
+          "type": "string",
+          "description": "Unique action identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable action name"
+        },
+        "description": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["validation", "testing", "deployment", "approval", "notification", "documentation", "custom"],
+          "description": "Action category"
+        },
+        "implementation": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string", "enum": ["script", "api_call", "manual", "pipeline", "function"] },
+            "command": { "type": "string" },
+            "script_path": { "type": "string" },
+            "api_endpoint": { "type": "string" },
+            "parameters": { "type": "object" },
+            "timeout": { "type": "string", "description": "ISO 8601 duration" },
+            "retry_policy": {
+              "type": "object",
+              "properties": {
+                "max_attempts": { "type": "integer" },
+                "backoff_strategy": { "type": "string", "enum": ["linear", "exponential", "fixed"] },
+                "backoff_duration": { "type": "string" }
+              }
+            }
+          }
+        },
+        "dependencies": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Actions that must complete before this one"
+        },
+        "success_criteria": {
+          "$ref": "#/definitions/stage_criteria"
+        },
+        "failure_handling": {
+          "type": "object",
+          "properties": {
+            "strategy": { "type": "string", "enum": ["fail_stage", "continue", "retry", "escalate"] },
+            "notification": { "type": "boolean" },
+            "fallback_action": { "type": "string" }
+          }
+        },
+        "estimated_duration": {
+          "type": "string",
+          "description": "ISO 8601 duration"
+        },
+        "resource_requirements": {
+          "type": "object",
+          "properties": {
+            "cpu": { "type": "string" },
+            "memory": { "type": "string" },
+            "ipu_required": { "type": "boolean" },
+            "ipu_count": { "type": "integer" },
+            "disk_space": { "type": "string" }
+          }
+        }
+      }
+    },
+    "automated_action": {
+      "type": "object",
+      "required": ["action_id", "trigger", "implementation"],
+      "properties": {
+        "action_id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "trigger": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string", "enum": ["stage_entry", "stage_exit", "condition_met", "time_based", "event"] },
+            "condition": { "$ref": "#/definitions/stage_criteria" },
+            "schedule": { "type": "string", "description": "Cron expression for time-based triggers" },
+            "event_type": { "type": "string" }
+          }
+        },
+        "implementation": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string", "enum": ["script", "api_call", "pipeline", "function", "webhook"] },
+            "target": { "type": "string" },
+            "parameters": { "type": "object" },
+            "authentication": { "type": "object" }
+          }
+        },
+        "enabled": { "type": "boolean", "default": true }
+      }
+    },
+    "stage_transition": {
+      "type": "object",
+      "required": ["from_stage", "to_stage"],
+      "properties": {
+        "transition_id": {
+          "type": "string",
+          "description": "Unique transition identifier"
+        },
+        "from_stage": {
+          "type": "string",
+          "description": "Source stage identifier"
+        },
+        "to_stage": {
+          "type": "string",
+          "description": "Target stage identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable transition name"
+        },
+        "description": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["automatic", "manual", "conditional", "time_based"],
+          "description": "Transition trigger type"
+        },
+        "conditions": {
+          "$ref": "#/definitions/stage_criteria"
+        },
+        "approval_required": {
+          "type": "boolean",
+          "default": false
+        },
+        "approvers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Required approvers for manual transitions"
+        },
+        "pre_transition_actions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Actions to execute before transition"
+        },
+        "post_transition_actions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Actions to execute after transition"
+        },
+        "rollback_transition": {
+          "type": "string",
+          "description": "Transition to use for rollback"
+        },
+        "weight": {
+          "type": "integer",
+          "default": 0,
+          "description": "Transition priority when multiple are available"
+        }
+      }
+    },
+    "approval_requirements": {
+      "type": "object",
+      "properties": {
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "approvers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "enum": ["user", "group", "role", "automatic"] },
+              "identifier": { "type": "string" },
+              "required": { "type": "boolean", "default": true },
+              "order": { "type": "integer", "description": "Approval order for sequential approvals" }
+            }
+          }
+        },
+        "approval_type": {
+          "type": "string",
+          "enum": ["all", "any", "majority", "sequential"],
+          "default": "all",
+          "description": "How approvals are combined"
+        },
+        "timeout": {
+          "type": "string",
+          "description": "ISO 8601 duration for approval timeout"
+        },
+        "escalation": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "escalation_path": { "type": "array", "items": { "type": "string" } },
+            "escalation_delay": { "type": "string", "description": "ISO 8601 duration" }
+          }
+        },
+        "delegation": {
+          "type": "object",
+          "properties": {
+            "allowed": { "type": "boolean" },
+            "delegation_rules": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "workflow_automation": {
+      "type": "object",
+      "properties": {
+        "auto_progression": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether workflow can progress automatically"
+        },
+        "auto_progression_stages": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Stages that support automatic progression"
+        },
+        "failure_handling": {
+          "type": "object",
+          "properties": {
+            "strategy": { "type": "string", "enum": ["stop", "rollback", "continue", "escalate"] },
+            "max_retries": { "type": "integer" },
+            "retry_delay": { "type": "string", "description": "ISO 8601 duration" },
+            "escalation_contacts": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "scheduling": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "maintenance_windows": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start_time": { "type": "string" },
+                  "end_time": { "type": "string" },
+                  "timezone": { "type": "string" },
+                  "days_of_week": { "type": "array", "items": { "type": "integer" } }
+                }
+              }
+            },
+            "deployment_freeze": {
+              "type": "object",
+              "properties": {
+                "enabled": { "type": "boolean" },
+                "freeze_periods": { "type": "array", "items": { "type": "object" } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "notification_config": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean", "default": true },
+        "channels": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "object",
+              "properties": {
+                "enabled": { "type": "boolean" },
+                "recipients": { "type": "array", "items": { "type": "string" } },
+                "template": { "type": "string" }
+              }
+            },
+            "slack": {
+              "type": "object",
+              "properties": {
+                "enabled": { "type": "boolean" },
+                "webhook_url": { "type": "string" },
+                "channel": { "type": "string" },
+                "template": { "type": "string" }
+              }
+            },
+            "webhook": {
+              "type": "object",
+              "properties": {
+                "enabled": { "type": "boolean" },
+                "url": { "type": "string" },
+                "headers": { "type": "object" },
+                "payload_template": { "type": "string" }
+              }
+            }
+          }
+        },
+        "events": {
+          "type": "object",
+          "properties": {
+            "stage_started": { "type": "boolean" },
+            "stage_completed": { "type": "boolean" },
+            "stage_failed": { "type": "boolean" },
+            "approval_required": { "type": "boolean" },
+            "workflow_completed": { "type": "boolean" },
+            "workflow_failed": { "type": "boolean" },
+            "escalation": { "type": "boolean" }
+          }
+        },
+        "filtering": {
+          "type": "object",
+          "properties": {
+            "priority_levels": { "type": "array", "items": { "type": "string" } },
+            "stages": { "type": "array", "items": { "type": "string" } },
+            "models": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "workflow_metrics": {
+      "type": "object",
+      "properties": {
+        "collection_enabled": { "type": "boolean", "default": true },
+        "metrics": {
+          "type": "object",
+          "properties": {
+            "duration": {
+              "type": "object",
+              "properties": {
+                "enabled": { "type": "boolean" },
+                "granularity": { "type": "string", "enum": ["stage", "action", "workflow"] }
+              }
+            },
+            "success_rate": { "type": "boolean" },
+            "failure_rate": { "type": "boolean" },
+            "approval_time": { "type": "boolean" },
+            "resource_usage": { "type": "boolean" },
+            "cost": { "type": "boolean" }
+          }
+        },
+        "aggregation": {
+          "type": "object",
+          "properties": {
+            "time_windows": { "type": "array", "items": { "type": "string" } },
+            "grouping": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "alerts": {
+          "type": "object",
+          "properties": {
+            "duration_threshold": { "type": "string" },
+            "failure_rate_threshold": { "type": "number" },
+            "custom_alerts": { "type": "array", "items": { "type": "object" } }
+          }
+        }
+      }
+    },
+    "compliance_requirements": {
+      "type": "object",
+      "properties": {
+        "standards": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Compliance standards (SOX, GDPR, HIPAA, etc.)"
+        },
+        "audit_trail": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean", "default": true },
+            "retention_period": { "type": "string", "description": "ISO 8601 duration" },
+            "immutable": { "type": "boolean", "default": true }
+          }
+        },
+        "data_governance": {
+          "type": "object",
+          "properties": {
+            "data_classification": { "type": "boolean" },
+            "privacy_controls": { "type": "boolean" },
+            "retention_policies": { "type": "boolean" }
+          }
+        },
+        "security_controls": {
+          "type": "object",
+          "properties": {
+            "access_control": { "type": "boolean" },
+            "encryption": { "type": "boolean" },
+            "vulnerability_scanning": { "type": "boolean" },
+            "secure_communication": { "type": "boolean" }
+          }
+        },
+        "change_management": {
+          "type": "object",
+          "properties": {
+            "change_approval": { "type": "boolean" },
+            "impact_analysis": { "type": "boolean" },
+            "rollback_procedures": { "type": "boolean" }
+          }
+        }
+      }
+    }
+  }
+}

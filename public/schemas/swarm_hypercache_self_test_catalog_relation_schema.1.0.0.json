@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "Schemas/swarm_hypercache_self_test_catalog_relation_schema.1.0.0.json",
+  "title": "HyperCache Self-Test Catalog Relation Row",
+  "type": "object",
+  "required": ["schemaVersion", "id", "sourceId", "relation", "targetId", "originType", "originPath"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "relation": {
+      "type": "string",
+      "enum": [
+        "accelerates",
+        "compatible_with",
+        "complements",
+        "configures",
+        "contains",
+        "controls",
+        "defines",
+        "describes",
+        "documents",
+        "emits",
+        "has_capability",
+        "has_parameter",
+        "has_weakness",
+        "implemented_by",
+        "incompatible_with",
+        "name_implies_category",
+        "preferred_target",
+        "queries",
+        "recommended_bin",
+        "stores",
+        "suitable_for",
+        "uses",
+        "validates"
+      ]
+    },
+    "targetId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "originType": {
+      "type": "string",
+      "enum": ["catalog", "document", "derived", "source"]
+    },
+    "originPath": {
+      "type": "string",
+      "minLength": 1
+    },
+    "documentPath": {
+      "type": "string"
+    },
+    "sourcePath": {
+      "type": "string"
+    },
+    "confidence": {
+      "type": "number"
+    },
+    "displayOrder": {
+      "type": "integer"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

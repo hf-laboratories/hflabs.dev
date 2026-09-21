@@ -1,0 +1,7 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Projects (List)",
+  "description": "Array of Project objects as returned by list endpoints",
+  "type": "array",
+  "items": { "$ref": "registry_project_schema.json" }
+}

@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PSPoplar Command Envelope",
+  "description": "Schema for PSPoplar command requests and standard responses",
+  "type": "object",
+  "properties": {
+    "PspCommand": {
+      "type": "object",
+      "required": ["Command"],
+      "properties": {
+        "Command": { "type": "string", "description": "Command verb (init, load-graph, run-session, profile, shutdown, run-demo)" },
+        "Arguments": {
+          "type": ["object", "null"],
+          "description": "Dictionary of string arguments",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "PspResponse": {
+      "type": "object",
+      "required": ["Ok"],
+      "properties": {
+        "Ok": { "type": "boolean" },
+        "Message": { "type": ["string", "null"] },
+        "Data": { "type": ["object", "array", "string", "number", "boolean", "null"] }
+      }
+    },
+    "InitDeviceArgs": {
+      "type": "object",
+      "properties": {
+        "deviceId": { "type": ["string", "null"] },
+        "connection": { "type": ["string", "null"], "description": "local | ipu-model | remote" }
+      }
+    },
+    "LoadGraphArgs": {
+      "type": "object",
+      "required": ["bucket", "key"],
+      "properties": {
+        "bucket": { "type": "string" },
+        "key": { "type": "string" },
+        "graphName": { "type": ["string", "null"] }
+      }
+    },
+    "RunSessionArgs": {
+      "type": "object",
+      "required": ["graphHandle"],
+      "properties": {
+        "graphHandle": { "type": "string" },
+        "inputBucket": { "type": ["string", "null"] },
+        "inputKey": { "type": ["string", "null"] }
+      }
+    },
+    "ProfileArgs": {
+      "type": "object",
+      "properties": {
+        "sessionHandle": { "type": ["string", "null"] },
+        "durationMs": { "type": "integer", "minimum": 1 }
+      }
+    }
+  }
+}

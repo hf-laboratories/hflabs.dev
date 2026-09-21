@@ -1,0 +1,324 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Model Registry Key-Value Collection Schema",
+  "description": "Schema for key-value storage collections in the IPU model registry",
+  "type": "object",
+  "required": ["collection_info", "items"],
+  "properties": {
+    "collection_info": {
+      "type": "object",
+      "required": ["collection_id", "name", "type", "created_at"],
+      "properties": {
+        "collection_id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_-]+$",
+          "description": "Unique collection identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable collection name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Collection purpose and usage description"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["metadata", "configuration", "metrics", "artifacts", "relationships", "cache"],
+          "description": "Collection type for organization"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_by": {
+          "type": "string",
+          "description": "Creator identifier"
+        },
+        "ttl_seconds": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Time-to-live for items in seconds (0 = no expiration)"
+        },
+        "max_items": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum number of items in collection"
+        },
+        "compression": {
+          "type": "boolean",
+          "description": "Whether values should be compressed"
+        },
+        "encryption": {
+          "type": "boolean",
+          "description": "Whether values should be encrypted"
+        },
+        "access_control": {
+          "$ref": "#/definitions/access_control"
+        },
+        "indexing": {
+          "type": "object",
+          "properties": {
+            "searchable_fields": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Fields that should be indexed for search"
+            },
+            "full_text_search": {
+              "type": "boolean",
+              "description": "Enable full-text search on values"
+            }
+          }
+        }
+      }
+    },
+    "items": {
+      "type": "object",
+      "description": "Key-value pairs in the collection",
+      "patternProperties": {
+        "^[a-zA-Z0-9_.-]+$": {
+          "$ref": "#/definitions/kv_item"
+        }
+      }
+    },
+    "relationships": {
+      "type": "object",
+      "description": "Relationships between items in this collection",
+      "patternProperties": {
+        "^[a-zA-Z0-9_.-]+$": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/relationship"
+          }
+        }
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "description": "Collection usage and performance statistics",
+      "properties": {
+        "total_items": { "type": "integer" },
+        "total_size_bytes": { "type": "integer" },
+        "average_item_size": { "type": "number" },
+        "last_accessed": { "type": "string", "format": "date-time" },
+        "access_count": { "type": "integer" },
+        "hit_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "eviction_count": { "type": "integer" }
+      }
+    }
+  },
+  "definitions": {
+    "kv_item": {
+      "type": "object",
+      "required": ["key", "value", "created_at"],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_.-]+$",
+          "description": "Unique item key within collection"
+        },
+        "value": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "number" },
+            { "type": "boolean" },
+            { "type": "object" },
+            { "type": "array" },
+            { "type": "null" }
+          ],
+          "description": "Item value - can be any JSON type"
+        },
+        "value_type": {
+          "type": "string",
+          "enum": ["string", "number", "boolean", "object", "array", "null", "binary", "encrypted"],
+          "description": "Type hint for the value"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_by": {
+          "type": "string",
+          "description": "Creator identifier"
+        },
+        "updated_by": {
+          "type": "string",
+          "description": "Last updater identifier"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Item version number for optimistic locking"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Expiration timestamp for this specific item"
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Tags for item categorization and search"
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Additional metadata about the item",
+          "properties": {
+            "size_bytes": { "type": "integer" },
+            "checksum": { "type": "string", "description": "SHA256 checksum of value" },
+            "compression_type": { "type": "string", "enum": ["none", "gzip", "bzip2", "lz4"] },
+            "encoding": { "type": "string", "enum": ["utf-8", "base64", "binary"] },
+            "source": { "type": "string", "description": "Source system or process" },
+            "category": { "type": "string", "description": "Item category" },
+            "importance": { "type": "string", "enum": ["low", "medium", "high", "critical"] }
+          }
+        },
+        "access_info": {
+          "type": "object",
+          "properties": {
+            "last_accessed": { "type": "string", "format": "date-time" },
+            "access_count": { "type": "integer" },
+            "last_modified": { "type": "string", "format": "date-time" },
+            "modification_count": { "type": "integer" }
+          }
+        },
+        "validation": {
+          "type": "object",
+          "properties": {
+            "schema": { "type": "string", "description": "JSON schema for value validation" },
+            "is_valid": { "type": "boolean" },
+            "validation_errors": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "last_validated": { "type": "string", "format": "date-time" }
+          }
+        }
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "required": ["type", "target"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["depends_on", "child_of", "related_to", "derived_from", "supersedes", "alias_of"],
+          "description": "Type of relationship"
+        },
+        "target": {
+          "type": "string",
+          "description": "Target key or external reference"
+        },
+        "strength": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Relationship strength (0-1)"
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Additional relationship metadata"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_by": {
+          "type": "string"
+        }
+      }
+    },
+    "access_control": {
+      "type": "object",
+      "properties": {
+        "visibility": {
+          "type": "string",
+          "enum": ["public", "private", "team", "organization"],
+          "description": "Visibility level"
+        },
+        "read_permissions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Users/groups with read access"
+        },
+        "write_permissions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Users/groups with write access"
+        },
+        "admin_permissions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Users/groups with admin access"
+        },
+        "access_policy": {
+          "type": "string",
+          "description": "Custom access policy definition"
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "collection_info": {
+        "collection_id": "model_metadata",
+        "name": "Model Metadata Collection",
+        "description": "Key-value store for model metadata and configuration",
+        "type": "metadata",
+        "created_at": "2025-08-06T10:00:00Z",
+        "created_by": "system",
+        "ttl_seconds": 0,
+        "max_items": 10000,
+        "compression": true,
+        "encryption": false,
+        "access_control": {
+          "visibility": "team",
+          "read_permissions": ["ml-team", "data-scientists"],
+          "write_permissions": ["ml-team"],
+          "admin_permissions": ["platform-admin"]
+        }
+      },
+      "items": {
+        "sentiment_classifier_v1.2.3_accuracy": {
+          "key": "sentiment_classifier_v1.2.3_accuracy",
+          "value": 0.943,
+          "value_type": "number",
+          "created_at": "2025-08-06T10:30:00Z",
+          "created_by": "model-trainer",
+          "version": 1,
+          "tags": ["performance", "accuracy", "sentiment"],
+          "metadata": {
+            "category": "performance_metric",
+            "importance": "high",
+            "source": "validation_pipeline"
+          }
+        },
+        "fraud_detector_config": {
+          "key": "fraud_detector_config",
+          "value": {
+            "threshold": 0.75,
+            "features": ["amount", "merchant", "location"],
+            "model_type": "ensemble"
+          },
+          "value_type": "object",
+          "created_at": "2025-08-06T09:15:00Z",
+          "created_by": "config-manager",
+          "version": 2,
+          "tags": ["configuration", "fraud", "detection"],
+          "metadata": {
+            "category": "model_config",
+            "importance": "critical"
+          }
+        }
+      }
+    }
+  ]
+}

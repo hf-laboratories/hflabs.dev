@@ -1,0 +1,271 @@
+---
+// PolyglotMatrix.astro
+import polyglotData from '../data/polyglot.json';
+
+const languages = [
+  { id: 'c', name: 'C', badge: 'Bare Metal', color: '#64748b' },
+  { id: 'cpp', name: 'C++', badge: 'Low Latency', color: '#3b82f6' },
+  { id: 'cs', name: 'C# .NET 10', badge: 'SIMD Managed', color: '#10b981' },
+  { id: 'cl', name: 'OpenCL', badge: 'Heterogeneous', color: '#f59e0b' },
+  { id: 'ps_1', name: 'PowerShell', badge: 'Automation', color: '#8b5cf6' },
+  { id: 'vl', name: 'Verilog', badge: 'Silicon RTL', color: '#ec4899' },
+  { id: 'svl', name: 'SystemVerilog', badge: 'Formal Verification', color: '#f43f5e' }
+];
+---
+
+<section id="polyglot" class="polyglot-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="badge" style="background:rgba(129,140,248,0.15); color:var(--accent-purple); border:1px solid rgba(129,140,248,0.3); margin-bottom:12px;">
+        Interactive Systems Wiki &bull; Hyperpolyglot Matrix
+      </div>
+      <h2 class="section-title">Polyglot Architecture: 7 Hardware &amp; Runtime Languages</h2>
+      <p class="section-desc">
+        Direct object-linked comparison across the HFLabs language stack: from silicon RTL (Verilog, SVL) and heterogeneous kernels (OpenCL, Level Zero) to zero-allocation managed memory (.NET 10 SIMD) and automated orchestrators.
+      </p>
+
+      <!-- Language Selector Filter Chips -->
+      <div class="lang-pills">
+        {languages.map((l, idx) => (
+          <button class={`lang-pill ${idx < 4 ? 'active' : ''}`} data-lang={l.id} style={`--pill-color:${l.color}`}>
+            <span class="lang-name">{l.name}</span>
+            <span class="lang-badge">{l.badge}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Comparative Linked-Object Matrix Cards -->
+    <div class="matrix-grid">
+      {polyglotData.map(topic => (
+        <div class="topic-card">
+          <div class="topic-header">
+            <h3>{topic.topic}</h3>
+            <p>{topic.description}</p>
+          </div>
+
+          <div class="comparisons-list">
+            {languages.map(l => {
+              const entry = topic.entries[l.id];
+              if (!entry) return null;
+              return (
+                <div class="comparison-row" data-lang-row={l.id}>
+                  <div class="comp-meta">
+                    <div class="comp-lang" style={`color:${l.color};`}>
+                      <span class="lang-icon">●</span> {l.name}
+                    </div>
+                    <div class="comp-paradigm">{entry.paradigm}</div>
+                  </div>
+                  <div class="comp-body">
+                    <p class="comp-notes">{entry.notes}</p>
+                    <pre class="comp-code"><code>{entry.snippet}</code></pre>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .polyglot-section {
+    padding: 80px 0;
+    border-top: 1px solid var(--border-color);
+    background: rgba(11, 15, 25, 0.5);
+  }
+
+  .section-header {
+    text-align: center;
+    max-width: 840px;
+    margin: 0 auto 48px;
+  }
+
+  .section-title {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+
+  .section-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  .lang-pills {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .lang-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .lang-pill:hover {
+    border-color: var(--pill-color);
+  }
+
+  .lang-pill.active {
+    background: rgba(30, 41, 59, 0.9);
+    border-color: var(--pill-color);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+  }
+
+  .lang-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .lang-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--pill-color);
+  }
+
+  .matrix-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .topic-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .topic-header {
+    background: rgba(15, 23, 42, 0.95);
+    border-bottom: 1px solid var(--border-color);
+    padding: 20px 24px;
+  }
+
+  .topic-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .topic-header p {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .comparisons-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .comparison-row {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 16px 24px;
+    gap: 20px;
+    align-items: start;
+    transition: background 0.15s;
+  }
+
+  .comparison-row:last-child {
+    border-bottom: none;
+  }
+
+  .comparison-row:hover {
+    background: rgba(30, 41, 59, 0.4);
+  }
+
+  .comparison-row.hidden {
+    display: none;
+  }
+
+  .comp-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .comp-lang {
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+  }
+
+  .comp-paradigm {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+  }
+
+  .comp-notes {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+
+  .comp-code {
+    background: #060911;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 11px;
+    color: #e2e8f0;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  @media (max-width: 768px) {
+    .comparison-row {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+  }
+</style>
+
+<script>
+  // Language filter toggles
+  const pills = document.querySelectorAll('.lang-pill');
+  const rows = document.querySelectorAll('.comparison-row');
+
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      pill.classList.toggle('active');
+      updateVisibleLanguages();
+    });
+  });
+
+  function updateVisibleLanguages() {
+    const activeLangs = Array.from(document.querySelectorAll('.lang-pill.active'))
+      .map(p => p.getAttribute('data-lang'));
+
+    rows.forEach(row => {
+      const rowLang = row.getAttribute('data-lang-row');
+      if (activeLangs.length === 0 || activeLangs.includes(rowLang)) {
+        row.classList.remove('hidden');
+      } else {
+        row.classList.add('hidden');
+      }
+    });
+  }
+</script>

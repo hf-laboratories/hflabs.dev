@@ -1,0 +1,570 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "IPU Model Registry Schema",
+  "description": "Comprehensive schema for IPU model registry structure including metadata, relationships, and lifecycle management",
+  "type": "object",
+  "required": ["registry_info", "models", "collections", "environments", "workflows"],
+  "properties": {
+    "registry_info": {
+      "type": "object",
+      "required": ["name", "version", "created_at", "schema_version"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Registry name identifier"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Registry schema version (semantic versioning)"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Registry creation timestamp"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last registry update timestamp"
+        },
+        "schema_version": {
+          "type": "string",
+          "description": "Schema specification version"
+        },
+        "description": {
+          "type": "string",
+          "description": "Registry purpose and scope description"
+        },
+        "owner": {
+          "type": "object",
+          "properties": {
+            "organization": { "type": "string" },
+            "team": { "type": "string" },
+            "contact": { "type": "string", "format": "email" }
+          }
+        }
+      }
+    },
+    "models": {
+      "type": "object",
+      "description": "Collection of registered models indexed by model_id",
+      "patternProperties": {
+        "^[a-zA-Z0-9_-]+$": {
+          "$ref": "#/definitions/model_entry"
+        }
+      }
+    },
+    "collections": {
+      "type": "object",
+      "description": "Model collections and groupings",
+      "patternProperties": {
+        "^[a-zA-Z0-9_-]+$": {
+          "$ref": "#/definitions/model_collection"
+        }
+      }
+    },
+    "environments": {
+      "type": "object",
+      "description": "Deployment environments and their configurations",
+      "patternProperties": {
+        "^[a-zA-Z0-9_-]+$": {
+          "$ref": "#/definitions/environment_config"
+        }
+      }
+    },
+    "workflows": {
+      "type": "object",
+      "description": "Model lifecycle workflows and automation",
+      "patternProperties": {
+        "^[a-zA-Z0-9_-]+$": {
+          "$ref": "#/definitions/workflow_definition"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "model_entry": {
+      "type": "object",
+      "required": ["model_id", "name", "type", "status", "created_at", "versions"],
+      "properties": {
+        "model_id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_-]+$",
+          "description": "Unique model identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable model name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Model purpose and functionality description"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["classification", "regression", "detection", "segmentation", "generation", "reinforcement", "custom"],
+          "description": "Model type category"
+        },
+        "framework": {
+          "type": "string",
+          "enum": ["ml.net", "onnx", "tensorflow", "pytorch", "poplar", "custom"],
+          "description": "Original ML framework"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["development", "testing", "staging", "production", "deprecated", "archived"],
+          "description": "Current model status"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_by": {
+          "type": "string",
+          "description": "Model creator identifier"
+        },
+        "owner": {
+          "type": "string",
+          "description": "Current model owner"
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Searchable tags for model discovery"
+        },
+        "collections": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Collections this model belongs to"
+        },
+        "versions": {
+          "type": "object",
+          "description": "Model version tracking",
+          "patternProperties": {
+            "^\\d+\\.\\d+\\.\\d+$": {
+              "$ref": "#/definitions/model_version"
+            }
+          }
+        },
+        "current_version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Currently active version"
+        },
+        "latest_version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Most recent version"
+        },
+        "metrics": {
+          "$ref": "#/definitions/model_metrics"
+        },
+        "hardware_requirements": {
+          "$ref": "#/definitions/hardware_requirements"
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/dependency"
+          }
+        },
+        "deployment_history": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/deployment_record"
+          }
+        }
+      }
+    },
+    "model_version": {
+      "type": "object",
+      "required": ["version", "created_at", "status", "artifacts"],
+      "properties": {
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_by": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["draft", "candidate", "validated", "released", "deprecated"]
+        },
+        "changelog": {
+          "type": "string",
+          "description": "Version change description"
+        },
+        "artifacts": {
+          "$ref": "#/definitions/model_artifacts"
+        },
+        "performance": {
+          "$ref": "#/definitions/performance_metrics"
+        },
+        "validation": {
+          "$ref": "#/definitions/validation_results"
+        },
+        "approval": {
+          "$ref": "#/definitions/approval_record"
+        },
+        "ipu_optimization": {
+          "$ref": "#/definitions/ipu_optimization"
+        }
+      }
+    },
+    "model_artifacts": {
+      "type": "object",
+      "required": ["primary_artifact"],
+      "properties": {
+        "primary_artifact": {
+          "type": "object",
+          "required": ["path", "format", "size", "checksum"],
+          "properties": {
+            "path": { "type": "string" },
+            "format": { "type": "string", "enum": ["onnx", "mlnet", "poplar", "binary"] },
+            "size": { "type": "integer", "description": "File size in bytes" },
+            "checksum": { "type": "string", "description": "SHA256 checksum" },
+            "compression": { "type": "string", "enum": ["none", "gzip", "bzip2"] }
+          }
+        },
+        "supporting_artifacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "path": { "type": "string" },
+              "type": { "type": "string", "enum": ["config", "weights", "metadata", "documentation", "test_data"] },
+              "size": { "type": "integer" },
+              "checksum": { "type": "string" }
+            }
+          }
+        },
+        "ipu_compiled": {
+          "type": "object",
+          "description": "IPU-compiled artifacts",
+          "properties": {
+            "executable_path": { "type": "string" },
+            "poplar_version": { "type": "string" },
+            "target_hardware": { "type": "string" },
+            "compilation_options": { "type": "object" },
+            "optimization_level": { "type": "string", "enum": ["O0", "O1", "O2", "O3"] }
+          }
+        }
+      }
+    },
+    "performance_metrics": {
+      "type": "object",
+      "properties": {
+        "accuracy": { "type": "number", "minimum": 0, "maximum": 1 },
+        "f1_score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "precision": { "type": "number", "minimum": 0, "maximum": 1 },
+        "recall": { "type": "number", "minimum": 0, "maximum": 1 },
+        "latency": {
+          "type": "object",
+          "properties": {
+            "p50": { "type": "number", "description": "50th percentile latency in ms" },
+            "p95": { "type": "number", "description": "95th percentile latency in ms" },
+            "p99": { "type": "number", "description": "99th percentile latency in ms" },
+            "mean": { "type": "number", "description": "Mean latency in ms" }
+          }
+        },
+        "throughput": {
+          "type": "object",
+          "properties": {
+            "inferences_per_second": { "type": "number" },
+            "tokens_per_second": { "type": "number" },
+            "batch_size": { "type": "integer" }
+          }
+        },
+        "resource_usage": {
+          "type": "object",
+          "properties": {
+            "ipu_utilization": { "type": "number", "minimum": 0, "maximum": 100 },
+            "memory_usage_mb": { "type": "number" },
+            "power_consumption_watts": { "type": "number" },
+            "tiles_utilized": { "type": "integer" }
+          }
+        },
+        "custom_metrics": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z0-9_-]+$": { "type": "number" }
+          }
+        }
+      }
+    },
+    "validation_results": {
+      "type": "object",
+      "properties": {
+        "unit_tests": {
+          "type": "object",
+          "properties": {
+            "passed": { "type": "integer" },
+            "failed": { "type": "integer" },
+            "coverage": { "type": "number", "minimum": 0, "maximum": 100 }
+          }
+        },
+        "integration_tests": {
+          "type": "object",
+          "properties": {
+            "passed": { "type": "integer" },
+            "failed": { "type": "integer" },
+            "test_suite": { "type": "string" }
+          }
+        },
+        "performance_tests": {
+          "type": "object",
+          "properties": {
+            "benchmark_results": { "$ref": "#/definitions/performance_metrics" },
+            "regression_detected": { "type": "boolean" },
+            "baseline_comparison": { "type": "object" }
+          }
+        },
+        "security_scan": {
+          "type": "object",
+          "properties": {
+            "vulnerabilities_found": { "type": "integer" },
+            "severity_breakdown": {
+              "type": "object",
+              "properties": {
+                "critical": { "type": "integer" },
+                "high": { "type": "integer" },
+                "medium": { "type": "integer" },
+                "low": { "type": "integer" }
+              }
+            },
+            "scan_date": { "type": "string", "format": "date-time" }
+          }
+        }
+      }
+    },
+    "approval_record": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["pending", "approved", "rejected", "conditional"]
+        },
+        "approved_by": { "type": "string" },
+        "approved_at": { "type": "string", "format": "date-time" },
+        "comments": { "type": "string" },
+        "conditions": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "approval_workflow": { "type": "string" }
+      }
+    },
+    "ipu_optimization": {
+      "type": "object",
+      "description": "IPU-specific optimization details",
+      "properties": {
+        "fusion_applied": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Applied operation fusion patterns"
+        },
+        "memory_optimization": {
+          "type": "object",
+          "properties": {
+            "recomputation_enabled": { "type": "boolean" },
+            "gradient_accumulation": { "type": "integer" },
+            "pipeline_stages": { "type": "integer" }
+          }
+        },
+        "precision_config": {
+          "type": "object",
+          "properties": {
+            "mixed_precision": { "type": "boolean" },
+            "precision_policy": { "type": "string" },
+            "quantization": { "type": "string", "enum": ["none", "int8", "int16", "fp16"] }
+          }
+        },
+        "compilation_stats": {
+          "type": "object",
+          "properties": {
+            "compilation_time_seconds": { "type": "number" },
+            "optimization_passes": { "type": "integer" },
+            "memory_footprint_mb": { "type": "number" }
+          }
+        }
+      }
+    },
+    "model_collection": {
+      "type": "object",
+      "required": ["name", "description", "models"],
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "created_by": { "type": "string" },
+        "models": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of model_ids in this collection"
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "access_control": {
+          "type": "object",
+          "properties": {
+            "visibility": { "type": "string", "enum": ["public", "private", "team"] },
+            "allowed_users": { "type": "array", "items": { "type": "string" } },
+            "allowed_teams": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "environment_config": {
+      "type": "object",
+      "required": ["name", "type", "hardware"],
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["development", "testing", "staging", "production"] },
+        "hardware": {
+          "type": "object",
+          "properties": {
+            "ipu_count": { "type": "integer" },
+            "ipu_type": { "type": "string" },
+            "memory_per_ipu": { "type": "string" },
+            "network_topology": { "type": "string" }
+          }
+        },
+        "resource_limits": {
+          "type": "object",
+          "properties": {
+            "max_concurrent_models": { "type": "integer" },
+            "memory_limit_gb": { "type": "number" },
+            "cpu_limit_cores": { "type": "number" }
+          }
+        },
+        "deployment_config": {
+          "type": "object",
+          "properties": {
+            "auto_scaling": { "type": "boolean" },
+            "load_balancing": { "type": "string" },
+            "health_check_endpoint": { "type": "string" },
+            "monitoring_enabled": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "workflow_definition": {
+      "type": "object",
+      "required": ["name", "type", "stages"],
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "type": { "type": "string", "enum": ["deployment", "validation", "approval", "retraining", "monitoring"] },
+        "trigger": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string", "enum": ["manual", "scheduled", "event", "webhook"] },
+            "schedule": { "type": "string", "description": "Cron expression for scheduled workflows" },
+            "events": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "stages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "type": { "type": "string" },
+              "action": { "type": "string" },
+              "parameters": { "type": "object" },
+              "retry_policy": {
+                "type": "object",
+                "properties": {
+                  "max_retries": { "type": "integer" },
+                  "backoff_strategy": { "type": "string" }
+                }
+              },
+              "timeout_seconds": { "type": "integer" }
+            }
+          }
+        },
+        "approval_required": { "type": "boolean" },
+        "notification_config": {
+          "type": "object",
+          "properties": {
+            "on_success": { "type": "array", "items": { "type": "string" } },
+            "on_failure": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "model_metrics": {
+      "type": "object",
+      "description": "Aggregated model metrics across all versions",
+      "properties": {
+        "total_versions": { "type": "integer" },
+        "total_deployments": { "type": "integer" },
+        "last_deployment": { "type": "string", "format": "date-time" },
+        "usage_stats": {
+          "type": "object",
+          "properties": {
+            "total_inferences": { "type": "integer" },
+            "daily_average": { "type": "number" },
+            "peak_usage": { "type": "number" }
+          }
+        },
+        "health_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Overall model health score"
+        }
+      }
+    },
+    "hardware_requirements": {
+      "type": "object",
+      "properties": {
+        "min_ipu_count": { "type": "integer" },
+        "recommended_ipu_count": { "type": "integer" },
+        "memory_per_ipu_mb": { "type": "integer" },
+        "ipu_type": { "type": "string", "enum": ["GC2", "GC200", "M2000", "C2", "S1"] },
+        "poplar_version": { "type": "string" },
+        "additional_requirements": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "dependency": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" },
+        "type": { "type": "string", "enum": ["model", "library", "service", "data"] },
+        "required": { "type": "boolean" },
+        "source": { "type": "string" }
+      }
+    },
+    "deployment_record": {
+      "type": "object",
+      "properties": {
+        "deployment_id": { "type": "string" },
+        "version": { "type": "string" },
+        "environment": { "type": "string" },
+        "deployed_at": { "type": "string", "format": "date-time" },
+        "deployed_by": { "type": "string" },
+        "status": { "type": "string", "enum": ["deploying", "active", "failed", "rolled_back"] },
+        "rollback_reason": { "type": "string" },
+        "performance_impact": { "type": "object" }
+      }
+    }
+  }
+}

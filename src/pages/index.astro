@@ -1,0 +1,26 @@
+---
+// index.astro
+import Layout from '../layouts/Layout.astro';
+import ScrollytellingHero from '../components/ScrollytellingHero.astro';
+import DivisionGrid from '../components/DivisionGrid.astro';
+import PolyglotMatrix from '../components/PolyglotMatrix.astro';
+import SchemaViewer from '../components/SchemaViewer.astro';
+import LicenseTierCard from '../components/LicenseTierCard.astro';
+---
+
+<Layout title="HFLabs — Systems Research, Swarm Metaheuristics & In-Memory GraphRAG">
+  <!-- Scrollytelling Interactive Hero -->
+  <ScrollytellingHero />
+
+  <!-- 6 Monorepo Divisions -->
+  <DivisionGrid />
+
+  <!-- Interactive Polyglot Systems Matrix (C, C++, C#, OpenCL, PS1, Verilog, SystemVerilog) -->
+  <PolyglotMatrix />
+
+  <!-- Open-Standard Published JSON Schemas -->
+  <SchemaViewer />
+
+  <!-- Licensing Tiers & Governance -->
+  <LicenseTierCard />
+</Layout>

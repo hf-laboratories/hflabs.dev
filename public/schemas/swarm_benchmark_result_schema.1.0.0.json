@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/swarm_benchmark_result_schema.1.0.0.json",
+  "title": "Swarm Benchmark Result",
+  "type": "object",
+  "required": ["schemaVersion", "runId", "status", "elapsedMilliseconds"],
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "1.0.0" },
+    "runId": { "type": "string" },
+    "status": { "type": "string" },
+    "bestFitness": { "type": "number" },
+    "bestPosition": { "type": "array", "items": { "type": "number" } },
+    "optimalValue": { "type": "number" },
+    "error": { "type": "number" },
+    "elapsedMilliseconds": { "type": "integer", "minimum": 0 },
+    "supermotifs": { "type": "object" },
+    "timeline": { "type": "object" },
+    "featureTelemetry": { "type": "object" },
+    "paretoFront": { "type": "array", "items": { "type": "array", "items": { "type": "number" } } },
+    "hypervolume": { "type": "number" },
+    "spacing": { "type": "number" }
+  },
+  "additionalProperties": true
+}

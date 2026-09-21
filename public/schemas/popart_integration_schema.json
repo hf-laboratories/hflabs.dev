@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PopART Integration Schema Overlay",
+  "type": "object",
+  "properties": {
+    "graph": {
+      "type": "object",
+      "properties": {
+        "node": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "attribute": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": { "type": "string" },
+                    "gc_popart_options": {
+                      "type": "object",
+                      "properties": {
+                        "availableMemoryProportion": { "type": "number" },
+                        "partialType": { 
+                          "type": "string",
+                          "enum": ["Float16", "Float32"] 
+                        },
+                        "enablePipelining": { "type": "boolean" },
+                        "schedulingPriority": { "type": "integer" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "gc_popart_graph_options": {
+          "type": "object",
+          "properties": {
+            "batchSerializationFactor": { "type": "integer" },
+            "executionStrategy": { 
+              "type": "string", 
+              "enum": ["Pipelined", "Sequential", "SameAsIpu"] 
+            },
+            "enableStochasticRounding": { "type": "boolean" },
+            "enableFastMath": { "type": "boolean" },
+            "enableCsvOps": { "type": "boolean" }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "gc_memory_layout": {
+    "tile_assignment": [0, 1, 2, 3],
+    "memory_strategy": "OnChip",
+    "exchange_strategy": "None",
+    "memory_estimate_bytes": 0
+  }
+}

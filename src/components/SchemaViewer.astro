@@ -1,0 +1,211 @@
+---
+// SchemaViewer.astro
+import schemas from '../data/schemas.json';
+---
+
+<section id="schemas" class="schemas-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="badge" style="background:rgba(52,211,153,0.15); color:var(--accent-emerald); border:1px solid rgba(52,211,153,0.3); margin-bottom:12px;">
+        Published JSON Schemas
+      </div>
+      <h2 class="section-title">Open-Standard API &amp; Data Schemas</h2>
+      <p class="section-desc">
+        Formal JSON Schemas powering REST endpoints, dataset registry catalogs, and telemetry interchange. Publicly accessible and versioned.
+      </p>
+    </div>
+
+    <div class="schemas-layout">
+      {schemas.map(s => (
+        <div class="schema-card">
+          <div class="schema-header">
+            <div>
+              <h3 class="schema-title">{s.name}</h3>
+              <span class="schema-file">{s.filename} &bull; v{s.version}</span>
+            </div>
+            <a href={`/schemas/${s.filename}`} download class="btn-secondary" style="font-size:11px; padding:4px 10px;">
+              Raw JSON &darr;
+            </a>
+          </div>
+
+          <p class="schema-desc">{s.description}</p>
+
+          <div class="schema-content-grid">
+            <!-- Fields Specification -->
+            <div class="fields-table-wrapper">
+              <h4>Fields &amp; Constraints</h4>
+              <table class="fields-table">
+                <thead>
+                  <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {s.fields.map(f => (
+                    <tr>
+                      <td class="field-name"><code>{f.name}</code></td>
+                      <td class="field-type"><span class="badge-type">{f.type}</span></td>
+                      <td class="field-req">{f.required ? '✓' : '-'}</td>
+                      <td class="field-desc">{f.desc}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Sample Payload Preview -->
+            <div class="payload-preview-wrapper">
+              <h4>Sample Payload</h4>
+              <pre class="payload-code"><code>{JSON.stringify(s.samplePayload, null, 2)}</code></pre>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .schemas-section {
+    padding: 80px 0;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .section-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 48px;
+  }
+
+  .section-title {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 16px;
+  }
+
+  .section-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .schemas-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .schema-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    padding: 24px;
+  }
+
+  .schema-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .schema-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .schema-file {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent-emerald);
+  }
+
+  .schema-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+  }
+
+  .schema-content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .fields-table-wrapper h4, .payload-preview-wrapper h4 {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    margin-bottom: 10px;
+  }
+
+  .fields-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .fields-table th {
+    text-align: left;
+    padding: 8px 10px;
+    background: rgba(15, 23, 42, 0.8);
+    color: var(--text-muted);
+    font-size: 11px;
+    font-family: var(--font-mono);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .fields-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .field-name code {
+    color: var(--accent-blue);
+    font-size: 11px;
+  }
+
+  .badge-type {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    background: rgba(56, 189, 248, 0.1);
+    color: var(--accent-blue);
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  .field-req {
+    color: var(--accent-emerald);
+    font-family: var(--font-mono);
+    text-align: center;
+  }
+
+  .field-desc {
+    color: var(--text-secondary);
+    font-size: 11px;
+  }
+
+  .payload-code {
+    background: #060911;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    font-size: 11px;
+    color: #a5b4fc;
+    height: calc(100% - 25px);
+    max-height: 240px;
+    overflow-y: auto;
+  }
+
+  @media (max-width: 900px) {
+    .schema-content-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://ipuservices.hflabs.io/schemas/execution_defense_settings_schema.json",
+  "title": "Execution Defense Settings",
+  "description": "Operator-tunable execution-defense controls for trading orchestration.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "defensiveProfileEnabled",
+    "povCapPercent",
+    "sliceJitterPercent",
+    "minFillSize",
+    "maxQuoteAgeMs",
+    "toxicityThreshold",
+    "markoutStopLossBps",
+    "inventorySkewCapPercent"
+  ],
+  "properties": {
+    "defensiveProfileEnabled": {
+      "type": "boolean",
+      "description": "Master toggle for execution-defense policies."
+    },
+    "povCapPercent": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Maximum participation-of-volume cap in percent."
+    },
+    "sliceJitterPercent": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 50,
+      "description": "Randomized timing jitter for order slicing in percent."
+    },
+    "minFillSize": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1000000,
+      "description": "Minimum acceptable fill size."
+    },
+    "maxQuoteAgeMs": {
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 600000,
+      "description": "Maximum allowed quote staleness in milliseconds."
+    },
+    "toxicityThreshold": {
+      "type": "number",
+      "minimum": 0.1,
+      "maximum": 1000,
+      "description": "Symbol toxicity threshold in basis points."
+    },
+    "markoutStopLossBps": {
+      "type": "number",
+      "minimum": 0.1,
+      "maximum": 1000,
+      "description": "Rolling markout stop-loss threshold in basis points."
+    },
+    "inventorySkewCapPercent": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Maximum inventory skew threshold in percent."
+    }
+  }
+}

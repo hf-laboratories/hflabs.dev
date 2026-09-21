@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Paged Response<T>",
+  "description": "Envelope for paginated list responses from the Registry API",
+  "type": "object",
+  "required": ["items", "total"],
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {},
+      "description": "Array of items (generic)"
+    },
+    "total": { "type": "integer", "minimum": 0, "description": "Total number of items available" }
+  }
+}

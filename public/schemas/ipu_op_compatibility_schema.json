@@ -1,0 +1,252 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Graphcore GC2 Operation Compatibility Database Schema v2.0",
+  "description": "Defines the consolidated compatibility database structure for ONNX and vendor-specific operations on Graphcore GC2 IPU hardware",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "object",
+      "description": "Schema definition and metadata for the database structure",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Version of the database schema"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the schema purpose"
+        },
+        "structure": {
+          "type": "object",
+          "description": "Description of major sections in the database",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "operation_structure": {
+          "type": "object",
+          "description": "Description of fields in each operation entry",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["version", "description", "structure", "operation_structure"]
+    },
+    "GlobalMetadata": {
+      "type": "object",
+      "description": "Global metadata about the database, hardware, and SDK versions",
+      "properties": {
+        "Version": {
+          "type": "string",
+          "description": "Database version"
+        },
+        "SchemaVersion": {
+          "type": "string",
+          "description": "Schema version this database conforms to"
+        },
+        "LastUpdated": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of last database update (ISO 8601 format)"
+        },
+        "IPUHardware": {
+          "type": "string",
+          "description": "Target IPU hardware version (e.g., GC2)"
+        },
+        "PoplarSDKVersion": {
+          "type": "string",
+          "description": "Graphcore Poplar SDK version"
+        },
+        "Description": {
+          "type": "string",
+          "description": "Database description and purpose"
+        },
+        "Documentation": {
+          "type": "object",
+          "description": "Links to relevant Graphcore documentation",
+          "properties": {
+            "TileVertexISA": {
+              "type": "string",
+              "format": "uri",
+              "description": "Link to Tile Vertex ISA documentation"
+            },
+            "Poplar": {
+              "type": "string",
+              "format": "uri",
+              "description": "Link to Poplar API documentation"
+            },
+            "PopOps": {
+              "type": "string",
+              "format": "uri",
+              "description": "Link to PopOps documentation"
+            },
+            "PopART": {
+              "type": "string",
+              "format": "uri",
+              "description": "Link to PopART documentation"
+            },
+            "PopLibs": {
+              "type": "string",
+              "format": "uri",
+              "description": "Link to PopLibs documentation"
+            }
+          }
+        },
+        "RuntimeEnvironments": {
+          "type": "object",
+          "description": "Description of runtime environment identifiers",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["Version", "SchemaVersion", "LastUpdated", "IPUHardware", "PoplarSDKVersion", "Description"]
+    },
+    "Operations": {
+      "type": "array",
+      "description": "Consolidated array of all operations with uniform structure",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^0x[0-9A-Fa-f]{4}$",
+            "description": "Unique hex identifier for the operation (0x0000-0xFFFF)"
+          },
+          "Name": {
+            "type": "string",
+            "description": "Operation name"
+          },
+          "Category": {
+            "type": "string",
+            "enum": ["Standard", "QualcommSpecific", "NvidiaSpecific", "CustomIPU"],
+            "description": "Operation category"
+          },
+          "Supported": {
+            "type": "boolean",
+            "description": "Whether the operation is supported on IPU hardware"
+          },
+          "DataTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of supported data types"
+          },
+          "PerformanceNotes": {
+            "type": "string",
+            "description": "Performance characteristics and optimization notes"
+          },
+          "Constraints": {
+            "type": "string",
+            "description": "Implementation constraints or limitations"
+          },
+          "FallbackAvailable": {
+            "type": "boolean",
+            "description": "Whether a fallback implementation is available"
+          },
+          "FallbackOperation": {
+            "type": "string",
+            "description": "Name of fallback operation if available"
+          },
+          "runtime": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["ms", "gc", "qc", "nvidia"]
+            },
+            "description": "List of runtime environments that support this operation"
+          },
+          "TileVertexISA": {
+            "type": "string",
+            "description": "Tile Vertex ISA information for this operation"
+          },
+          "PoplarDocs": {
+            "type": "string",
+            "format": "uri",
+            "description": "Link to relevant Poplar documentation"
+          },
+          "PopOpsDocs": {
+            "type": "string",
+            "format": "uri",
+            "description": "Link to relevant PopOps documentation"
+          },
+          "PopARTDocs": {
+            "type": "string",
+            "format": "uri",
+            "description": "Link to relevant PopART documentation"
+          },
+          "PopLibsDocs": {
+            "type": "string",
+            "format": "uri",
+            "description": "Link to relevant PopLibs documentation"
+          },
+          "ReplacementFor": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of operations this custom operation can replace"
+          },
+          "PerformanceBenefit": {
+            "type": "string",
+            "enum": ["Low", "Medium", "High", "VeryHigh"],
+            "description": "Performance benefit of this custom operation"
+          },
+          "EstimatedSpeedup": {
+            "type": "string",
+            "description": "Estimated speedup compared to standard operations"
+          }
+        },
+        "required": ["id", "Name", "Category", "Supported", "DataTypes", "PerformanceNotes", "Constraints", "FallbackAvailable", "runtime"]
+      }
+    },
+    "Statistics": {
+      "type": "object",
+      "description": "Summary statistics and counts for the operations database",
+      "properties": {
+        "TotalOperations": {
+          "type": "integer",
+          "description": "Total number of operations in the database"
+        },
+        "SupportedOperations": {
+          "type": "integer",
+          "description": "Number of supported operations"
+        },
+        "UnsupportedOperations": {
+          "type": "integer",
+          "description": "Number of unsupported operations"
+        },
+        "OperationsByCategory": {
+          "type": "object",
+          "description": "Count of operations by category",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        },
+        "AvailableHexIDs": {
+          "type": "object",
+          "description": "Information about hex ID allocation",
+          "properties": {
+            "Used": {
+              "type": "string",
+              "description": "Range of used hex IDs"
+            },
+            "Available": {
+              "type": "string",
+              "description": "Range of available hex IDs"
+            },
+            "RemainingSlots": {
+              "type": "integer",
+              "description": "Number of remaining ID slots"
+            }
+          },
+          "required": ["Used", "Available", "RemainingSlots"]
+        }
+      },
+      "required": ["TotalOperations", "SupportedOperations", "UnsupportedOperations", "OperationsByCategory", "AvailableHexIDs"]
+    }
+  },
+  "required": ["$schema", "GlobalMetadata", "Operations", "Statistics"]
+}

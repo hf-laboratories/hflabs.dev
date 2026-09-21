@@ -1,0 +1,558 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ipuservices.io/schemas/cluster-config.schema.json",
+  "title": "IPUServices Cluster Configuration",
+  "description": "Defines hardware topology, network configuration, and resource allocation for IPUServices clusters",
+  "type": "object",
+  "required": ["$schema", "cluster", "nodes"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Reference to this schema"
+    },
+    "cluster": {
+      "type": "object",
+      "description": "Cluster-wide metadata and settings",
+      "required": ["name", "environment", "version"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Human-readable cluster name",
+          "examples": ["dev-cluster", "prod-east-1"]
+        },
+        "environment": {
+          "type": "string",
+          "enum": ["dev", "staging", "prod"],
+          "description": "Deployment environment"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Configuration version (semver)"
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional cluster description"
+        },
+        "location": {
+          "type": "string",
+          "description": "Physical or logical location"
+        },
+        "contact": {
+          "type": "string",
+          "format": "email",
+          "description": "Admin contact email"
+        }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "description": "List of nodes in the cluster",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/node"
+      }
+    },
+    "networks": {
+      "type": "array",
+      "description": "Network definitions for the cluster",
+      "items": {
+        "$ref": "#/definitions/network"
+      }
+    },
+    "roles": {
+      "type": "object",
+      "description": "Role-to-node mappings for service placement",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "List of node names that can serve this role"
+      }
+    },
+    "rdma": {
+      "$ref": "#/definitions/rdmaConfig",
+      "description": "RDMA-specific cluster configuration"
+    },
+    "storage": {
+      "$ref": "#/definitions/storageConfig",
+      "description": "Storage configuration and pools"
+    },
+    "timing": {
+      "$ref": "#/definitions/timingConfig",
+      "description": "Time synchronization configuration"
+    }
+  },
+  "definitions": {
+    "node": {
+      "type": "object",
+      "required": ["name", "role", "hardware"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unique node identifier",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9-]*$"
+        },
+        "hostname": {
+          "type": "string",
+          "description": "Network hostname or IP"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["ipu-host", "storage-host", "gateway", "controller", "worker"],
+          "description": "Primary role of this node"
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Additional tags for node selection"
+        },
+        "hardware": {
+          "$ref": "#/definitions/hardware"
+        },
+        "os": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["linux", "windows"],
+              "default": "linux"
+            },
+            "distribution": {
+              "type": "string",
+              "examples": ["ubuntu-22.04", "rhel-9", "windows-server-2022"]
+            },
+            "kernel": {
+              "type": "string",
+              "description": "Kernel version (Linux)"
+            }
+          }
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "port": { "type": "integer" },
+              "protocol": { 
+                "type": "string",
+                "enum": ["tcp", "udp", "rdma", "grpc"]
+              }
+            }
+          },
+          "description": "Services running on this node"
+        }
+      }
+    },
+    "hardware": {
+      "type": "object",
+      "description": "Hardware specification for a node",
+      "properties": {
+        "chassis": {
+          "type": "object",
+          "properties": {
+            "manufacturer": { "type": "string" },
+            "model": { "type": "string" },
+            "formFactor": {
+              "type": "string",
+              "enum": ["tower", "1u", "2u", "4u", "blade", "desktop"]
+            },
+            "serialNumber": { "type": "string" }
+          }
+        },
+        "cpu": {
+          "type": "object",
+          "properties": {
+            "count": { 
+              "type": "integer",
+              "minimum": 1,
+              "description": "Number of physical CPUs"
+            },
+            "model": { 
+              "type": "string",
+              "description": "CPU model name"
+            },
+            "cores": { 
+              "type": "integer",
+              "description": "Cores per CPU"
+            },
+            "threads": { 
+              "type": "integer",
+              "description": "Threads per CPU"
+            },
+            "baseClock": {
+              "type": "number",
+              "description": "Base clock in GHz"
+            },
+            "tdp": {
+              "type": "integer",
+              "description": "TDP in watts"
+            }
+          }
+        },
+        "memory": {
+          "type": "object",
+          "properties": {
+            "totalGB": { 
+              "type": "integer",
+              "description": "Total RAM in GB"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["DDR4", "DDR5"],
+              "description": "Memory type"
+            },
+            "speed": {
+              "type": "integer",
+              "description": "Speed in MT/s"
+            },
+            "ecc": {
+              "type": "boolean",
+              "description": "ECC support"
+            },
+            "dimms": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "slot": { "type": "string" },
+                  "sizeGB": { "type": "integer" },
+                  "type": { 
+                    "type": "string",
+                    "enum": ["RDIMM", "LRDIMM", "UDIMM"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "nics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/nic"
+          }
+        },
+        "gpus": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/gpu"
+          }
+        },
+        "ipus": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ipu"
+          }
+        },
+        "storage": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/storageDevice"
+          }
+        }
+      }
+    },
+    "nic": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Interface name (e.g., eth0, enp3s0f0)"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["ethernet", "rdma", "infiniband", "timing"],
+          "description": "NIC type"
+        },
+        "manufacturer": { "type": "string" },
+        "model": { "type": "string" },
+        "formFactor": {
+          "type": "string",
+          "enum": ["pcie", "ocp2", "ocp3", "onboard"]
+        },
+        "speed": {
+          "type": "string",
+          "pattern": "^\\d+[GMg]$",
+          "description": "Link speed (e.g., 25G, 100G)"
+        },
+        "ports": {
+          "type": "integer",
+          "description": "Number of ports"
+        },
+        "rdmaCapable": {
+          "type": "boolean",
+          "default": false
+        },
+        "rdmaProtocol": {
+          "type": "string",
+          "enum": ["RoCEv2", "iWARP", "InfiniBand"]
+        },
+        "pciAddress": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{4}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}\\.[0-9a-fA-F]$"
+        },
+        "macAddress": {
+          "type": "string",
+          "pattern": "^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$"
+        },
+        "ipAddresses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "address": { "type": "string" },
+              "network": { "type": "string" },
+              "gateway": { "type": "string" }
+            }
+          }
+        },
+        "features": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Special features (e.g., PTP, GPSDO, loopback)"
+        }
+      }
+    },
+    "gpu": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "manufacturer": { "type": "string" },
+        "model": { "type": "string" },
+        "memoryGB": { "type": "integer" },
+        "pciAddress": { "type": "string" },
+        "cudaCapability": { "type": "string" },
+        "driverVersion": { "type": "string" }
+      }
+    },
+    "ipu": {
+      "type": "object",
+      "required": ["name", "model"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "IPU identifier"
+        },
+        "manufacturer": {
+          "type": "string",
+          "default": "Graphcore"
+        },
+        "model": {
+          "type": "string",
+          "enum": ["GC2", "GC200", "BOW-2000", "BOW-POD"],
+          "description": "IPU model"
+        },
+        "generation": {
+          "type": "string",
+          "enum": ["MK1", "MK2", "BOW"],
+          "description": "IPU generation"
+        },
+        "formFactor": {
+          "type": "string",
+          "enum": ["pcie", "dell-dc", "m2000", "pod"]
+        },
+        "tiles": {
+          "type": "integer",
+          "description": "Number of tiles"
+        },
+        "memoryGB": {
+          "type": "number",
+          "description": "In-processor memory in GB"
+        },
+        "pciAddress": { "type": "string" },
+        "serialNumber": { "type": "string" },
+        "sdkVersion": {
+          "type": "string",
+          "description": "Poplar SDK version"
+        },
+        "ipuLink": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "connectedTo": { 
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "storageDevice": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Device name (e.g., /dev/nvme0n1)"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["nvme", "sata-ssd", "sata-hdd", "sas-ssd", "sas-hdd"]
+        },
+        "manufacturer": { "type": "string" },
+        "model": { "type": "string" },
+        "capacityGB": { "type": "integer" },
+        "formFactor": {
+          "type": "string",
+          "enum": ["m.2", "u.2", "2.5", "3.5"]
+        },
+        "interface": {
+          "type": "string",
+          "enum": ["pcie-gen3", "pcie-gen4", "pcie-gen5", "sata3", "sas3"]
+        },
+        "pciAddress": { "type": "string" },
+        "serialNumber": { "type": "string" },
+        "features": {
+          "type": "object",
+          "properties": {
+            "cmb": { 
+              "type": "boolean",
+              "description": "Controller Memory Buffer support"
+            },
+            "zns": {
+              "type": "boolean",
+              "description": "Zoned Namespace support"
+            },
+            "opal": {
+              "type": "boolean",
+              "description": "Self-encrypting drive"
+            }
+          }
+        },
+        "role": {
+          "type": "string",
+          "enum": ["os", "data", "cache", "scratch"],
+          "description": "Purpose of this device"
+        }
+      }
+    },
+    "network": {
+      "type": "object",
+      "required": ["name", "type", "cidr"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Network name"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["management", "rdma", "storage", "sync", "external"]
+        },
+        "cidr": {
+          "type": "string",
+          "description": "Network CIDR (e.g., 192.168.100.0/24)"
+        },
+        "gateway": { "type": "string" },
+        "vlan": { "type": "integer" },
+        "mtu": { 
+          "type": "integer",
+          "default": 1500
+        },
+        "rdmaEnabled": { "type": "boolean" }
+      }
+    },
+    "rdmaConfig": {
+      "type": "object",
+      "properties": {
+        "defaultPort": {
+          "type": "integer",
+          "default": 18515
+        },
+        "nvmfPort": {
+          "type": "integer",
+          "default": 4420
+        },
+        "mtu": {
+          "type": "integer",
+          "default": 4096
+        },
+        "maxQueueDepth": {
+          "type": "integer",
+          "default": 128
+        },
+        "protocol": {
+          "type": "string",
+          "enum": ["RoCEv2", "iWARP", "InfiniBand"],
+          "default": "RoCEv2"
+        },
+        "pfc": {
+          "type": "boolean",
+          "description": "Priority Flow Control enabled",
+          "default": true
+        },
+        "ecn": {
+          "type": "boolean",
+          "description": "Explicit Congestion Notification",
+          "default": true
+        }
+      }
+    },
+    "storageConfig": {
+      "type": "object",
+      "properties": {
+        "pools": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "type": { 
+                "type": "string",
+                "enum": ["nvme-direct", "nvmf", "ceph", "local"]
+              },
+              "nodes": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "capacityTB": { "type": "number" }
+            }
+          }
+        },
+        "nvmfSubsystems": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "nqn": { "type": "string" },
+              "node": { "type": "string" },
+              "port": { "type": "integer" }
+            }
+          }
+        }
+      }
+    },
+    "timingConfig": {
+      "type": "object",
+      "description": "Time synchronization configuration",
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": ["ptp", "gps", "ntp", "internal"],
+          "default": "ptp"
+        },
+        "grandmaster": {
+          "type": "string",
+          "description": "Node name of PTP grandmaster"
+        },
+        "ptpDomain": {
+          "type": "integer",
+          "default": 0
+        },
+        "gpsdo": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "node": { "type": "string" },
+            "device": { "type": "string" }
+          }
+        },
+        "accuracy": {
+          "type": "string",
+          "description": "Target timing accuracy",
+          "examples": ["1us", "100ns", "10ns"]
+        }
+      }
+    }
+  }
+}

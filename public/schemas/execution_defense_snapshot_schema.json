@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://ipuservices.hflabs.io/schemas/execution_defense_snapshot_schema.json",
+  "title": "Execution Defense Snapshot",
+  "description": "Combined settings and runtime telemetry payload for execution-defense endpoints.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["settings", "runtime"],
+  "properties": {
+    "settings": {
+      "$ref": "execution_defense_settings_schema.json"
+    },
+    "runtime": {
+      "$ref": "execution_defense_runtime_snapshot_schema.json"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "gc_mimd_config": {
+    "vertex_type": "WorkerFarm",
+    "worker_count": 6,
+    "synchronization_type": "Barrier",
+    "partitioning_strategy": "Balanced"
+  },
+  "gc_mimd_graph_config": {
+    "worker_mapping_strategy": "TileAffinity",
+    "enable_cooperative_multitasking": true,
+    "cooperative_scheduling_policy": "PriorityBased"
+  }
+}

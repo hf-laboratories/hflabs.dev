@@ -1,0 +1,14 @@
+---
+// schemas/index.astro
+import Layout from '../../layouts/Layout.astro';
+import SchemaViewer from '../../components/SchemaViewer.astro';
+---
+
+<Layout title="Published JSON Schemas &bull; HFLabs" description="Published JSON schemas for REST response pagination, dataset catalogs, project registries, and telemetry.">
+  <div class="container" style="padding-top:40px;">
+    <div style="margin-bottom:24px;">
+      <a href="/" style="font-size:12px; font-family:var(--font-mono);">&larr; Back to HFLabs Overview</a>
+    </div>
+  </div>
+  <SchemaViewer />
+</Layout>

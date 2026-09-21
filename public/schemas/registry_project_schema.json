@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Project (Registry DTO)",
+  "description": "Schema for Project objects exposed by the WebUI Registry API",
+  "type": "object",
+  "required": ["id", "name", "createdAt"],
+  "properties": {
+    "id": { "type": "string", "description": "Unique project identifier" },
+    "name": { "type": "string", "description": "Project name" },
+    "description": { "type": ["string", "null"], "description": "Optional description" },
+    "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp (UTC)" }
+  }
+}

@@ -1,0 +1,73 @@
+[
+  {
+    "tier": "Community Free",
+    "slug": "free",
+    "color": "#10b981",
+    "badge": "Open-Core",
+    "target": "Individual developers, researchers, and academic evaluation",
+    "price": "$0 / forever",
+    "limits": {
+      "nodes": "Up to 25,000 in-memory nodes",
+      "edges": "Up to 100,000 semantic edges",
+      "vectorDims": "128-dimensional SIMD float vectors",
+      "queryLatency": "< 2.5 ms 2-hop traversal",
+      "concurrency": "4 background worker threads",
+      "support": "Community Discord & GitHub Issues"
+    },
+    "features": [
+      "In-Memory Graph Store & Vector Index",
+      "TAPE Planner & Graph Grounding Verifier",
+      "Level Zero GPU Kernel Dispatch (Single Device)",
+      "Standard Restructuring Stack & Diff Visualizer",
+      "Full source code access for open-core modules"
+    ]
+  },
+  {
+    "tier": "Developer Pro",
+    "slug": "pro",
+    "color": "#38bdf8",
+    "badge": "High-Performance",
+    "target": "Commercial engineering teams and scaling production systems",
+    "price": "Licensed per core / cluster node",
+    "limits": {
+      "nodes": "Up to 500,000 in-memory nodes",
+      "edges": "Up to 2,000,000 semantic edges",
+      "vectorDims": "Up to 512-dimensional AVX-512 / NEON vectors",
+      "queryLatency": "< 0.8 ms multi-hop traversal",
+      "concurrency": "Uncapped worker pool scaling",
+      "support": "Standard SLA & Direct Developer Access"
+    },
+    "features": [
+      "Everything in Community Free Tier",
+      "Continuous Task DAG Scheduler & Auto-Repair",
+      "Multi-Store Concurrent Graph Queries",
+      "Multi-GPU Level Zero Compute Mesh",
+      "Autonomous Pixie Swarm Rule Projection",
+      "Full Web Console & Live WebSocket Telemetry"
+    ]
+  },
+  {
+    "tier": "High-Assurance Enterprise",
+    "slug": "high-assurance",
+    "color": "#f59e0b",
+    "badge": "Regulated & Defense",
+    "target": "Mission-critical, defense, regulated finance, and air-gapped deployments",
+    "price": "Custom enterprise contract",
+    "limits": {
+      "nodes": "Millions (Sharded via BESS Partitioner)",
+      "edges": "Tens of millions across NUMA nodes",
+      "vectorDims": "Custom SIMD / Quantized INT8 tensor maps",
+      "queryLatency": "Sub-millisecond guaranteed SLA",
+      "concurrency": "Custom NUMA-pinned hardware threads",
+      "support": "24/7 dedicated engineering & air-gapped update bundles"
+    },
+    "features": [
+      "Everything in Developer Pro Tier",
+      "HMAC-SHA256 Cryptographic License Verification",
+      "Multi-Level Security (MLS) Clearance Label Enforcer",
+      "Capability Sandbox & Tool Access Invariant Verifier",
+      "Metamorphic Test Oracle & BESS Evolutionary Reasoner",
+      "Air-Gapped Offline Verification & Zero External Telemetry"
+    ]
+  }
+]

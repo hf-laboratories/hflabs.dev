@@ -1,0 +1,659 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Model Versioning Table Schema",
+  "description": "Schema for model version tracking and history in the IPU model registry",
+  "type": "object",
+  "required": ["table_info", "versions"],
+  "properties": {
+    "table_info": {
+      "type": "object",
+      "required": ["table_name", "model_id", "created_at"],
+      "properties": {
+        "table_name": {
+          "type": "string",
+          "description": "Versioning table identifier"
+        },
+        "model_id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_-]+$",
+          "description": "Associated model identifier"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "versioning_strategy": {
+          "type": "string",
+          "enum": ["semantic", "timestamp", "sequential", "git_based"],
+          "description": "Versioning strategy used"
+        },
+        "branching_model": {
+          "type": "string",
+          "enum": ["linear", "git_flow", "feature_branch", "release_branch"],
+          "description": "Branching model for version management"
+        },
+        "retention_policy": {
+          "$ref": "#/definitions/retention_policy"
+        },
+        "access_control": {
+          "$ref": "#/definitions/access_control"
+        }
+      }
+    },
+    "versions": {
+      "type": "array",
+      "description": "Chronological list of model versions",
+      "items": {
+        "$ref": "#/definitions/version_record"
+      }
+    },
+    "branches": {
+      "type": "object",
+      "description": "Development branches and their states",
+      "patternProperties": {
+        "^[a-zA-Z0-9_-]+$": {
+          "$ref": "#/definitions/branch_info"
+        }
+      }
+    },
+    "tags": {
+      "type": "object",
+      "description": "Version tags and aliases",
+      "patternProperties": {
+        "^[a-zA-Z0-9_.-]+$": {
+          "$ref": "#/definitions/version_tag"
+        }
+      }
+    },
+    "merges": {
+      "type": "array",
+      "description": "Version merge history",
+      "items": {
+        "$ref": "#/definitions/merge_record"
+      }
+    },
+    "statistics": {
+      "$ref": "#/definitions/versioning_statistics"
+    }
+  },
+  "definitions": {
+    "version_record": {
+      "type": "object",
+      "required": ["version_id", "version", "created_at", "status", "commit_info"],
+      "properties": {
+        "version_id": {
+          "type": "string",
+          "description": "Unique version identifier (UUID)"
+        },
+        "version": {
+          "type": "string",
+          "description": "Version string (e.g., 1.2.3, 2025.08.06.001)"
+        },
+        "major": { "type": "integer", "minimum": 0 },
+        "minor": { "type": "integer", "minimum": 0 },
+        "patch": { "type": "integer", "minimum": 0 },
+        "prerelease": {
+          "type": "string",
+          "description": "Pre-release identifier (alpha, beta, rc)"
+        },
+        "build_metadata": {
+          "type": "string",
+          "description": "Build metadata for version"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_by": {
+          "type": "string",
+          "description": "Version creator identifier"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["draft", "development", "testing", "candidate", "released", "deprecated", "archived"],
+          "description": "Version lifecycle status"
+        },
+        "branch": {
+          "type": "string",
+          "description": "Branch this version belongs to"
+        },
+        "parent_versions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Parent version(s) for merge tracking"
+        },
+        "commit_info": {
+          "$ref": "#/definitions/commit_info"
+        },
+        "artifacts": {
+          "$ref": "#/definitions/version_artifacts"
+        },
+        "changes": {
+          "$ref": "#/definitions/version_changes"
+        },
+        "validation": {
+          "$ref": "#/definitions/version_validation"
+        },
+        "deployment_info": {
+          "$ref": "#/definitions/deployment_info"
+        },
+        "performance_delta": {
+          "$ref": "#/definitions/performance_delta"
+        },
+        "rollback_info": {
+          "$ref": "#/definitions/rollback_info"
+        },
+        "approval_chain": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/approval_step"
+          }
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/version_dependency"
+          }
+        },
+        "compatibility": {
+          "$ref": "#/definitions/compatibility_info"
+        }
+      }
+    },
+    "commit_info": {
+      "type": "object",
+      "required": ["commit_hash", "message", "author"],
+      "properties": {
+        "commit_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$",
+          "description": "Git commit hash (SHA-1)"
+        },
+        "short_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{7,}$",
+          "description": "Shortened commit hash"
+        },
+        "message": {
+          "type": "string",
+          "description": "Commit message"
+        },
+        "author": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "email": { "type": "string", "format": "email" },
+            "timestamp": { "type": "string", "format": "date-time" }
+          }
+        },
+        "committer": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "email": { "type": "string", "format": "email" },
+            "timestamp": { "type": "string", "format": "date-time" }
+          }
+        },
+        "repository": {
+          "type": "object",
+          "properties": {
+            "url": { "type": "string", "format": "uri" },
+            "branch": { "type": "string" },
+            "remote": { "type": "string" }
+          }
+        },
+        "files_changed": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": { "type": "string" },
+              "status": { "type": "string", "enum": ["added", "modified", "deleted", "renamed"] },
+              "additions": { "type": "integer" },
+              "deletions": { "type": "integer" }
+            }
+          }
+        }
+      }
+    },
+    "version_artifacts": {
+      "type": "object",
+      "properties": {
+        "model_file": {
+          "type": "object",
+          "properties": {
+            "path": { "type": "string" },
+            "size_bytes": { "type": "integer" },
+            "checksum": { "type": "string" },
+            "format": { "type": "string" },
+            "compression": { "type": "string" }
+          }
+        },
+        "weights": {
+          "type": "object",
+          "properties": {
+            "path": { "type": "string" },
+            "size_bytes": { "type": "integer" },
+            "checksum": { "type": "string" },
+            "precision": { "type": "string" }
+          }
+        },
+        "config_files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "path": { "type": "string" },
+              "type": { "type": "string" },
+              "checksum": { "type": "string" }
+            }
+          }
+        },
+        "documentation": {
+          "type": "object",
+          "properties": {
+            "readme_path": { "type": "string" },
+            "changelog_path": { "type": "string" },
+            "api_docs_path": { "type": "string" },
+            "examples_path": { "type": "string" }
+          }
+        },
+        "ipu_compiled": {
+          "type": "object",
+          "properties": {
+            "executable_path": { "type": "string" },
+            "poplar_version": { "type": "string" },
+            "target_architecture": { "type": "string" },
+            "optimization_flags": { "type": "array", "items": { "type": "string" } },
+            "compilation_log": { "type": "string" }
+          }
+        }
+      }
+    },
+    "version_changes": {
+      "type": "object",
+      "properties": {
+        "changelog": {
+          "type": "string",
+          "description": "Human-readable change description"
+        },
+        "breaking_changes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of breaking changes"
+        },
+        "new_features": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "New features added"
+        },
+        "bug_fixes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Bugs fixed in this version"
+        },
+        "performance_improvements": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Performance improvements"
+        },
+        "deprecated_features": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Features deprecated in this version"
+        },
+        "migration_guide": {
+          "type": "string",
+          "description": "Migration guide for breaking changes"
+        },
+        "diff_stats": {
+          "type": "object",
+          "properties": {
+            "lines_added": { "type": "integer" },
+            "lines_removed": { "type": "integer" },
+            "files_changed": { "type": "integer" },
+            "complexity_delta": { "type": "number" }
+          }
+        }
+      }
+    },
+    "version_validation": {
+      "type": "object",
+      "properties": {
+        "validation_status": {
+          "type": "string",
+          "enum": ["pending", "in_progress", "passed", "failed", "skipped"]
+        },
+        "test_results": {
+          "type": "object",
+          "properties": {
+            "unit_tests": {
+              "type": "object",
+              "properties": {
+                "passed": { "type": "integer" },
+                "failed": { "type": "integer" },
+                "skipped": { "type": "integer" },
+                "coverage": { "type": "number" }
+              }
+            },
+            "integration_tests": {
+              "type": "object",
+              "properties": {
+                "passed": { "type": "integer" },
+                "failed": { "type": "integer" },
+                "duration_seconds": { "type": "number" }
+              }
+            },
+            "performance_tests": {
+              "type": "object",
+              "properties": {
+                "latency_p95": { "type": "number" },
+                "throughput": { "type": "number" },
+                "memory_usage": { "type": "number" },
+                "regression_detected": { "type": "boolean" }
+              }
+            },
+            "security_scan": {
+              "type": "object",
+              "properties": {
+                "vulnerabilities": { "type": "integer" },
+                "severity_score": { "type": "number" },
+                "passed": { "type": "boolean" }
+              }
+            }
+          }
+        },
+        "validation_pipeline": {
+          "type": "string",
+          "description": "Validation pipeline identifier"
+        },
+        "validation_log": {
+          "type": "string",
+          "description": "Path to validation log file"
+        },
+        "validated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "validated_by": {
+          "type": "string"
+        }
+      }
+    },
+    "deployment_info": {
+      "type": "object",
+      "properties": {
+        "deployments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "deployment_id": { "type": "string" },
+              "environment": { "type": "string" },
+              "deployed_at": { "type": "string", "format": "date-time" },
+              "deployed_by": { "type": "string" },
+              "status": { "type": "string", "enum": ["pending", "deploying", "active", "failed", "rolled_back"] },
+              "deployment_strategy": { "type": "string" },
+              "rollback_version": { "type": "string" },
+              "health_check_url": { "type": "string" }
+            }
+          }
+        },
+        "current_deployments": {
+          "type": "object",
+          "description": "Current active deployments by environment",
+          "patternProperties": {
+            "^[a-zA-Z0-9_-]+$": {
+              "type": "object",
+              "properties": {
+                "deployment_id": { "type": "string" },
+                "deployed_at": { "type": "string", "format": "date-time" },
+                "health_status": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "performance_delta": {
+      "type": "object",
+      "description": "Performance comparison with previous version",
+      "properties": {
+        "baseline_version": { "type": "string" },
+        "comparison_date": { "type": "string", "format": "date-time" },
+        "metrics": {
+          "type": "object",
+          "properties": {
+            "latency": {
+              "type": "object",
+              "properties": {
+                "current": { "type": "number" },
+                "baseline": { "type": "number" },
+                "delta_percent": { "type": "number" },
+                "improvement": { "type": "boolean" }
+              }
+            },
+            "throughput": {
+              "type": "object",
+              "properties": {
+                "current": { "type": "number" },
+                "baseline": { "type": "number" },
+                "delta_percent": { "type": "number" },
+                "improvement": { "type": "boolean" }
+              }
+            },
+            "accuracy": {
+              "type": "object",
+              "properties": {
+                "current": { "type": "number" },
+                "baseline": { "type": "number" },
+                "delta_percent": { "type": "number" },
+                "improvement": { "type": "boolean" }
+              }
+            },
+            "memory_usage": {
+              "type": "object",
+              "properties": {
+                "current": { "type": "number" },
+                "baseline": { "type": "number" },
+                "delta_percent": { "type": "number" },
+                "improvement": { "type": "boolean" }
+              }
+            }
+          }
+        },
+        "overall_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Overall performance score (0-100)"
+        }
+      }
+    },
+    "rollback_info": {
+      "type": "object",
+      "properties": {
+        "can_rollback": { "type": "boolean" },
+        "rollback_target": { "type": "string", "description": "Target version for rollback" },
+        "rollback_reason": { "type": "string" },
+        "rollback_strategy": { "type": "string", "enum": ["immediate", "gradual", "canary"] },
+        "rollback_validation": {
+          "type": "object",
+          "properties": {
+            "required_tests": { "type": "array", "items": { "type": "string" } },
+            "approval_required": { "type": "boolean" },
+            "automatic_rollback_triggers": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "approval_step": {
+      "type": "object",
+      "properties": {
+        "step_id": { "type": "string" },
+        "approver": { "type": "string" },
+        "approval_type": { "type": "string", "enum": ["manual", "automated", "conditional"] },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected", "skipped"] },
+        "approved_at": { "type": "string", "format": "date-time" },
+        "comments": { "type": "string" },
+        "conditions": { "type": "array", "items": { "type": "string" } },
+        "priority": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "version_dependency": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "version_range": { "type": "string" },
+        "type": { "type": "string", "enum": ["model", "library", "service", "data", "hardware"] },
+        "required": { "type": "boolean" },
+        "source": { "type": "string" },
+        "checksum": { "type": "string" },
+        "vulnerability_scan": {
+          "type": "object",
+          "properties": {
+            "scanned": { "type": "boolean" },
+            "vulnerabilities": { "type": "integer" },
+            "last_scan": { "type": "string", "format": "date-time" }
+          }
+        }
+      }
+    },
+    "compatibility_info": {
+      "type": "object",
+      "properties": {
+        "backward_compatible": { "type": "boolean" },
+        "forward_compatible": { "type": "boolean" },
+        "api_version": { "type": "string" },
+        "schema_version": { "type": "string" },
+        "supported_frameworks": { "type": "array", "items": { "type": "string" } },
+        "minimum_requirements": {
+          "type": "object",
+          "properties": {
+            "poplar_version": { "type": "string" },
+            "ipu_architecture": { "type": "string" },
+            "memory_mb": { "type": "integer" },
+            "python_version": { "type": "string" }
+          }
+        },
+        "deprecation_warnings": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "branch_info": {
+      "type": "object",
+      "properties": {
+        "branch_name": { "type": "string" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "created_by": { "type": "string" },
+        "parent_branch": { "type": "string" },
+        "head_version": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "merged", "abandoned", "protected"] },
+        "merge_target": { "type": "string" },
+        "description": { "type": "string" },
+        "protection_rules": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "version_tag": {
+      "type": "object",
+      "properties": {
+        "tag_name": { "type": "string" },
+        "version": { "type": "string" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "created_by": { "type": "string" },
+        "description": { "type": "string" },
+        "type": { "type": "string", "enum": ["release", "hotfix", "snapshot", "alias"] },
+        "protected": { "type": "boolean" }
+      }
+    },
+    "merge_record": {
+      "type": "object",
+      "properties": {
+        "merge_id": { "type": "string" },
+        "source_branch": { "type": "string" },
+        "target_branch": { "type": "string" },
+        "source_version": { "type": "string" },
+        "target_version": { "type": "string" },
+        "result_version": { "type": "string" },
+        "merged_at": { "type": "string", "format": "date-time" },
+        "merged_by": { "type": "string" },
+        "merge_strategy": { "type": "string", "enum": ["fast_forward", "recursive", "octopus", "manual"] },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "file": { "type": "string" },
+              "type": { "type": "string" },
+              "resolution": { "type": "string" }
+            }
+          }
+        },
+        "validation_required": { "type": "boolean" },
+        "validation_status": { "type": "string" }
+      }
+    },
+    "versioning_statistics": {
+      "type": "object",
+      "properties": {
+        "total_versions": { "type": "integer" },
+        "active_branches": { "type": "integer" },
+        "total_merges": { "type": "integer" },
+        "average_version_lifespan_days": { "type": "number" },
+        "most_active_branch": { "type": "string" },
+        "latest_release": { "type": "string" },
+        "latest_development": { "type": "string" },
+        "version_frequency": {
+          "type": "object",
+          "properties": {
+            "per_day": { "type": "number" },
+            "per_week": { "type": "number" },
+            "per_month": { "type": "number" }
+          }
+        },
+        "quality_metrics": {
+          "type": "object",
+          "properties": {
+            "average_test_coverage": { "type": "number" },
+            "average_validation_time": { "type": "number" },
+            "success_rate": { "type": "number" }
+          }
+        }
+      }
+    },
+    "retention_policy": {
+      "type": "object",
+      "properties": {
+        "keep_latest": { "type": "integer", "description": "Number of latest versions to keep" },
+        "keep_days": { "type": "integer", "description": "Days to keep versions" },
+        "keep_releases": { "type": "boolean", "description": "Always keep release versions" },
+        "archive_old_versions": { "type": "boolean" },
+        "cleanup_schedule": { "type": "string", "description": "Cron expression for cleanup" }
+      }
+    },
+    "access_control": {
+      "type": "object",
+      "properties": {
+        "read_permissions": { "type": "array", "items": { "type": "string" } },
+        "write_permissions": { "type": "array", "items": { "type": "string" } },
+        "admin_permissions": { "type": "array", "items": { "type": "string" } },
+        "branch_protection": {
+          "type": "object",
+          "properties": {
+            "protected_branches": { "type": "array", "items": { "type": "string" } },
+            "require_pull_request": { "type": "boolean" },
+            "require_approval": { "type": "boolean" },
+            "minimum_approvals": { "type": "integer" }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,149 @@
+[
+  {
+    "id": "memory-layout",
+    "topic": "Memory Management & Pointer Semantics",
+    "description": "How each language handles pointer arithmetic, contiguous allocation, cache locality, and lifetime bounds.",
+    "entries": {
+      "c": {
+        "syntax": "void* ptr = malloc(size); ... free(ptr);",
+        "paradigm": "Explicit Unmanaged Heap / Stack",
+        "notes": "Raw byte pointers, manual lifetime management, struct padding rules strictly defined by C ABI.",
+        "snippet": "struct Node* node = (struct Node*)malloc(sizeof(struct Node));\nnode->id = 42;\nfree(node);"
+      },
+      "cpp": {
+        "syntax": "std::unique_ptr<Node> node = std::make_unique<Node>();",
+        "paradigm": "RAII / Smart Pointers / Custom Allocators",
+        "notes": "Deterministic destruction via RAII, pmr (polymorphic memory resources) for pool allocation.",
+        "snippet": "auto buffer = std::make_unique<float[]>(1024);\nstd::span<float> view(buffer.get(), 1024);"
+      },
+      "cs": {
+        "syntax": "Span<byte> span = stackalloc byte[256]; / MemoryPool<T>",
+        "paradigm": "Managed GC with Zero-Allocation Span<T> & Memory<T>",
+        "notes": ".NET 10 zero-overhead slicing without GC pressure, fixed pointers for P/Invoke interop.",
+        "snippet": "Span<float> vec = stackalloc float[128];\nref float head = ref MemoryMarshal.GetReference(vec);"
+      },
+      "cl": {
+        "syntax": "__global float* buf / __local float scratch[64];",
+        "paradigm": "Explicit OpenCL Address Spaces",
+        "notes": "Explicit __global (VRAM), __local (workgroup shared SRAM), __private (registers).",
+        "snippet": "__kernel void init_buf(__global float* out, __local float* cache) {\n    cache[get_local_id(0)] = 0.0f;\n}"
+      },
+      "ps_1": {
+        "syntax": "[System.Runtime.InteropServices.Marshal]::AllocHGlobal()",
+        "paradigm": "Managed Scripting Engine / .NET CLR Interop",
+        "notes": "Direct access to CLR types and P/Invoke via Add-Type and Marshal APIs.",
+        "snippet": "$ptr = [System.Runtime.InteropServices.Marshal]::AllocHGlobal(1024)\n[System.Runtime.InteropServices.Marshal]::FreeHGlobal($ptr)"
+      },
+      "vl": {
+        "syntax": "reg [31:0] mem [0:1023];",
+        "paradigm": "Synthesizable Hardware Registers & BRAM Arrays",
+        "notes": "Fixed bit-width hardware registers and Block RAM inference in FPGA fabric.",
+        "snippet": "reg [31:0] ram [0:255];\nalways @(posedge clk) begin\n    if (we) ram[addr] <= din;\nend"
+      },
+      "svl": {
+        "syntax": "logic [31:0] mem [256]; / dynamic array logic [7:0] d[]",
+        "paradigm": "SystemVerilog Queues, Dynamic Arrays & Packed Structs",
+        "notes": "Enhanced verification constructs and packed 2-state/4-state hardware structs.",
+        "snippet": "typedef struct packed {\n    logic [15:0] tag;\n    logic [63:0] payload;\n} packet_t;\npacket_t pkt;"
+      }
+    }
+  },
+  {
+    "id": "concurrency",
+    "topic": "Concurrency, Parallelism & Work Dispatch",
+    "description": "Thread model, synchronization primitives, workgroup grids, and clock-edge execution.",
+    "entries": {
+      "c": {
+        "syntax": "pthread_create(&th, NULL, worker, arg);",
+        "paradigm": "POSIX Threads / Atomic Primitives (stdatomic.h)",
+        "notes": "OS thread abstractions and atomic load/store with explicit memory orderings.",
+        "snippet": "atomic_int flag = ATOMIC_VAR_INIT(0);\natomic_store_explicit(&flag, 1, memory_order_release);"
+      },
+      "cpp": {
+        "syntax": "std::jthread th([](std::stop_token st) { ... });",
+        "paradigm": "Standard Concurrency / std::atomic / Coroutines",
+        "notes": "Cooperative cancellation tokens, lock-free wait-free algorithms, C++20 coroutines.",
+        "snippet": "std::atomic<bool> ready{false};\nstd::latch sync_point(4);"
+      },
+      "cs": {
+        "syntax": "ValueTask / Channel<T> / Parallel.ForEachAsync",
+        "paradigm": "Task Parallel Library / Actor Mailboxes / SIMD",
+        "notes": "Allocation-free ValueTask pipelines, lock-free bounded Channels, ThreadPool work-stealing.",
+        "snippet": "var channel = Channel.CreateBounded<TaskItem>(new BoundedChannelOptions(1024) {\n    FullMode = BoundedChannelFullMode.Wait\n});"
+      },
+      "cl": {
+        "syntax": "clEnqueueNDRangeKernel(queue, kernel, 1, NULL, global, local...);",
+        "paradigm": "Data-Parallel Workgroup & Work-Item Grid",
+        "notes": "Massively parallel SIMD workgroup execution across compute units with barrier() sync.",
+        "snippet": "barrier(CLK_LOCAL_MEM_FENCE);\nint gid = get_global_id(0);"
+      },
+      "ps_1": {
+        "syntax": "Start-ThreadJob -ScriptBlock { ... } / ForEach-Object -Parallel",
+        "paradigm": "Runspace Pools & Multithreaded Pipelines",
+        "notes": "Thread-level isolation via PowerShell Runspaces without cross-process IPC overhead.",
+        "snippet": "1..16 | ForEach-Object -Parallel {\n    Invoke-RestMethod -Uri \"http://localhost:5000/api/worker/$_\"\n} -ThrottleLimit 8"
+      },
+      "vl": {
+        "syntax": "fork ... join / always @(posedge clk)",
+        "paradigm": "Cycle-Accurate Hardware Clock Synchronism",
+        "notes": "All hardware blocks evaluate in parallel on clock edges (posedge/negedge).",
+        "snippet": "always @(posedge clk or negedge rst_n) begin\n    if (!rst_n) state <= IDLE;\n    else state <= next_state;\nend"
+      },
+      "svl": {
+        "syntax": "fork ... join_none / semaphores / mailboxes",
+        "paradigm": "Event-Driven SystemVerilog Verification Processes",
+        "notes": "Fine-grained thread controls with join_any and join_none for UVM testbenches.",
+        "snippet": "mailbox #(packet_t) mbx = new(16);\nfork\n    mbx.put(pkt);\n    packet_t rec; mbx.get(rec);\njoin"
+      }
+    }
+  },
+  {
+    "id": "hardware-accel",
+    "topic": "Hardware Acceleration & Driver Interface",
+    "description": "Direct compute invocation, kernel loading, register programming, and accelerator offloading.",
+    "entries": {
+      "c": {
+        "syntax": "zeCommandListAppendLaunchKernel(cmdList, kernel, ...);",
+        "paradigm": "Native C ABI Driver Entrypoint",
+        "notes": "Low-level zero-overhead entrypoint for Level Zero, CUDA Driver, or Vulkan Kompute.",
+        "snippet": "ze_group_count_t dispatch = { 1024, 1, 1 };\nzeCommandListAppendLaunchKernel(hCmdList, hKernel, &dispatch, NULL, 0, NULL);"
+      },
+      "cpp": {
+        "syntax": "sycl::queue q; q.submit([&](sycl::handler& h) { ... });",
+        "paradigm": "Modern SYCL & Native Level Zero C++ Wrappers",
+        "notes": "Zero-copy USM (Unified Shared Memory) device allocation and typed kernel graph submission.",
+        "snippet": "sycl::queue q{sycl::gpu_selector_v};\nfloat* d_buf = sycl::malloc_device<float>(N, q);"
+      },
+      "cs": {
+        "syntax": "LevelZeroDriver.AppendLaunchKernel(cmdList, kernel, dispatch);",
+        "paradigm": "P/Invoke Low-Allocation C# Native Acceleration (L0.NET)",
+        "notes": "High-throughput P/Invoke with custom blittable structs and zero-marshaling overhead.",
+        "snippet": "using var cmdList = ctx.CreateCommandList(device);\ncmdList.LaunchKernel(kernel, groups: (64, 1, 1));\ncmdList.ExecuteAndWait();"
+      },
+      "cl": {
+        "syntax": "clCreateBuffer(ctx, CL_MEM_READ_WRITE, size, NULL, &err);",
+        "paradigm": "OpenCL Host-Device Memory Orchestration",
+        "notes": "Vendor-independent GPU and accelerator compute execution via OpenCL ICD loader.",
+        "snippet": "cl_mem d_data = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, size, h_data, &err);"
+      },
+      "ps_1": {
+        "syntax": "pwsh -File Scripts/Audit-SpvKernels.ps1 -Target tgllp",
+        "paradigm": "Toolchain Automation & Hardware ABI Smoke Testing",
+        "notes": "Automates SPIR-V translation (ocloc), zebin inspection, and ABI validation.",
+        "snippet": "dotnet run -c Release --project src/HFLabs/Hardware/LevelZero.Toolchain/AuditTool.csproj"
+      },
+      "vl": {
+        "syntax": "assign out = a * b + c; // DSP48 / MAC Slice",
+        "paradigm": "Direct Silicon DSP & Arithmetic Datapath",
+        "notes": "Direct synthesis into dedicated DSP48 slices, systolic arrays, or custom FP32 MAC units.",
+        "snippet": "wire [31:0] mac_out;\nassign mac_out = (in_a * in_b) + accum;"
+      },
+      "svl": {
+        "syntax": "assert property (@(posedge clk) req |-> ##[1:4] ack);",
+        "paradigm": "Formal Verification (SVA) of Hardware Interfaces",
+        "notes": "SystemVerilog Assertions (SVA) verifying latency, protocol timing, and cache coherency.",
+        "snippet": "property p_coherence_handshake;\n    @(posedge clk) disable iff (!rst_n)\n    req |-> ##1 ack;\nendproperty\nassert property (p_coherence_handshake);"
+      }
+    }
+  }
+]

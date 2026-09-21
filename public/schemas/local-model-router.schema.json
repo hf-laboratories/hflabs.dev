@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hflabs.io/schemas/local-model-router.schema.json",
+  "title": "IPUServices Local Model Router Configuration",
+  "type": "object",
+  "required": ["schemaVersion", "configVersion", "stateDirectory", "default", "providers"],
+  "properties": {
+    "schemaVersion": { "const": "local-model-router.v1" },
+    "configVersion": { "type": "string", "minLength": 1 },
+    "stateDirectory": { "type": "string", "minLength": 1 },
+    "unknownLimitBehavior": { "enum": ["allow-and-observe", "defer"] },
+    "adaptiveBackoffMinutes": { "type": "integer", "minimum": 1 },
+    "default": {
+      "type": "object",
+      "required": ["provider", "taskKind", "contextProfile", "mode", "targetUtilization"],
+      "properties": {
+        "provider": { "const": "auto" },
+        "taskKind": { "type": "string" },
+        "contextProfile": { "enum": ["shared", "claude", "antigravity", "both"] },
+        "mode": { "const": "plan" },
+        "persistPrompt": { "type": "boolean" },
+        "enableMcp": { "type": "boolean" },
+        "strictQuota": { "type": "boolean" },
+        "targetUtilization": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+        "maxPromptCharacters": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "providers": {
+      "type": "object",
+      "required": ["claude", "antigravity"],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^(claude|antigravity)$": {
+          "type": "object",
+          "required": ["command", "minIntervalSeconds", "maxRunSeconds", "limits"],
+          "properties": {
+            "command": { "type": "string", "minLength": 1 },
+            "minIntervalSeconds": { "type": "integer", "minimum": 0 },
+            "maxRunSeconds": { "type": "integer", "minimum": 1 },
+            "preferredTaskKinds": { "type": "array", "items": { "type": "string" } },
+            "quotaSource": { "type": "string" },
+            "limits": {
+              "type": "object",
+              "required": ["daily", "weekly", "monthly"],
+              "additionalProperties": false,
+              "patternProperties": {
+                "^(daily|weekly|monthly)$": {
+                  "type": "object",
+                  "required": ["maxRequests", "maxEstimatedTokens"],
+                  "properties": {
+                    "maxRequests": { "type": ["integer", "null"], "minimum": 0 },
+                    "maxEstimatedTokens": { "type": ["integer", "null"], "minimum": 0 }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

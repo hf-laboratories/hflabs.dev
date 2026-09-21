@@ -1,0 +1,15 @@
+{
+  "gc_popart_options": {
+    "availableMemoryProportion": 0.6,
+    "partialType": "Float16",
+    "enablePipelining": true,
+    "schedulingPriority": 0
+  },
+  "gc_popart_graph_options": {
+    "batchSerializationFactor": 1,
+    "executionStrategy": "Pipelined",
+    "enableStochasticRounding": true,
+    "enableFastMath": true,
+    "enableCsvOps": false
+  }
+}

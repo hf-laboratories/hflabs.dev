@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://ipuservices.hflabs.io/schemas/rbac_policy.schema.json",
+  "title": "IPUServices RBAC Policy",
+  "description": "Schema for role-based access control policies",
+  "type": "object",
+  "required": ["version", "roles"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Policy schema version",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "default": "1.0.0"
+    },
+    "roles": {
+      "type": "array",
+      "description": "Role definitions",
+      "items": {
+        "$ref": "#/definitions/role"
+      },
+      "minItems": 1
+    },
+    "permissions": {
+      "type": "array",
+      "description": "Permission definitions",
+      "items": {
+        "$ref": "#/definitions/permission"
+      }
+    },
+    "policies": {
+      "type": "array",
+      "description": "Additional policy rules",
+      "items": {
+        "$ref": "#/definitions/policy"
+      }
+    }
+  },
+  "definitions": {
+    "role": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Role name (unique identifier)",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"
+        },
+        "description": {
+          "type": "string",
+          "description": "Role description",
+          "maxLength": 256
+        },
+        "isSystemRole": {
+          "type": "boolean",
+          "description": "Whether this is a built-in system role",
+          "default": false
+        },
+        "priority": {
+          "type": "integer",
+          "description": "Role priority (higher = more privileges)",
+          "minimum": 0,
+          "maximum": 1000,
+          "default": 0
+        },
+        "permissions": {
+          "type": "array",
+          "description": "Permissions granted to this role",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z]+:[a-z*]+$"
+          }
+        },
+        "inherits": {
+          "type": "array",
+          "description": "Roles this role inherits permissions from",
+          "items": {
+            "type": "string"
+          }
+        },
+        "deny": {
+          "type": "array",
+          "description": "Explicit permission denials",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z]+:[a-z*]+$"
+          }
+        }
+      }
+    },
+    "permission": {
+      "type": "object",
+      "required": ["name", "resource", "action"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Permission identifier (resource:action)",
+          "pattern": "^[a-z]+:[a-z*]+$"
+        },
+        "resource": {
+          "type": "string",
+          "description": "Resource type",
+          "enum": ["models", "experiments", "features", "pipelines", "devices", "datasets", "deployments", "admin"]
+        },
+        "action": {
+          "type": "string",
+          "description": "Action type",
+          "enum": ["read", "write", "delete", "execute", "deploy", "manage", "users", "roles", "settings", "audit", "*"]
+        },
+        "description": {
+          "type": "string",
+          "description": "Permission description",
+          "maxLength": 256
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "required": ["name", "effect"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Policy name",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "description": {
+          "type": "string",
+          "description": "Policy description",
+          "maxLength": 256
+        },
+        "effect": {
+          "type": "string",
+          "description": "Policy effect",
+          "enum": ["allow", "deny"]
+        },
+        "principals": {
+          "type": "array",
+          "description": "Users or roles this policy applies to",
+          "items": {
+            "type": "string"
+          }
+        },
+        "resources": {
+          "type": "array",
+          "description": "Resources this policy applies to",
+          "items": {
+            "type": "string"
+          }
+        },
+        "actions": {
+          "type": "array",
+          "description": "Actions this policy applies to",
+          "items": {
+            "type": "string"
+          }
+        },
+        "conditions": {
+          "type": "object",
+          "description": "Conditions for policy evaluation",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}

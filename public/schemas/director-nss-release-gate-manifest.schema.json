@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hf-laboratories.example/schemas/director-nss-release-gate-manifest.schema.json",
+  "title": "Director NSS fabric release-gate manifest",
+  "type": "object",
+  "required": ["schemaVersion", "task", "capturedUtc", "status", "source", "target", "transcript", "metrics", "releaseGates", "artifacts"],
+  "properties": {
+    "schemaVersion": { "const": "director-nss-release-gate.v1" },
+    "task": { "const": "DIRNSS-007" },
+    "capturedUtc": { "type": "string", "format": "date-time" },
+    "status": { "enum": ["model-baseline-captured", "hardware-validated", "blocked"] },
+    "source": {
+      "type": "object",
+      "required": ["revision", "dirty"],
+      "properties": {
+        "revision": { "type": "string", "minLength": 1 },
+        "dirty": { "type": "boolean" }
+      }
+    },
+    "target": {
+      "type": "object",
+      "required": ["source", "requestedIpus", "activeIpus", "totalTiles", "fallback", "physicalIpuDetected"],
+      "properties": {
+        "source": { "enum": ["IpuModel", "Hardware", "None"] },
+        "requestedIpus": { "type": "integer", "minimum": 1 },
+        "activeIpus": { "type": "integer", "minimum": 0 },
+        "totalTiles": { "type": "integer", "minimum": 0 },
+        "fallback": { "type": "boolean" },
+        "physicalIpuDetected": { "type": "boolean" },
+        "fallbackReason": { "type": ["string", "null"] }
+      }
+    },
+    "transcript": {
+      "type": "object",
+      "required": ["planEpoch", "validLanes", "startApplied", "pauseApplied", "planBroadcastConsistent"],
+      "properties": {
+        "planEpoch": { "type": "integer", "minimum": 0 },
+        "validLanes": { "type": "integer", "minimum": 0 },
+        "startApplied": { "type": "boolean" },
+        "pauseApplied": { "type": "boolean" },
+        "planBroadcastConsistent": { "type": "boolean" }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "required": ["planBytes", "controlBytes", "acknowledgementBytes", "laneGateBytes", "initializationHostToDeviceBytes", "perStepHostToDeviceBytes", "compactDeviceToHostBytes", "residentSteps", "hostSynchronizations", "totalPcieBytes", "buildMilliseconds", "executionMilliseconds"],
+      "properties": {
+        "planBytes": { "type": "integer", "minimum": 0 },
+        "controlBytes": { "type": "integer", "minimum": 0 },
+        "acknowledgementBytes": { "type": "integer", "minimum": 0 },
+        "laneGateBytes": { "type": "integer", "minimum": 0 },
+        "initializationHostToDeviceBytes": { "type": "integer", "minimum": 0 },
+        "perStepHostToDeviceBytes": { "type": "integer", "minimum": 0 },
+        "compactDeviceToHostBytes": { "type": "integer", "minimum": 0 },
+        "residentSteps": { "type": "integer", "minimum": 0 },
+        "hostSynchronizations": { "type": "integer", "minimum": 0 },
+        "totalPcieBytes": { "type": "integer", "minimum": 0 },
+        "buildMilliseconds": { "type": "number", "minimum": 0 },
+        "executionMilliseconds": { "type": "number", "minimum": 0 }
+      }
+    },
+    "releaseGates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "status"],
+        "properties": {
+          "name": { "type": "string" },
+          "status": { "type": "string" }
+        }
+      }
+    },
+    "artifacts": { "type": "object" }
+  }
+}

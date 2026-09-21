@@ -1,0 +1,193 @@
+---
+// LicenseTierCard.astro
+import tiers from '../data/licensing.json';
+---
+
+<section id="licensing" class="licensing-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="badge" style="background:rgba(251,191,36,0.15); color:var(--accent-amber); border:1px solid rgba(251,191,36,0.3); margin-bottom:12px;">
+        Licensing &amp; Tier Governance
+      </div>
+      <h2 class="section-title">Transparent, High-Assurance Licensing</h2>
+      <p class="section-desc">
+        From open-core community deployments to air-gapped defense contracts with HMAC cryptographic signature validation.
+      </p>
+    </div>
+
+    <div class="tiers-grid">
+      {tiers.map(t => (
+        <div class="tier-card" style={`--tier-accent:${t.color};`}>
+          <div class="tier-header">
+            <div class="tier-badge-row">
+              <span class="tier-badge">{t.badge}</span>
+            </div>
+            <h3 class="tier-title">{t.tier}</h3>
+            <p class="tier-target">{t.target}</p>
+            <div class="tier-price">{t.price}</div>
+          </div>
+
+          <div class="tier-limits">
+            <h4>Runtime Bounds &amp; Capacity</h4>
+            <ul>
+              {Object.entries(t.limits).map(([k, v]) => (
+                <li>
+                  <span class="limit-key">{k}</span>
+                  <span class="limit-val">{v}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="tier-features">
+            <h4>Included Subsystems</h4>
+            <ul>
+              {t.features.map(f => (
+                <li>
+                  <span class="check-icon">✓</span>
+                  <span>{f}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .licensing-section {
+    padding: 80px 0;
+    border-top: 1px solid var(--border-color);
+    background: rgba(11, 15, 25, 0.4);
+  }
+
+  .section-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 48px;
+  }
+
+  .section-title {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 16px;
+  }
+
+  .section-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .tiers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    align-items: stretch;
+  }
+
+  .tier-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-top: 4px solid var(--tier-accent);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .tier-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--tier-accent);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .tier-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 8px 0 4px;
+  }
+
+  .tier-target {
+    font-size: 12px;
+    color: var(--text-secondary);
+    min-height: 36px;
+  }
+
+  .tier-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--tier-accent);
+    font-family: var(--font-mono);
+    margin-top: 8px;
+  }
+
+  .tier-limits {
+    background: rgba(11, 15, 25, 0.6);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .tier-limits h4, .tier-features h4 {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    margin-bottom: 10px;
+  }
+
+  .tier-limits ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .tier-limits li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+  }
+
+  .limit-key {
+    color: var(--text-muted);
+    text-transform: capitalize;
+  }
+
+  .limit-val {
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .tier-features ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .tier-features li {
+    font-size: 13px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.4;
+  }
+
+  .check-icon {
+    color: var(--tier-accent);
+    font-weight: 700;
+  }
+</style>

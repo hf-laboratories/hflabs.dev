@@ -1,0 +1,617 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Model Versioning Table Schema",
+  "description": "Database schema definition for model versioning tables",
+  "type": "object",
+  "properties": {
+    "tables": {
+      "type": "object",
+      "properties": {
+        "model_versions": {
+          "type": "object",
+          "description": "Core table for tracking model versions",
+          "properties": {
+            "columns": {
+              "type": "object",
+              "properties": {
+                "version_id": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["PRIMARY KEY", "NOT NULL"],
+                    "description": "Unique identifier for the model version"
+                  }
+                },
+                "model_id": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL", "FOREIGN KEY REFERENCES models(model_id)"],
+                    "description": "Reference to the parent model"
+                  }
+                },
+                "version": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL"],
+                    "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                    "description": "Semantic version number (major.minor.patch)"
+                  }
+                },
+                "major_version": {
+                  "type": "object",
+                  "properties": {
+                    "type": "integer",
+                    "constraints": ["NOT NULL"],
+                    "description": "Major version number"
+                  }
+                },
+                "minor_version": {
+                  "type": "object",
+                  "properties": {
+                    "type": "integer",
+                    "constraints": ["NOT NULL"],
+                    "description": "Minor version number"
+                  }
+                },
+                "patch_version": {
+                  "type": "object",
+                  "properties": {
+                    "type": "integer",
+                    "constraints": ["NOT NULL"],
+                    "description": "Patch version number"
+                  }
+                },
+                "file_path": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL"],
+                    "description": "Physical file path of the model"
+                  }
+                },
+                "file_size": {
+                  "type": "object",
+                  "properties": {
+                    "type": "integer",
+                    "description": "File size in bytes"
+                  }
+                },
+                "file_hash": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "description": "SHA-256 hash of the model file"
+                  }
+                },
+                "status": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL"],
+                    "enum": ["Draft", "Testing", "Approved", "Production", "Deprecated", "Archived"],
+                    "default": "Draft",
+                    "description": "Version lifecycle status"
+                  }
+                },
+                "created_by": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL"],
+                    "description": "User who created this version"
+                  }
+                },
+                "created_at": {
+                  "type": "object",
+                  "properties": {
+                    "type": "timestamp",
+                    "constraints": ["NOT NULL"],
+                    "default": "CURRENT_TIMESTAMP",
+                    "description": "Version creation timestamp"
+                  }
+                },
+                "updated_at": {
+                  "type": "object",
+                  "properties": {
+                    "type": "timestamp",
+                    "default": "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
+                    "description": "Last update timestamp"
+                  }
+                },
+                "approved_by": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "description": "User who approved this version"
+                  }
+                },
+                "approved_at": {
+                  "type": "object",
+                  "properties": {
+                    "type": "timestamp",
+                    "description": "Approval timestamp"
+                  }
+                },
+                "deployed_at": {
+                  "type": "object",
+                  "properties": {
+                    "type": "timestamp",
+                    "description": "Production deployment timestamp"
+                  }
+                },
+                "retired_at": {
+                  "type": "object",
+                  "properties": {
+                    "type": "timestamp",
+                    "description": "Retirement timestamp"
+                  }
+                },
+                "performance_metrics": {
+                  "type": "object",
+                  "properties": {
+                    "type": "text",
+                    "description": "JSON blob containing performance metrics"
+                  }
+                },
+                "ipu_optimized": {
+                  "type": "object",
+                  "properties": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Whether this version is IPU-optimized"
+                  }
+                },
+                "ipu_configuration": {
+                  "type": "object",
+                  "properties": {
+                    "type": "text",
+                    "description": "JSON blob containing IPU configuration"
+                  }
+                },
+                "changelog": {
+                  "type": "object",
+                  "properties": {
+                    "type": "text",
+                    "description": "Change description for this version"
+                  }
+                },
+                "tags": {
+                  "type": "object",
+                  "properties": {
+                    "type": "text",
+                    "description": "Comma-separated tags for this version"
+                  }
+                }
+              }
+            },
+            "indexes": [
+              {
+                "name": "idx_model_versions_model_id",
+                "columns": ["model_id"],
+                "type": "INDEX"
+              },
+              {
+                "name": "idx_model_versions_version",
+                "columns": ["model_id", "version"],
+                "type": "UNIQUE"
+              },
+              {
+                "name": "idx_model_versions_status",
+                "columns": ["status"],
+                "type": "INDEX"
+              },
+              {
+                "name": "idx_model_versions_created_at",
+                "columns": ["created_at"],
+                "type": "INDEX"
+              }
+            ]
+          }
+        },
+        "version_lineage": {
+          "type": "object",
+          "description": "Table for tracking version relationships and lineage",
+          "properties": {
+            "columns": {
+              "type": "object",
+              "properties": {
+                "lineage_id": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["PRIMARY KEY", "NOT NULL"],
+                    "description": "Unique lineage record identifier"
+                  }
+                },
+                "parent_version_id": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL", "FOREIGN KEY REFERENCES model_versions(version_id)"],
+                    "description": "Parent version identifier"
+                  }
+                },
+                "child_version_id": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL", "FOREIGN KEY REFERENCES model_versions(version_id)"],
+                    "description": "Child version identifier"
+                  }
+                },
+                "relationship_type": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL"],
+                    "enum": ["direct_successor", "branch", "merge", "rollback", "hotfix"],
+                    "description": "Type of relationship between versions"
+                  }
+                },
+                "created_at": {
+                  "type": "object",
+                  "properties": {
+                    "type": "timestamp",
+                    "constraints": ["NOT NULL"],
+                    "default": "CURRENT_TIMESTAMP",
+                    "description": "Lineage record creation timestamp"
+                  }
+                }
+              }
+            },
+            "indexes": [
+              {
+                "name": "idx_version_lineage_parent",
+                "columns": ["parent_version_id"],
+                "type": "INDEX"
+              },
+              {
+                "name": "idx_version_lineage_child",
+                "columns": ["child_version_id"],
+                "type": "INDEX"
+              }
+            ]
+          }
+        },
+        "version_approvals": {
+          "type": "object",
+          "description": "Table for tracking version approval workflow",
+          "properties": {
+            "columns": {
+              "type": "object",
+              "properties": {
+                "approval_id": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["PRIMARY KEY", "NOT NULL"],
+                    "description": "Unique approval record identifier"
+                  }
+                },
+                "version_id": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL", "FOREIGN KEY REFERENCES model_versions(version_id)"],
+                    "description": "Version being approved"
+                  }
+                },
+                "approval_type": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL"],
+                    "enum": ["technical_review", "business_approval", "security_review", "compliance_check"],
+                    "description": "Type of approval required"
+                  }
+                },
+                "status": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL"],
+                    "enum": ["pending", "approved", "rejected", "expired"],
+                    "default": "pending",
+                    "description": "Approval status"
+                  }
+                },
+                "approver": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "description": "User who provided the approval"
+                  }
+                },
+                "approved_at": {
+                  "type": "object",
+                  "properties": {
+                    "type": "timestamp",
+                    "description": "Approval timestamp"
+                  }
+                },
+                "comments": {
+                  "type": "object",
+                  "properties": {
+                    "type": "text",
+                    "description": "Approval comments or feedback"
+                  }
+                },
+                "expires_at": {
+                  "type": "object",
+                  "properties": {
+                    "type": "timestamp",
+                    "description": "Approval expiration timestamp"
+                  }
+                },
+                "created_at": {
+                  "type": "object",
+                  "properties": {
+                    "type": "timestamp",
+                    "constraints": ["NOT NULL"],
+                    "default": "CURRENT_TIMESTAMP",
+                    "description": "Approval request creation timestamp"
+                  }
+                }
+              }
+            },
+            "indexes": [
+              {
+                "name": "idx_version_approvals_version",
+                "columns": ["version_id"],
+                "type": "INDEX"
+              },
+              {
+                "name": "idx_version_approvals_status",
+                "columns": ["status"],
+                "type": "INDEX"
+              },
+              {
+                "name": "idx_version_approvals_approver",
+                "columns": ["approver"],
+                "type": "INDEX"
+              }
+            ]
+          }
+        },
+        "version_benchmarks": {
+          "type": "object",
+          "description": "Table for storing version performance benchmarks",
+          "properties": {
+            "columns": {
+              "type": "object",
+              "properties": {
+                "benchmark_id": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["PRIMARY KEY", "NOT NULL"],
+                    "description": "Unique benchmark record identifier"
+                  }
+                },
+                "version_id": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL", "FOREIGN KEY REFERENCES model_versions(version_id)"],
+                    "description": "Version being benchmarked"
+                  }
+                },
+                "benchmark_type": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL"],
+                    "enum": ["accuracy", "performance", "latency", "throughput", "memory", "ipu_efficiency"],
+                    "description": "Type of benchmark"
+                  }
+                },
+                "metric_name": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL"],
+                    "description": "Name of the metric being measured"
+                  }
+                },
+                "metric_value": {
+                  "type": "object",
+                  "properties": {
+                    "type": "double",
+                    "constraints": ["NOT NULL"],
+                    "description": "Benchmark metric value"
+                  }
+                },
+                "metric_unit": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "description": "Unit of measurement for the metric"
+                  }
+                },
+                "test_environment": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "description": "Environment where benchmark was run"
+                  }
+                },
+                "test_configuration": {
+                  "type": "object",
+                  "properties": {
+                    "type": "text",
+                    "description": "JSON blob with test configuration details"
+                  }
+                },
+                "created_by": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL"],
+                    "description": "User who ran the benchmark"
+                  }
+                },
+                "created_at": {
+                  "type": "object",
+                  "properties": {
+                    "type": "timestamp",
+                    "constraints": ["NOT NULL"],
+                    "default": "CURRENT_TIMESTAMP",
+                    "description": "Benchmark execution timestamp"
+                  }
+                }
+              }
+            },
+            "indexes": [
+              {
+                "name": "idx_version_benchmarks_version",
+                "columns": ["version_id"],
+                "type": "INDEX"
+              },
+              {
+                "name": "idx_version_benchmarks_type",
+                "columns": ["benchmark_type"],
+                "type": "INDEX"
+              },
+              {
+                "name": "idx_version_benchmarks_metric",
+                "columns": ["metric_name"],
+                "type": "INDEX"
+              }
+            ]
+          }
+        },
+        "version_deployments": {
+          "type": "object",
+          "description": "Table for tracking version deployments across environments",
+          "properties": {
+            "columns": {
+              "type": "object",
+              "properties": {
+                "deployment_id": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["PRIMARY KEY", "NOT NULL"],
+                    "description": "Unique deployment record identifier"
+                  }
+                },
+                "version_id": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL", "FOREIGN KEY REFERENCES model_versions(version_id)"],
+                    "description": "Version being deployed"
+                  }
+                },
+                "environment": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL"],
+                    "enum": ["development", "testing", "staging", "production"],
+                    "description": "Target deployment environment"
+                  }
+                },
+                "deployment_type": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL"],
+                    "enum": ["blue_green", "canary", "rolling", "direct"],
+                    "description": "Type of deployment strategy"
+                  }
+                },
+                "status": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL"],
+                    "enum": ["pending", "in_progress", "completed", "failed", "rolled_back"],
+                    "default": "pending",
+                    "description": "Deployment status"
+                  }
+                },
+                "endpoint_url": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "description": "Deployment endpoint URL"
+                  }
+                },
+                "configuration": {
+                  "type": "object",
+                  "properties": {
+                    "type": "text",
+                    "description": "JSON blob with deployment configuration"
+                  }
+                },
+                "deployed_by": {
+                  "type": "object",
+                  "properties": {
+                    "type": "string",
+                    "constraints": ["NOT NULL"],
+                    "description": "User who initiated the deployment"
+                  }
+                },
+                "deployed_at": {
+                  "type": "object",
+                  "properties": {
+                    "type": "timestamp",
+                    "description": "Deployment completion timestamp"
+                  }
+                },
+                "created_at": {
+                  "type": "object",
+                  "properties": {
+                    "type": "timestamp",
+                    "constraints": ["NOT NULL"],
+                    "default": "CURRENT_TIMESTAMP",
+                    "description": "Deployment record creation timestamp"
+                  }
+                }
+              }
+            },
+            "indexes": [
+              {
+                "name": "idx_version_deployments_version",
+                "columns": ["version_id"],
+                "type": "INDEX"
+              },
+              {
+                "name": "idx_version_deployments_environment",
+                "columns": ["environment"],
+                "type": "INDEX"
+              },
+              {
+                "name": "idx_version_deployments_status",
+                "columns": ["status"],
+                "type": "INDEX"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "views": {
+      "type": "object",
+      "properties": {
+        "version_summary": {
+          "type": "object",
+          "description": "Summary view of model versions with key metrics",
+          "properties": {
+            "sql": "CREATE VIEW version_summary AS SELECT mv.version_id, mv.model_id, mv.version, mv.status, mv.created_by, mv.created_at, mv.ipu_optimized, COUNT(va.approval_id) as pending_approvals, COUNT(vd.deployment_id) as active_deployments FROM model_versions mv LEFT JOIN version_approvals va ON mv.version_id = va.version_id AND va.status = 'pending' LEFT JOIN version_deployments vd ON mv.version_id = vd.version_id AND vd.status = 'completed' GROUP BY mv.version_id"
+          }
+        },
+        "latest_versions": {
+          "type": "object",
+          "description": "View showing the latest version for each model",
+          "properties": {
+            "sql": "CREATE VIEW latest_versions AS SELECT DISTINCT mv1.model_id, mv1.version_id, mv1.version, mv1.status, mv1.created_at FROM model_versions mv1 INNER JOIN (SELECT model_id, MAX(major_version * 10000 + minor_version * 100 + patch_version) as latest_version_num FROM model_versions GROUP BY model_id) mv2 ON mv1.model_id = mv2.model_id AND (mv1.major_version * 10000 + mv1.minor_version * 100 + mv1.patch_version) = mv2.latest_version_num"
+          }
+        }
+      }
+    }
+  }
+}

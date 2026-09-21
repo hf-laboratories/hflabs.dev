@@ -1,0 +1,197 @@
+---
+// DivisionGrid.astro
+import divisions from '../data/divisions.json';
+---
+
+<section id="divisions" class="divisions-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="badge" style="background:rgba(56,189,248,0.15); color:var(--accent-blue); border:1px solid rgba(56,189,248,0.3); margin-bottom:12px;">
+        Monorepo Architecture
+      </div>
+      <h2 class="section-title">The 6 Monorepo Divisions</h2>
+      <p class="section-desc">
+        HFLabs-Work-MonoRepo organizes complex polyglot systems into strictly governed architectural divisions, eliminating cross-boundary namespace pollution and enforcing invariant project directories.
+      </p>
+    </div>
+
+    <div class="divisions-grid">
+      {divisions.map(div => (
+        <div class="division-card" style={`--div-accent:${div.color};`}>
+          <div class="division-header">
+            <div class="div-icon-title">
+              <span class="div-icon">{div.icon}</span>
+              <div>
+                <h3 class="div-name">{div.name}</h3>
+                <span class="div-badge">{div.badge}</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="div-tagline">{div.tagline}</p>
+
+          <div class="projects-list">
+            <h4>Key Projects &amp; Assets</h4>
+            <ul>
+              {div.projects.map(p => (
+                <li class="project-item">
+                  <div class="proj-name-status">
+                    <span class="proj-name">{p.name}</span>
+                    <span class={`proj-status status-${p.status.toLowerCase()}`}>{p.status}</span>
+                  </div>
+                  <p class="proj-desc">{p.description}</p>
+                  <code class="proj-path">{p.path}</code>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .divisions-section {
+    padding: 80px 0;
+  }
+
+  .section-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 56px;
+  }
+
+  .section-title {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 16px;
+  }
+
+  .section-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .divisions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 24px;
+  }
+
+  .division-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-top: 3px solid var(--div-accent);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .division-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+    border-color: var(--div-accent);
+  }
+
+  .div-icon-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .div-icon {
+    font-size: 28px;
+  }
+
+  .div-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .div-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--div-accent);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .div-tagline {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .projects-list {
+    margin-top: auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 16px;
+  }
+
+  .projects-list h4 {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    margin-bottom: 12px;
+  }
+
+  .projects-list ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .project-item {
+    background: rgba(11, 15, 25, 0.6);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .proj-name-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+
+  .proj-name {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--text-primary);
+  }
+
+  .proj-status {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  .status-production { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+  .status-published { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+  .status-validated { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+  .status-verified { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+  .status-quarantined { background: rgba(244, 63, 94, 0.15); color: #fb7185; }
+
+  .proj-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-bottom: 6px;
+  }
+
+  .proj-path {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+</style>

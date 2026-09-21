@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Dataset (Registry DTO)",
+  "description": "Schema for Dataset objects exposed by the WebUI Registry API",
+  "type": "object",
+  "required": ["id", "name", "bucket", "prefix", "createdAt"],
+  "properties": {
+    "id": { "type": "string", "description": "Unique dataset identifier" },
+    "name": { "type": "string", "description": "Dataset name" },
+    "description": { "type": ["string", "null"], "description": "Optional description" },
+    "bucket": { "type": "string", "description": "Object store bucket name" },
+    "prefix": { "type": "string", "description": "Key prefix within the bucket" },
+    "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp (UTC)" }
+  }
+}

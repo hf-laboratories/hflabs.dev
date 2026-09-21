@@ -1,0 +1,270 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Model Registry Key-Value Collection",
+  "description": "Schema for key-value metadata collections stored with models and versions",
+  "type": "object",
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "description": "Core metadata key-value pairs",
+      "properties": {
+        "modelType": {
+          "type": "string",
+          "enum": ["classification", "regression", "clustering", "nlp", "computer_vision", "time_series", "reinforcement_learning", "other"],
+          "description": "Type of machine learning model"
+        },
+        "framework": {
+          "type": "string",
+          "enum": ["tensorflow", "pytorch", "onnx", "scikit-learn", "xgboost", "lightgbm", "custom", "other"],
+          "description": "ML framework used to create the model"
+        },
+        "language": {
+          "type": "string",
+          "enum": ["python", "r", "julia", "cpp", "java", "csharp", "other"],
+          "description": "Programming language used for model development"
+        },
+        "domain": {
+          "type": "string",
+          "description": "Business domain or use case area"
+        },
+        "datasetId": {
+          "type": "string",
+          "description": "Identifier of the training dataset"
+        },
+        "trainingDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date when the model was trained"
+        },
+        "author": {
+          "type": "string",
+          "description": "Model author or creator"
+        },
+        "license": {
+          "type": "string",
+          "description": "Model license information"
+        }
+      }
+    },
+    "performance": {
+      "type": "object",
+      "description": "Performance metrics and benchmarks",
+      "properties": {
+        "accuracy": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Model accuracy score"
+        },
+        "precision": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Model precision score"
+        },
+        "recall": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Model recall score"
+        },
+        "f1Score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "F1 score"
+        },
+        "auc": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Area under the curve"
+        },
+        "latency": {
+          "type": "object",
+          "properties": {
+            "p50": { "type": "number", "description": "50th percentile latency in milliseconds" },
+            "p95": { "type": "number", "description": "95th percentile latency in milliseconds" },
+            "p99": { "type": "number", "description": "99th percentile latency in milliseconds" }
+          }
+        },
+        "throughput": {
+          "type": "number",
+          "description": "Requests per second the model can handle"
+        },
+        "memoryUsage": {
+          "type": "number",
+          "description": "Memory usage in MB"
+        }
+      }
+    },
+    "ipuOptimization": {
+      "type": "object",
+      "description": "IPU-specific optimization metadata",
+      "properties": {
+        "isIPUOptimized": {
+          "type": "boolean",
+          "description": "Whether the model is optimized for IPU execution"
+        },
+        "ipuVersion": {
+          "type": "string",
+          "enum": ["mk1", "mk2", "mk2-gc200"],
+          "description": "Target IPU version"
+        },
+        "poplarVersion": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Poplar SDK version used"
+        },
+        "ipuConfiguration": {
+          "type": "object",
+          "properties": {
+            "numIPUs": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Number of IPUs required"
+            },
+            "tilesPerIPU": {
+              "type": "integer",
+              "description": "Number of tiles used per IPU"
+            },
+            "memoryPerIPU": {
+              "type": "string",
+              "description": "Memory allocation per IPU"
+            },
+            "batchSize": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Optimal batch size for IPU execution"
+            },
+            "replicationFactor": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Model replication factor across IPUs"
+            }
+          }
+        },
+        "optimizations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["graph_optimization", "operator_fusion", "memory_optimization", "pipeline_parallelism", "data_parallelism", "gradient_accumulation"]
+          },
+          "description": "Applied IPU optimizations"
+        },
+        "benchmarks": {
+          "type": "object",
+          "properties": {
+            "ipuThroughput": {
+              "type": "number",
+              "description": "IPU-specific throughput (samples/second)"
+            },
+            "ipuLatency": {
+              "type": "number",
+              "description": "IPU-specific latency in milliseconds"
+            },
+            "ipuMemoryEfficiency": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Memory utilization efficiency on IPU"
+            },
+            "cpuVsIpuSpeedup": {
+              "type": "number",
+              "description": "Speedup factor compared to CPU execution"
+            }
+          }
+        }
+      }
+    },
+    "deployment": {
+      "type": "object",
+      "description": "Deployment-related metadata",
+      "properties": {
+        "environments": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["development", "staging", "production", "testing"]
+          },
+          "description": "Environments where the model is deployed"
+        },
+        "endpoints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "url": { "type": "string", "format": "uri" },
+              "environment": { "type": "string" },
+              "status": { 
+                "type": "string", 
+                "enum": ["active", "inactive", "maintenance"] 
+              }
+            },
+            "required": ["name", "url", "environment", "status"]
+          }
+        },
+        "scalingConfig": {
+          "type": "object",
+          "properties": {
+            "minInstances": { "type": "integer", "minimum": 0 },
+            "maxInstances": { "type": "integer", "minimum": 1 },
+            "targetCPUUtilization": { "type": "number", "minimum": 0, "maximum": 100 },
+            "targetMemoryUtilization": { "type": "number", "minimum": 0, "maximum": 100 }
+          }
+        }
+      }
+    },
+    "governance": {
+      "type": "object",
+      "description": "Model governance and compliance metadata",
+      "properties": {
+        "complianceLevel": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical"],
+          "description": "Required compliance level"
+        },
+        "dataClassification": {
+          "type": "string",
+          "enum": ["public", "internal", "confidential", "restricted"],
+          "description": "Data classification level"
+        },
+        "approvalRequired": {
+          "type": "boolean",
+          "description": "Whether deployment requires approval"
+        },
+        "approvers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of required approvers"
+        },
+        "retentionPolicy": {
+          "type": "object",
+          "properties": {
+            "retentionDays": { "type": "integer", "minimum": 1 },
+            "archiveAfterDays": { "type": "integer", "minimum": 1 },
+            "deleteAfterDays": { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
+    },
+    "customFields": {
+      "type": "object",
+      "description": "User-defined custom metadata fields",
+      "patternProperties": {
+        "^[a-zA-Z][a-zA-Z0-9_]*$": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "number" },
+            { "type": "boolean" },
+            { "type": "array" },
+            { "type": "object" }
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}

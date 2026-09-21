@@ -1,0 +1,239 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ipuservices.io/schemas/cluster-orchestration-topology.schema.json",
+  "title": "IPUServices Cluster Orchestration Topology",
+  "description": "Describes a small cluster topology for near-zero-wait orchestration across CPU NUMA, GPU, IPU, RDMA, NVMe and time/clock domains.",
+  "type": "object",
+  "required": ["$schema", "cluster", "nodes"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "cluster": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "description": { "type": "string" }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/node" }
+    },
+    "links": {
+      "type": "array",
+      "description": "Explicit inter-node links (e.g., dual-link 25GbE RDMA).",
+      "items": { "$ref": "#/definitions/link" }
+    }
+  },
+  "definitions": {
+    "node": {
+      "type": "object",
+      "required": ["id", "name", "domains"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9-]*$" },
+        "name": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "domains": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/domain" }
+        }
+      }
+    },
+    "domain": {
+      "type": "object",
+      "description": "A schedulable resource domain with its own memory/compute/bus constraints (e.g., cpu-numa, gpu, ipu, storage, time).",
+      "required": ["id", "type"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9-]*$" },
+        "type": {
+          "type": "string",
+          "enum": [
+            "cpu-numa",
+            "gpu",
+            "ipu",
+            "rdma-nic",
+            "nvme-pool",
+            "ptp-clock"
+          ]
+        },
+        "name": { "type": "string" },
+        "cpu": { "$ref": "#/definitions/cpuDomain" },
+        "gpu": { "$ref": "#/definitions/gpuDomain" },
+        "ipu": { "$ref": "#/definitions/ipuDomain" },
+        "rdma": { "$ref": "#/definitions/rdmaNicDomain" },
+        "nvme": { "$ref": "#/definitions/nvmePoolDomain" },
+        "ptp": { "$ref": "#/definitions/ptpClockDomain" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "cpu-numa" } } },
+          "then": { "required": ["cpu"] }
+        },
+        {
+          "if": { "properties": { "type": { "const": "gpu" } } },
+          "then": { "required": ["gpu"] }
+        },
+        {
+          "if": { "properties": { "type": { "const": "ipu" } } },
+          "then": { "required": ["ipu"] }
+        },
+        {
+          "if": { "properties": { "type": { "const": "rdma-nic" } } },
+          "then": { "required": ["rdma"] }
+        },
+        {
+          "if": { "properties": { "type": { "const": "nvme-pool" } } },
+          "then": { "required": ["nvme"] }
+        },
+        {
+          "if": { "properties": { "type": { "const": "ptp-clock" } } },
+          "then": { "required": ["ptp"] }
+        }
+      ]
+    },
+    "cpuDomain": {
+      "type": "object",
+      "required": ["vendor", "modelFamily", "socketCount", "numaNodes", "memory"],
+      "properties": {
+        "vendor": { "type": "string", "examples": ["Intel"] },
+        "modelFamily": { "type": "string", "examples": ["Xeon E5 v4"] },
+        "socketCount": { "type": "integer", "minimum": 1 },
+        "numaNodes": { "type": "integer", "minimum": 1 },
+        "coreCount": { "type": "integer", "minimum": 1 },
+        "threadCount": { "type": "integer", "minimum": 1 },
+        "memory": {
+          "type": "object",
+          "required": ["bytes", "dimms"],
+          "properties": {
+            "bytes": { "type": "integer", "minimum": 0 },
+            "dimms": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["kind", "bytes"],
+                "properties": {
+                  "kind": { "type": "string", "enum": ["RDIMM", "LRDIMM"] },
+                  "bytes": { "type": "integer", "minimum": 0 }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "gpuDomain": {
+      "type": "object",
+      "required": ["vendor", "model", "bus"],
+      "properties": {
+        "vendor": { "type": "string", "examples": ["NVIDIA"] },
+        "model": { "type": "string", "examples": ["GTX 1650 OC"] },
+        "vramBytes": { "type": "integer", "minimum": 0 },
+        "bus": { "$ref": "#/definitions/pciEndpoint" }
+      }
+    },
+    "ipuDomain": {
+      "type": "object",
+      "required": ["vendor", "model", "bus"],
+      "properties": {
+        "vendor": { "type": "string", "examples": ["Graphcore"] },
+        "model": { "type": "string", "examples": ["GC2"] },
+        "onDeviceMemoryBytes": { "type": "integer", "minimum": 0 },
+        "bus": { "$ref": "#/definitions/pciEndpoint" }
+      }
+    },
+    "rdmaNicDomain": {
+      "type": "object",
+      "required": ["vendor", "model", "ports"],
+      "properties": {
+        "vendor": { "type": "string", "examples": ["NVIDIA/Mellanox"] },
+        "model": { "type": "string", "examples": ["ConnectX-4 Lx"] },
+        "ports": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "speedGbps"],
+            "properties": {
+              "name": { "type": "string" },
+              "speedGbps": { "type": "number", "minimum": 0 },
+              "rdma": { "type": "boolean", "default": true },
+              "mtu": { "type": "integer", "minimum": 576 },
+              "pfc": { "type": "boolean" },
+              "ecn": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+    "nvmePoolDomain": {
+      "type": "object",
+      "required": ["deviceCount"],
+      "properties": {
+        "deviceCount": { "type": "integer", "minimum": 0 },
+        "devices": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" },
+              "bytes": { "type": "integer", "minimum": 0 },
+              "pcie": { "$ref": "#/definitions/pciEndpoint" }
+            }
+          }
+        }
+      }
+    },
+    "ptpClockDomain": {
+      "type": "object",
+      "required": ["role"],
+      "properties": {
+        "role": { "type": "string", "enum": ["GM", "BC", "OC"] },
+        "discipline": {
+          "type": "object",
+          "properties": {
+            "loopbackPortSpeedGbps": { "type": "number", "minimum": 0 },
+            "expectedOffsetNs": { "type": "integer" }
+          }
+        }
+      }
+    },
+    "pciEndpoint": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "enum": ["pcie"] },
+        "gen": { "type": "integer", "minimum": 1, "maximum": 6 },
+        "lanes": { "type": "integer", "minimum": 1, "maximum": 32 },
+        "slot": { "type": "string" },
+        "numaAffinity": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "link": {
+      "type": "object",
+      "required": ["id", "from", "to", "type", "speedGbps"],
+      "properties": {
+        "id": { "type": "string" },
+        "from": { "$ref": "#/definitions/linkEndpoint" },
+        "to": { "$ref": "#/definitions/linkEndpoint" },
+        "type": { "type": "string", "enum": ["rdma-roce", "rdma-ib", "ethernet"] },
+        "speedGbps": { "type": "number", "minimum": 0 },
+        "count": { "type": "integer", "minimum": 1, "default": 1 },
+        "latencyUs": { "type": "number", "minimum": 0 },
+        "notes": { "type": "string" }
+      }
+    },
+    "linkEndpoint": {
+      "type": "object",
+      "required": ["nodeId"],
+      "properties": {
+        "nodeId": { "type": "string" },
+        "domainId": { "type": "string" },
+        "port": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,408 @@
+[
+  {
+    "id": "products",
+    "name": "Products",
+    "icon": "🚀",
+    "badge": "Commercial & Open-Core",
+    "tagline": "Real-time vector cognition engines, swarm metaheuristics, and cluster management platforms.",
+    "color": "#38bdf8",
+    "projects": [
+      {
+        "name": "HypertensorGraphRAG Command Center",
+        "description": "Sub-millisecond multi-hop graph reasoning, SIMD vector embeddings, FastMCP host, and desktop HUD.",
+        "path": "src/HFLabs/Products/HypertensorGraphRAG",
+        "status": "Production"
+      },
+      {
+        "name": "HyperSwarm Optimization Suite",
+        "description": "Integrated swarm metaheuristics, dynamic director authority, swarm characterization, and desktop visualizer suite.",
+        "path": "src/HFLabs/Products/HyperSwarmOptimizationSuite",
+        "status": "Production"
+      },
+      {
+        "name": "ClusterManagement Suite",
+        "description": "Cluster administration application and storage node agent services.",
+        "path": "src/HFLabs/Products/ClusterManagement",
+        "status": "Production"
+      },
+      {
+        "name": "ClusterDesk",
+        "description": "Cluster administration desktop HUD, node topology management, and live operational monitoring.",
+        "path": "src/HFLabs/Products/ClusterDesk",
+        "status": "Production"
+      },
+      {
+        "name": "SwarmDev",
+        "description": "Swarm development workbench and algorithmic performance analysis suite.",
+        "path": "src/HFLabs/Products/SwarmDev",
+        "status": "Production"
+      },
+      {
+        "name": "AutoMLApp",
+        "description": "Automated machine learning optimization host, hyperparameter search, and validation test harness.",
+        "path": "src/HFLabs/Products/AutoMLApp",
+        "status": "Production"
+      },
+      {
+        "name": "LaunchControl",
+        "description": "Cluster orchestration engine and workload deployment launcher with near-zero wait planning.",
+        "path": "src/HFLabs/Products/LaunchControl",
+        "status": "Production"
+      },
+      {
+        "name": "QueryAccel & SQL Bridges",
+        "description": "Hardware-accelerated database query engines, Postgres acceleration, and low-latency SQL streaming bridges.",
+        "path": "src/HFLabs/Products/QueryAccel",
+        "status": "Production"
+      },
+      {
+        "name": "StartupAcceleration Suite",
+        "description": "Pre-warmed memory allocations, startup acceleration tokens, and desktop management.",
+        "path": "src/HFLabs/Products/StartupAcceleration",
+        "status": "Production"
+      }
+    ]
+  },
+  {
+    "id": "research",
+    "name": "Research",
+    "icon": "🔬",
+    "badge": "Academic & Benchmarks",
+    "tagline": "110 peer-reviewed white papers, CEC competition entrants, and multi-objective benchmark datapiles.",
+    "color": "#a855f7",
+    "projects": [
+      {
+        "name": "110 Research White Papers",
+        "description": "Formal preprints across swarm intelligence, neuromorphic architectures, and vector graph reasoning.",
+        "path": "src/HFLabs/Research/Papers",
+        "status": "Published"
+      },
+      {
+        "name": "CEC Competition Entrant",
+        "description": "Constrained wave projection solver achieving 100% feasibility on standard CEC competition benchmarks.",
+        "path": "src/HFLabs/Research/CECCompetitionEntrant",
+        "status": "Validated"
+      },
+      {
+        "name": "Black-Box Optimization Competitions (BBComp)",
+        "description": "Empirical solvers and benchmark suites for black-box continuous optimization competitions.",
+        "path": "src/HFLabs/Research/BBComp",
+        "status": "Active"
+      },
+      {
+        "name": "HyperCache Benchmark Datapiles",
+        "description": "1,748-configuration training sweeps and empirical truth validation traces.",
+        "path": "src/HFLabs/Research/HyperCache",
+        "status": "Verified"
+      }
+    ]
+  },
+  {
+    "id": "libraries",
+    "name": "Libraries",
+    "icon": "🧠",
+    "badge": "ML & Substrates",
+    "tagline": "Machine learning primitives, neuromorphic spiking, knowledge graph embeddings, contextual inference, profiling, and ONNX pipelines.",
+    "color": "#06b6d4",
+    "projects": [
+      {
+        "name": "HFLabs Machine Learning Suite",
+        "description": "Spiking neuromorphic models, contextual inference, intergraph inference, KGE embeddings, hyperparameter optimization, and LLM services.",
+        "path": "src/HFLabs/Libraries/ML",
+        "status": "Active"
+      },
+      {
+        "name": "ONNX Runtime & Shape Inference",
+        "description": "ONNX-centric models, shape inference, operator checkers, and low-level compute graphs.",
+        "path": "src/HFLabs/Libraries/Onnx",
+        "status": "Production"
+      },
+      {
+        "name": "ML.NET to IPU ONNX Pipeline",
+        "description": "Automated pipeline converters and model serialization adapters bridging ML.NET models into IPU-executable ONNX graphs.",
+        "path": "src/HFLabs/Libraries/MLNet2IpuOnnx",
+        "status": "Production"
+      },
+      {
+        "name": "Cluster Workload Orchestration Engine",
+        "description": "High-throughput near-zero wait cluster workload orchestrator and task DAG planner.",
+        "path": "src/HFLabs/Libraries/Orchestration",
+        "status": "Production"
+      },
+      {
+        "name": "Profiling & Telemetry Substrate",
+        "description": "Hardware profiling counters, CPU/GPU timing telemetry, and execution metrics.",
+        "path": "src/HFLabs/Libraries/Profiling",
+        "status": "Production"
+      },
+      {
+        "name": "Terminal TUI Layout Framework",
+        "description": "Terminal UI layout engine, components, and transport rendering models.",
+        "path": "src/HFLabs/Libraries/Tui",
+        "status": "Production"
+      }
+    ]
+  },
+  {
+    "id": "books",
+    "name": "Books & Specifications",
+    "icon": "📚",
+    "badge": "Formal Manuscripts",
+    "tagline": "Long-form architectural manuscripts, execution pathmaps, and deep system specifications.",
+    "color": "#f59e0b",
+    "projects": [
+      {
+        "name": "Execution Pathmaps Reference",
+        "description": "Exhaustive call-graph topologies from entrypoint to hardware registers across all subsystems.",
+        "path": "src/HFLabs/Books/ExecutionPathmaps",
+        "status": "Live Spec"
+      },
+      {
+        "name": "HyperSwarm Repo Truth",
+        "description": "Foundational architectural invariants, Level Zero facts, and empirical baselines.",
+        "path": "src/HFLabs/Books/RepoTruth",
+        "status": "Canonical"
+      }
+    ]
+  },
+  {
+    "id": "patterns",
+    "name": "Patterns Catalog",
+    "icon": "📐",
+    "badge": "245+ C# Idioms",
+    "tagline": "Low-allocation concurrency primitives, zero-copy buffers, SIMD vectorization, and hardware design idioms.",
+    "color": "#10b981",
+    "projects": [
+      {
+        "name": "245+ C# Low-Allocation Patterns",
+        "description": "Comprehensive design catalogue for allocation-free primitives, struct enumerators, and buffer slicing.",
+        "path": "src/HFLabs/Patterns",
+        "status": "Cataloged"
+      },
+      {
+        "name": "Telemetry-First Web Panels",
+        "description": "High-assurance web UI architectures, canvas unrolling, and zero-flicker telemetry streaming.",
+        "path": "src/HFLabs/Patterns/TelemetryPanels",
+        "status": "Pattern"
+      }
+    ]
+  },
+  {
+    "id": "hardware",
+    "name": "Hardware Substrate",
+    "icon": "⚡",
+    "badge": "Level Zero & Bare Metal",
+    "tagline": "Direct GPU compute interop (LevelZero.NET), IPU tile placement, exchange networking, Poplar shims, and RDMA bypass.",
+    "color": "#f43f5e",
+    "projects": [
+      {
+        "name": "LevelZero.NET",
+        "description": "Direct Intel Level Zero GPU compute interop and 18+ precompiled Iris Xe GT2 zebin kernels.",
+        "path": "src/HFLabs/Hardware/LevelZero.NET",
+        "status": "Production"
+      },
+      {
+        "name": "IPU Tile Placement Engine",
+        "description": "Hardware-level IPU tile placement, spatial layout, and memory routing algorithms.",
+        "path": "src/HFLabs/Hardware/TileMapping",
+        "status": "Production"
+      },
+      {
+        "name": "Low-Latency Exchange Protocols",
+        "description": "Ultra-low latency exchange network shims and hardware acceleration bridges.",
+        "path": "src/HFLabs/Hardware/Exchanges",
+        "status": "Production"
+      },
+      {
+        "name": "Poplar.NET Hardware Drivers",
+        "description": "Low-level Poplar.NET hardware shims and custom kernel driver interop without Poplar SDK.",
+        "path": "src/HFLabs/Hardware/Poplar.NET",
+        "status": "Active"
+      },
+      {
+        "name": "RDMA High-Speed Networking",
+        "description": "Kernel-bypass RDMA networking and verbs driver interop for distributed cluster interconnects.",
+        "path": "src/HFLabs/Hardware/RDMA",
+        "status": "Active"
+      },
+      {
+        "name": "PCIe & Windows Kernel Driver Shims",
+        "description": "Low-level PCIe kernel driver headers, memory apertures, and C++ driver shims.",
+        "path": "src/HFLabs/Hardware/KernelDriver",
+        "status": "Production"
+      }
+    ]
+  },
+  {
+    "id": "internal",
+    "name": "Internal & Operations",
+    "icon": "🔒",
+    "badge": "Sequestered Operations",
+    "tagline": "Internal test harnesses, credentials management, and private hosting surfaces.",
+    "color": "#64748b",
+    "projects": [
+      {
+        "name": "Internal Test Runner",
+        "description": "Automated internal test orchestration and validation harness.",
+        "path": "src/HFLabs/Internal/TestRunner",
+        "status": "Internal"
+      },
+      {
+        "name": "Security & Credential Management",
+        "description": "Internal secret stores, authentication primitives, and security token handling.",
+        "path": "src/HFLabs/Internal/Security",
+        "status": "Private"
+      },
+      {
+        "name": "WebUI Server Host",
+        "description": "Internal telemetry web server and REST hosting surface.",
+        "path": "src/HFLabs/Internal/WebUI.Server",
+        "status": "Private"
+      }
+    ]
+  },
+  {
+    "id": "infra",
+    "name": "Infrastructure & Cloud",
+    "icon": "☁️",
+    "badge": "Deployment & Cloud",
+    "tagline": "Azure cloud infrastructure, Docker container definitions, Kubernetes charts, and deployment manifests.",
+    "color": "#0ea5e9",
+    "projects": [
+      {
+        "name": "Cloud Deployment Manifests",
+        "description": "Deployment configurations, staging profiles, and production rollout scripts.",
+        "path": "src/HFLabs/Infra/deploy",
+        "status": "Production"
+      },
+      {
+        "name": "Docker Container Fabric",
+        "description": "Container image builds, multi-stage Dockerfiles, and compose specifications.",
+        "path": "src/HFLabs/Infra/docker",
+        "status": "Production"
+      },
+      {
+        "name": "Kubernetes Clusters & Charts",
+        "description": "Helm charts, pod specs, ingress controllers, and service topologies.",
+        "path": "src/HFLabs/Infra/k8s",
+        "status": "Production"
+      },
+      {
+        "name": "Azure Cloud Infrastructure",
+        "description": "Bicep templates, ARM scripts, and cloud resource definitions.",
+        "path": "src/HFLabs/Infra/azure",
+        "status": "Production"
+      }
+    ]
+  },
+  {
+    "id": "data",
+    "name": "Data & Schemas",
+    "icon": "🗄️",
+    "badge": "Schemas & Models",
+    "tagline": "Canonical data models, protocol specifications, XML/JSON schemas, and configuration templates.",
+    "color": "#8b5cf6",
+    "projects": [
+      {
+        "name": "Protocol Schemas",
+        "description": "XML, JSON, and Protocol Buffer schemas for data interchange.",
+        "path": "src/HFLabs/Data/Schemas",
+        "status": "Production"
+      },
+      {
+        "name": "Canonical Data Models",
+        "description": "Unified domain entity representations and serialization contracts.",
+        "path": "src/HFLabs/Data/DataModels",
+        "status": "Production"
+      },
+      {
+        "name": "System Configuration",
+        "description": "Baseline cluster configurations and application settings.",
+        "path": "src/HFLabs/Data/Configuration",
+        "status": "Production"
+      }
+    ]
+  },
+  {
+    "id": "powershell",
+    "name": "PowerShell Automation",
+    "icon": "🐚",
+    "badge": "Automation & Modules",
+    "tagline": "Enterprise PowerShell modules, automation scripts, and administrative toolchains.",
+    "color": "#2563eb",
+    "projects": [
+      {
+        "name": "Automation Scripts",
+        "description": "Build pipelines, test harnesses, training sweeps, and maintenance scripts.",
+        "path": "src/HFLabs/Powershell/Scripts",
+        "status": "Production"
+      },
+      {
+        "name": "Reusable PowerShell Modules",
+        "description": "Cmdlet packages for hardware probing, process control, and system metrics.",
+        "path": "src/HFLabs/Powershell/Modules",
+        "status": "Production"
+      }
+    ]
+  },
+  {
+    "id": "devtools",
+    "name": "Developer Tooling",
+    "icon": "🛠️",
+    "badge": "Analyzers & CodeGen",
+    "tagline": "Roslyn diagnostic analyzers, pattern code fixes, build-time code generation, and stub analysis.",
+    "color": "#ec4899",
+    "projects": [
+      {
+        "name": "Pattern Analyzers & CodeFixes",
+        "description": "Roslyn diagnostic rules enforcing low-allocation patterns and C# safety.",
+        "path": "src/HFLabs/DevTools/PatternAnalyzers",
+        "status": "Production"
+      },
+      {
+        "name": "CodeGen & Toolchains",
+        "description": "Automated code synthesizers, proto generators, and ABI builders.",
+        "path": "src/HFLabs/DevTools/CodeGen",
+        "status": "Production"
+      },
+      {
+        "name": "Stub & Build Analyzers",
+        "description": "Detection tools verifying code completion and build configuration validity.",
+        "path": "src/HFLabs/DevTools/StubAnalysis",
+        "status": "Production"
+      }
+    ]
+  },
+  {
+    "id": "examples",
+    "name": "Examples & Showcases",
+    "icon": "💡",
+    "badge": "Demos & Reference",
+    "tagline": "Sample clients, reference API implementations, and architectural demonstration code.",
+    "color": "#14b8a6",
+    "projects": [
+      {
+        "name": "VersionedApi Client Samples",
+        "description": "Reference clients demonstrating V1 and V2 ABI contracts and backward compatibility.",
+        "path": "src/HFLabs/Examples",
+        "status": "Sample"
+      }
+    ]
+  },
+  {
+    "id": "tools",
+    "name": "Standalone Tools",
+    "icon": "⚙️",
+    "badge": "Utilities & Visualizers",
+    "tagline": "Developer utilities, stand-alone diagnostic tools, and external visualizers.",
+    "color": "#6b7280",
+    "projects": [
+      {
+        "name": "Developer Utilities",
+        "description": "Standalone developer tools, log analyzers, and diagnostics.",
+        "path": "src/HFLabs/Tools",
+        "status": "Active"
+      }
+    ]
+  }
+]

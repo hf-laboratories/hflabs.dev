@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Model (Registry DTO)",
+  "description": "Schema for Model objects exposed by the WebUI Registry API",
+  "type": "object",
+  "required": ["id", "projectId", "name", "createdAt"],
+  "properties": {
+    "id": { "type": "string", "description": "Unique model identifier" },
+    "projectId": { "type": "string", "description": "Owning project identifier" },
+    "name": { "type": "string", "description": "Model name" },
+    "description": { "type": ["string", "null"], "description": "Optional description" },
+    "artifactKey": { "type": ["string", "null"], "description": "Object store key for primary artifact" },
+    "onnxKey": { "type": ["string", "null"], "description": "Object store key for source ONNX" },
+    "ipuOnnxKey": { "type": ["string", "null"], "description": "Object store key for IPU-optimized ONNX" },
+    "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp (UTC)" }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Precision Configuration Schema Overlay",
+  "type": "object",
+  "properties": {
+    "graph": {
+      "type": "object",
+      "properties": {
+        "node": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "gc_precision_config": {
+                "type": "object",
+                "properties": {
+                  "compute_precision": { 
+                    "type": "string",
+                    "enum": ["FLOAT16", "FLOAT32", "MIXED"] 
+                  },
+                  "weight_precision": { 
+                    "type": "string", 
+                    "enum": ["FLOAT16", "FLOAT32", "INT8"] 
+                  },
+                  "output_precision": { 
+                    "type": "string",
+                    "enum": ["FLOAT16", "FLOAT32"] 
+                  },
+                  "precision_preservation": {
+                    "type": "string",
+                    "enum": ["PRESERVE_ACCUMULATOR", "PRESERVE_INPUT_WEIGHTS", "HIGH_PERFORMANCE"]
+                  }
+                },
+                "required": ["compute_precision"]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

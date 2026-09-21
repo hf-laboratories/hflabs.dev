@@ -1,0 +1,97 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "HFLabs — Systems Research, Swarm Metaheuristics & In-Memory GraphRAG",
+  description = "High-performance vector cognition, Intel Level Zero hardware acceleration, and autonomous swarm systems."
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/styles/global.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-content">
+      <a href="/" class="site-logo">
+        <span class="logo-badge">HF</span>
+        <span>HFLabs</span>
+      </a>
+      <nav class="nav-links">
+        <a href="/#divisions" class="nav-link">Divisions</a>
+        <a href="/#products" class="nav-link">Products</a>
+        <a href="/wiki" class="nav-link">Polyglot Wiki</a>
+        <a href="/schemas" class="nav-link">Schemas</a>
+        <a href="/licensing" class="nav-link">Licensing</a>
+        <a href="/docs" class="nav-link">Docs</a>
+        <a href="https://github.com/hf-laboratories/IPUServices" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="padding:6px 12px; font-size:12px;">
+          GitHub &rarr;
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <slot />
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="site-logo" style="margin-bottom:12px;">
+          <span class="logo-badge">HF</span>
+          <span>HFLabs MonoRepo</span>
+        </div>
+        <p style="font-size:13px; color:var(--text-secondary); max-width:340px;">
+          Advanced systems research, sub-millisecond vector cognition, swarm metaheuristic engines, and hardware compute acceleration.
+        </p>
+        <div style="margin-top:16px; font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">
+          &copy; {new Date().getFullYear()} HFLabs. Published under MIT and HFLabs High-Assurance Commercial Licenses.
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Architecture</h4>
+        <ul>
+          <li><a href="/#divisions">6 Core Divisions</a></li>
+          <li><a href="/docs/graphrag-operator">In-Memory GraphRAG</a></li>
+          <li><a href="/docs/swarm-benchmark">HyperSwarm Director</a></li>
+          <li><a href="/docs/levelzero-net">LevelZero.NET</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Knowledge</h4>
+        <ul>
+          <li><a href="/wiki">Polyglot Matrix (C/C++/C#/CL/PS1/VL/SVL)</a></li>
+          <li><a href="/schemas">Published JSON Schemas</a></li>
+          <li><a href="/#research">110 Research Preprints</a></li>
+          <li><a href="/#patterns">245+ C# Patterns</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Governance</h4>
+        <ul>
+          <li><a href="/licensing">Licensing Tiers & SLA</a></li>
+          <li><a href="/schemas/paged_response_schema.json">API Schema Registry</a></li>
+          <li><a href="https://github.com/hf-laboratories/IPUServices" target="_blank" rel="noopener noreferrer">Source Repository</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

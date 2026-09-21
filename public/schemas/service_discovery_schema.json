@@ -1,0 +1,176 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://hflabs.ai/schemas/service_discovery_schema.json",
+  "title": "Service Discovery Configuration",
+  "description": "Configuration schema for IPUServices service discovery",
+  "type": "object",
+  "properties": {
+    "serviceDiscovery": {
+      "type": "object",
+      "description": "Global service discovery settings",
+      "properties": {
+        "provider": {
+          "type": "string",
+          "description": "Service discovery provider (InMemory, Consul, Eureka, Kubernetes)",
+          "enum": ["InMemory", "Consul", "Eureka", "Kubernetes"],
+          "default": "InMemory"
+        },
+        "healthCheckInterval": {
+          "type": "string",
+          "description": "Interval for health check polling (TimeSpan format)",
+          "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
+          "default": "00:00:10"
+        },
+        "healthCheckTimeout": {
+          "type": "string",
+          "description": "Timeout for health check requests (TimeSpan format)",
+          "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
+          "default": "00:00:05"
+        },
+        "unhealthyThreshold": {
+          "type": "integer",
+          "description": "Number of consecutive failed health checks before marking unhealthy",
+          "minimum": 1,
+          "default": 3
+        },
+        "healthyThreshold": {
+          "type": "integer",
+          "description": "Number of consecutive successful health checks before marking healthy",
+          "minimum": 1,
+          "default": 2
+        },
+        "deregisterAfter": {
+          "type": "string",
+          "description": "Time after which a service is deregistered if no heartbeat received (TimeSpan format)",
+          "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
+          "default": "00:05:00"
+        },
+        "enableHealthChecks": {
+          "type": "boolean",
+          "description": "Enable automatic health checking",
+          "default": true
+        },
+        "consul": {
+          "type": "object",
+          "description": "Consul-specific configuration (only used when provider is Consul)",
+          "properties": {
+            "address": {
+              "type": "string",
+              "description": "Consul agent address (e.g., http://localhost:8500)",
+              "default": "http://localhost:8500"
+            },
+            "datacenter": {
+              "type": ["string", "null"],
+              "description": "Consul datacenter name"
+            },
+            "token": {
+              "type": ["string", "null"],
+              "description": "ACL token for authentication"
+            },
+            "waitTime": {
+              "type": "string",
+              "description": "Wait time for blocking queries (TimeSpan format)",
+              "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
+              "default": "00:05:00"
+            },
+            "useTls": {
+              "type": "boolean",
+              "description": "Enable TLS for Consul communication",
+              "default": false
+            },
+            "serviceTtl": {
+              "type": "string",
+              "description": "TTL for service registration (TimeSpan format)",
+              "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
+              "default": "00:00:30"
+            },
+            "heartbeatInterval": {
+              "type": "string",
+              "description": "Interval for sending TTL heartbeats (TimeSpan format)",
+              "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
+              "default": "00:00:10"
+            },
+            "deregisterCriticalServiceAfter": {
+              "type": "string",
+              "description": "Time after which a critical service is deregistered (TimeSpan format)",
+              "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
+              "default": "00:05:00"
+            },
+            "useTtlHealthCheck": {
+              "type": "boolean",
+              "description": "Use TTL-based health checks instead of HTTP checks",
+              "default": true
+            },
+            "globalTags": {
+              "type": "array",
+              "description": "Tags to add to all services registered through this client",
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            },
+            "globalMetadata": {
+              "type": "object",
+              "description": "Metadata to add to all services registered through this client",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "default": {}
+            }
+          }
+        }
+      },
+      "required": ["provider"]
+    },
+    "services": {
+      "type": "array",
+      "description": "Service definitions for registration",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Unique service name"
+          },
+          "protocol": {
+            "type": "string",
+            "description": "Protocol used by the service",
+            "enum": ["http", "https", "grpc"],
+            "default": "http"
+          },
+          "defaultPort": {
+            "type": "integer",
+            "description": "Default port for the service",
+            "minimum": 1,
+            "maximum": 65535
+          },
+          "healthCheckPath": {
+            "type": "string",
+            "description": "Health check endpoint path",
+            "default": "/health"
+          },
+          "tags": {
+            "type": "array",
+            "description": "Tags for service filtering and categorization",
+            "items": {
+              "type": "string"
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Additional metadata key-value pairs",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable service description"
+          }
+        },
+        "required": ["name", "protocol", "defaultPort"]
+      }
+    }
+  },
+  "required": ["serviceDiscovery", "services"]
+}

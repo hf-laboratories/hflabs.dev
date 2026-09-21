@@ -1,0 +1,8 @@
+{
+  "gc_precision_config": {
+    "compute_precision": "MIXED",
+    "weight_precision": "FLOAT16",
+    "output_precision": "FLOAT32",
+    "precision_preservation": "HIGH_PERFORMANCE"
+  }
+}

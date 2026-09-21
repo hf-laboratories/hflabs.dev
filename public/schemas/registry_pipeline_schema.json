@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pipeline (Registry DTO)",
+  "description": "Schema for Pipeline objects exposed by the WebUI Registry API",
+  "type": "object",
+  "required": ["id", "projectId", "name", "createdAt"],
+  "properties": {
+    "id": { "type": "string", "description": "Unique pipeline identifier" },
+    "projectId": { "type": "string", "description": "Owning project identifier" },
+    "name": { "type": "string", "description": "Pipeline name" },
+    "description": { "type": ["string", "null"], "description": "Optional description" },
+    "specKey": { "type": ["string", "null"], "description": "Object store key to pipeline spec JSON (optional)" },
+    "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp (UTC)" }
+  }
+}

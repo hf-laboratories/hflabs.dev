@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/swarm_benchmark_feature_matrix_schema.1.0.0.json",
+  "title": "Swarm Benchmark Feature Matrix",
+  "type": "object",
+  "required": ["version", "generatedAt", "schema", "features"],
+  "properties": {
+    "version": { "type": "string", "const": "1.0.0" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "schema": { "type": "string" },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "classes", "modalityGroups", "compatibility"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "classes": { "type": "array", "items": { "type": "string" } },
+          "modalityGroups": { "type": "array", "items": { "type": "string" } },
+          "compatibility": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

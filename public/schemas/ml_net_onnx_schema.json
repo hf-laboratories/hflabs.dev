@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ML.NET ONNX Export Schema",
+  "type": "object",
+  "properties": {
+    "ir_version": { "type": "integer" },
+    "producer_name": { "type": "string" },
+    "producer_version": { "type": "string" },
+    "domain": { "type": "string" },
+    "model_version": { "type": "integer" },
+    "doc_string": { "type": "string" },
+    "graph": {
+      "type": "object",
+      "properties": {
+        "node": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "input": { "type": "array", "items": { "type": "string" } },
+              "output": { "type": "array", "items": { "type": "string" } },
+              "name": { "type": "string" },
+              "op_type": { "type": "string" },
+              "domain": { "type": "string" },
+              "attribute": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": { "type": "string" },
+                    "type": { "type": "integer" },
+                    "f": { "type": "number" },
+                    "i": { "type": "integer" },
+                    "s": { "type": "string" },
+                    "t": { "type": "object" },
+                    "floats": { "type": "array", "items": { "type": "number" } },
+                    "ints": { "type": "array", "items": { "type": "integer" } },
+                    "strings": { "type": "array", "items": { "type": "string" } }
+                  }
+                }
+              }
+            },
+            "required": ["input", "output", "name", "op_type"]
+          }
+        },
+        "initializer": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "dims": { "type": "array", "items": { "type": "integer" } },
+              "data_type": { "type": "integer" },
+              "float_data": { "type": "array", "items": { "type": "number" } },
+              "int32_data": { "type": "array", "items": { "type": "integer" } },
+              "string_data": { "type": "array", "items": { "type": "string" } },
+              "name": { "type": "string" }
+            },
+            "required": ["dims", "data_type", "name"]
+          }
+        },
+        "input": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "type": { "type": "object" }
+            },
+            "required": ["name", "type"]
+          }
+        },
+        "output": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "type": { "type": "object" }
+            },
+            "required": ["name", "type"]
+          }
+        },
+        "value_info": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "type": { "type": "object" }
+            },
+            "required": ["name", "type"]
+          }
+        }
+      },
+      "required": ["node", "input", "output"]
+    }
+  },
+  "required": ["ir_version", "producer_name", "graph"]
+}

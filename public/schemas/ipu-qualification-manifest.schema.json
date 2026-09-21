@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hf-laboratories.example/schemas/ipu-qualification-manifest.schema.json",
+  "title": "Integrated IPU qualification manifest",
+  "type": "object",
+  "required": ["schemaVersion", "task", "capturedUtc", "source", "target", "shape", "precision", "scenarios", "metrics", "evidence", "artifacts"],
+  "properties": {
+    "schemaVersion": { "const": "ipu-qualification.v1" },
+    "task": { "const": "DIRNSS-011" },
+    "capturedUtc": { "type": "string", "format": "date-time" },
+    "source": {
+      "type": "object",
+      "required": ["revision", "dirty"],
+      "properties": {
+        "revision": { "type": "string", "minLength": 1 },
+        "dirty": { "type": "boolean" }
+      }
+    },
+    "target": {
+      "type": "object",
+      "required": ["source", "requestedIpus", "activeIpus", "totalTiles", "fallback"],
+      "properties": {
+        "source": { "enum": ["CpuReference", "IpuModel", "Hardware", "None"] },
+        "requestedIpus": { "type": "integer", "minimum": 1 },
+        "activeIpus": { "type": "integer", "minimum": 0 },
+        "totalTiles": { "type": "integer", "minimum": 0 },
+        "fallback": { "type": "boolean" },
+        "reason": { "type": ["string", "null"] }
+      }
+    },
+    "shape": {
+      "type": "object",
+      "required": ["maxLanes", "maxAgents", "dimensions", "maxFactors", "maxBfcus", "maxHaloRecords", "nssWords"],
+      "properties": {
+        "maxLanes": { "type": "integer", "minimum": 1 },
+        "maxAgents": { "type": "integer", "minimum": 1 },
+        "dimensions": { "type": "integer", "minimum": 1 },
+        "maxFactors": { "type": "integer", "minimum": 1 },
+        "maxBfcus": { "type": "integer", "minimum": 1 },
+        "maxHaloRecords": { "type": "integer", "minimum": 1 },
+        "nssWords": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "precision": {
+      "type": "object",
+      "required": ["dataType", "absoluteTolerance", "relativeTolerance"],
+      "properties": {
+        "dataType": { "enum": ["float32", "float16", "mixed"] },
+        "absoluteTolerance": { "type": "number", "minimum": 0 },
+        "relativeTolerance": { "type": "number", "minimum": 0 }
+      }
+    },
+    "scenarios": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "seed", "targetTier", "residentSteps", "status"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "seed": { "type": "integer" },
+          "targetTier": { "enum": ["CpuReference", "IpuModel", "PhysicalIpu", "MultiIpu"] },
+          "residentSteps": { "type": "integer", "minimum": 1 },
+          "status": { "enum": ["contracted", "graph-built", "model-executable", "semantically-verified", "hardware-executable", "blocked"] },
+          "reason": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "required": ["graphBuildMilliseconds", "residentExecutionMilliseconds", "initializationHostToDeviceBytes", "perStepHostToDeviceBytes", "compactDeviceToHostBytes", "fullStateDeviceToHostBytes", "hostSynchronizations", "residentSteps", "phaseEvidence"],
+      "properties": {
+        "graphBuildMilliseconds": { "type": ["number", "null"], "minimum": 0 },
+        "residentExecutionMilliseconds": { "type": ["number", "null"], "minimum": 0 },
+        "initializationHostToDeviceBytes": { "type": ["integer", "null"], "minimum": 0 },
+        "perStepHostToDeviceBytes": { "type": ["integer", "null"], "minimum": 0 },
+        "compactDeviceToHostBytes": { "type": ["integer", "null"], "minimum": 0 },
+        "fullStateDeviceToHostBytes": { "type": ["integer", "null"], "minimum": 0 },
+        "hostSynchronizations": { "type": ["integer", "null"], "minimum": 0 },
+        "residentSteps": { "type": ["integer", "null"], "minimum": 0 },
+        "phaseEvidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["phase", "status"],
+            "properties": {
+              "phase": { "type": "string", "minLength": 1 },
+              "status": { "enum": ["contracted", "graph-built", "model-executable", "hardware-executable", "blocked"] },
+              "reason": { "type": ["string", "null"] }
+            }
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["contracted", "graphBuilt", "modelExecutable", "semanticallyVerified", "hardwareExecutable", "residentEfficient", "nssTransport"],
+      "properties": {
+        "contracted": { "type": "boolean" },
+        "graphBuilt": { "type": "boolean" },
+        "modelExecutable": { "type": "boolean" },
+        "semanticallyVerified": { "type": "boolean" },
+        "hardwareExecutable": { "type": "boolean" },
+        "residentEfficient": { "type": "boolean" },
+        "nssTransport": { "enum": ["software-only", "rdma-validated", "blocked"] }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "required": ["schema", "plan", "scenarioContract", "smokeProject"],
+      "properties": {
+        "schema": { "type": "string", "minLength": 1 },
+        "plan": { "type": "string", "minLength": 1 },
+        "scenarioContract": { "type": "string", "minLength": 1 },
+        "smokeProject": { "type": "string", "minLength": 1 },
+        "nativeArtifact": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Graphcore GC2 Hardware Constraints Schema",
+  "description": "Defines the hardware constraints of the Graphcore GC2 IPU for validation of ONNX model tile mappings",
+  "type": "object",
+  "properties": {
+    "ipu_version": {
+      "type": "string",
+      "enum": ["GC2", "GC200", "GC600","MK1","MK2"],
+      "description": "GC2 IPU hardware version"
+    },
+    "tiles_per_ipu": {
+      "type": "integer",
+      "description": "Number of processor tiles per IPU",
+      "minimum": 1216,
+      "maximum": 1472
+    },
+    "memory_per_tile": {
+      "type": "integer",
+      "description": "Memory available per tile in bytes",
+      "minimum": 256000,
+      "maximum": 640000
+    },
+    "exchange_constraints": {
+      "type": "object",
+      "properties": {
+        "max_exchange_size": {
+          "type": "integer",
+          "description": "Maximum exchange packet size in bytes",
+          "minimum": 1,
+          "maximum": 8192
+        },
+        "max_simultaneous_exchanges": {
+          "type": "integer",
+          "description": "Maximum number of simultaneous exchanges",
+          "minimum": 1
+        },
+        "max_exchange_bandwidth": {
+          "type": "integer",
+          "description": "Maximum exchange bandwidth in bytes per cycle",
+          "minimum": 1
+        }
+      },
+      "required": ["max_exchange_size", "max_simultaneous_exchanges", "max_exchange_bandwidth"]
+    },
+    "execution_constraints": {
+      "type": "object",
+      "properties": {
+        "max_compute_per_tile": {
+            "type": "integer",
+            "description": "Each tile contains an accumulating matrix product unit (AMP) capable of 64 multiply-accumulate (MAC) ops per cycle",
+            "maximum": 64,
+            "minimum": 1
+        },
+        "max_vertices_per_tile": {
+          "type": "integer",
+          "description": "Maximum number of vertices (operation nodes) per tile",
+          "minimum": 1
+        },
+        "max_tile_parallelism": {
+            "type": "integer",
+            "description": "Maximum parallel workers per tile",
+            "minimum": 6
+        },
+        "max_worker_parallelism": {
+            "type": "integer",
+            "description": "Maximum parallel ops per worker",
+            "fp16": 4,
+            "fp32": 2
+        }
+      },
+      "required": ["max_compute_per_tile", "max_vertices_per_tile", "max_tile_parallelism"]
+    },
+    "data_types": {
+      "type": "object",
+      "properties": {
+        "supported_types": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["FLOAT16", "FLOAT32", "INT8", "INT16", "INT32", "BOOL"]
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "preferred_compute_type": {
+          "type": "string",
+          "enum": ["FLOAT16", "FLOAT32", "MIXED"]
+        }
+      },
+      "required": ["supported_types", "preferred_compute_type"]
+    }
+  },
+  "required": ["ipu_version", "tiles_per_ipu", "memory_per_tile", "exchange_constraints", "execution_constraints", "data_types"]
+}

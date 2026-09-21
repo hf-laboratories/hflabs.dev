@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ipuservices.io/schemas/cluster-orchestration-status.schema.json",
+  "title": "IPUServices Cluster Orchestration Status",
+  "description": "Status snapshot: link health/latency, queue depths, domain utilization, and time-sync indicators used by the orchestrator control loop.",
+  "type": "object",
+  "required": ["$schema", "observedUtc", "nodes"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "observedUtc": { "type": "string", "format": "date-time" },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/nodeStatus" }
+    },
+    "links": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/linkStatus" }
+    }
+  },
+  "definitions": {
+    "nodeStatus": {
+      "type": "object",
+      "required": ["nodeId", "domains"],
+      "properties": {
+        "nodeId": { "type": "string" },
+        "domains": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/domainStatus" }
+        }
+      }
+    },
+    "domainStatus": {
+      "type": "object",
+      "required": ["domainId", "type"],
+      "properties": {
+        "domainId": { "type": "string" },
+        "type": { "type": "string" },
+        "utilization": {
+          "type": "object",
+          "properties": {
+            "computePct": { "type": "number", "minimum": 0, "maximum": 100 },
+            "memoryPct": { "type": "number", "minimum": 0, "maximum": 100 },
+            "ioPct": { "type": "number", "minimum": 0, "maximum": 100 }
+          }
+        },
+        "queues": {
+          "type": "object",
+          "properties": {
+            "submitDepth": { "type": "integer", "minimum": 0 },
+            "completionDepth": { "type": "integer", "minimum": 0 },
+            "backpressure": { "type": "boolean" }
+          }
+        },
+        "latency": {
+          "type": "object",
+          "properties": {
+            "p50Us": { "type": "number", "minimum": 0 },
+            "p95Us": { "type": "number", "minimum": 0 },
+            "p99Us": { "type": "number", "minimum": 0 }
+          }
+        },
+        "timing": {
+          "type": "object",
+          "properties": {
+            "ptpRole": { "type": "string" },
+            "offsetNs": { "type": "integer" },
+            "holdover": { "type": "boolean" }
+          }
+        },
+        "notes": { "type": "string" }
+      }
+    },
+    "linkStatus": {
+      "type": "object",
+      "required": ["linkId"],
+      "properties": {
+        "linkId": { "type": "string" },
+        "up": { "type": "boolean" },
+        "effectiveGbps": { "type": "number", "minimum": 0 },
+        "rttUs": { "type": "number", "minimum": 0 },
+        "pfc": { "type": "boolean" },
+        "ecnMarks": { "type": "integer", "minimum": 0 },
+        "retransmits": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

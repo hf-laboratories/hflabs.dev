@@ -1,0 +1,171 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Swarm Exchange Pattern Schema for GC2 IPUs",
+  "description": "Defines the exchange patterns for multi-agent swarm intelligence on Graphcore GC2 IPUs",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "description": "Version of the schema",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "swarm_topology": {
+      "type": "string",
+      "description": "Topology of agent connections in the swarm",
+      "enum": ["FullyConnected", "NearestNeighbor", "SmallWorld", "Hierarchical", "Custom"]
+    },
+    "agent_count": {
+      "type": "integer",
+      "description": "Number of agents in the swarm",
+      "minimum": 2
+    },
+    "ipu_count": {
+      "type": "integer",
+      "description": "Number of IPUs used",
+      "minimum": 1
+    },
+    "communication_phases": {
+      "type": "array",
+      "description": "Different phases of communication during swarm execution",
+      "items": {
+        "type": "object",
+        "properties": {
+          "phase_name": {
+            "type": "string",
+            "description": "Name of the communication phase"
+          },
+          "phase_type": {
+            "type": "string",
+            "enum": ["GlobalSync", "LocalExchange", "HierarchicalSync", "RandomExchange", "Custom"],
+            "description": "Type of communication pattern used in this phase"
+          },
+          "activation_frequency": {
+            "type": "string",
+            "description": "When this phase is activated",
+            "enum": ["EveryStep", "EveryNSteps", "OnGeneration", "OnEvolutionaryEvent", "OnConvergenceCheck", "Custom"]
+          },
+          "activation_parameters": {
+            "type": "object",
+            "description": "Parameters controlling when this phase is activated"
+          },
+          "exchanges": {
+            "type": "array",
+            "description": "Exchange operations in this phase",
+            "items": {
+              "type": "object",
+              "properties": {
+                "source_agent": {
+                  "type": "integer",
+                  "description": "Source agent ID",
+                  "minimum": 0
+                },
+                "target_agent": {
+                  "type": "integer",
+                  "description": "Target agent ID",
+                  "minimum": 0
+                },
+                "exchange_type": {
+                  "type": "string",
+                  "enum": ["Direct", "Collective", "Broadcast", "Reduce", "Custom"],
+                  "description": "Type of exchange operation"
+                },
+                "tensor_shape": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "description": "Shape of the tensor being exchanged"
+                },
+                "data_type": {
+                  "type": "string",
+                  "enum": ["FLOAT16", "FLOAT32", "INT32", "INT16", "UINT16"],
+                  "description": "Data type of the tensor being exchanged"
+                },
+                "gc2_exchange_options": {
+                  "type": "object",
+                  "properties": {
+                    "exchange_strategy": {
+                      "type": "string",
+                      "enum": ["Default", "Buffered", "StreamingCopy", "RemoteDMA", "CollectiveSliced"],
+                      "description": "GC2-specific exchange strategy"
+                    },
+                    "priority": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 10,
+                      "description": "Priority of this exchange (higher numbers = higher priority)"
+                    },
+                    "optimization_hints": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": ["Latency", "Bandwidth", "MemoryUsage"]
+                      },
+                      "description": "Hints for the exchange optimizer"
+                    }
+                  }
+                }
+              },
+              "required": ["source_agent", "target_agent", "exchange_type"]
+            }
+          }
+        },
+        "required": ["phase_name", "phase_type", "exchanges"]
+      }
+    },
+    "tile_mapping": {
+      "type": "object",
+      "properties": {
+        "agent_to_tile_map": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "agent_id": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "tile_ids": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "ipu_id": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": ["agent_id", "tile_ids"]
+          }
+        }
+      }
+    },
+    "optimization_metrics": {
+      "type": "object",
+      "properties": {
+        "total_exchange_count": {
+          "type": "integer"
+        },
+        "cross_ipu_exchange_count": {
+          "type": "integer"
+        },
+        "cross_tile_exchange_count": {
+          "type": "integer"
+        },
+        "exchange_bytes_total": {
+          "type": "integer"
+        },
+        "estimated_exchange_time": {
+          "type": "number"
+        },
+        "original_vs_optimized_ratio": {
+          "type": "number"
+        }
+      }
+    }
+  },
+  "required": ["schema_version", "swarm_topology", "agent_count", "ipu_count", "communication_phases"]
+}

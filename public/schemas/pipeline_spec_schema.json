@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pipeline Specification",
+  "description": "Minimal spec for PipelineComposer JSON saved in object store and referenced by Pipeline.SpecKey",
+  "type": "object",
+  "required": ["pipelineId", "name", "nodes", "edges"],
+  "properties": {
+    "pipelineId": { "type": "string" },
+    "projectId": { "type": ["string", "null"] },
+    "name": { "type": "string" },
+    "description": { "type": ["string", "null"] },
+    "version": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"], "format": "date-time" },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string", "description": "ops-unit or blueprint/system type" },
+          "label": { "type": ["string", "null"] },
+          "params": { "type": ["object", "null"], "additionalProperties": true },
+          "position": {
+            "type": ["object", "null"],
+            "properties": { "x": { "type": "number" }, "y": { "type": "number" } }
+          }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from", "to"],
+        "properties": {
+          "from": { "type": "string" },
+          "to": { "type": "string" },
+          "exchange": { "type": ["string", "null"], "description": "exchange pattern (topic, queue, stream, bus)" },
+          "metadata": { "type": ["object", "null"], "additionalProperties": true }
+        }
+      }
+    },
+    "objectStore": {
+      "type": ["object", "null"],
+      "properties": {
+        "bucket": { "type": "string" },
+        "prefix": { "type": "string" }
+      }
+    }
+  }
+}

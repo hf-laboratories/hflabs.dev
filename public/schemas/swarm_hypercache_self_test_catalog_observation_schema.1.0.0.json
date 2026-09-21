@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "Schemas/swarm_hypercache_self_test_catalog_observation_schema.1.0.0.json",
+  "title": "HyperCache Self-Test Catalog Observation Row",
+  "type": "object",
+  "required": ["schemaVersion", "id", "subjectType", "subjectId", "kind", "observedAtUtc", "status", "originType", "originPath"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subjectType": {
+      "type": "string",
+      "enum": ["artifact", "entity", "relation"]
+    },
+    "subjectId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observedAtUtc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "originType": {
+      "type": "string",
+      "enum": ["catalog", "document", "derived", "source"]
+    },
+    "originPath": {
+      "type": "string",
+      "minLength": 1
+    },
+    "probeStage": {
+      "type": "string"
+    },
+    "metricName": {
+      "type": "string"
+    },
+    "metricValue": {
+      "type": "number"
+    },
+    "unit": {
+      "type": "string"
+    },
+    "expectedRange": {
+      "type": "string"
+    },
+    "detail": {
+      "type": "string"
+    },
+    "runId": {
+      "type": "string"
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

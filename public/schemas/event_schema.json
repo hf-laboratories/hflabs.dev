@@ -1,0 +1,354 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://hflabs.io/schemas/events/v1/event-envelope.json",
+  "title": "IPUServices Event Envelope Schema",
+  "description": "Schema for events published on the IPUServices event bus",
+  "type": "object",
+  "required": ["eventId", "eventType", "timestamp", "schemaVersion"],
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this event instance"
+    },
+    "eventType": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "description": "Type name of the event (e.g., 'EntityCreated', 'JobCompleted')"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the event occurred"
+    },
+    "correlationId": {
+      "type": ["string", "null"],
+      "description": "Correlation ID for distributed tracing across services"
+    },
+    "source": {
+      "type": ["string", "null"],
+      "description": "Source service that emitted the event"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1,
+      "description": "Version of the event schema for compatibility"
+    },
+    "data": {
+      "type": "object",
+      "description": "Event-specific payload data",
+      "additionalProperties": true
+    }
+  },
+  "definitions": {
+    "EntityCreated": {
+      "allOf": [
+        { "$ref": "#" },
+        {
+          "type": "object",
+          "properties": {
+            "eventType": { "const": "EntityCreated" },
+            "data": {
+              "type": "object",
+              "required": ["entityType", "entityId"],
+              "properties": {
+                "entityType": {
+                  "type": "string",
+                  "description": "Type of entity that was created"
+                },
+                "entityId": {
+                  "type": "string",
+                  "description": "Unique identifier of the created entity"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "EntityUpdated": {
+      "allOf": [
+        { "$ref": "#" },
+        {
+          "type": "object",
+          "properties": {
+            "eventType": { "const": "EntityUpdated" },
+            "data": {
+              "type": "object",
+              "required": ["entityType", "entityId"],
+              "properties": {
+                "entityType": {
+                  "type": "string",
+                  "description": "Type of entity that was updated"
+                },
+                "entityId": {
+                  "type": "string",
+                  "description": "Unique identifier of the updated entity"
+                },
+                "changes": {
+                  "type": "object",
+                  "description": "Map of changed property names to their new values",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "EntityDeleted": {
+      "allOf": [
+        { "$ref": "#" },
+        {
+          "type": "object",
+          "properties": {
+            "eventType": { "const": "EntityDeleted" },
+            "data": {
+              "type": "object",
+              "required": ["entityType", "entityId"],
+              "properties": {
+                "entityType": {
+                  "type": "string",
+                  "description": "Type of entity that was deleted"
+                },
+                "entityId": {
+                  "type": "string",
+                  "description": "Unique identifier of the deleted entity"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "JobStarted": {
+      "allOf": [
+        { "$ref": "#" },
+        {
+          "type": "object",
+          "properties": {
+            "eventType": { "const": "JobStarted" },
+            "data": {
+              "type": "object",
+              "required": ["jobId", "jobType"],
+              "properties": {
+                "jobId": {
+                  "type": "string",
+                  "description": "Unique identifier of the job"
+                },
+                "jobType": {
+                  "type": "string",
+                  "description": "Type/category of the job"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "JobCompleted": {
+      "allOf": [
+        { "$ref": "#" },
+        {
+          "type": "object",
+          "properties": {
+            "eventType": { "const": "JobCompleted" },
+            "data": {
+              "type": "object",
+              "required": ["jobId", "jobType", "success"],
+              "properties": {
+                "jobId": {
+                  "type": "string",
+                  "description": "Unique identifier of the job"
+                },
+                "jobType": {
+                  "type": "string",
+                  "description": "Type/category of the job"
+                },
+                "success": {
+                  "type": "boolean",
+                  "description": "Whether the job completed successfully"
+                },
+                "error": {
+                  "type": ["string", "null"],
+                  "description": "Error message if the job failed"
+                },
+                "durationMs": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "Job execution duration in milliseconds"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "ServiceHealthChanged": {
+      "allOf": [
+        { "$ref": "#" },
+        {
+          "type": "object",
+          "properties": {
+            "eventType": { "const": "ServiceHealthChanged" },
+            "data": {
+              "type": "object",
+              "required": ["serviceName", "instanceId", "previousStatus", "newStatus"],
+              "properties": {
+                "serviceName": {
+                  "type": "string",
+                  "description": "Name of the service"
+                },
+                "instanceId": {
+                  "type": "string",
+                  "description": "Instance identifier of the service"
+                },
+                "previousStatus": {
+                  "type": "string",
+                  "enum": ["Unknown", "Healthy", "Degraded", "Unhealthy"],
+                  "description": "Previous health status"
+                },
+                "newStatus": {
+                  "type": "string",
+                  "enum": ["Unknown", "Healthy", "Degraded", "Unhealthy"],
+                  "description": "New health status"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "IPUJobSubmitted": {
+      "allOf": [
+        { "$ref": "#" },
+        {
+          "type": "object",
+          "properties": {
+            "eventType": { "const": "IPUJobSubmitted" },
+            "data": {
+              "type": "object",
+              "required": ["jobId", "modelId", "priority"],
+              "properties": {
+                "jobId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "modelId": {
+                  "type": "string"
+                },
+                "priority": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "requestedTiles": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "estimatedDurationMs": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "IPUJobAllocated": {
+      "allOf": [
+        { "$ref": "#" },
+        {
+          "type": "object",
+          "properties": {
+            "eventType": { "const": "IPUJobAllocated" },
+            "data": {
+              "type": "object",
+              "required": ["jobId", "deviceId", "tileIds"],
+              "properties": {
+                "jobId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "deviceId": {
+                  "type": "string"
+                },
+                "tileIds": {
+                  "type": "array",
+                  "items": { "type": "integer" },
+                  "minItems": 1
+                },
+                "allocatedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "QueryAccelerated": {
+      "allOf": [
+        { "$ref": "#" },
+        {
+          "type": "object",
+          "properties": {
+            "eventType": { "const": "QueryAccelerated" },
+            "data": {
+              "type": "object",
+              "required": ["queryId", "accelerationTimeMs"],
+              "properties": {
+                "queryId": {
+                  "type": "string"
+                },
+                "originalTimeMs": {
+                  "type": "number"
+                },
+                "accelerationTimeMs": {
+                  "type": "number"
+                },
+                "speedupFactor": {
+                  "type": "number"
+                },
+                "tilesUsed": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "examples": [
+    {
+      "eventId": "550e8400-e29b-41d4-a716-446655440000",
+      "eventType": "EntityCreated",
+      "timestamp": "2024-01-15T10:30:00Z",
+      "correlationId": "req-12345",
+      "source": "QueryAccelService",
+      "schemaVersion": 1,
+      "data": {
+        "entityType": "Query",
+        "entityId": "q-789"
+      }
+    },
+    {
+      "eventId": "660e8400-e29b-41d4-a716-446655440001",
+      "eventType": "JobCompleted",
+      "timestamp": "2024-01-15T10:31:00Z",
+      "correlationId": "req-12345",
+      "source": "Accelerator",
+      "schemaVersion": 1,
+      "data": {
+        "jobId": "job-456",
+        "jobType": "InferenceJob",
+        "success": true,
+        "durationMs": 1250
+      }
+    }
+  ]
+}

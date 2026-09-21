@@ -1,0 +1,206 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Model Registry Structure",
+  "description": "Schema defining the overall structure and configuration of the model registry system",
+  "type": "object",
+  "properties": {
+    "registryConfiguration": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the model registry instance"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Registry schema version in semantic versioning format"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the registry purpose and scope"
+        },
+        "settings": {
+          "type": "object",
+          "properties": {
+            "storageBackend": {
+              "type": "string",
+              "enum": ["sqlite", "postgresql", "mysql", "sqlserver"],
+              "description": "Database backend for registry storage"
+            },
+            "modelStoragePath": {
+              "type": "string",
+              "description": "Base path for model file storage"
+            },
+            "maxModelSize": {
+              "type": "integer",
+              "description": "Maximum model file size in bytes"
+            },
+            "retentionPolicy": {
+              "type": "object",
+              "properties": {
+                "maxVersionsPerModel": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Maximum number of versions to retain per model"
+                },
+                "retentionDays": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Number of days to retain model versions"
+                },
+                "autoCleanup": {
+                  "type": "boolean",
+                  "description": "Enable automatic cleanup of old versions"
+                }
+              },
+              "required": ["maxVersionsPerModel", "retentionDays", "autoCleanup"]
+            },
+            "auditSettings": {
+              "type": "object",
+              "properties": {
+                "enableAuditLog": {
+                  "type": "boolean",
+                  "description": "Enable audit logging for all operations"
+                },
+                "auditRetentionDays": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Number of days to retain audit logs"
+                }
+              },
+              "required": ["enableAuditLog", "auditRetentionDays"]
+            }
+          },
+          "required": ["storageBackend", "modelStoragePath", "retentionPolicy", "auditSettings"]
+        }
+      },
+      "required": ["name", "version", "description", "settings"]
+    },
+    "namespaces": {
+      "type": "array",
+      "description": "Registry namespaces for organizing models by domain/team",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$",
+            "description": "Namespace identifier"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Human-readable namespace name"
+          },
+          "description": {
+            "type": "string",
+            "description": "Namespace purpose and scope"
+          },
+          "permissions": {
+            "type": "object",
+            "properties": {
+              "read": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Users/groups with read access"
+              },
+              "write": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Users/groups with write access"
+              },
+              "admin": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Users/groups with admin access"
+              }
+            },
+            "required": ["read", "write", "admin"]
+          }
+        },
+        "required": ["name", "displayName", "description", "permissions"]
+      }
+    },
+    "modelCategories": {
+      "type": "array",
+      "description": "Predefined model categories for classification",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Category identifier"
+          },
+          "description": {
+            "type": "string",
+            "description": "Category description"
+          },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Associated tags for this category"
+          }
+        },
+        "required": ["name", "description"]
+      }
+    },
+    "workflows": {
+      "type": "object",
+      "description": "Registry workflow configurations",
+      "properties": {
+        "modelRegistration": {
+          "$ref": "#/definitions/workflow"
+        },
+        "versionApproval": {
+          "$ref": "#/definitions/workflow"
+        },
+        "deployment": {
+          "$ref": "#/definitions/workflow"
+        },
+        "retirement": {
+          "$ref": "#/definitions/workflow"
+        }
+      }
+    }
+  },
+  "required": ["registryConfiguration", "namespaces", "modelCategories", "workflows"],
+  "definitions": {
+    "workflow": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether this workflow is enabled"
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Step name"
+              },
+              "type": {
+                "type": "string",
+                "enum": ["manual", "automatic", "approval"],
+                "description": "Step execution type"
+              },
+              "approvers": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Required approvers for approval steps"
+              },
+              "conditions": {
+                "type": "object",
+                "description": "Conditions that must be met for step execution"
+              }
+            },
+            "required": ["name", "type"]
+          }
+        }
+      },
+      "required": ["enabled", "steps"]
+    }
+  }
+}

@@ -1,0 +1,1017 @@
+{
+  "_header": {
+    "project": "IPUServices",
+    "created_by": "Alix @ HF Labs",
+    "year": "2025",
+    "description": "Data Ingestion Configuration Schema"
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hflabs.com/schemas/IPUServices/data-ingestion-config.json",
+  "title": "IPUServices Data Ingestion Configuration",
+  "description": "Configuration schema for IPUServices data ingestion pipeline",
+  "type": "object",
+  "required": ["version", "database", "streamConfigs", "batchConfigs", "validationConfig", "retentionConfig", "performanceConfig"],
+  
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Configuration version"
+    },
+    "description": {
+      "type": "string",
+      "description": "Configuration description"
+    },
+    
+    "database": {
+      "type": "object",
+      "required": ["connectionString"],
+      "properties": {
+        "connectionString": {
+          "type": "string",
+          "description": "Database connection string"
+        },
+        "commandTimeout": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3600,
+          "default": 30,
+          "description": "Command timeout in seconds"
+        },
+        "enableWAL": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Write-Ahead Logging"
+        },
+        "pragmaSettings": {
+          "type": "object",
+          "properties": {
+            "journal_mode": {
+              "type": "string",
+              "enum": ["DELETE", "TRUNCATE", "PERSIST", "MEMORY", "WAL", "OFF"]
+            },
+            "synchronous": {
+              "type": "string", 
+              "enum": ["OFF", "NORMAL", "FULL", "EXTRA"]
+            },
+            "cache_size": {
+              "type": "integer",
+              "minimum": 1000
+            },
+            "temp_store": {
+              "type": "string",
+              "enum": ["DEFAULT", "FILE", "MEMORY"]
+            }
+          }
+        }
+      }
+    },
+    
+    "streamConfigs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/streamConfig"
+      },
+      "description": "Real-time stream configurations"
+    },
+    
+    "batchConfigs": {
+      "type": "array", 
+      "items": {
+        "$ref": "#/$defs/batchConfig"
+      },
+      "description": "Batch processing configurations"
+    },
+    
+    "validationConfig": {
+      "$ref": "#/$defs/validationConfig",
+      "description": "Data validation configuration"
+    },
+    
+    "retentionConfig": {
+      "$ref": "#/$defs/retentionConfig",
+      "description": "Data retention configuration"
+    },
+    
+    "performanceConfig": {
+      "$ref": "#/$defs/performanceConfig",
+      "description": "Performance optimization configuration"
+    },
+    
+    "ipuConfig": {
+      "$ref": "#/$defs/ipuConfig",
+      "description": "IPU acceleration configuration"
+    },
+    
+    "schemaRegistryConfig": {
+      "$ref": "#/$defs/schemaRegistryConfig",
+      "description": "Schema registry configuration"
+    },
+    
+    "monitoringConfig": {
+      "$ref": "#/$defs/monitoringConfig",
+      "description": "Monitoring and observability configuration"
+    },
+    
+    "securityConfig": {
+      "$ref": "#/$defs/securityConfig",
+      "description": "Security configuration"
+    },
+    
+    "integrationConfig": {
+      "$ref": "#/$defs/integrationConfig",
+      "description": "External system integration configuration"
+    },
+    
+    "transformationPipelines": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/transformationPipeline"
+      },
+      "description": "Data transformation pipeline configurations"
+    },
+    
+    "environmentVariables": {
+      "type": "object",
+      "patternProperties": {
+        "^[A-Z][A-Z0-9_]*$": {
+          "type": "string"
+        }
+      },
+      "description": "Environment variable definitions"
+    },
+    
+    "development": {
+      "$ref": "#/$defs/developmentConfig",
+      "description": "Development and debugging configuration"
+    }
+  },
+  
+  "$defs": {
+    "streamConfig": {
+      "type": "object",
+      "required": ["streamName", "schemaName"],
+      "properties": {
+        "streamName": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_-]+$",
+          "description": "Unique stream name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Stream description"
+        },
+        "bufferSize": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100000,
+          "default": 1000,
+          "description": "Stream buffer size"
+        },
+        "maxConcurrency": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 10,
+          "description": "Maximum concurrent processing"
+        },
+        "processingTimeout": {
+          "type": "string",
+          "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
+          "description": "Processing timeout (HH:MM:SS)"
+        },
+        "schemaName": {
+          "type": "string",
+          "description": "Associated schema name"
+        },
+        "enableDeadLetter": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable dead letter queue"
+        },
+        "enableMetrics": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable metrics collection"
+        },
+        "enableTracing": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable distributed tracing"
+        },
+        "properties": {
+          "type": "object",
+          "description": "Additional stream properties"
+        }
+      }
+    },
+    
+    "batchConfig": {
+      "type": "object",
+      "required": ["datasetName", "schemaName", "storageLocation"],
+      "properties": {
+        "datasetName": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_-]+$",
+          "description": "Unique dataset name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Dataset description"
+        },
+        "batchSize": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000,
+          "default": 10000,
+          "description": "Batch processing size"
+        },
+        "processingTimeout": {
+          "type": "string",
+          "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
+          "description": "Processing timeout (HH:MM:SS)"
+        },
+        "schemaName": {
+          "type": "string",
+          "description": "Associated schema name"
+        },
+        "storageLocation": {
+          "type": "string",
+          "description": "Data storage location"
+        },
+        "enableParallelProcessing": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable parallel processing"
+        },
+        "maxParallelBatches": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "default": 3,
+          "description": "Maximum parallel batches"
+        },
+        "properties": {
+          "type": "object",
+          "description": "Additional batch properties"
+        }
+      }
+    },
+    
+    "validationConfig": {
+      "type": "object",
+      "properties": {
+        "strictMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable strict validation mode"
+        },
+        "allowUnknownFields": {
+          "type": "boolean",
+          "default": true,
+          "description": "Allow unknown fields in data"
+        },
+        "validateDataTypes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Validate data types"
+        },
+        "validateRequired": {
+          "type": "boolean",
+          "default": true,
+          "description": "Validate required fields"
+        },
+        "validateFormats": {
+          "type": "boolean",
+          "default": true,
+          "description": "Validate field formats"
+        },
+        "validateRanges": {
+          "type": "boolean",
+          "default": false,
+          "description": "Validate value ranges"
+        },
+        "validatePatterns": {
+          "type": "boolean",
+          "default": false,
+          "description": "Validate field patterns"
+        },
+        "maxValidationErrors": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000,
+          "default": 100,
+          "description": "Maximum validation errors"
+        },
+        "validationTimeout": {
+          "type": "string",
+          "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
+          "description": "Validation timeout (HH:MM:SS)"
+        },
+        "enableSchemaInference": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable automatic schema inference"
+        },
+        "enableAutoCorrection": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable automatic data correction"
+        },
+        "customValidators": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "type"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Validator name"
+              },
+              "type": {
+                "type": "string",
+                "enum": ["custom", "regex", "range", "format"],
+                "description": "Validator type"
+              },
+              "assembly": {
+                "type": "string",
+                "description": "Assembly name for custom validators"
+              },
+              "className": {
+                "type": "string",
+                "description": "Class name for custom validators"
+              },
+              "pattern": {
+                "type": "string",
+                "description": "Regex pattern for regex validators"
+              },
+              "errorMessage": {
+                "type": "string",
+                "description": "Custom error message"
+              }
+            }
+          }
+        }
+      }
+    },
+    
+    "retentionConfig": {
+      "type": "object",
+      "properties": {
+        "realTimeDataRetention": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d{2}:\\d{2}:\\d{2}$",
+          "description": "Real-time data retention period (DD.HH:MM:SS)"
+        },
+        "batchDataRetention": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d{2}:\\d{2}:\\d{2}$",
+          "description": "Batch data retention period (DD.HH:MM:SS)"
+        },
+        "schemaHistoryRetention": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d{2}:\\d{2}:\\d{2}$",
+          "description": "Schema history retention period (DD.HH:MM:SS)"
+        },
+        "deadLetterRetention": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d{2}:\\d{2}:\\d{2}$",
+          "description": "Dead letter retention period (DD.HH:MM:SS)"
+        },
+        "metricsRetention": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d{2}:\\d{2}:\\d{2}$",
+          "description": "Metrics retention period (DD.HH:MM:SS)"
+        },
+        "enableAutoCleanup": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable automatic cleanup"
+        },
+        "cleanupInterval": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d{2}:\\d{2}:\\d{2}$",
+          "description": "Cleanup interval (DD.HH:MM:SS)"
+        },
+        "cleanupBatchSize": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 100000,
+          "default": 10000,
+          "description": "Cleanup batch size"
+        },
+        "enableArchiving": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable data archiving"
+        },
+        "archiveLocation": {
+          "type": "string",
+          "description": "Archive storage location"
+        },
+        "archiveCompression": {
+          "type": "string",
+          "enum": ["none", "gzip", "lz4", "snappy"],
+          "default": "gzip",
+          "description": "Archive compression algorithm"
+        }
+      }
+    },
+    
+    "performanceConfig": {
+      "type": "object",
+      "properties": {
+        "maxConcurrentStreams": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 50,
+          "description": "Maximum concurrent streams"
+        },
+        "maxConcurrentBatches": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50,
+          "default": 5,
+          "description": "Maximum concurrent batches"
+        },
+        "databaseConnectionPoolSize": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 20,
+          "description": "Database connection pool size"
+        },
+        "connectionTimeout": {
+          "type": "string",
+          "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
+          "description": "Connection timeout (HH:MM:SS)"
+        },
+        "commandTimeout": {
+          "type": "string",
+          "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
+          "description": "Command timeout (HH:MM:SS)"
+        },
+        "enableBatching": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable operation batching"
+        },
+        "batchFlushSize": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100000,
+          "default": 1000,
+          "description": "Batch flush size"
+        },
+        "batchFlushInterval": {
+          "type": "string",
+          "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
+          "description": "Batch flush interval (HH:MM:SS)"
+        },
+        "enableCaching": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable result caching"
+        },
+        "cacheSize": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 10000000,
+          "description": "Cache size limit"
+        },
+        "cacheTTL": {
+          "type": "string",
+          "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
+          "description": "Cache time-to-live (HH:MM:SS)"
+        },
+        "enableCompression": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable data compression"
+        },
+        "compressionLevel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9,
+          "default": 6,
+          "description": "Compression level"
+        },
+        "enableMetrics": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable performance metrics"
+        },
+        "metricsInterval": {
+          "type": "string",
+          "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
+          "description": "Metrics collection interval (HH:MM:SS)"
+        }
+      }
+    },
+    
+    "ipuConfig": {
+      "type": "object",
+      "properties": {
+        "enableIPUAcceleration": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable IPU acceleration"
+        },
+        "batchSize": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1024,
+          "default": 64,
+          "description": "IPU batch size"
+        },
+        "dataLayout": {
+          "type": "string",
+          "enum": ["tiled", "linear"],
+          "default": "tiled",
+          "description": "Data layout optimization"
+        },
+        "optimizeMemoryUsage": {
+          "type": "boolean",
+          "default": true,
+          "description": "Optimize memory usage"
+        },
+        "maxConcurrentIPUJobs": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8862,
+          "default": 1477,
+          "description": "Maximum concurrent IPU jobs"
+        },
+        "ipuMemoryLimit": {
+          "type": "string",
+          "pattern": "^\\d+[KMGT]?B$",
+          "description": "IPU memory limit"
+        },
+        "tileMapping": {
+          "type": "string",
+          "enum": ["balanced", "sequential", "custom"],
+          "default": "balanced",
+          "description": "Tile mapping strategy"
+        },
+        "enableProfiling": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable IPU profiling"
+        },
+        "ipuSpecificSettings": {
+          "type": "object",
+          "description": "IPU-specific configuration settings"
+        }
+      }
+    },
+    "schemaRegistryConfig": {
+      "type": "object",
+      "properties": {
+        "enableVersioning": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable schema versioning"
+        },
+        "compatibilityMode": {
+          "type": "string",
+          "enum": ["none", "forward", "backward", "full"],
+          "default": "forward",
+          "description": "Schema compatibility mode"
+        },
+        "enableSchemaInference": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable automatic schema inference"
+        },
+        "maxSchemaVersions": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 10,
+          "description": "Maximum schema versions to retain"
+        },
+        "schemaStorageLocation": {
+          "type": "string",
+          "description": "Schema storage location"
+        },
+        "enableSchemaValidation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable schema validation"
+        },
+        "schemaFormat": {
+          "type": "string",
+          "enum": ["json-schema", "avro", "protobuf"],
+          "default": "json-schema",
+          "description": "Schema format"
+        },
+        "enableSchemaEvolution": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable schema evolution"
+        },
+        "breakingChangePolicy": {
+          "type": "string",
+          "enum": ["reject", "warn", "allow"],
+          "default": "reject",
+          "description": "Breaking change policy"
+        },
+        "autoRegisterSchemas": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically register schemas"
+        }
+      }
+    },
+    
+    "monitoringConfig": {
+      "type": "object",
+      "properties": {
+        "enableMetrics": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable metrics collection"
+        },
+        "enableTracing": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable distributed tracing"
+        },
+        "enableLogging": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable structured logging"
+        },
+        "metricsExporter": {
+          "type": "string",
+          "enum": ["prometheus", "statsd", "console"],
+          "default": "prometheus",
+          "description": "Metrics exporter type"
+        },
+        "tracingExporter": {
+          "type": "string",
+          "enum": ["jaeger", "zipkin", "console"],
+          "default": "jaeger",
+          "description": "Tracing exporter type"
+        },
+        "logLevel": {
+          "type": "string",
+          "enum": ["Trace", "Debug", "Info", "Warning", "Error", "Critical"],
+          "default": "Info",
+          "description": "Logging level"
+        },
+        "logFormat": {
+          "type": "string",
+          "enum": ["json", "text"],
+          "default": "json",
+          "description": "Log format"
+        },
+        "enableHealthChecks": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable health checks"
+        },
+        "healthCheckInterval": {
+          "type": "string",
+          "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
+          "description": "Health check interval (HH:MM:SS)"
+        },
+        "enableAlerting": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable alerting"
+        },
+        "alertingThresholds": {
+          "type": "object",
+          "properties": {
+            "errorRate": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Error rate threshold (0-1)"
+            },
+            "latencyP95Ms": {
+              "type": "number",
+              "minimum": 0,
+              "description": "95th percentile latency threshold (ms)"
+            },
+            "throughputDropPercent": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Throughput drop threshold (0-1)"
+            },
+            "queueDepthMax": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Maximum queue depth"
+            }
+          }
+        }
+      }
+    },
+    
+    "securityConfig": {
+      "type": "object",
+      "properties": {
+        "enableEncryption": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable data encryption"
+        },
+        "encryptionAlgorithm": {
+          "type": "string",
+          "enum": ["AES-256-GCM", "AES-128-GCM", "ChaCha20-Poly1305"],
+          "default": "AES-256-GCM",
+          "description": "Encryption algorithm"
+        },
+        "keyRotationInterval": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d{2}:\\d{2}:\\d{2}$",
+          "description": "Key rotation interval (DD.HH:MM:SS)"
+        },
+        "enableAuthentication": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable authentication"
+        },
+        "authenticationProvider": {
+          "type": "string",
+          "enum": ["jwt", "oauth2", "basic", "apikey"],
+          "default": "jwt",
+          "description": "Authentication provider"
+        },
+        "enableAuthorization": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable authorization"
+        },
+        "enableAuditLogging": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable audit logging"
+        },
+        "auditLogLevel": {
+          "type": "string",
+          "enum": ["Info", "Warning", "Error"],
+          "default": "Info",
+          "description": "Audit log level"
+        },
+        "enableDataMasking": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable data masking"
+        },
+        "maskingRules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["fieldPattern", "maskingType"],
+            "properties": {
+              "fieldPattern": {
+                "type": "string",
+                "description": "Field pattern (regex)"
+              },
+              "maskingType": {
+                "type": "string",
+                "enum": ["email", "phone", "ssn", "credit-card", "hash", "redact"],
+                "description": "Masking type"
+              }
+            }
+          }
+        }
+      }
+    },
+    
+    "integrationConfig": {
+      "type": "object",
+      "properties": {
+        "featureStore": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false,
+              "description": "Enable feature store integration"
+            },
+            "connectionString": {
+              "type": "string",
+              "description": "Feature store connection string"
+            },
+            "enableAutoFeatureExtraction": {
+              "type": "boolean",
+              "default": false,
+              "description": "Enable automatic feature extraction"
+            },
+            "featureExtractionRules": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["sourceField", "targetFeature", "transformation"],
+                "properties": {
+                  "sourceField": {
+                    "type": "string",
+                    "description": "Source field name"
+                  },
+                  "targetFeature": {
+                    "type": "string",
+                    "description": "Target feature name"
+                  },
+                  "transformation": {
+                    "type": "string",
+                    "description": "Transformation function"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "modelRegistry": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false,
+              "description": "Enable model registry integration"
+            },
+            "connectionString": {
+              "type": "string",
+              "description": "Model registry connection string"
+            },
+            "enableAutoRetraining": {
+              "type": "boolean",
+              "default": false,
+              "description": "Enable automatic retraining triggers"
+            },
+            "retrainingThresholds": {
+              "type": "object",
+              "properties": {
+                "dataVolumeIncrease": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "description": "Data volume increase threshold (0-1)"
+                },
+                "schemaChanges": {
+                  "type": "boolean",
+                  "description": "Trigger on schema changes"
+                },
+                "performanceDegradation": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "description": "Performance degradation threshold (0-1)"
+                }
+              }
+            }
+          }
+        },
+        "externalSystems": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "type"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "System name"
+              },
+              "type": {
+                "type": "string",
+                "enum": ["s3", "rabbitmq", "kafka", "redis", "elasticsearch"],
+                "description": "System type"
+              },
+              "configuration": {
+                "type": "object",
+                "description": "System-specific configuration"
+              }
+            }
+          }
+        }
+      }
+    },
+    
+    "transformationPipeline": {
+      "type": "object",
+      "required": ["pipelineName", "steps"],
+      "properties": {
+        "pipelineName": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_-]+$",
+          "description": "Pipeline name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Pipeline description"
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/transformationStep"
+          },
+          "description": "Transformation steps"
+        },
+        "enableParallelExecution": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable parallel execution"
+        },
+        "ipuConfig": {
+          "$ref": "#/$defs/ipuConfig",
+          "description": "IPU configuration for pipeline"
+        },
+        "globalConfig": {
+          "type": "object",
+          "description": "Global pipeline configuration"
+        }
+      }
+    },
+    
+    "transformationStep": {
+      "type": "object",
+      "required": ["stepName", "transformationType"],
+      "properties": {
+        "stepName": {
+          "type": "string",
+          "description": "Step name"
+        },
+        "transformationType": {
+          "type": "string",
+          "enum": ["sql", "python", "ipu", "custom", "validation"],
+          "description": "Transformation type"
+        },
+        "transformationCode": {
+          "type": "string",
+          "description": "Transformation code or reference"
+        },
+        "inputFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Input field names"
+        },
+        "outputFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Output field names"
+        },
+        "parameters": {
+          "type": "object",
+          "description": "Step parameters"
+        },
+        "isOptional": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether step is optional"
+        },
+        "timeout": {
+          "type": "string",
+          "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
+          "description": "Step timeout (HH:MM:SS)"
+        }
+      }
+    },
+    
+    "developmentConfig": {
+      "type": "object",
+      "properties": {
+        "enableDebugMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable debug mode"
+        },
+        "enableVerboseLogging": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable verbose logging"
+        },
+        "enableTestData": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable test data generation"
+        },
+        "testDataLocation": {
+          "type": "string",
+          "description": "Test data location"
+        },
+        "enablePerformanceProfiling": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable performance profiling"
+        },
+        "profilingOutputLocation": {
+          "type": "string",
+          "description": "Profiling output location"
+        }
+      }
+    }
+  }
+}

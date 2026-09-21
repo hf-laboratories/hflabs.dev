@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "Schemas/swarm_hypercache_self_test_catalog_entity_schema.1.0.0.json",
+  "title": "HyperCache Self-Test Catalog Entity Row",
+  "type": "object",
+  "required": ["schemaVersion", "id", "kind", "name", "originType", "originPath"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "algorithm_capability",
+        "algorithm_weakness",
+        "adapter",
+        "architecture_component",
+        "code_symbol",
+        "command_surface",
+        "config_surface",
+        "director_test",
+        "dimension_bin",
+        "document",
+        "documentation_fragment",
+        "feature",
+        "feature_category",
+        "feature_parameter",
+        "function_category",
+        "log_surface",
+        "named_set",
+        "optimization_layer",
+        "optimizer",
+        "persistence_surface",
+        "problem_type",
+        "self_test_mode",
+        "source_surface",
+        "state_surface",
+        "stigmergy_component",
+        "test_function",
+        "topology",
+        "validation_surface"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "originType": {
+      "type": "string",
+      "enum": ["catalog", "document", "derived", "source"]
+    },
+    "originPath": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parentId": {
+      "type": "string"
+    },
+    "documentPath": {
+      "type": "string"
+    },
+    "sourcePath": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "displayOrder": {
+      "type": "integer"
+    },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

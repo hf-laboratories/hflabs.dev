@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/swarm_benchmark_aggregate_schema.1.0.0.json",
+  "title": "Swarm Benchmark Aggregate",
+  "type": "object",
+  "required": ["schemaVersion", "aggregation", "results"],
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "1.0.0" },
+    "aggregation": { "type": "string" },
+    "results": { "type": "array", "items": { "type": "object" } }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,221 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hf-laboratories/IPUServices/schemas/codemap.schema.json",
+  "title": "IPUServices CodeMap Schema",
+  "description": "Schema for representing the structure of C# code in the repository using patterns and snippets",
+  "type": "object",
+  "required": ["version", "generated", "files"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Schema version",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "generated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when codemap was generated"
+    },
+    "gitCommit": {
+      "type": "string",
+      "description": "Git commit SHA at generation time"
+    },
+    "files": {
+      "type": "object",
+      "description": "Map of file paths to their structure",
+      "additionalProperties": {
+        "$ref": "#/$defs/fileEntry"
+      }
+    },
+    "statistics": {
+      "$ref": "#/$defs/statistics"
+    }
+  },
+  "$defs": {
+    "fileEntry": {
+      "type": "object",
+      "required": ["namespace", "types"],
+      "properties": {
+        "namespace": {
+          "type": "string",
+          "description": "Primary namespace in the file"
+        },
+        "usings": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Using directives"
+        },
+        "globalUsings": {
+          "type": "boolean",
+          "description": "Whether file uses implicit global usings"
+        },
+        "fileHash": {
+          "type": "string",
+          "description": "SHA256 hash of file content for change detection"
+        },
+        "types": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/typeEntry" }
+        }
+      }
+    },
+    "typeEntry": {
+      "type": "object",
+      "required": ["name", "kind"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Type name"
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["class", "struct", "interface", "enum", "record", "delegate"],
+          "description": "Type kind"
+        },
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["public", "internal", "protected", "private", "abstract", "sealed", "static", "partial", "readonly", "ref"]
+          }
+        },
+        "baseType": {
+          "type": "string",
+          "description": "Base class if any"
+        },
+        "implements": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Implemented interfaces"
+        },
+        "patterns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Pattern IDs (PAT-CS-XXX) detected in this type"
+        },
+        "members": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/memberEntry" }
+        },
+        "lineRange": {
+          "$ref": "#/$defs/lineRange"
+        },
+        "attributes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Attributes applied to the type"
+        }
+      }
+    },
+    "memberEntry": {
+      "type": "object",
+      "required": ["name", "kind"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Member name"
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["field", "property", "method", "constructor", "event", "indexer", "operator", "finalizer", "nestedType"],
+          "description": "Member kind"
+        },
+        "type": {
+          "type": "string",
+          "description": "Return type or field type"
+        },
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["public", "internal", "protected", "private", "static", "abstract", "virtual", "override", "sealed", "async", "readonly", "const", "volatile", "extern", "new", "required"]
+          }
+        },
+        "parameters": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/parameterEntry" },
+          "description": "Method/constructor parameters"
+        },
+        "patterns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Pattern IDs detected in this member"
+        },
+        "snippets": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Snippet IDs (SNP-XX-NNN) matching this member"
+        },
+        "lineRange": {
+          "$ref": "#/$defs/lineRange"
+        },
+        "attributes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Attributes applied to the member"
+        },
+        "calls": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Other methods called by this member"
+        }
+      }
+    },
+    "parameterEntry": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "modifier": {
+          "type": "string",
+          "enum": ["ref", "out", "in", "params", "this"]
+        },
+        "defaultValue": {
+          "type": "string"
+        },
+        "attributes": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "lineRange": {
+      "type": "object",
+      "properties": {
+        "start": { "type": "integer", "minimum": 1 },
+        "end": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "properties": {
+        "totalFiles": { "type": "integer" },
+        "totalTypes": { "type": "integer" },
+        "totalMembers": { "type": "integer" },
+        "patternUsage": {
+          "type": "object",
+          "additionalProperties": { "type": "integer" },
+          "description": "Count of each pattern ID usage"
+        },
+        "snippetUsage": {
+          "type": "object",
+          "additionalProperties": { "type": "integer" },
+          "description": "Count of each snippet ID usage"
+        },
+        "typeKindCounts": {
+          "type": "object",
+          "additionalProperties": { "type": "integer" }
+        },
+        "memberKindCounts": {
+          "type": "object",
+          "additionalProperties": { "type": "integer" }
+        }
+      }
+    }
+  }
+}

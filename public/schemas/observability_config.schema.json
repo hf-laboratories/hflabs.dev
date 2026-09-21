@@ -1,0 +1,439 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://hflabs.io/schemas/observability_config.schema.json",
+  "title": "IPUServices Observability Configuration",
+  "description": "Configuration schema for observability features including metrics, logging, alerting, and health checks",
+  "type": "object",
+  "properties": {
+    "Observability": {
+      "type": "object",
+      "description": "Root observability configuration",
+      "properties": {
+        "Enabled": {
+          "type": "boolean",
+          "description": "Whether observability features are enabled",
+          "default": true
+        },
+        "ServiceName": {
+          "type": "string",
+          "description": "Service name for telemetry identification",
+          "default": "IPUServices"
+        },
+        "ServiceVersion": {
+          "type": "string",
+          "description": "Service version for telemetry identification",
+          "default": "1.0.0"
+        },
+        "Environment": {
+          "type": "string",
+          "description": "Environment name (Development, Staging, Production)",
+          "enum": ["Development", "Staging", "Production"],
+          "default": "Development"
+        },
+        "Metrics": {
+          "$ref": "#/definitions/MetricsOptions"
+        },
+        "Tracing": {
+          "$ref": "#/definitions/TracingOptions"
+        },
+        "Logging": {
+          "$ref": "#/definitions/LoggingOptions"
+        },
+        "Alerting": {
+          "$ref": "#/definitions/AlertingOptions"
+        },
+        "HealthChecks": {
+          "$ref": "#/definitions/HealthCheckOptions"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "MetricsOptions": {
+      "type": "object",
+      "description": "Metrics collection configuration",
+      "properties": {
+        "Enabled": {
+          "type": "boolean",
+          "description": "Whether metrics collection is enabled",
+          "default": true
+        },
+        "ExportToConsole": {
+          "type": "boolean",
+          "description": "Export metrics to console for debugging",
+          "default": false
+        },
+        "OtlpEndpoint": {
+          "type": "string",
+          "format": "uri",
+          "description": "OTLP exporter endpoint for metrics (e.g., http://localhost:4317)"
+        },
+        "ExposePrometheusEndpoint": {
+          "type": "boolean",
+          "description": "Expose a Prometheus /metrics endpoint",
+          "default": true
+        },
+        "PrometheusEndpointPath": {
+          "type": "string",
+          "description": "Path for Prometheus metrics endpoint",
+          "default": "/metrics"
+        },
+        "CollectionIntervalSeconds": {
+          "type": "integer",
+          "description": "Collection interval for periodic metrics",
+          "minimum": 1,
+          "maximum": 300,
+          "default": 15
+        },
+        "MaxSnapshotsRetained": {
+          "type": "integer",
+          "description": "Maximum metric snapshots to retain in memory",
+          "minimum": 100,
+          "maximum": 100000,
+          "default": 1000
+        },
+        "GlobalTags": {
+          "type": "object",
+          "description": "Custom tags to add to all metrics",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "TracingOptions": {
+      "type": "object",
+      "description": "Distributed tracing configuration",
+      "properties": {
+        "Enabled": {
+          "type": "boolean",
+          "description": "Whether distributed tracing is enabled",
+          "default": true
+        },
+        "ExportToConsole": {
+          "type": "boolean",
+          "description": "Export traces to console for debugging",
+          "default": false
+        },
+        "OtlpEndpoint": {
+          "type": "string",
+          "format": "uri",
+          "description": "OTLP exporter endpoint for traces"
+        },
+        "JaegerEndpoint": {
+          "type": "string",
+          "format": "uri",
+          "description": "Jaeger exporter endpoint (legacy support)"
+        },
+        "SamplingRatio": {
+          "type": "number",
+          "description": "Sampling ratio (0.0 to 1.0)",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 1.0
+        },
+        "PropagateW3CTraceContext": {
+          "type": "boolean",
+          "description": "Propagate W3C trace context headers",
+          "default": true
+        },
+        "InstrumentHttpClient": {
+          "type": "boolean",
+          "description": "Instrument HTTP client calls",
+          "default": true
+        },
+        "InstrumentAspNetCore": {
+          "type": "boolean",
+          "description": "Instrument ASP.NET Core requests",
+          "default": true
+        },
+        "InstrumentGrpc": {
+          "type": "boolean",
+          "description": "Instrument gRPC calls",
+          "default": true
+        }
+      }
+    },
+    "LoggingOptions": {
+      "type": "object",
+      "description": "Log aggregation configuration",
+      "properties": {
+        "Enabled": {
+          "type": "boolean",
+          "description": "Whether log aggregation is enabled",
+          "default": true
+        },
+        "ExportToConsole": {
+          "type": "boolean",
+          "description": "Export logs to console",
+          "default": true
+        },
+        "OtlpEndpoint": {
+          "type": "string",
+          "format": "uri",
+          "description": "OTLP exporter endpoint for logs"
+        },
+        "MaxEntriesRetained": {
+          "type": "integer",
+          "description": "Maximum log entries to retain in memory",
+          "minimum": 1000,
+          "maximum": 1000000,
+          "default": 10000
+        },
+        "MinimumLevel": {
+          "type": "string",
+          "description": "Minimum log level to capture",
+          "enum": ["Trace", "Debug", "Information", "Warning", "Error", "Critical"],
+          "default": "Information"
+        },
+        "IncludeStackTraces": {
+          "type": "boolean",
+          "description": "Include exception stack traces in logs",
+          "default": true
+        },
+        "IncludeCorrelationId": {
+          "type": "boolean",
+          "description": "Include correlation IDs in log entries",
+          "default": true
+        },
+        "Enrichers": {
+          "type": "object",
+          "description": "Custom enrichers to add to all logs",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "AlertingOptions": {
+      "type": "object",
+      "description": "Alerting configuration",
+      "properties": {
+        "Enabled": {
+          "type": "boolean",
+          "description": "Whether alerting is enabled",
+          "default": true
+        },
+        "EvaluationIntervalSeconds": {
+          "type": "integer",
+          "description": "Interval for evaluating alert rules",
+          "minimum": 10,
+          "maximum": 600,
+          "default": 60
+        },
+        "MaxActiveAlerts": {
+          "type": "integer",
+          "description": "Maximum active alerts to retain",
+          "minimum": 100,
+          "maximum": 10000,
+          "default": 1000
+        },
+        "MaxHistoricalAlerts": {
+          "type": "integer",
+          "description": "Maximum historical alerts to retain",
+          "minimum": 1000,
+          "maximum": 100000,
+          "default": 10000
+        },
+        "DefaultSeverity": {
+          "type": "string",
+          "description": "Default alert severity if not specified",
+          "enum": ["Info", "Warning", "Error", "Critical"],
+          "default": "Warning"
+        },
+        "Notifications": {
+          "$ref": "#/definitions/NotificationChannelsOptions"
+        },
+        "Thresholds": {
+          "$ref": "#/definitions/AlertThresholdsOptions"
+        }
+      }
+    },
+    "NotificationChannelsOptions": {
+      "type": "object",
+      "description": "Notification channels configuration",
+      "properties": {
+        "LogAlerts": {
+          "type": "boolean",
+          "description": "Log alerts to application log",
+          "default": true
+        },
+        "WebhookUrls": {
+          "type": "array",
+          "description": "Webhook URLs for alert notifications",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "Email": {
+          "type": "object",
+          "properties": {
+            "Enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "SmtpHost": {
+              "type": "string"
+            },
+            "SmtpPort": {
+              "type": "integer",
+              "default": 587
+            },
+            "FromAddress": {
+              "type": "string",
+              "format": "email"
+            },
+            "ToAddresses": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "email"
+              }
+            }
+          }
+        },
+        "Slack": {
+          "type": "object",
+          "properties": {
+            "Enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "WebhookUrl": {
+              "type": "string",
+              "format": "uri"
+            },
+            "Channel": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "AlertThresholdsOptions": {
+      "type": "object",
+      "description": "Default alert thresholds for common metrics",
+      "properties": {
+        "CpuUtilizationWarning": {
+          "type": "number",
+          "description": "CPU utilization warning threshold (0.0 to 1.0)",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.8
+        },
+        "CpuUtilizationCritical": {
+          "type": "number",
+          "description": "CPU utilization critical threshold",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.95
+        },
+        "MemoryUtilizationWarning": {
+          "type": "number",
+          "description": "Memory utilization warning threshold",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.8
+        },
+        "MemoryUtilizationCritical": {
+          "type": "number",
+          "description": "Memory utilization critical threshold",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.95
+        },
+        "IpuUtilizationWarning": {
+          "type": "number",
+          "description": "IPU utilization warning threshold",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.9
+        },
+        "IpuTemperatureWarning": {
+          "type": "number",
+          "description": "IPU temperature warning threshold (Celsius)",
+          "default": 80
+        },
+        "IpuTemperatureCritical": {
+          "type": "number",
+          "description": "IPU temperature critical threshold (Celsius)",
+          "default": 90
+        },
+        "ErrorRateWarning": {
+          "type": "number",
+          "description": "Error rate warning threshold (0.0 to 1.0)",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.01
+        },
+        "ErrorRateCritical": {
+          "type": "number",
+          "description": "Error rate critical threshold",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.05
+        },
+        "LatencyP99Warning": {
+          "type": "number",
+          "description": "P99 latency warning threshold (milliseconds)",
+          "minimum": 0,
+          "default": 1000
+        },
+        "LatencyP99Critical": {
+          "type": "number",
+          "description": "P99 latency critical threshold (milliseconds)",
+          "minimum": 0,
+          "default": 5000
+        }
+      }
+    },
+    "HealthCheckOptions": {
+      "type": "object",
+      "description": "Health check configuration",
+      "properties": {
+        "Enabled": {
+          "type": "boolean",
+          "description": "Whether health checks are enabled",
+          "default": true
+        },
+        "IntervalSeconds": {
+          "type": "integer",
+          "description": "Health check interval in seconds",
+          "minimum": 5,
+          "maximum": 300,
+          "default": 30
+        },
+        "TimeoutSeconds": {
+          "type": "integer",
+          "description": "Health check timeout in seconds",
+          "minimum": 1,
+          "maximum": 60,
+          "default": 10
+        },
+        "FailureThreshold": {
+          "type": "integer",
+          "description": "Consecutive failures before marking unhealthy",
+          "minimum": 1,
+          "maximum": 10,
+          "default": 3
+        },
+        "LivenessPath": {
+          "type": "string",
+          "description": "Liveness probe endpoint path",
+          "default": "/health/live"
+        },
+        "ReadinessPath": {
+          "type": "string",
+          "description": "Readiness probe endpoint path",
+          "default": "/health/ready"
+        },
+        "DetailsPath": {
+          "type": "string",
+          "description": "Detailed health endpoint path",
+          "default": "/health/details"
+        }
+      }
+    }
+  }
+}

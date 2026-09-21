@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Accelerator Service Configuration",
+  "description": "Configuration for the IPU Accelerator service with compiled graph caching",
+  "type": "object",
+  "properties": {
+    "maxRowCount": {
+      "type": "integer",
+      "description": "Maximum number of rows allowed per execution plan",
+      "default": 10000000,
+      "minimum": 0
+    },
+    "cache": {
+      "type": "object",
+      "description": "Compiled graph cache configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable or disable caching",
+          "default": true
+        },
+        "maxMemoryEntries": {
+          "type": "integer",
+          "description": "Maximum number of entries in memory cache",
+          "default": 100,
+          "minimum": 1
+        },
+        "maxMemorySizeBytes": {
+          "type": "integer",
+          "description": "Maximum total size of memory cache in bytes",
+          "default": 536870912,
+          "minimum": 1048576
+        },
+        "enableDiskCache": {
+          "type": "boolean",
+          "description": "Enable disk-based persistence",
+          "default": true
+        },
+        "diskCachePath": {
+          "type": "string",
+          "description": "Directory for disk cache",
+          "default": "./cache/accelerator"
+        },
+        "maxDiskEntries": {
+          "type": "integer",
+          "description": "Maximum number of entries in disk cache",
+          "default": 1000,
+          "minimum": 1
+        },
+        "maxDiskSizeBytes": {
+          "type": "integer",
+          "description": "Maximum total size of disk cache in bytes",
+          "default": 10737418240,
+          "minimum": 10485760
+        },
+        "entryTtl": {
+          "type": "string",
+          "description": "Time-to-live for cache entries (TimeSpan format: HH:MM:SS)",
+          "default": "24:00:00",
+          "pattern": "^\\d{1,2}:\\d{2}:\\d{2}$"
+        },
+        "evictionPolicy": {
+          "type": "string",
+          "description": "Cache eviction policy",
+          "enum": ["LRU", "TTL"],
+          "default": "LRU"
+        },
+        "sdkVersion": {
+          "type": "string",
+          "description": "SDK version to use in cache keys",
+          "default": "poplar-3.4"
+        },
+        "deviceType": {
+          "type": "string",
+          "description": "Device type to use in cache keys",
+          "default": "ipu2"
+        },
+        "enableCacheWarming": {
+          "type": "boolean",
+          "description": "Enable cache warming on startup",
+          "default": false
+        },
+        "warmingPlans": {
+          "type": "array",
+          "description": "List of plan patterns to warm cache with",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      }
+    }
+  }
+}

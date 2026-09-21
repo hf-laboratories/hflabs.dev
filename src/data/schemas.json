@@ -1,0 +1,67 @@
+[
+  {
+    "id": "paged-response",
+    "name": "Paged Response Schema",
+    "filename": "paged_response_schema.json",
+    "description": "Canonical RFC-compliant pagination format for REST APIs, telemetry logs, and query results across all HFLabs services.",
+    "version": "1.0.0",
+    "fields": [
+      { "name": "items", "type": "array", "required": true, "desc": "Collection of records returned for the current page." },
+      { "name": "pageIndex", "type": "integer", "required": true, "desc": "0-based index of the current page." },
+      { "name": "pageSize", "type": "integer", "required": true, "desc": "Maximum number of items requested per page." },
+      { "name": "totalCount", "type": "integer", "required": true, "desc": "Total count of records matching the query in the underlying store." },
+      { "name": "totalPages", "type": "integer", "required": true, "desc": "Computed total page count." },
+      { "name": "hasPreviousPage", "type": "boolean", "required": true, "desc": "True if pageIndex > 0." },
+      { "name": "hasNextPage", "type": "boolean", "required": true, "desc": "True if pageIndex + 1 < totalPages." }
+    ],
+    "samplePayload": {
+      "items": [{ "id": "node-101", "type": "GraphNode", "label": "Director" }],
+      "pageIndex": 0,
+      "pageSize": 50,
+      "totalCount": 248,
+      "totalPages": 5,
+      "hasPreviousPage": false,
+      "hasNextPage": true
+    }
+  },
+  {
+    "id": "registry-project",
+    "name": "Registry Project Paged Schema",
+    "filename": "registry_project_paged_schema.json",
+    "description": "Standard schema for querying and enumerating monorepo projects, dependencies, targets, and division classifications.",
+    "version": "1.0.0",
+    "fields": [
+      { "name": "projectId", "type": "string", "required": true, "desc": "Unique identifier of the project." },
+      { "name": "projectName", "type": "string", "required": true, "desc": "Formal name of the assembly / component." },
+      { "name": "division", "type": "string", "required": true, "desc": "One of: Products, Research, Books, Patterns, Hardware, Internal." },
+      { "name": "targetFramework", "type": "string", "required": true, "desc": "Target runtime framework (e.g. net10.0)." },
+      { "name": "isTestProject", "type": "boolean", "required": true, "desc": "Flags whether the project contains unit or verification tests." }
+    ],
+    "samplePayload": {
+      "projectId": "proj:graphrag-server",
+      "projectName": "HFLabs.GraphRAG.Server",
+      "division": "Products",
+      "targetFramework": "net10.0",
+      "isTestProject": false
+    }
+  },
+  {
+    "id": "registry-dataset",
+    "name": "Registry Dataset Paged Schema",
+    "filename": "registry_dataset_paged_schema.json",
+    "description": "Specification for metadata describing benchmark sweeps, training datapiles, and validation archives.",
+    "version": "1.0.0",
+    "fields": [
+      { "name": "datasetId", "type": "string", "required": true, "desc": "Unique dataset URI or identifier." },
+      { "name": "format", "type": "string", "required": true, "desc": "File format (jsonl, parquet, csv, zebin)." },
+      { "name": "recordCount", "type": "integer", "required": true, "desc": "Total row or sample count." },
+      { "name": "sha256Checksum", "type": "string", "required": true, "desc": "Cryptographic integrity verification checksum." }
+    ],
+    "samplePayload": {
+      "datasetId": "dataset:cec2026-constrained-dev",
+      "format": "jsonl",
+      "recordCount": 10240,
+      "sha256Checksum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+]

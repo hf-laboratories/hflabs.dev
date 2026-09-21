@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hf-laboratories.example/schemas/nss-release-gate-manifest.schema.json",
+  "title": "NSS predictive lockstep release-gate manifest",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "phase",
+    "runId",
+    "startedUtc",
+    "completedUtc",
+    "profile",
+    "status",
+    "source",
+    "execution",
+    "rdma",
+    "ring",
+    "benchmark",
+    "operationalAlarmPolicy",
+    "releaseGates",
+    "artifacts"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "nss-release-gate.v1" },
+    "phase": { "const": "phase7" },
+    "runId": { "type": "string", "minLength": 1 },
+    "startedUtc": { "type": "string", "format": "date-time" },
+    "completedUtc": { "type": "string", "format": "date-time" },
+    "profile": { "enum": ["cpu", "gpu", "ipu", "rdma"] },
+    "status": { "enum": ["baseline-captured", "benchmark-failed"] },
+    "source": {
+      "type": "object",
+      "required": ["repositoryRoot", "revision", "dirty"],
+      "properties": {
+        "repositoryRoot": { "type": "string" },
+        "revision": { "type": "string" },
+        "dirty": { "type": ["boolean", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "execution": {
+      "type": "object",
+      "required": ["cpuAffinity", "numaNode", "queueDepth", "processorCount"],
+      "properties": {
+        "cpuAffinity": { "type": "string" },
+        "numaNode": { "type": "string" },
+        "queueDepth": { "type": "integer", "minimum": 1 },
+        "processorCount": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": true
+    },
+    "rdma": {
+      "type": "object",
+      "required": ["device", "port", "interface", "captureExitCodes"],
+      "properties": {
+        "device": { "type": "string" },
+        "port": { "type": "integer", "minimum": 1 },
+        "interface": { "type": "string" },
+        "captureExitCodes": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "ring": {
+      "type": "object",
+      "required": ["slotCount", "slotSize", "controlSlotCount", "inputSlotCount", "recoverySlotCount", "protocol"],
+      "properties": {
+        "slotCount": { "type": "integer", "minimum": 1 },
+        "slotSize": { "type": "integer", "minimum": 32 },
+        "controlSlotCount": { "type": "integer", "minimum": 1 },
+        "inputSlotCount": { "type": "integer", "minimum": 1 },
+        "recoverySlotCount": { "type": "integer", "minimum": 1 },
+        "protocol": { "const": "PredictiveSyncEnvelopeV1" }
+      },
+      "additionalProperties": true
+    },
+    "benchmark": {
+      "type": "object",
+      "required": ["exitCode", "neurons", "groups", "iterations", "warmupIterations", "activity", "seed", "manifest"],
+      "properties": {
+        "exitCode": { "type": ["integer", "null"] },
+        "neurons": { "type": "integer", "minimum": 1 },
+        "groups": { "type": "integer", "minimum": 1 },
+        "iterations": { "type": "integer", "minimum": 1 },
+        "warmupIterations": { "type": "integer", "minimum": 0 },
+        "activity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "seed": { "type": "integer" },
+        "manifest": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "operationalAlarmPolicy": {
+      "type": "object",
+      "required": [
+        "maxHashMismatchRatePerSecond",
+        "maxCorrectionRatePerSecond",
+        "maxReseedRatePerSecond",
+        "maxCorrectionRatio",
+        "maxReseedRatio",
+        "maxFallbackActivations"
+      ],
+      "additionalProperties": { "type": "number", "minimum": 0 }
+    },
+    "releaseGates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "status"],
+        "properties": {
+          "name": { "type": "string" },
+          "status": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "artifacts": { "type": "object" }
+  },
+  "additionalProperties": true
+}

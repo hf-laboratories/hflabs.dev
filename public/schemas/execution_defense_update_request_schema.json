@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://ipuservices.hflabs.io/schemas/execution_defense_update_request_schema.json",
+  "title": "Execution Defense Update Request",
+  "description": "PATCH-like request payload for execution-defense settings updates.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "defensiveProfileEnabled": {
+      "type": "boolean"
+    },
+    "povCapPercent": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "sliceJitterPercent": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 50
+    },
+    "minFillSize": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1000000
+    },
+    "maxQuoteAgeMs": {
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 600000
+    },
+    "toxicityThreshold": {
+      "type": "number",
+      "minimum": 0.1,
+      "maximum": 1000
+    },
+    "markoutStopLossBps": {
+      "type": "number",
+      "minimum": 0.1,
+      "maximum": 1000
+    },
+    "inventorySkewCapPercent": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    }
+  }
+}

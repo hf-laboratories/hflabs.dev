@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Multi-IPU Distribution Schema Overlay",
+  "type": "object",
+  "properties": {
+    "graph": {
+      "type": "object",
+      "properties": {
+        "gc_multi_ipu_config": {
+          "type": "object",
+          "properties": {
+            "ipu_count": { "type": "integer" },
+            "replication_factor": { "type": "integer" },
+            "pipeline_stages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "ipu_id": { "type": "integer" },
+                  "nodes": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  }
+                },
+                "required": ["ipu_id", "nodes"]
+              }
+            },
+            "data_parallel_regions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "region_name": { "type": "string" },
+                  "node_groups": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": ["ipu_count"]
+        },
+        "node": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "gc_ipu_assignment": { "type": "integer" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

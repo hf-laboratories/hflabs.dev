@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://ipuservices.hflabs.io/schemas/execution_defense_runtime_snapshot_schema.json",
+  "title": "Execution Defense Runtime Snapshot",
+  "description": "Runtime telemetry for execution-defense monitoring and operator UX.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "updatedAtUtc",
+    "updatedBy",
+    "lastTelemetryAtUtc",
+    "lastObservedQuoteAgeMs",
+    "lastObservedQuoteCount",
+    "lastObservedInventorySkewPercent",
+    "rollingMarkoutBps",
+    "markoutSampleCount",
+    "clampedProposals",
+    "droppedProposals",
+    "guardTrips",
+    "topToxicSymbols"
+  ],
+  "properties": {
+    "updatedAtUtc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedBy": {
+      "type": "string"
+    },
+    "lastTelemetryAtUtc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "lastObservedQuoteAgeMs": {
+      "type": "number"
+    },
+    "lastObservedQuoteCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "lastObservedInventorySkewPercent": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "rollingMarkoutBps": {
+      "type": "number"
+    },
+    "markoutSampleCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "clampedProposals": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "droppedProposals": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "guardTrips": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "topToxicSymbols": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["symbol", "toxicityBps"],
+        "properties": {
+          "symbol": {
+            "type": "string"
+          },
+          "toxicityBps": {
+            "type": "number",
+            "minimum": 0
+          }
+        }
+      }
+    }
+  }
+}

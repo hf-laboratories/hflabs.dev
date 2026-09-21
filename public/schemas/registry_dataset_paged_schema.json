@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Datasets (Paged)",
+  "description": "Paged response envelope with Dataset items",
+  "allOf": [
+    { "$ref": "paged_response_schema.json" },
+    {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": { "$ref": "registry_dataset_schema.json" }
+        }
+      }
+    }
+  ]
+}

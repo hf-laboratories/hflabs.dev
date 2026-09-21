@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GC2 Memory Layout Schema Overlay",
+  "type": "object",
+  "properties": {
+    "graph": {
+      "type": "object",
+      "properties": {
+        "node": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "gc_memory_layout": {
+                "type": "object",
+                "properties": {
+                  "tile_assignment": {
+                    "type": "array",
+                    "items": { "type": "integer" }
+                  },
+                  "memory_strategy": {
+                    "type": "string",
+                    "enum": ["OnChip", "PartialOnChip", "StreamingOnChip", "Exchange"]
+                  },
+                  "exchange_strategy": {
+                    "type": "string",
+                    "enum": ["CycleOverTiles", "CollectiveExchange", "None"]
+                  },
+                  "memory_estimate_bytes": { "type": "integer" }
+                },
+                "required": ["tile_assignment", "memory_strategy"]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

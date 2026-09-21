@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://ipuservices.hflabs.io/schemas/security_config.schema.json",
+  "title": "IPUServices Security Configuration",
+  "description": "Configuration schema for security settings including JWT, authentication, and RBAC",
+  "type": "object",
+  "required": ["jwt", "authentication"],
+  "properties": {
+    "jwt": {
+      "type": "object",
+      "description": "JWT token configuration",
+      "required": ["secret", "issuer", "audience"],
+      "properties": {
+        "secret": {
+          "type": "string",
+          "description": "Secret key for signing JWT tokens (minimum 32 characters)",
+          "minLength": 32
+        },
+        "issuer": {
+          "type": "string",
+          "description": "Token issuer identifier",
+          "default": "IPUServices"
+        },
+        "audience": {
+          "type": "string",
+          "description": "Token audience identifier",
+          "default": "IPUServices.Clients"
+        },
+        "accessTokenExpirationMinutes": {
+          "type": "integer",
+          "description": "Access token expiration in minutes",
+          "minimum": 1,
+          "maximum": 1440,
+          "default": 15
+        },
+        "refreshTokenExpirationDays": {
+          "type": "integer",
+          "description": "Refresh token expiration in days",
+          "minimum": 1,
+          "maximum": 90,
+          "default": 7
+        }
+      }
+    },
+    "authentication": {
+      "type": "object",
+      "description": "Authentication settings",
+      "properties": {
+        "maxFailedLoginAttempts": {
+          "type": "integer",
+          "description": "Maximum failed login attempts before lockout",
+          "minimum": 1,
+          "maximum": 20,
+          "default": 5
+        },
+        "lockoutDurationMinutes": {
+          "type": "integer",
+          "description": "Account lockout duration in minutes",
+          "minimum": 1,
+          "maximum": 1440,
+          "default": 15
+        },
+        "passwordMinLength": {
+          "type": "integer",
+          "description": "Minimum password length",
+          "minimum": 6,
+          "maximum": 128,
+          "default": 8
+        },
+        "requireUppercase": {
+          "type": "boolean",
+          "description": "Require uppercase letter in password",
+          "default": true
+        },
+        "requireLowercase": {
+          "type": "boolean",
+          "description": "Require lowercase letter in password",
+          "default": true
+        },
+        "requireDigit": {
+          "type": "boolean",
+          "description": "Require digit in password",
+          "default": true
+        },
+        "requireSpecialChar": {
+          "type": "boolean",
+          "description": "Require special character in password",
+          "default": true
+        },
+        "passwordResetTokenExpirationHours": {
+          "type": "integer",
+          "description": "Password reset token expiration in hours",
+          "minimum": 1,
+          "maximum": 168,
+          "default": 24
+        }
+      }
+    },
+    "mfa": {
+      "type": "object",
+      "description": "Multi-factor authentication settings",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable MFA support",
+          "default": true
+        },
+        "issuer": {
+          "type": "string",
+          "description": "TOTP issuer name",
+          "default": "IPUServices"
+        },
+        "totpPeriodSeconds": {
+          "type": "integer",
+          "description": "TOTP code validity period",
+          "minimum": 15,
+          "maximum": 60,
+          "default": 30
+        },
+        "totpDigits": {
+          "type": "integer",
+          "description": "TOTP code length",
+          "minimum": 6,
+          "maximum": 8,
+          "default": 6
+        },
+        "backupCodeCount": {
+          "type": "integer",
+          "description": "Number of backup codes to generate",
+          "minimum": 5,
+          "maximum": 20,
+          "default": 10
+        }
+      }
+    },
+    "rateLimiting": {
+      "type": "object",
+      "description": "Rate limiting configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable rate limiting",
+          "default": true
+        },
+        "maxRequestsPerMinute": {
+          "type": "integer",
+          "description": "Maximum requests per minute per client",
+          "minimum": 10,
+          "maximum": 10000,
+          "default": 100
+        },
+        "maxRequestsPerMinuteForAuth": {
+          "type": "integer",
+          "description": "Maximum authentication requests per minute",
+          "minimum": 5,
+          "maximum": 60,
+          "default": 10
+        }
+      }
+    },
+    "securityHeaders": {
+      "type": "object",
+      "description": "Security headers configuration",
+      "properties": {
+        "enableHsts": {
+          "type": "boolean",
+          "description": "Enable HTTP Strict Transport Security",
+          "default": true
+        },
+        "hstsMaxAgeSeconds": {
+          "type": "integer",
+          "description": "HSTS max-age in seconds",
+          "default": 31536000
+        },
+        "enableCsp": {
+          "type": "boolean",
+          "description": "Enable Content Security Policy",
+          "default": true
+        },
+        "cspPolicy": {
+          "type": "string",
+          "description": "Content Security Policy directive",
+          "default": "default-src 'self'"
+        },
+        "enableXFrameOptions": {
+          "type": "boolean",
+          "description": "Enable X-Frame-Options header",
+          "default": true
+        },
+        "xFrameOptionsValue": {
+          "type": "string",
+          "enum": ["DENY", "SAMEORIGIN"],
+          "default": "DENY"
+        }
+      }
+    },
+    "apiKeys": {
+      "type": "object",
+      "description": "API key configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable API key authentication",
+          "default": true
+        },
+        "headerName": {
+          "type": "string",
+          "description": "HTTP header name for API key",
+          "default": "X-API-Key"
+        },
+        "defaultExpirationDays": {
+          "type": "integer",
+          "description": "Default API key expiration in days",
+          "minimum": 1,
+          "maximum": 365,
+          "default": 90
+        },
+        "allowRotation": {
+          "type": "boolean",
+          "description": "Allow API key rotation",
+          "default": true
+        }
+      }
+    }
+  }
+}
