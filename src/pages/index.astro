@@ -1,15 +1,1869 @@
 ---
-// index.astro
+// src/pages/index.astro
 import Layout from '../layouts/Layout.astro';
-import ScrollytellingHero from '../components/ScrollytellingHero.astro';
-import DivisionGrid from '../components/DivisionGrid.astro';
+import DivisionBackgroundOverlay from '../components/DivisionBackgroundOverlay.astro';
+import divisions from '../data/divisions.json';
 ---
 
-<Layout title="HFLabs — Systems Research, Swarm Metaheuristics & In-Memory GraphRAG">
-  <!-- Scrollytelling Interactive Hero -->
-  <ScrollytellingHero />
+<Layout 
+  title="HFLabs — Systems Research, Swarm Metaheuristics & In-Memory GraphRAG"
+  description="High-performance vector cognition, Intel Level Zero hardware acceleration, and autonomous swarm systems."
+  isFullPage={true}
+  hideFooter={true}
+>
+  <!-- Fullpage 3-Slide Presentation Container -->
+  <div id="hflabs-fullpage-container" class="fullpage-slider">
+    
+    <!-- Floating Side Pagination Navigation -->
+    <nav class="fullpage-nav" aria-label="Section Navigation">
+      <button class="nav-dot active" data-target-page="0" title="01 Architecture Overview">
+        <span class="dot-num">01</span>
+        <span class="dot-label">Overview</span>
+      </button>
+      <button class="nav-dot" data-target-page="1" title="02 Interactive Topology Stage">
+        <span class="dot-num">02</span>
+        <span class="dot-label">Topology Stage</span>
+      </button>
+      <button class="nav-dot" data-target-page="2" title="03 Core Divisions Stack">
+        <span class="dot-num">03</span>
+        <span class="dot-label">Core Divisions</span>
+      </button>
+    </nav>
 
-  <!-- Core HFLabs Divisions & Technology Stack -->
-  <DivisionGrid />
+    <!-- Floating Wheel Click Progress Indicator -->
+    <div id="wheel-progress-indicator" class="wheel-indicator" title="Scroll 3 wheel clicks to jump sections">
+      <span class="wheel-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="5" y="2" width="14" height="20" rx="7"></rect>
+          <line x1="12" y1="6" x2="12" y2="10"></line>
+        </svg>
+      </span>
+      <div class="wheel-ticks">
+        <span class="wheel-tick" id="tick-1"></span>
+        <span class="wheel-tick" id="tick-2"></span>
+        <span class="wheel-tick" id="tick-3"></span>
+      </div>
+      <span class="wheel-label">3 clicks to jump</span>
+    </div>
+
+    <!-- =========================================================================
+         PAGE 1 / SLIDE 0: EXECUTIVE HERO & HIGH-ASSURANCE ARCHITECTURE OVERVIEW
+         ========================================================================= -->
+    <section class="page-slide slide-hero" id="page-0" data-page-index="0">
+      <DivisionBackgroundOverlay id="hero-bg-overlay" initialDivision={0} opacity={0.65} />
+      
+      <div class="container slide-content">
+        <div class="hero-top-badges">
+          <span class="badge" style="background:rgba(56,189,248,0.15); color:var(--accent-blue); border:1px solid rgba(56,189,248,0.35);">
+            HFLabs Systems Architecture
+          </span>
+          <span class="badge" style="background:rgba(16,185,129,0.12); color:var(--accent-emerald); border:1px solid rgba(16,185,129,0.3);">
+            Production Runtimes (.NET 10 &bull; C ABI &bull; Level Zero)
+          </span>
+        </div>
+
+        <h1 class="hero-title">
+          High-Assurance Systems, <br />
+          <span class="text-gradient">SIMD Vector Cognition</span> &amp; Swarm Metaheuristics.
+        </h1>
+
+        <p class="hero-lead">
+          Explore the primary engineering divisions of HFLabs: in-memory GraphRAG &amp; swarm optimization, heterogeneous ML &amp; query acceleration, and bare-metal Intel Level Zero / Poplar native substrates.
+        </p>
+
+        <!-- Systems Telemetry HUD Grid -->
+        <div class="systems-hud-grid">
+          <div class="hud-card" style="--card-border: #38bdf8;">
+            <div class="hud-header">
+              <span class="hud-dot" style="background:#38bdf8;"></span>
+              <span class="hud-code">HYPERTENSOR GRAPHRAG</span>
+            </div>
+            <div class="hud-metric">0.15–1.95 ms</div>
+            <div class="hud-sub">2-Hop in-memory graph traversal with 128-d SIMD TensorPrimitives.</div>
+          </div>
+
+          <div class="hud-card" style="--card-border: #06b6d4;">
+            <div class="hud-header">
+              <span class="hud-dot" style="background:#06b6d4;"></span>
+              <span class="hud-code">FASTMCP PROTOCOL</span>
+            </div>
+            <div class="hud-metric">65+ Agent Tools</div>
+            <div class="hud-sub">High-throughput agent integration via typed STDIO and HTTP transport.</div>
+          </div>
+
+          <div class="hud-card" style="--card-border: #a855f7;">
+            <div class="hud-header">
+              <span class="hud-dot" style="background:#a855f7;"></span>
+              <span class="hud-code">LEVEL ZERO &amp; POPLAR</span>
+            </div>
+            <div class="hud-metric">26 Native Zebins</div>
+            <div class="hud-sub">Precompiled compute kernels spanning 11 Intel hardware targets.</div>
+          </div>
+
+          <div class="hud-card" style="--card-border: #f43f5e;">
+            <div class="hud-header">
+              <span class="hud-dot" style="background:#f43f5e;"></span>
+              <span class="hud-code">ZERO-ALLOC ABI</span>
+            </div>
+            <div class="hud-metric">Span&lt;T&gt; &amp; AVX-512</div>
+            <div class="hud-sub">Source-generated P/Invoke and direct C-linkage driver shims.</div>
+          </div>
+        </div>
+
+        <!-- Hero Actions & Direct Section Jump Buttons -->
+        <div class="hero-actions-row">
+          <button class="btn-primary jump-to-stage-btn" data-jump-to="1">
+            <span>Explore Topology Stage</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <polyline points="19 12 12 19 5 12"></polyline>
+            </svg>
+          </button>
+          <button class="btn-secondary jump-to-divisions-btn" data-jump-to="2">
+            <span>Core Technology Stack</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+          <a href="/polyglot" class="btn-secondary">
+            <span>Hyperpolyglot Matrix</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Slide Scroll Prompt -->
+        <div class="scroll-prompt-bar">
+          <span class="prompt-mouse-pulse"></span>
+          <span>Scroll down (3 clicks of scroll wheel) or press &darr; to explore</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         PAGE 2 / SLIDE 1: INTERACTIVE TOPOLOGY STAGE & NARRATIVE SCROLLYTELLING
+         ========================================================================= -->
+    <section class="page-slide slide-stage" id="page-1" data-page-index="1">
+      <DivisionBackgroundOverlay id="stage-bg-overlay" initialDivision={0} opacity={0.88} />
+
+      <div class="container slide-content">
+        <!-- Stage Top Header -->
+        <div class="stage-header-row">
+          <div>
+            <div class="badge" style="background:rgba(56,189,248,0.15); color:var(--accent-blue); border:1px solid rgba(56,189,248,0.3); margin-bottom:6px;">
+              Interactive Scrollytelling Stage
+            </div>
+            <h2 class="stage-main-title">Systems Topology &amp; Architecture</h2>
+          </div>
+
+          <!-- Division Cycle Tabs -->
+          <div class="stage-div-tabs" role="tablist">
+            <button class="stage-tab active" data-stage-div="0" role="tab" style="--tab-color:#38bdf8;">
+              <span class="tab-num">01</span>
+              <span class="tab-txt">Cognition &amp; Swarm</span>
+              <div class="tab-cycle-progress"></div>
+            </button>
+            <button class="stage-tab" data-stage-div="1" role="tab" style="--tab-color:#06b6d4;">
+              <span class="tab-num">02</span>
+              <span class="tab-txt">ML &amp; Acceleration</span>
+              <div class="tab-cycle-progress"></div>
+            </button>
+            <button class="stage-tab" data-stage-div="2" role="tab" style="--tab-color:#f43f5e;">
+              <span class="tab-num">03</span>
+              <span class="tab-txt">Hardware Substrates</span>
+              <div class="tab-cycle-progress"></div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Stage Split Workspace -->
+        <div class="stage-workspace-grid">
+          <!-- Left: Narrative Information Card -->
+          <div class="stage-narrative-panel">
+            <div class="stage-narrative-card">
+              <div class="card-top-meta">
+                <span id="stageDivBadge" class="div-identity-badge">DIVISION 01</span>
+                <span class="cycle-status-pill">
+                  <span class="pulse-dot"></span>
+                  <span id="cycleStatusText">Active Cycle (5s)</span>
+                </span>
+              </div>
+
+              <h3 id="stageDivTitle" class="stage-narrative-heading">Cognition &amp; Swarm Intelligence</h3>
+              <p id="stageDivDesc" class="stage-narrative-body">
+                In-memory graph retrieval, SIMD vector search, and multi-algorithm swarm optimization. Keeps the entire graph resident in RAM to eliminate disk-bound lookups, powering agent reasoning through FastMCP and desktop visualization HUDs.
+              </p>
+
+              <!-- Dynamic Project Badges -->
+              <div id="stageProjectPills" class="stage-pills-row">
+                <span class="stage-pill">Hypertensor GraphRAG</span>
+                <span class="stage-pill">HyperSwarm Suite</span>
+                <span class="stage-pill">SwarmDev</span>
+              </div>
+
+              <!-- Metric Stats Grid -->
+              <div class="stage-metrics-trio">
+                <div class="metric-trio-item">
+                  <span id="stageMetricLbl1" class="metric-lbl">2-Hop Traversal</span>
+                  <strong id="stageMetricVal1" class="metric-val">0.15–1.95 ms</strong>
+                </div>
+                <div class="metric-trio-item">
+                  <span id="stageMetricLbl2" class="metric-lbl">SIMD Vectors</span>
+                  <strong id="stageMetricVal2" class="metric-val">128-d Default</strong>
+                </div>
+                <div class="metric-trio-item">
+                  <span id="stageMetricLbl3" class="metric-lbl">MCP Connectivity</span>
+                  <strong id="stageMetricVal3" class="metric-val">65+ Tools</strong>
+                </div>
+              </div>
+
+              <div class="stage-action-row">
+                <a id="stageProductLink" href="/products/ht-graphrag" class="btn-primary" style="font-size:12px; padding:6px 14px;">
+                  Explore Products &rarr;
+                </a>
+                <button class="stage-pause-btn" id="stagePauseBtn" title="Pause / Resume Auto-Cycle">
+                  <span class="pause-icon">&#10074;&#10074;</span>
+                  <span class="pause-text">Pause Cycle</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Live Interactive Visualizer Diagram & Telemetry -->
+          <div class="stage-visualizer-panel">
+            <div class="visualizer-display-box">
+              <div class="visualizer-bar">
+                <div class="bar-left">
+                  <span class="green-status-dot"></span>
+                  <span id="visHeaderTitle" class="vis-header-text">Cognition &amp; Swarm Intelligence</span>
+                </div>
+                <span id="visHeaderBadge" class="vis-header-tag">DIVISION 01</span>
+              </div>
+
+              <!-- Live Node Mesh Diagram -->
+              <div class="diagram-mesh-wrapper">
+                <div class="diagram-nodes-grid" id="stageNodesGrid">
+                  <div class="diagram-node node-primary" id="vnode-1">
+                    <span class="node-icon">🧠</span>
+                    <div class="node-text">
+                      <span class="node-title">Hypertensor GraphRAG</span>
+                      <span class="node-sub">In-Memory Typed Store</span>
+                    </div>
+                  </div>
+                  <div class="diagram-link link-h" id="vlink-1">
+                    <span class="link-pulse"></span>
+                  </div>
+                  <div class="diagram-node node-secondary" id="vnode-2">
+                    <span class="node-icon">⚡</span>
+                    <div class="node-text">
+                      <span class="node-title">SIMD TensorPrimitives</span>
+                      <span class="node-sub">128-d Vector Cosine</span>
+                    </div>
+                  </div>
+                  <div class="diagram-node node-secondary" id="vnode-3">
+                    <span class="node-icon">🐝</span>
+                    <div class="node-text">
+                      <span class="node-title">HyperSwarm Suite</span>
+                      <span class="node-sub">Director Authority</span>
+                    </div>
+                  </div>
+                  <div class="diagram-link link-h" id="vlink-2">
+                    <span class="link-pulse"></span>
+                  </div>
+                  <div class="diagram-node node-primary" id="vnode-4">
+                    <span class="node-icon">🔌</span>
+                    <div class="node-text">
+                      <span class="node-title">FastMCP Server</span>
+                      <span class="node-sub">65+ Agent Tools</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dynamic Terminal Telemetry Stream -->
+              <div class="stage-terminal-stream">
+                <div class="term-header">
+                  <span class="term-dot red"></span>
+                  <span class="term-dot yellow"></span>
+                  <span class="term-dot green"></span>
+                  <span class="term-title">HFLABS TELEMETRY KERNEL</span>
+                </div>
+                <code id="stageTerminalText" class="term-output">
+                  [Cognition &amp; Swarm] Hypertensor GraphRAG: 2-hop traversal in 0.15 ms | SIMD 128d | FastMCP 65+ tools active
+                </code>
+              </div>
+
+              <!-- Stage Bottom Hardware Telemetry -->
+              <div class="stage-vis-footer">
+                <div class="vis-footer-stat">
+                  <span id="visStatLbl1" class="vf-lbl">Graph Residency</span>
+                  <strong id="visStatVal1" class="vf-val">In-Memory RAM</strong>
+                </div>
+                <div class="vis-footer-stat">
+                  <span id="visStatLbl2" class="vf-lbl">Vector Engine</span>
+                  <strong id="visStatVal2" class="vf-val">SIMD TensorPrimitives</strong>
+                </div>
+                <div class="vis-footer-stat">
+                  <span id="visStatLbl3" class="vf-lbl">Agent Protocol</span>
+                  <strong id="visStatVal3" class="vf-val">FastMCP (65+ Tools)</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         PAGE 3 / SLIDE 2: CORE TECHNOLOGY STACK & DIVISIONS GRID (+ FOOTER)
+         ========================================================================= -->
+    <section class="page-slide slide-divisions" id="page-2" data-page-index="2">
+      <DivisionBackgroundOverlay id="divisions-bg-overlay" initialDivision={0} opacity={0.85} />
+
+      <div class="container slide-content divisions-slide-inner">
+        <!-- Section Header -->
+        <div class="divisions-top-bar">
+          <div class="div-top-title-group">
+            <div class="badge" style="background:rgba(56,189,248,0.15); color:var(--accent-blue); border:1px solid rgba(56,189,248,0.3);">
+              Core Technology Stack
+            </div>
+            <h2 class="divisions-main-heading">3 Specialized Divisions</h2>
+          </div>
+          <p class="divisions-sub-desc">
+            High-assurance architectures spanning in-memory GraphRAG, autonomous swarm optimization, LevelZero.NET GPU acceleration, and bare-metal compute substrates.
+          </p>
+        </div>
+
+        <!-- 3-Division Bento Cards Grid -->
+        <div class="divisions-grid-trio">
+          {divisions.map((div, idx) => (
+            <div 
+              id={`div-card-${idx}`}
+              class={`division-card-interactive ${idx === 0 ? 'focused' : ''}`}
+              data-division-index={idx}
+              style={`--div-accent:${div.color};`}
+            >
+              <div class="card-focus-indicator">
+                <span class="focus-ring"></span>
+                <span class="focus-text">Active Focused Division</span>
+                <div class="focus-countdown-bar"></div>
+              </div>
+
+              <div class="div-card-head">
+                <span class="div-card-icon">{div.icon}</span>
+                <div>
+                  <h3 class="div-card-name">{div.name}</h3>
+                  <span class="div-card-badge">{div.badge}</span>
+                </div>
+              </div>
+
+              <p class="div-card-tagline">{div.tagline}</p>
+
+              <div class="div-card-projects">
+                <h4>Core Projects &amp; Runtimes</h4>
+                <ul class="projects-scroller">
+                  {div.projects.map(p => (
+                    <li class="project-mini-item">
+                      <div class="proj-title-row">
+                        <strong class="p-name">{p.name}</strong>
+                        <span class={`p-status status-${p.status.toLowerCase().replace(/\s+/g, '-')}`}>{p.status}</span>
+                      </div>
+                      <p class="p-desc">{p.description}</p>
+                      {p.name.includes("GraphRAG") && (
+                        <a href="/products/ht-graphrag" class="p-link-btn">HT GraphRAG Product Page &rarr;</a>
+                      )}
+                      {p.name.includes("HyperSwarm") && (
+                        <a href="/products/hyperswarm" class="p-link-btn">HyperSwarm Product Page &rarr;</a>
+                      )}
+                      {p.name.includes("SwarmDev") && (
+                        <a href="/products/swarmdev" class="p-link-btn">SwarmDev Product Page &rarr;</a>
+                      )}
+                      {p.name.includes("AutoMLApp") && (
+                        <a href="/products/automlapp" class="p-link-btn">AutoMLApp Product Page &rarr;</a>
+                      )}
+                      {p.name.includes("Machine Learning Suite") && (
+                        <a href="/products/ml-suite" class="p-link-btn">ML Suite Product Page &rarr;</a>
+                      )}
+                      {p.name === "Accelerator" && (
+                        <a href="/products/accelerator" class="p-link-btn">Accelerator Product Page &rarr;</a>
+                      )}
+                      {(p.name.includes("QueryAccel") || p.name.includes("IPU SQL")) && (
+                        <a href="/products/queryaccel" class="p-link-btn">QueryAccel Product Page &rarr;</a>
+                      )}
+                      {p.name.includes("LevelZero") && (
+                        <a href="/docs/levelzero-net" class="p-link-btn">LevelZero.NET Manual &rarr;</a>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Integrated Compact Slide Footer -->
+        <footer class="slide-footer-ribbon">
+          <div class="footer-ribbon-left">
+            <span class="ribbon-brand">&copy; {new Date().getFullYear()} HFLabs</span>
+            <span class="ribbon-sep">&bull;</span>
+            <span class="ribbon-license">MIT &amp; High-Assurance Commercial Licenses</span>
+            <span class="ribbon-sep">&bull;</span>
+            <span class="ribbon-disclaimer">All hardware trademarks belong to respective owners.</span>
+          </div>
+          <div class="footer-ribbon-links">
+            <a href="/polyglot">Polyglot Matrix</a>
+            <a href="/schemas">Schemas</a>
+            <a href="/docs">Docs</a>
+            <a href="/about">About</a>
+            <a href="https://github.com/hf-laboratories/IPUServices" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </div>
+        </footer>
+      </div>
+    </section>
+
+  </div>
 </Layout>
 
+<style>
+  /* Fullpage Slider Layout */
+  .fullpage-slider {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 65px);
+    overflow: hidden;
+  }
+
+  .page-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(40px) scale(0.98);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .page-slide.active-slide {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+    z-index: 10;
+  }
+
+  .slide-content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    padding: 24px 0;
+    max-height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* Floating Navigation Dots */
+  .fullpage-nav {
+    position: fixed;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 150;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .nav-dot {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: all 0.25s ease;
+  }
+
+  .nav-dot:hover {
+    border-color: var(--accent-blue);
+    color: #fff;
+    transform: translateX(-4px);
+  }
+
+  .nav-dot.active {
+    background: rgba(56, 189, 248, 0.18);
+    border-color: var(--accent-blue);
+    color: #fff;
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+  }
+
+  .dot-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .dot-label {
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  /* Wheel Click Indicator */
+  .wheel-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 24px;
+    z-index: 150;
+    background: rgba(8, 12, 24, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    padding: 5px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(8px);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--text-muted);
+  }
+
+  .wheel-ticks {
+    display: flex;
+    gap: 4px;
+  }
+
+  .wheel-tick {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    transition: background 0.15s, transform 0.15s;
+  }
+
+  .wheel-tick.active {
+    background: var(--accent-blue);
+    transform: scale(1.3);
+    box-shadow: 0 0 8px var(--accent-blue);
+  }
+
+  /* Page 1 (Hero) Styles */
+  .hero-top-badges {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+
+  .hero-title {
+    font-size: 38px;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    color: #f8fafc;
+    margin-bottom: 14px;
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #38bdf8, #818cf8, #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-lead {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 820px;
+    margin-bottom: 22px;
+  }
+
+  .systems-hud-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .hud-card {
+    background: rgba(10, 15, 28, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 2px solid var(--card-border);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    backdrop-filter: blur(8px);
+    transition: transform 0.2s ease;
+  }
+
+  .hud-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .hud-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+
+  .hud-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .hud-code {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    letter-spacing: 0.05em;
+  }
+
+  .hud-metric {
+    font-size: 16px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 4px;
+  }
+
+  .hud-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.35;
+  }
+
+  .hero-actions-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .scroll-prompt-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .prompt-mouse-pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    box-shadow: 0 0 10px var(--accent-blue);
+    animation: mousePulse 1.5s infinite;
+  }
+
+  @keyframes mousePulse {
+    0% { transform: scale(0.8); opacity: 0.5; }
+    50% { transform: scale(1.3); opacity: 1; }
+    100% { transform: scale(0.8); opacity: 0.5; }
+  }
+
+  /* Page 2 (Stage) Styles */
+  .stage-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .stage-main-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #f8fafc;
+    letter-spacing: -0.02em;
+  }
+
+  .stage-div-tabs {
+    display: flex;
+    gap: 8px;
+  }
+
+  .stage-tab {
+    position: relative;
+    background: rgba(10, 15, 28, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+    padding: 7px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    overflow: hidden;
+  }
+
+  .stage-tab:hover {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .stage-tab.active {
+    color: #fff;
+    border-color: var(--tab-color);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .tab-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--tab-color);
+    font-weight: 700;
+  }
+
+  .tab-cycle-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: var(--tab-color);
+    width: 0%;
+    transition: width 0.1s linear;
+  }
+
+  .stage-tab.active .tab-cycle-progress {
+    width: 100%;
+    transition: width 5.2s linear;
+  }
+
+  .stage-workspace-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: stretch;
+  }
+
+  .stage-narrative-card {
+    background: rgba(8, 12, 24, 0.85);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    backdrop-filter: blur(10px);
+  }
+
+  .card-top-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .div-identity-badge {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--accent-blue);
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .cycle-status-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--accent-emerald);
+  }
+
+  .pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-emerald);
+    box-shadow: 0 0 6px var(--accent-emerald);
+    animation: mousePulse 1.2s infinite;
+  }
+
+  .stage-narrative-heading {
+    font-size: 20px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 8px;
+  }
+
+  .stage-narrative-body {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin-bottom: 14px;
+  }
+
+  .stage-pills-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .stage-pill {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e2e8f0;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .stage-metrics-trio {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-md);
+    padding: 10px;
+    margin-bottom: 16px;
+  }
+
+  .metric-trio-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .metric-lbl {
+    font-size: 9.5px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+  }
+
+  .metric-val {
+    font-size: 12.5px;
+    color: #f8fafc;
+  }
+
+  .stage-action-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .stage-pause-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .stage-pause-btn:hover {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+
+  /* Visualizer Display Box */
+  .visualizer-display-box {
+    background: #050811;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .visualizer-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .bar-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .green-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent-emerald);
+    box-shadow: 0 0 8px var(--accent-emerald);
+  }
+
+  .vis-header-text {
+    font-size: 13px;
+    font-weight: 700;
+    color: #f8fafc;
+  }
+
+  .vis-header-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--accent-blue);
+  }
+
+  .diagram-mesh-wrapper {
+    background: #020409;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+
+  .diagram-nodes-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: auto auto;
+    gap: 10px 12px;
+    align-items: center;
+  }
+
+  .diagram-node {
+    background: #080c18;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .node-icon {
+    font-size: 16px;
+  }
+
+  .node-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .node-title {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #f8fafc;
+  }
+
+  .node-sub {
+    font-size: 9.5px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+  }
+
+  .diagram-link {
+    height: 2px;
+    background: rgba(56, 189, 248, 0.2);
+    position: relative;
+    width: 24px;
+  }
+
+  .link-pulse {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    top: -2px;
+    border-radius: 50%;
+    background: #38bdf8;
+    box-shadow: 0 0 6px #38bdf8;
+    animation: linkTravel 2s infinite ease-in-out;
+  }
+
+  @keyframes linkTravel {
+    0% { left: 0; }
+    100% { left: calc(100% - 6px); }
+  }
+
+  .stage-terminal-stream {
+    background: #000;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    margin-bottom: 12px;
+  }
+
+  .term-header {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+
+  .term-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+  }
+
+  .term-dot.red { background: #ef4444; }
+  .term-dot.yellow { background: #eab308; }
+  .term-dot.green { background: #22c55e; }
+
+  .term-title {
+    font-family: var(--font-mono);
+    font-size: 8.5px;
+    color: var(--text-muted);
+    margin-left: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .term-output {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: #38bdf8;
+    line-height: 1.4;
+    display: block;
+  }
+
+  .stage-vis-footer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 8px;
+  }
+
+  .vis-footer-stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .vf-lbl {
+    font-size: 9px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+  }
+
+  .vf-val {
+    font-size: 11px;
+    color: #e2e8f0;
+  }
+
+  /* Page 3 (Divisions Stack) Styles */
+  .divisions-slide-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .divisions-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .div-top-title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .divisions-main-heading {
+    font-size: 24px;
+    font-weight: 800;
+    color: #f8fafc;
+    letter-spacing: -0.02em;
+  }
+
+  .divisions-sub-desc {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    max-width: 620px;
+    line-height: 1.4;
+  }
+
+  .divisions-grid-trio {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+
+  .division-card-interactive {
+    position: relative;
+    background: rgba(8, 12, 24, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 3px solid var(--div-accent);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .division-card-interactive:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+    background: rgba(12, 18, 36, 0.9);
+  }
+
+  .division-card-interactive.focused {
+    border-color: var(--div-accent);
+    background: rgba(14, 22, 44, 0.95);
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.6), 0 0 20px color-mix(in srgb, var(--div-accent) 25%, transparent);
+    transform: translateY(-2px);
+  }
+
+  .card-focus-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    padding: 3px 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .focus-ring {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--text-muted);
+  }
+
+  .division-card-interactive.focused .focus-ring {
+    background: var(--div-accent);
+    box-shadow: 0 0 8px var(--div-accent);
+  }
+
+  .focus-text {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    color: var(--text-muted);
+  }
+
+  .division-card-interactive.focused .focus-text {
+    color: var(--div-accent);
+    font-weight: 700;
+  }
+
+  .focus-countdown-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: var(--div-accent);
+    width: 0%;
+  }
+
+  .division-card-interactive.focused .focus-countdown-bar {
+    width: 100%;
+    transition: width 5.2s linear;
+  }
+
+  .div-card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .div-card-icon {
+    font-size: 20px;
+  }
+
+  .div-card-name {
+    font-size: 14px;
+    font-weight: 800;
+    color: #f8fafc;
+    line-height: 1.2;
+  }
+
+  .div-card-badge {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    color: var(--div-accent);
+  }
+
+  .div-card-tagline {
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  .div-card-projects h4 {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    letter-spacing: 0.04em;
+  }
+
+  .projects-scroller {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 180px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+
+  .project-mini-item {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .proj-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .p-name {
+    font-size: 12px;
+    color: #f8fafc;
+  }
+
+  .p-status {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-secondary);
+  }
+
+  .status-production {
+    color: var(--accent-emerald);
+    background: rgba(16, 185, 129, 0.1);
+  }
+
+  .status-mvp {
+    color: var(--accent-amber);
+    background: rgba(251, 191, 36, 0.1);
+  }
+
+  .status-in-development {
+    color: var(--accent-purple);
+    background: rgba(168, 85, 247, 0.1);
+  }
+
+  .p-desc {
+    font-size: 10.5px;
+    color: var(--text-secondary);
+    line-height: 1.35;
+  }
+
+  .p-link-btn {
+    display: inline-flex;
+    align-items: center;
+    font-size: 10px;
+    font-family: var(--font-mono);
+    color: var(--accent-blue);
+    margin-top: 2px;
+  }
+
+  .p-link-btn:hover {
+    text-decoration: underline;
+  }
+
+  /* Slide Footer Ribbon */
+  .slide-footer-ribbon {
+    background: rgba(8, 12, 24, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .footer-ribbon-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .ribbon-brand {
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+
+  .ribbon-sep {
+    opacity: 0.3;
+  }
+
+  .footer-ribbon-links {
+    display: flex;
+    gap: 14px;
+  }
+
+  .footer-ribbon-links a {
+    color: var(--text-secondary);
+    font-size: 11.5px;
+  }
+
+  .footer-ribbon-links a:hover {
+    color: var(--accent-blue);
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 1024px) {
+    .systems-hud-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .stage-workspace-grid {
+      grid-template-columns: 1fr;
+    }
+    .divisions-grid-trio {
+      grid-template-columns: 1fr;
+    }
+    .fullpage-slider {
+      height: auto;
+      overflow: visible;
+    }
+    .page-slide {
+      position: relative;
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+      min-height: 100vh;
+      padding: 40px 0;
+    }
+    .fullpage-nav, .wheel-indicator {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Division configuration dictionary
+  const divisionData = [
+    {
+      id: 0,
+      badge: 'DIVISION 01',
+      badgeColor: '#38bdf8',
+      title: 'Cognition & Swarm Intelligence',
+      desc: 'In-memory graph retrieval, SIMD vector search, and multi-algorithm swarm optimization. Keeps the entire graph resident in RAM to eliminate disk-bound lookups, powering agent reasoning through FastMCP and desktop visualization HUDs.',
+      pills: ['Hypertensor GraphRAG', 'HyperSwarm Suite', 'SwarmDev'],
+      metrics: [
+        { lbl: '2-Hop Traversal', val: '0.15–1.95 ms' },
+        { lbl: 'SIMD Vectors', val: '128-d Default' },
+        { lbl: 'MCP Connectivity', val: '65+ Tools' }
+      ],
+      link: '/products/ht-graphrag',
+      nodes: [
+        { icon: '🧠', title: 'Hypertensor GraphRAG', sub: 'In-Memory Typed Store' },
+        { icon: '⚡', title: 'SIMD TensorPrimitives', sub: '128-d Vector Cosine' },
+        { icon: '🐝', title: 'HyperSwarm Suite', sub: 'Director Authority' },
+        { icon: '🔌', title: 'FastMCP Server', sub: '65+ Agent Tools' }
+      ],
+      terminal: '[Cognition & Swarm] Hypertensor GraphRAG: 2-hop traversal in 0.15 ms | SIMD 128d | FastMCP 65+ tools active',
+      stats: [
+        { lbl: 'Graph Residency', val: 'In-Memory RAM' },
+        { lbl: 'Vector Engine', val: 'SIMD TensorPrimitives' },
+        { lbl: 'Agent Protocol', val: 'FastMCP (65+ Tools)' }
+      ]
+    },
+    {
+      id: 1,
+      badge: 'DIVISION 02',
+      badgeColor: '#06b6d4',
+      title: 'Machine Learning & Acceleration',
+      desc: 'Spiking and graph-based ML, heterogeneous accelerator orchestration, and IPU-offloaded SQL. A unified gRPC service coordinates execution envelopes across IPU (Poplar), CUDA, OpenCL, Level Zero, FPGA, and DMA/RDMA backends.',
+      pills: ['HFLabs ML Suite', 'Accelerator Layer', 'IPU SQL Accel'],
+      metrics: [
+        { lbl: 'ML Substrates', val: 'SNN & KGE' },
+        { lbl: 'Accelerator Fabric', val: 'Unified gRPC' },
+        { lbl: 'Query Engine', val: 'IPU SQL Offload' }
+      ],
+      link: '/products/ml-suite',
+      nodes: [
+        { icon: '🧬', title: 'HFLabs ML Suite', sub: 'Spiking NN & KGE' },
+        { icon: '⚡', title: 'Accelerator gRPC', sub: 'Plan Envelope Fabric' },
+        { icon: '🎛️', title: 'Heterogeneous Backends', sub: 'IPU / L0 / CUDA / FPGA' },
+        { icon: '🗄️', title: 'IPU SQL Acceleration', sub: 'Postgres & CLR Offload' }
+      ],
+      terminal: '[ML & Acceleration] gRPC plan envelope dispatched across IPU (Poplar) & Level Zero | SQL aggregate offloaded',
+      stats: [
+        { lbl: 'ML Architecture', val: 'Spiking & Graph ML' },
+        { lbl: 'Acceleration Fabric', val: 'Unified gRPC Plan' },
+        { lbl: 'Query Offload', val: 'IPU SQL Bridge (MVP)' }
+      ]
+    },
+    {
+      id: 2,
+      badge: 'DIVISION 03',
+      badgeColor: '#f43f5e',
+      title: 'Hardware & Native Substrates',
+      desc: 'Intel Level Zero interop, precompiled kernels, Graphcore Poplar bindings, and header-to-binding generation. Direct C ABI shims, zero-overhead C# P/Invoke, and 26 OpenCL C kernels precompiled into native zebins across 11 Intel targets.',
+      pills: ['LevelZero.NET', 'L0 Kernel Catalog', 'Poplar.NET', 'Abigen'],
+      metrics: [
+        { lbl: 'Native Interop', val: 'Managed C# P/Invoke' },
+        { lbl: 'GPU Kernels', val: '26 Zebin & SPIR-V' },
+        { lbl: 'Intel Targets', val: '11 Hardware Targets' }
+      ],
+      link: '/docs/levelzero-net',
+      nodes: [
+        { icon: '⚙️', title: 'Abigen Clang Engine', sub: 'C ABI Shim Generator' },
+        { icon: '📦', title: 'Native C ABI Shim', sub: 'Zero-Overhead P/Invoke' },
+        { icon: '🖥️', title: 'LevelZero.NET', sub: '16 Domain Wrappers' },
+        { icon: '⚡', title: 'L0 Kernel Catalog', sub: '26 Precompiled Zebins' }
+      ],
+      terminal: '[Hardware Substrate] LevelZero.NET initialized | 26 kernels precompiled across 11 Intel targets (Iris Xe to Panther Lake)',
+      stats: [
+        { lbl: 'Native Interop', val: 'Managed C# P/Invoke' },
+        { lbl: 'GPU Kernels', val: '26 Zebin & SPIR-V' },
+        { lbl: 'Intel Targets', val: '11 Hardware Targets' }
+      ]
+    }
+  ];
+
+  // ==========================================
+  // 1. Fullpage 3-Slide Controller & Wheel Lock
+  // ==========================================
+  const totalPages = 3;
+  let currentPage = 0;
+  let isPageTransitioning = false;
+  let wheelAccumulator = 0; // -3 to +3 clicks
+  let wheelResetTimer: number | null = null;
+
+  const slides = document.querySelectorAll('.page-slide');
+  const navDots = document.querySelectorAll('.nav-dot');
+  const tickEls = [
+    document.getElementById('tick-1'),
+    document.getElementById('tick-2'),
+    document.getElementById('tick-3')
+  ];
+
+  function updateWheelVisuals(count: number) {
+    const absCount = Math.min(3, Math.abs(count));
+    tickEls.forEach((el, idx) => {
+      if (el) {
+        if (idx < absCount) {
+          el.classList.add('active');
+        } else {
+          el.classList.remove('active');
+        }
+      }
+    });
+  }
+
+  function goToPage(pageIdx: number) {
+    if (pageIdx < 0 || pageIdx >= totalPages) return;
+    if (pageIdx === currentPage && slides[pageIdx].classList.contains('active-slide')) return;
+
+    isPageTransitioning = true;
+    currentPage = pageIdx;
+
+    slides.forEach((s, idx) => {
+      if (idx === pageIdx) {
+        s.classList.add('active-slide');
+      } else {
+        s.classList.remove('active-slide');
+      }
+    });
+
+    navDots.forEach((dot, idx) => {
+      if (idx === pageIdx) {
+        dot.classList.add('active');
+      } else {
+        dot.classList.remove('active');
+      }
+    });
+
+    // Notify division cycle managers of viewport section changes
+    handleSectionInViewChange();
+
+    setTimeout(() => {
+      isPageTransitioning = false;
+    }, 600);
+  }
+
+  // Initialize first page
+  goToPage(0);
+
+  // Wheel Restrictor (3 clicks to jump)
+  window.addEventListener('wheel', (e: WheelEvent) => {
+    // Only lock when inside desktop viewport
+    if (window.innerWidth <= 1024) return;
+
+    e.preventDefault();
+    if (isPageTransitioning) return;
+
+    const delta = e.deltaY;
+    if (Math.abs(delta) < 15) return; // Ignore micro jitter
+
+    const dir = delta > 0 ? 1 : -1;
+
+    if (dir > 0) {
+      if (wheelAccumulator < 0) wheelAccumulator = 0;
+      wheelAccumulator += 1;
+    } else {
+      if (wheelAccumulator > 0) wheelAccumulator = 0;
+      wheelAccumulator -= 1;
+    }
+
+    updateWheelVisuals(wheelAccumulator);
+
+    if (wheelResetTimer) clearTimeout(wheelResetTimer);
+    wheelResetTimer = window.setTimeout(() => {
+      wheelAccumulator = 0;
+      updateWheelVisuals(0);
+    }, 750);
+
+    if (wheelAccumulator >= 3) {
+      if (currentPage < totalPages - 1) {
+        goToPage(currentPage + 1);
+      }
+      wheelAccumulator = 0;
+      updateWheelVisuals(0);
+    } else if (wheelAccumulator <= -3) {
+      if (currentPage > 0) {
+        goToPage(currentPage - 1);
+      }
+      wheelAccumulator = 0;
+      updateWheelVisuals(0);
+    }
+  }, { passive: false });
+
+  // Navigation Dots Click
+  navDots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const target = parseInt(dot.getAttribute('data-target-page') || '0', 10);
+      goToPage(target);
+    });
+  });
+
+  // Jump buttons on Hero
+  document.querySelectorAll('[data-jump-to]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const page = parseInt(btn.getAttribute('data-jump-to') || '0', 10);
+      goToPage(page);
+    });
+  });
+
+  // Keyboard Navigation
+  window.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+      if (currentPage < totalPages - 1) {
+        e.preventDefault();
+        goToPage(currentPage + 1);
+      }
+    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+      if (currentPage > 0) {
+        e.preventDefault();
+        goToPage(currentPage - 1);
+      }
+    } else if (e.key === 'Home') {
+      goToPage(0);
+    } else if (e.key === 'End') {
+      goToPage(totalPages - 1);
+    }
+  });
+
+  // Touch Swipe for mobile/tablet
+  let touchStartY = 0;
+  window.addEventListener('touchstart', (e: TouchEvent) => {
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  window.addEventListener('touchend', (e: TouchEvent) => {
+    const touchEndY = e.changedTouches[0].clientY;
+    const diff = touchStartY - touchEndY;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0 && currentPage < totalPages - 1) {
+        goToPage(currentPage + 1);
+      } else if (diff < 0 && currentPage > 0) {
+        goToPage(currentPage - 1);
+      }
+    }
+  }, { passive: true });
+
+  // ==========================================
+  // 2. Section 2 (Topology Stage) Division Cycling & Overlay
+  // ==========================================
+  let stageCurrentDiv = 0;
+  let stageCycleTimer: number | null = null;
+  let isStagePaused = false;
+  const stageDuration = 5200; // 5.2 seconds per division animation cycle
+
+  const stageTabs = document.querySelectorAll('.stage-tab');
+  const stageDivBadge = document.getElementById('stageDivBadge');
+  const stageDivTitle = document.getElementById('stageDivTitle');
+  const stageDivDesc = document.getElementById('stageDivDesc');
+  const stageProjectPills = document.getElementById('stageProjectPills');
+  const stageMetricLbl1 = document.getElementById('stageMetricLbl1');
+  const stageMetricVal1 = document.getElementById('stageMetricVal1');
+  const stageMetricLbl2 = document.getElementById('stageMetricLbl2');
+  const stageMetricVal2 = document.getElementById('stageMetricVal2');
+  const stageMetricLbl3 = document.getElementById('stageMetricLbl3');
+  const stageMetricVal3 = document.getElementById('stageMetricVal3');
+  const stageProductLink = document.getElementById('stageProductLink') as HTMLAnchorElement;
+  const stagePauseBtn = document.getElementById('stagePauseBtn');
+  const cycleStatusText = document.getElementById('cycleStatusText');
+
+  const visHeaderTitle = document.getElementById('visHeaderTitle');
+  const visHeaderBadge = document.getElementById('visHeaderBadge');
+  const stageTerminalText = document.getElementById('stageTerminalText');
+  const visStatLbl1 = document.getElementById('visStatLbl1');
+  const visStatVal1 = document.getElementById('visStatVal1');
+  const visStatLbl2 = document.getElementById('visStatLbl2');
+  const visStatVal2 = document.getElementById('visStatVal2');
+  const visStatLbl3 = document.getElementById('visStatLbl3');
+  const visStatVal3 = document.getElementById('visStatVal3');
+
+  function setStageDivision(divIdx: number) {
+    stageCurrentDiv = divIdx;
+    const data = divisionData[divIdx];
+    if (!data) return;
+
+    // Update Stage Tabs
+    stageTabs.forEach((tab, idx) => {
+      if (idx === divIdx) {
+        tab.classList.add('active');
+      } else {
+        tab.classList.remove('active');
+      }
+    });
+
+    // Update Narrative content
+    if (stageDivBadge) {
+      stageDivBadge.textContent = data.badge;
+      stageDivBadge.style.color = data.badgeColor;
+      stageDivBadge.style.borderColor = `${data.badgeColor}4D`;
+      stageDivBadge.style.background = `${data.badgeColor}1A`;
+    }
+    if (stageDivTitle) stageDivTitle.textContent = data.title;
+    if (stageDivDesc) stageDivDesc.textContent = data.desc;
+
+    if (stageProjectPills) {
+      stageProjectPills.innerHTML = data.pills.map(p => `<span class="stage-pill">${p}</span>`).join('');
+    }
+
+    if (stageMetricLbl1 && stageMetricVal1) {
+      stageMetricLbl1.textContent = data.metrics[0].lbl;
+      stageMetricVal1.textContent = data.metrics[0].val;
+    }
+    if (stageMetricLbl2 && stageMetricVal2) {
+      stageMetricLbl2.textContent = data.metrics[1].lbl;
+      stageMetricVal2.textContent = data.metrics[1].val;
+    }
+    if (stageMetricLbl3 && stageMetricVal3) {
+      stageMetricLbl3.textContent = data.metrics[2].lbl;
+      stageMetricVal3.textContent = data.metrics[2].val;
+    }
+    if (stageProductLink) stageProductLink.href = data.link;
+
+    // Update Visualizer Header & Terminal
+    if (visHeaderTitle) visHeaderTitle.textContent = data.title;
+    if (visHeaderBadge) {
+      visHeaderBadge.textContent = data.badge;
+      visHeaderBadge.style.color = data.badgeColor;
+    }
+    if (stageTerminalText) stageTerminalText.textContent = data.terminal;
+
+    // Update Visualizer Diagram Nodes
+    const nodeIds = ['vnode-1', 'vnode-2', 'vnode-3', 'vnode-4'];
+    data.nodes.forEach((n, idx) => {
+      const nodeEl = document.getElementById(nodeIds[idx]);
+      if (nodeEl) {
+        const icon = nodeEl.querySelector('.node-icon');
+        const title = nodeEl.querySelector('.node-title');
+        const sub = nodeEl.querySelector('.node-sub');
+        if (icon) icon.textContent = n.icon;
+        if (title) title.textContent = n.title;
+        if (sub) sub.textContent = n.sub;
+      }
+    });
+
+    // Update Stats
+    if (visStatLbl1 && visStatVal1) {
+      visStatLbl1.textContent = data.stats[0].lbl;
+      visStatVal1.textContent = data.stats[0].val;
+    }
+    if (visStatLbl2 && visStatVal2) {
+      visStatLbl2.textContent = data.stats[1].lbl;
+      visStatVal2.textContent = data.stats[1].val;
+    }
+    if (visStatLbl3 && visStatVal3) {
+      visStatLbl3.textContent = data.stats[2].lbl;
+      visStatVal3.textContent = data.stats[2].val;
+    }
+
+    // Dispatch background overlay update for stage
+    window.dispatchEvent(new CustomEvent('division-change', {
+      detail: {
+        targetOverlayId: 'stage-bg-overlay',
+        divisionIndex: divIdx
+      }
+    }));
+  }
+
+  function startStageCycle() {
+    stopStageCycle();
+    if (isStagePaused) return;
+
+    stageCycleTimer = window.setTimeout(() => {
+      const nextDiv = (stageCurrentDiv + 1) % 3;
+      setStageDivision(nextDiv);
+      startStageCycle();
+    }, stageDuration);
+  }
+
+  function stopStageCycle() {
+    if (stageCycleTimer) {
+      clearTimeout(stageCycleTimer);
+      stageCycleTimer = null;
+    }
+  }
+
+  // Stage Tab Click
+  stageTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const idx = parseInt(tab.getAttribute('data-stage-div') || '0', 10);
+      setStageDivision(idx);
+      startStageCycle();
+    });
+  });
+
+  // Pause / Resume Stage Cycle
+  if (stagePauseBtn && cycleStatusText) {
+    stagePauseBtn.addEventListener('click', () => {
+      isStagePaused = !isStagePaused;
+      if (isStagePaused) {
+        stopStageCycle();
+        stagePauseBtn.innerHTML = `<span class="pause-icon">&#9654;</span><span class="pause-text">Resume</span>`;
+        cycleStatusText.textContent = 'Paused';
+        cycleStatusText.style.color = 'var(--text-muted)';
+      } else {
+        startStageCycle();
+        stagePauseBtn.innerHTML = `<span class="pause-icon">&#10074;&#10074;</span><span class="pause-text">Pause</span>`;
+        cycleStatusText.textContent = 'Active Cycle (5s)';
+        cycleStatusText.style.color = 'var(--accent-emerald)';
+      }
+    });
+  }
+
+  // ==========================================
+  // 3. Section 3 (Core Divisions Stack) Cycling & Overlay
+  // ==========================================
+  let divisionsCurrentDiv = 0;
+  let divisionsCycleTimer: number | null = null;
+  const divisionsDuration = 5200; // 5.2 seconds per division animation cycle
+
+  const divisionCards = document.querySelectorAll('.division-card-interactive');
+
+  function setDivisionsCardFocus(divIdx: number) {
+    divisionsCurrentDiv = divIdx;
+    divisionCards.forEach((card, idx) => {
+      if (idx === divIdx) {
+        card.classList.add('focused');
+      } else {
+        card.classList.remove('focused');
+      }
+    });
+
+    // Update background overlay for division section
+    window.dispatchEvent(new CustomEvent('division-change', {
+      detail: {
+        targetOverlayId: 'divisions-bg-overlay',
+        divisionIndex: divIdx
+      }
+    }));
+  }
+
+  function startDivisionsCycle() {
+    stopDivisionsCycle();
+    divisionsCycleTimer = window.setTimeout(() => {
+      const nextDiv = (divisionsCurrentDiv + 1) % 3;
+      setDivisionsCardFocus(nextDiv);
+      startDivisionsCycle();
+    }, divisionsDuration);
+  }
+
+  function stopDivisionsCycle() {
+    if (divisionsCycleTimer) {
+      clearTimeout(divisionsCycleTimer);
+      divisionsCycleTimer = null;
+    }
+  }
+
+  // Card click or hover interaction
+  divisionCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const idx = parseInt(card.getAttribute('data-division-index') || '0', 10);
+      setDivisionsCardFocus(idx);
+      startDivisionsCycle();
+    });
+    card.addEventListener('mouseenter', () => {
+      const idx = parseInt(card.getAttribute('data-division-index') || '0', 10);
+      setDivisionsCardFocus(idx);
+    });
+  });
+
+  // ==========================================
+  // 4. In-View Section Handling
+  // "division cycling should only effect the section in view"
+  // ==========================================
+  function handleSectionInViewChange() {
+    // If Page 1 (Topology Stage) is active, run its cycle; otherwise pause it!
+    if (currentPage === 1) {
+      setStageDivision(stageCurrentDiv);
+      startStageCycle();
+    } else {
+      stopStageCycle();
+    }
+
+    // If Page 2 (Core Divisions Stack) is active, run its cycle; otherwise pause it!
+    if (currentPage === 2) {
+      setDivisionsCardFocus(divisionsCurrentDiv);
+      startDivisionsCycle();
+    } else {
+      stopDivisionsCycle();
+    }
+  }
+
+  // Initial call
+  handleSectionInViewChange();
+</script>

@@ -206,3 +206,31 @@ a:hover {
 .footer-col a:hover {
   color: var(--accent-blue);
 }
+
+/* Fullpage 3-Slide System Rules */
+.fullpage-html,
+.fullpage-body {
+  height: 100%;
+  overflow: hidden;
+}
+
+@media (max-width: 1024px) {
+  .fullpage-html,
+  .fullpage-body {
+    height: auto;
+    overflow-y: auto;
+  }
+}
+
+.fullpage-main {
+  height: calc(100vh - 65px);
+  overflow: hidden;
+}
+
+@media (max-width: 1024px) {
+  .fullpage-main {
+    height: auto;
+    overflow: visible;
+  }
+}
+

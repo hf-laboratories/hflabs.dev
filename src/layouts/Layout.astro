@@ -5,16 +5,20 @@ import HFLogo from '../components/HFLogo.astro';
 interface Props {
   title?: string;
   description?: string;
+  isFullPage?: boolean;
+  hideFooter?: boolean;
 }
 
 const {
   title = "HFLabs — Systems Research, Swarm Metaheuristics & In-Memory GraphRAG",
-  description = "High-performance vector cognition, Intel Level Zero hardware acceleration, and autonomous swarm systems."
+  description = "High-performance vector cognition, Intel Level Zero hardware acceleration, and autonomous swarm systems.",
+  isFullPage = false,
+  hideFooter = false
 } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class={isFullPage ? 'fullpage-html' : ''}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -27,7 +31,7 @@ const {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class={isFullPage ? 'fullpage-body' : ''}>
   <header class="site-header">
     <div class="container header-content">
       <a href="/" class="site-logo">
@@ -47,66 +51,68 @@ const {
     </div>
   </header>
 
-  <main>
+  <main class={isFullPage ? 'fullpage-main' : ''}>
     <slot />
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-grid">
-      <div>
-        <div class="site-logo" style="margin-bottom:12px;">
-          <HFLogo size={20} />
+  {!hideFooter && (
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <div class="site-logo" style="margin-bottom:12px;">
+            <HFLogo size={20} />
+          </div>
+          <p style="font-size:13px; color:var(--text-secondary); max-width:340px;">
+            Advanced systems research, sub-millisecond vector cognition, swarm metaheuristic engines, and hardware compute acceleration.
+          </p>
+          <div style="margin-top:16px; font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">
+            &copy; {new Date().getFullYear()} HFLabs. Published under MIT and HFLabs High-Assurance Commercial Licenses.
+          </div>
+          <div style="margin-top:10px; font-size:10.5px; color:var(--text-muted); line-height:1.5; max-width:440px; opacity:0.8;">
+            Graphcore, IPU, Colossus, Poplar, and PopART are registered trademarks or trademarks of Graphcore Limited. Intel, OneAPI, Level Zero, Iris, Arc, Meteor Lake, Lunar Lake, and Arrow Lake are trademarks or registered trademarks of Intel Corporation. NVIDIA and CUDA are trademarks or registered trademarks of NVIDIA Corporation. All referenced hardware architectures, trademarks, and brand names belong to their respective owners and are used solely for identification, interoperability, and technical compatibility descriptions.
+          </div>
         </div>
-        <p style="font-size:13px; color:var(--text-secondary); max-width:340px;">
-          Advanced systems research, sub-millisecond vector cognition, swarm metaheuristic engines, and hardware compute acceleration.
-        </p>
-        <div style="margin-top:16px; font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">
-          &copy; {new Date().getFullYear()} HFLabs. Published under MIT and HFLabs High-Assurance Commercial Licenses.
+
+        <div class="footer-col">
+          <h4>Architecture</h4>
+          <ul>
+            <li><a href="/#divisions">Core Systems Stack</a></li>
+            <li><a href="/products/ht-graphrag">HT GraphRAG Product Page</a></li>
+            <li><a href="/products/ml-suite">ML Suite Product Page</a></li>
+            <li><a href="/products/hyperswarm">HyperSwarm Product Page</a></li>
+            <li><a href="/products/swarmdev">SwarmDev Product Page</a></li>
+            <li><a href="/products/automlapp">AutoMLApp Product Page</a></li>
+            <li><a href="/products/accelerator">Accelerator Product Page</a></li>
+            <li><a href="/products/queryaccel">QueryAccel Product Page</a></li>
+            <li><a href="/docs/graphrag-operator">In-Memory Hypertensor GraphRAG Manual</a></li>
+            <li><a href="/docs/hyperswarm-benchmarks">HyperSwarm &amp; SwarmDev Docs</a></li>
+            <li><a href="/docs/levelzero-net">LevelZero.NET &amp; L0 Kernels</a></li>
+            <li><a href="/docs/accelerator-interop">Accelerator &amp; IPU SQL Docs</a></li>
+          </ul>
         </div>
-        <div style="margin-top:10px; font-size:10.5px; color:var(--text-muted); line-height:1.5; max-width:440px; opacity:0.8;">
-          Graphcore, IPU, Colossus, Poplar, and PopART are registered trademarks or trademarks of Graphcore Limited. Intel, OneAPI, Level Zero, Iris, Arc, Meteor Lake, Lunar Lake, and Arrow Lake are trademarks or registered trademarks of Intel Corporation. NVIDIA and CUDA are trademarks or registered trademarks of NVIDIA Corporation. All referenced hardware architectures, trademarks, and brand names belong to their respective owners and are used solely for identification, interoperability, and technical compatibility descriptions.
+
+        <div class="footer-col">
+          <h4>Knowledge</h4>
+          <ul>
+            <li><a href="/polyglot">Polyglot Matrix (C/C++/C#/CL/PS1/VL/SVL)</a></li>
+            <li><a href="/schemas">Schema &amp; Wire Contract Registry</a></li>
+            <li><a href="/products/ml-suite">HFLabs Machine Learning Suite</a></li>
+            <li><a href="/#hardware">Poplar.NET &amp; ABIGen</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>About &amp; Governance</h4>
+          <ul>
+            <li><a href="/about">About Alix &amp; HF Labs</a></li>
+            <li><a href="/products/ht-graphrag#licensing">HT GraphRAG Licensing Tiers</a></li>
+            <li><a href="mailto:alix@hflabs.dev">Contact: alix@hflabs.dev</a></li>
+            <li><a href="/schemas/paged_response_schema.json">API Schema Registry</a></li>
+            <li><a href="https://github.com/hf-laboratories/IPUServices" target="_blank" rel="noopener noreferrer">Source Repository</a></li>
+          </ul>
         </div>
       </div>
-
-      <div class="footer-col">
-        <h4>Architecture</h4>
-        <ul>
-          <li><a href="/#divisions">Core Systems Stack</a></li>
-          <li><a href="/products/ht-graphrag">HT GraphRAG Product Page</a></li>
-          <li><a href="/products/ml-suite">ML Suite Product Page</a></li>
-          <li><a href="/products/hyperswarm">HyperSwarm Product Page</a></li>
-          <li><a href="/products/swarmdev">SwarmDev Product Page</a></li>
-          <li><a href="/products/automlapp">AutoMLApp Product Page</a></li>
-          <li><a href="/products/accelerator">Accelerator Product Page</a></li>
-          <li><a href="/products/queryaccel">QueryAccel Product Page</a></li>
-          <li><a href="/docs/graphrag-operator">In-Memory Hypertensor GraphRAG Manual</a></li>
-          <li><a href="/docs/hyperswarm-benchmarks">HyperSwarm &amp; SwarmDev Docs</a></li>
-          <li><a href="/docs/levelzero-net">LevelZero.NET &amp; L0 Kernels</a></li>
-          <li><a href="/docs/accelerator-interop">Accelerator &amp; IPU SQL Docs</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>Knowledge</h4>
-        <ul>
-          <li><a href="/polyglot">Polyglot Matrix (C/C++/C#/CL/PS1/VL/SVL)</a></li>
-          <li><a href="/schemas">Schema &amp; Wire Contract Registry</a></li>
-          <li><a href="/products/ml-suite">HFLabs Machine Learning Suite</a></li>
-          <li><a href="/#hardware">Poplar.NET &amp; ABIGen</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>About &amp; Governance</h4>
-        <ul>
-          <li><a href="/about">About Alix &amp; HF Labs</a></li>
-          <li><a href="/products/ht-graphrag#licensing">HT GraphRAG Licensing Tiers</a></li>
-          <li><a href="mailto:alix@hflabs.dev">Contact: alix@hflabs.dev</a></li>
-          <li><a href="/schemas/paged_response_schema.json">API Schema Registry</a></li>
-          <li><a href="https://github.com/hf-laboratories/IPUServices" target="_blank" rel="noopener noreferrer">Source Repository</a></li>
-        </ul>
-      </div>
-    </div>
-  </footer>
+    </footer>
+  )}
 </body>
 </html>
