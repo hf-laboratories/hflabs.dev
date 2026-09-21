@@ -1,4 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" rx="20" fill="#0f172a" />
-  <text x="50" y="65" font-family="'JetBrains Mono', monospace" font-size="45" font-weight="bold" fill="#38bdf8" text-anchor="middle">HF</text>
+  <rect width="100" height="100" rx="22" fill="#070b19" />
+  <g transform="translate(14, 14)" stroke="#38bdf8" stroke-width="10" stroke-linecap="square">
+    <!-- Top arm of F -->
+    <path d="M34 10H70" />
+    <!-- Continuous middle crossbar of H and F -->
+    <path d="M8 36H60" />
+    <!-- Left stem of H -->
+    <path d="M12 10V62" />
+    <!-- Right stem of H / spine of F -->
+    <path d="M38 10V62" />
+  </g>
 </svg>

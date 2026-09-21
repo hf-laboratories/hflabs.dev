@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- AutoMLApp WinForms NodeGraph Pipeline Schema & Layout Definition -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           targetNamespace="https://hflabs.dev/schemas/nodegraph" 
+           xmlns="https://hflabs.dev/schemas/nodegraph" 
+           elementFormDefault="qualified">
+  
+  <xs:element name="PipelineGraph">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Metadata">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="PipelineId" type="xs:string" />
+              <xs:element name="Name" type="xs:string" />
+              <xs:element name="TargetSubstrate" type="xs:string" />
+              <xs:element name="Version" type="xs:decimal" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Nodes">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Node" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Id" type="xs:string" />
+                    <xs:element name="NodeType" type="xs:string" />
+                    <xs:element name="PositionX" type="xs:integer" />
+                    <xs:element name="PositionY" type="xs:integer" />
+                    <xs:element name="Parameters" type="xs:anyType" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Edges">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Edge" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:attribute name="SourceNode" type="xs:string" use="required" />
+                  <xs:attribute name="SourcePort" type="xs:string" use="required" />
+                  <xs:attribute name="TargetNode" type="xs:string" use="required" />
+                  <xs:attribute name="TargetPort" type="xs:string" use="required" />
+                  <xs:attribute name="DataType" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

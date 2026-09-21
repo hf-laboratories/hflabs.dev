@@ -1,0 +1,102 @@
+---
+// src/components/HFLogo.astro
+interface Props {
+  size?: number;
+  showText?: boolean;
+  className?: string;
+  glow?: boolean;
+}
+
+const {
+  size = 22,
+  showText = true,
+  className = "",
+  glow = false
+} = Astro.props;
+---
+
+<div class={`hf-brand-logo ${className}`} style={`--logo-size: ${size}px;`}>
+  <div class={`hf-glyph-box ${glow ? 'has-glow' : ''}`}>
+    <!-- Smooshed H and F Connected Monogram Glyph -->
+    <svg 
+      viewBox="0 0 26 24" 
+      class="hf-glyph-svg"
+      fill="none" 
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <!-- Top arm of F extending right from right stem -->
+      <path 
+        d="M11 3.5H23.5" 
+        stroke="currentColor" 
+        stroke-width="3" 
+        stroke-linecap="square"
+      />
+      <!-- Continuous middle crossbar connecting H and extending as F middle arm -->
+      <path 
+        d="M2.5 12H20.5" 
+        stroke="currentColor" 
+        stroke-width="3" 
+        stroke-linecap="square"
+      />
+      <!-- Left vertical stem of H -->
+      <path 
+        d="M3.5 3.5V20.5" 
+        stroke="currentColor" 
+        stroke-width="3" 
+        stroke-linecap="square"
+      />
+      <!-- Right vertical stem (shared by H and F) -->
+      <path 
+        d="M12.5 3.5V20.5" 
+        stroke="currentColor" 
+        stroke-width="3" 
+        stroke-linecap="square"
+      />
+    </svg>
+  </div>
+  {showText && (
+    <span class="hf-brand-text">Labs</span>
+  )}
+</div>
+
+<style>
+  .hf-brand-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    text-decoration: none;
+    line-height: 1;
+  }
+
+  .hf-glyph-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--logo-size, 24px);
+    height: var(--logo-size, 24px);
+    color: var(--accent-blue, #38bdf8);
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .hf-glyph-box.has-glow {
+    filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.5));
+  }
+
+  .hf-glyph-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+  }
+
+  .hf-brand-text {
+    font-size: calc(var(--logo-size, 24px) * 0.95);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #f8fafc;
+    font-family: var(--font-sans);
+  }
+</style>

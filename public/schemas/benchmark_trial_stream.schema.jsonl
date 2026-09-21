@@ -1,0 +1,4 @@
+{"trial_id": 1, "optimizer": "Director_Adaptive_Ensemble", "params": {"learning_rate": 0.0032, "swarm_size": 64, "inertia": 0.72}, "fitness": 0.9421, "iteration": 120, "is_best": false}
+{"trial_id": 2, "optimizer": "Director_Adaptive_Ensemble", "params": {"learning_rate": 0.0018, "swarm_size": 128, "inertia": 0.65}, "fitness": 0.9784, "iteration": 240, "is_best": true}
+{"trial_id": 3, "optimizer": "Director_Adaptive_Ensemble", "params": {"learning_rate": 0.0009, "swarm_size": 256, "inertia": 0.58}, "fitness": 0.9892, "iteration": 480, "is_best": true}
+{"trial_id": 4, "optimizer": "TuRBO_Trust_Region", "params": {"trust_region_length": 0.25, "candidates": 500}, "fitness": 0.9915, "iteration": 600, "is_best": true}

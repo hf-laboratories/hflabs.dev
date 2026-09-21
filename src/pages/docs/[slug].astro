@@ -1,7 +1,18 @@
 ---
-// src/pages/docs/index.astro
+// src/pages/docs/[slug].astro
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const docs = await getCollection('docs');
+  return docs.map((doc) => ({
+    params: { slug: doc.id },
+    props: { doc }
+  }));
+}
+
+const { doc } = Astro.props;
+const { Content, headings } = await render(doc);
 
 const allDocs = await getCollection('docs');
 
@@ -12,10 +23,6 @@ const sortedDocs = allDocs.sort((a, b) => {
   }
   return a.data.category.localeCompare(b.data.category);
 });
-
-// Default doc to display at /docs
-const defaultDoc = sortedDocs.find((d) => d.id === 'getting-started') || sortedDocs[0];
-const { Content, headings } = await render(defaultDoc);
 
 // Group docs by category
 const categories: Record<string, typeof allDocs> = {};
@@ -34,6 +41,7 @@ sortedDocs.forEach((d) => {
   categories[cat].push(d);
 });
 
+// Order categories
 const orderedCategories = Object.keys(categories).sort((a, b) => {
   const idxA = categoryOrder.indexOf(a);
   const idxB = categoryOrder.indexOf(b);
@@ -43,8 +51,12 @@ const orderedCategories = Object.keys(categories).sort((a, b) => {
   return a.localeCompare(b);
 });
 
-const nextDoc = sortedDocs.length > 1 ? sortedDocs[1] : null;
+// Find previous and next docs in global sequence
+const currentIndex = sortedDocs.findIndex((d) => d.id === doc.id);
+const prevDoc = currentIndex > 0 ? sortedDocs[currentIndex - 1] : null;
+const nextDoc = currentIndex < sortedDocs.length - 1 ? sortedDocs[currentIndex + 1] : null;
 
+// Category icons
 const categoryIcons: Record<string, string> = {
   "Overview & Setup": "🚀",
   "GraphRAG & Cognition": "🧠",
@@ -56,8 +68,8 @@ const categoryIcons: Record<string, string> = {
 ---
 
 <Layout 
-  title={`${defaultDoc.data.title} • HFLabs Docs`}
-  description={defaultDoc.data.description}
+  title={`${doc.data.title} • HFLabs Docs`}
+  description={doc.data.description}
 >
   <div class="docs-app">
     <!-- Top Mobile Header Bar -->
@@ -70,7 +82,7 @@ const categoryIcons: Record<string, string> = {
         </svg>
         <span>Docs Menu</span>
       </button>
-      <span class="mobile-current-title">{defaultDoc.data.title}</span>
+      <span class="mobile-current-title">{doc.data.title}</span>
     </div>
 
     <div class="docs-layout-container container">
@@ -106,7 +118,7 @@ const categoryIcons: Record<string, string> = {
               </div>
               <ul class="category-list">
                 {categories[category].map((item) => {
-                  const isActive = item.id === defaultDoc.id;
+                  const isActive = item.id === doc.id;
                   return (
                     <li class={`nav-item ${isActive ? 'active' : ''}`} data-doc-title={item.data.title.toLowerCase()} data-doc-tags={item.data.tags?.join(' ').toLowerCase() || ''}>
                       <a href={`/docs/${item.id}`} class="nav-link">
@@ -147,9 +159,9 @@ const categoryIcons: Record<string, string> = {
             <span class="sep">/</span>
             <a href="/docs">Docs</a>
             <span class="sep">/</span>
-            <span class="cat">{defaultDoc.data.category}</span>
+            <span class="cat">{doc.data.category}</span>
             <span class="sep">/</span>
-            <span class="curr">{defaultDoc.data.title}</span>
+            <span class="curr">{doc.data.title}</span>
           </nav>
         </div>
 
@@ -157,17 +169,17 @@ const categoryIcons: Record<string, string> = {
           <!-- Document Header Card -->
           <header class="doc-header-card">
             <div class="doc-badge-row">
-              <span class="badge badge-cyan">{defaultDoc.data.category.toUpperCase()}</span>
-              {defaultDoc.data.badge && (
-                <span class="badge badge-emerald">{defaultDoc.data.badge.toUpperCase()}</span>
+              <span class="badge badge-cyan">{doc.data.category.toUpperCase()}</span>
+              {doc.data.badge && (
+                <span class="badge badge-emerald">{doc.data.badge.toUpperCase()}</span>
               )}
               <span class="badge badge-purple">LOCAL AIR-GAPPED</span>
             </div>
-            <h1 class="doc-main-title">{defaultDoc.data.title}</h1>
-            <p class="doc-main-desc">{defaultDoc.data.description}</p>
-            {defaultDoc.data.tags && defaultDoc.data.tags.length > 0 && (
+            <h1 class="doc-main-title">{doc.data.title}</h1>
+            <p class="doc-main-desc">{doc.data.description}</p>
+            {doc.data.tags && doc.data.tags.length > 0 && (
               <div class="doc-tags-list">
-                {defaultDoc.data.tags.map((tag) => (
+                {doc.data.tags.map((tag) => (
                   <span class="doc-tag">#{tag}</span>
                 ))}
               </div>
@@ -181,7 +193,13 @@ const categoryIcons: Record<string, string> = {
 
           <!-- Bottom Navigation Links -->
           <div class="doc-pagination">
-            <div />
+            {prevDoc ? (
+              <a href={`/docs/${prevDoc.id}`} class="pagination-btn prev">
+                <span class="pag-label">&larr; Previous</span>
+                <span class="pag-title">{prevDoc.data.title}</span>
+              </a>
+            ) : <div />}
+
             {nextDoc && (
               <a href={`/docs/${nextDoc.id}`} class="pagination-btn next">
                 <span class="pag-label">Next &rarr;</span>

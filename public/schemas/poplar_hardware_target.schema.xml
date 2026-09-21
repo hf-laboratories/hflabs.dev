@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Graphcore IPU Hardware Target Definition & Poplar Tile Mapping Specification -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="https://hflabs.dev/schemas/poplar"
+           xmlns="https://hflabs.dev/schemas/poplar"
+           elementFormDefault="qualified">
+
+  <xs:element name="IPUTargetDescriptor">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Generation" type="xs:string" fixed="Colossus-GC200" />
+        <xs:element name="TileCount" type="xs:positiveInteger" default="1472" />
+        <xs:element name="SramPerTileKb" type="xs:positiveInteger" default="624" />
+        <xs:element name="TotalInProcessorSramMb" type="xs:positiveInteger" default="900" />
+        <xs:element name="ExchangeBandwidthTbps" type="xs:decimal" default="47.5" />
+        <xs:element name="ExecutionModel" type="xs:string" fixed="BulkSynchronousParallel" />
+        <xs:element name="SupportedPrecisions">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Precision" type="xs:string" maxOccurs="unbounded" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

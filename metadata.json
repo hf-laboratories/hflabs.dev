@@ -1,6 +1,6 @@
 {
   "name": "HFLabs",
-  "description": "High-Assurance Systems, SIMD Vector Cognition & Swarm Metaheuristics - HFLabs MonoRepo Portal",
+  "description": "High-Assurance Systems, SIMD Vector Cognition & Swarm Metaheuristics - HFLabs Portal",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

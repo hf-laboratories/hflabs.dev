@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import HFLogo from '../components/HFLogo.astro';
 
 interface Props {
   title?: string;
@@ -30,8 +31,7 @@ const {
   <header class="site-header">
     <div class="container header-content">
       <a href="/" class="site-logo">
-        <span class="logo-badge">HF</span>
-        <span>HFLabs</span>
+        <HFLogo size={22} glow={true} />
       </a>
       <nav class="nav-links">
         <a href="/#divisions" class="nav-link">Core Systems</a>
@@ -55,14 +55,16 @@ const {
     <div class="container footer-grid">
       <div>
         <div class="site-logo" style="margin-bottom:12px;">
-          <span class="logo-badge">HF</span>
-          <span>HFLabs MonoRepo</span>
+          <HFLogo size={20} />
         </div>
         <p style="font-size:13px; color:var(--text-secondary); max-width:340px;">
           Advanced systems research, sub-millisecond vector cognition, swarm metaheuristic engines, and hardware compute acceleration.
         </p>
         <div style="margin-top:16px; font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">
           &copy; {new Date().getFullYear()} HFLabs. Published under MIT and HFLabs High-Assurance Commercial Licenses.
+        </div>
+        <div style="margin-top:10px; font-size:10.5px; color:var(--text-muted); line-height:1.5; max-width:440px; opacity:0.8;">
+          Graphcore, IPU, Colossus, Poplar, and PopART are registered trademarks or trademarks of Graphcore Limited. Intel, OneAPI, Level Zero, Iris, Arc, Meteor Lake, Lunar Lake, and Arrow Lake are trademarks or registered trademarks of Intel Corporation. NVIDIA and CUDA are trademarks or registered trademarks of NVIDIA Corporation. All referenced hardware architectures, trademarks, and brand names belong to their respective owners and are used solely for identification, interoperability, and technical compatibility descriptions.
         </div>
       </div>
 
@@ -75,10 +77,12 @@ const {
           <li><a href="/products/hyperswarm">HyperSwarm Product Page</a></li>
           <li><a href="/products/swarmdev">SwarmDev Product Page</a></li>
           <li><a href="/products/automlapp">AutoMLApp Product Page</a></li>
-          <li><a href="/docs#graphrag-operator">In-Memory Hypertensor GraphRAG Manual</a></li>
-          <li><a href="/docs#swarm-benchmark">HyperSwarm &amp; SwarmDev Docs</a></li>
-          <li><a href="/docs#levelzero-net">LevelZero.NET &amp; L0 Kernels</a></li>
-          <li><a href="/docs#accelerator-interop">Accelerator &amp; IPU SQL</a></li>
+          <li><a href="/products/accelerator">Accelerator Product Page</a></li>
+          <li><a href="/products/queryaccel">QueryAccel Product Page</a></li>
+          <li><a href="/docs/graphrag-operator">In-Memory Hypertensor GraphRAG Manual</a></li>
+          <li><a href="/docs/hyperswarm-benchmarks">HyperSwarm &amp; SwarmDev Docs</a></li>
+          <li><a href="/docs/levelzero-net">LevelZero.NET &amp; L0 Kernels</a></li>
+          <li><a href="/docs/accelerator-interop">Accelerator &amp; IPU SQL Docs</a></li>
         </ul>
       </div>
 

@@ -1,0 +1,4 @@
+{"timestamp": "2026-09-21T16:00:00.102Z", "event_id": "evt_01J8A9K1", "source": "LevelZero.Engine", "device_id": 0, "kernel": "pso_swarm_update", "execution_time_us": 142.5, "vram_bytes_allocated": 33554432, "status": "COMPLETED"}
+{"timestamp": "2026-09-21T16:00:00.104Z", "event_id": "evt_01J8A9K2", "source": "Poplar.TileEngine", "tile_count": 1472, "kernel": "aggregate_sum_reduction", "execution_time_us": 88.2, "status": "COMPLETED"}
+{"timestamp": "2026-09-21T16:00:00.107Z", "event_id": "evt_01J8A9K3", "source": "QueryAccel.PostgresFDW", "query_hash": "q_78f10a8b", "rows_scanned": 1000000, "speedup_factor": 14.8, "status": "COMPLETED"}
+{"timestamp": "2026-09-21T16:00:00.110Z", "event_id": "evt_01J8A9K4", "source": "FastMCP.Bridge", "tool_call": "graph_hybrid_search", "latency_ms": 1.2, "status": "OK"}

@@ -1,0 +1,957 @@
+---
+// src/pages/products/accelerator.astro
+import Layout from '../../layouts/Layout.astro';
+
+const backends = [
+  {
+    name: "Graphcore IPU",
+    runtime: "Poplar SDK Native",
+    model: "BSP (Bulk-Synchronous Parallel)",
+    icon: "⚡",
+    color: "#38bdf8",
+    desc: "First-class IPU device models, Poplar error mapping into typed .NET exceptions, special compute units with ring-pipe configuration solving, and sidecar capacity reservations."
+  },
+  {
+    name: "Intel GPU",
+    runtime: "OneAPI Level Zero",
+    model: "SPMD (Single Program, Multiple Data)",
+    icon: "🔷",
+    color: "#06b6d4",
+    desc: "Direct SPIR-V and native Zebin dispatch via LevelZero.NET, typed USM shared-memory buffers, multi-device affinity scoring, and hardware execution telemetry."
+  },
+  {
+    name: "CUDA & OpenCL GPU",
+    runtime: "Native Driver Stacks",
+    model: "SIMT / SPMD",
+    icon: "🟢",
+    color: "#10b981",
+    desc: "Pluggable driver wrappers for NVIDIA CUDA and cross-platform OpenCL GPUs with automatic memory pinning, capability discovery, and asynchronous command queues."
+  },
+  {
+    name: "FPGA & Swarm Fabric",
+    runtime: "Bitstream Manager (WIP)",
+    model: "Spatial / Dataflow",
+    icon: "🔌",
+    color: "#f59e0b",
+    desc: "Hardware-level agent message routing, spatial compute blocks, and direct swarm metaheuristic algorithm offloading over high-throughput low-latency fabrics."
+  },
+  {
+    name: "DMA, RDMA & NVMe",
+    runtime: "Direct Transport Paths",
+    model: "Kernel-Bypass Fabric",
+    icon: "📡",
+    color: "#a855f7",
+    desc: "Kernel-bypass RDMA interconnects, direct memory access (DMA) engines, and high-throughput NVMe streaming channels across clustered compute nodes."
+  },
+  {
+    name: "Host Abstractor (CPU)",
+    runtime: "SIMD TensorPrimitives",
+    model: "Multithreaded SIMD",
+    icon: "🖥️",
+    color: "#94a3b8",
+    desc: "Vectorized CPU-side baseline with AVX-512 and ARM Neon acceleration, serving as a guaranteed fallback execution target when specialized devices are unavailable."
+  }
+];
+
+const capabilities = [
+  {
+    title: "One Plan, Many Backends",
+    icon: "📋",
+    color: "#38bdf8",
+    tagline: "gRPC PlanEnvelope & AcceleratorManager",
+    desc: "Applications submit structured computation plans via PlanEnvelope. AcceleratorManager handles backend discovery, lifecycle, hardware capability scoring, and automatic multi-device dispatch."
+  },
+  {
+    title: "Dual Operating Models",
+    icon: "⚖️",
+    color: "#818cf8",
+    tagline: "SPMD vs BSP Contract Validation",
+    desc: "Distinguishes execution models from programming models. Intel GPUs execute SPMD while Graphcore IPUs execute BSP. Contract validators enforce behavioral semantics across mixed clusters."
+  },
+  {
+    title: "Compile Once, Reuse",
+    icon: "🔄",
+    color: "#10b981",
+    tagline: "Content-Addressed Plan Hashing",
+    desc: "Content-addressed SHA-256 plan hashing identifies identical work. An in-memory and disk compiled-graph cache bypasses recompilation, supporting multi-device segment propagation."
+  },
+  {
+    title: "First-Class IPU Architecture",
+    icon: "⚡",
+    color: "#f59e0b",
+    tagline: "Poplar SDK & Ring-Pipe Solver",
+    desc: "IPUs receive dedicated device models, typed Poplar exception mappers, ring-pipe configuration solvers, and sidecar reservation services for compute-adjacent observer graphs."
+  },
+  {
+    title: "Tiered KV-Cache for LLMs",
+    icon: "🗄️",
+    color: "#ec4899",
+    tagline: "Hierarchical Memory Orchestration",
+    desc: "Places large LLM key-value states across VRAM, host pinned memory, and NVMe buffers. An address map and directory engine enable context lengths exceeding single-device capacity."
+  },
+  {
+    title: "Remote & Distributive Dispatch",
+    icon: "🌐",
+    color: "#06b6d4",
+    tagline: "Multi-Node Network Fabric",
+    desc: "Dispatches computation fragments to remote worker nodes across the local network. Real-time Level Zero and ring-pipe telemetry quantify latency and throughput bottlenecks."
+  },
+  {
+    title: "Observable by Default",
+    icon: "📊",
+    color: "#a855f7",
+    tagline: "Topology Snapshots & Metrics",
+    desc: "Full execution telemetry, runtime topology snapshots, and capability maps allow operators to inspect exactly what ran on which device and why the scheduler selected it."
+  },
+  {
+    title: "PowerShell Operations Module",
+    icon: "💻",
+    color: "#f43f5e",
+    tagline: "Heterogeneous Orchestration Cmdlets",
+    desc: "Hardware discovery, device ranking, and fabric orchestration ship as native PowerShell cmdlets and scripts for DevOps automation, continuous integration, and ops workflows."
+  }
+];
+
+const operatingModelComparison = [
+  { feature: "Primary Execution Model", intel: "SPMD (Single Program, Multiple Data)", ipu: "BSP (Bulk-Synchronous Parallel)" },
+  { feature: "Memory Architecture", intel: "Unified Shared Memory (USM / Device Pinned)", ipu: "In-Processor SRAM per Tile (Super-fast local)" },
+  { feature: "Synchronization Pattern", intel: "Work-group Barriers & Command Events", ipu: "Strict Compute-Exchange-Sync Supersteps" },
+  { feature: "Error Representation", intel: "Level Zero Result Codes & Exception Mapping", ipu: "Poplar Engine Exception Translation" },
+  { feature: "Orchestration Primitive", intel: "LevelZero.NET Command Queues", ipu: "Poplar Ring-Pipe Streams & Engine Sessions" },
+  { feature: "Observer Sidecar Support", intel: "Async Event Polling & Timestamps", ipu: "Reserved Tile Capacity & Sidecar Advice" }
+];
+---
+
+<Layout 
+  title="Accelerator — Heterogeneous Compute Orchestration (.NET) | HF Labs"
+  description="One execution layer for every device you own. Runs computation plans across CPUs, Graphcore IPUs, Intel GPUs, CUDA/OpenCL, FPGAs, and RDMA fabrics."
+>
+  <!-- Top Breadcrumb Bar -->
+  <div class="product-top-bar">
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="sep">/</span>
+        <a href="/products">Products</a>
+        <span class="sep">/</span>
+        <span class="curr">Accelerator</span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="product-hero">
+    <div class="container">
+      <div class="hero-badge-row">
+        <span class="badge badge-cyan">HETEROGENEOUS COMPUTE</span>
+        <span class="badge badge-emerald">ZERO APPLICATION CODE CHANGES</span>
+        <span class="badge badge-purple">GRAPHCORE IPU &bull; INTEL GPU &bull; CUDA</span>
+        <span class="badge badge-amber">gRPC PLAN ENVELOPE</span>
+      </div>
+
+      <div class="hero-layout">
+        <div class="hero-main">
+          <h1 class="hero-title">Accelerator</h1>
+          <p class="hero-tagline">
+            One execution layer for every device you own.
+          </p>
+          <p class="hero-intro">
+            <strong>Accelerator</strong> is a .NET service that runs computation plans on whatever hardware is in the machine or on the network. That includes a CPU SIMD baseline, Graphcore IPUs, Intel GPUs, CUDA and OpenCL GPUs, FPGAs, DMA engines, and RDMA links. You describe the work once as a plan. Accelerator finds the devices, scores them, compiles the plan for the ones it picks, caches the result, and executes it. Your application code doesn't change when the hardware does.
+          </p>
+
+          <div class="hero-actions">
+            <a href="https://github.com/hf-laboratories/IPUServices" target="_blank" rel="noopener noreferrer" class="btn-primary">
+              <span>View on GitHub</span>
+              <span class="btn-arrow">&rarr;</span>
+            </a>
+            <a href="/docs#accelerator-interop" class="btn-secondary">
+              <span>Read the Docs</span>
+            </a>
+            <a href="/products/ht-graphrag#licensing" class="btn-secondary">
+              <span>Contact Us</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-specs-card">
+          <div class="specs-header">
+            <span class="specs-title">Accelerator Architecture Matrix</span>
+            <span class="specs-pill">gRPC Microservice</span>
+          </div>
+          <div class="specs-list">
+            <div class="spec-row">
+              <span class="spec-label">Service Interface</span>
+              <span class="spec-value highlight-cyan">gRPC (PlanEnvelope / PlanResult)</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Supported Accelerators</span>
+              <span class="spec-value">IPU, Intel GPU, CUDA, OpenCL, FPGA, CPU</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">High-Speed Fabrics</span>
+              <span class="spec-value">DMA Engines, RDMA Transport, NVMe Stream</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Compilation Strategy</span>
+              <span class="spec-value highlight-green">Content-Addressed SHA-256 Cache</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Hardware Discovery</span>
+              <span class="spec-value">Live Windows &amp; Linux Hardware Probes</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">KV-Cache Tiering</span>
+              <span class="spec-value">Pinned Layer Pool + NVMe Directory</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">CLI &amp; Tooling</span>
+              <span class="spec-value">PowerShell Module &amp; Discovery Cmdlets</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Supported Hardware Backends -->
+  <section class="section-padding bg-darker">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-cyan">DEVICE BACKENDS</span>
+        <h2 class="section-title">Hardware Acceleration Targets</h2>
+        <p class="section-subtitle">
+          Accelerator dynamically scores, selects, and dispatches computation across heterogeneous devices based on live capability declarations.
+        </p>
+      </div>
+
+      <div class="backends-grid">
+        {backends.map((b) => (
+          <div class="backend-card" style={`--back-color: ${b.color};`}>
+            <div class="backend-header">
+              <div class="backend-icon" style={`background:${b.color}15; border-color:${b.color}40;`}>
+                <span>{b.icon}</span>
+              </div>
+              <div>
+                <span class="backend-runtime" style={`color:${b.color}; border:1px solid ${b.color}35;`}>{b.runtime}</span>
+                <h3 class="backend-name">{b.name}</h3>
+              </div>
+            </div>
+            <div class="backend-model-badge">
+              <span class="model-label">Model:</span>
+              <span class="model-value">{b.model}</span>
+            </div>
+            <p class="backend-desc">{b.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Core System Capabilities -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-purple">ORCHESTRATION PIPELINE</span>
+        <h2 class="section-title">End-to-End Orchestration Capabilities</h2>
+        <p class="section-subtitle">
+          From plan submission to distributed execution, caching, telemetry, and automated memory tiering.
+        </p>
+      </div>
+
+      <div class="capabilities-grid">
+        {capabilities.map((c) => (
+          <div class="cap-card" style={`--cap-color: ${c.color};`}>
+            <div class="cap-header">
+              <span class="cap-icon">{c.icon}</span>
+              <span class="cap-tagline" style={`color:${c.color};`}>{c.tagline}</span>
+            </div>
+            <h3 class="cap-title">{c.title}</h3>
+            <p class="cap-desc">{c.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep Dive: Dual Operating Models -->
+  <section class="section-padding bg-darker">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-emerald">EXECUTION CONTRACTS</span>
+        <h2 class="section-title">Dual Operating Models: SPMD &amp; BSP</h2>
+        <p class="section-subtitle">
+          Accelerator declares execution and programming models per backend, validating contracts so mixing device types never hides behavioral semantics.
+        </p>
+      </div>
+
+      <div class="table-container">
+        <table class="op-model-table">
+          <thead>
+            <tr>
+              <th>Architectural Dimension</th>
+              <th>Intel GPU (Level Zero)</th>
+              <th>Graphcore IPU (Poplar)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {operatingModelComparison.map((row) => (
+              <tr>
+                <td class="dim-col"><strong>{row.feature}</strong></td>
+                <td class="intel-col">{row.intel}</td>
+                <td class="ipu-col">{row.ipu}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep Dive: Plan Lifecycle & KV-Cache -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="dual-feature-grid">
+        <!-- Feature 1: Compile Once, Reuse -->
+        <div class="deep-card">
+          <div class="deep-card-header">
+            <span class="badge badge-cyan">COMPILATION LIFECYCLE</span>
+            <h3 class="deep-title">Compile Once, Reuse</h3>
+          </div>
+          <p class="deep-text">
+            Plan compilation is isolated from execution. Content-addressed plan hashing ensures repetitive computations avoid redundant compilation cycles.
+          </p>
+          <div class="deep-bullet-box">
+            <div class="deep-bullet-item">
+              <strong>Content-Addressed Hashing</strong>
+              <p>Cryptographic hash derived from graph topology, operator signatures, parameter types, and tensor dimensions.</p>
+            </div>
+            <div class="deep-bullet-item">
+              <strong>Compiled Graph Cache</strong>
+              <p>Maintains serialized IPU Poplar executable streams and compiled Level Zero Zebin modules ready for instant execution.</p>
+            </div>
+            <div class="deep-bullet-item">
+              <strong>Segment Propagation</strong>
+              <p>Multi-backend plans are automatically partitioned into contiguous device segments with managed DMA/RDMA boundaries.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 2: KV-Cache Tiering for LLMs -->
+        <div class="deep-card">
+          <div class="deep-card-header">
+            <span class="badge badge-emerald">MEMORY ORCHESTRATION</span>
+            <h3 class="deep-title">KV-Cache Tiering for LLMs</h3>
+          </div>
+          <p class="deep-text">
+            Overcomes single-device memory limits for large context window language models through hierarchical storage tiering.
+          </p>
+          <div class="deep-bullet-box">
+            <div class="deep-bullet-item">
+              <strong>Pinned Layer Buffer Pool</strong>
+              <p>High-priority attention heads and recent token states remain locked in ultra-fast device VRAM or host pinned RAM.</p>
+            </div>
+            <div class="deep-bullet-item">
+              <strong>Address Map &amp; Directory</strong>
+              <p>Tracks page offsets across VRAM, host system memory, and streaming NVMe storage for sub-millisecond retrieval.</p>
+            </div>
+            <div class="deep-bullet-item">
+              <strong>Vector-Engine Channel</strong>
+              <p>Direct bridge enabling Hypertensor GraphRAG and ML Suite inference engines to stream KV state asynchronously.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why This Exists Banner -->
+  <section class="why-section">
+    <div class="container">
+      <div class="why-card">
+        <span class="badge badge-cyan">FOUNDATIONAL INFRASTRUCTURE</span>
+        <h2 class="why-title">Why This Exists</h2>
+        <p class="why-quote">
+          &ldquo;Compute shouldn't be locked to one vendor's stack. Accelerator lets a workstation with an older IPU card, an Intel GPU and a few dozen CPU cores act as one machine. It is the hardware foundation under the rest of the suite: the ML libraries, the swarm optimizers and Hypertensor GraphRAG all reach devices through it.&rdquo;
+        </p>
+        <div class="why-meta">
+          <strong>HF Labs Systems Foundation</strong> &bull; Unified Heterogeneous Compute Layer
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Global CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-box">
+        <h2 class="cta-title">Unify Your Hardware Compute Under One Layer</h2>
+        <p class="cta-desc">
+          Deploy computation plans across IPUs, GPUs, and CPUs without rewriting application code. Explore the open repositories or read our operator guides.
+        </p>
+        <div class="cta-buttons">
+          <a href="https://github.com/hf-laboratories/IPUServices" target="_blank" rel="noopener noreferrer" class="btn-primary">
+            View on GitHub &rarr;
+          </a>
+          <a href="/docs#accelerator-interop" class="btn-secondary">
+            Read the Docs
+          </a>
+          <a href="/products/ht-graphrag#licensing" class="btn-secondary">
+            Contact Us
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .product-top-bar {
+    background: rgba(15, 23, 42, 0.6);
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 0;
+    font-size: 13px;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .breadcrumb a {
+    color: var(--text-secondary);
+  }
+
+  .breadcrumb a:hover {
+    color: var(--accent-blue);
+  }
+
+  .breadcrumb .sep {
+    color: var(--border-color);
+  }
+
+  .breadcrumb .curr {
+    color: var(--text-primary);
+  }
+
+  /* Hero */
+  .product-hero {
+    padding: 60px 0 45px;
+    position: relative;
+  }
+
+  .hero-badge-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .badge-purple {
+    background: rgba(129, 140, 248, 0.12);
+    color: var(--accent-purple);
+    border: 1px solid rgba(129, 140, 248, 0.3);
+  }
+
+  .badge-cyan {
+    background: rgba(56, 189, 248, 0.12);
+    color: var(--accent-blue);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+  }
+
+  .badge-emerald {
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--accent-emerald);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .badge-amber {
+    background: rgba(245, 158, 11, 0.12);
+    color: var(--accent-amber);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+  }
+
+  .hero-layout {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  @media (max-width: 1024px) {
+    .hero-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .hero-title {
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #f8fafc;
+    margin-bottom: 14px;
+  }
+
+  .hero-tagline {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--accent-blue);
+    line-height: 1.4;
+    margin-bottom: 18px;
+  }
+
+  .hero-intro {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 28px;
+  }
+
+  .hero-intro strong {
+    color: #f1f5f9;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn-arrow {
+    transition: transform 0.2s ease;
+  }
+
+  .btn-primary:hover .btn-arrow {
+    transform: translateX(3px);
+  }
+
+  /* Specs Card */
+  .hero-specs-card {
+    background: #080c18;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  .specs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .specs-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+
+  .specs-pill {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent-blue);
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .specs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12.5px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .spec-label {
+    color: var(--text-secondary);
+  }
+
+  .spec-value {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: #e2e8f0;
+    text-align: right;
+  }
+
+  .highlight-green {
+    color: var(--accent-emerald) !important;
+    font-weight: 700;
+  }
+
+  .highlight-cyan {
+    color: var(--accent-blue) !important;
+    font-weight: 700;
+  }
+
+  /* Section Padding */
+  .section-padding {
+    padding: 70px 0;
+  }
+
+  .bg-darker {
+    background: #050812;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .section-header {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 48px;
+  }
+
+  .section-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-top: 10px;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+
+  .section-subtitle {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Backends Grid */
+  .backends-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .backends-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .backend-card {
+    background: #090e1c;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease;
+  }
+
+  .backend-card:hover {
+    border-color: var(--back-color);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  }
+
+  .backend-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .backend-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 20px;
+  }
+
+  .backend-runtime {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+  }
+
+  .backend-name {
+    font-size: 17px;
+    font-weight: 800;
+    color: #f8fafc;
+  }
+
+  .backend-model-badge {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+    padding: 4px 8px;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    margin-bottom: 12px;
+    display: flex;
+    gap: 6px;
+  }
+
+  .model-label {
+    color: var(--text-muted);
+  }
+
+  .model-value {
+    color: var(--text-primary);
+  }
+
+  .backend-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+
+  /* Capabilities Grid */
+  .capabilities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .cap-card {
+    background: #080c18;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+  }
+
+  .cap-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .cap-icon {
+    font-size: 24px;
+  }
+
+  .cap-tagline {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .cap-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 8px;
+  }
+
+  .cap-desc {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Table Container */
+  .table-container {
+    overflow-x: auto;
+    background: #080c18;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 8px;
+  }
+
+  .op-model-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    text-align: left;
+  }
+
+  .op-model-table th {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 14px 18px;
+    color: #f1f5f9;
+    font-weight: 700;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .op-model-table td {
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    color: var(--text-secondary);
+  }
+
+  .dim-col strong {
+    color: #f8fafc;
+  }
+
+  .intel-col {
+    color: var(--accent-blue);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .ipu-col {
+    color: var(--accent-purple);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  /* Dual Feature Grid */
+  .dual-feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  @media (max-width: 900px) {
+    .dual-feature-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .deep-card {
+    background: #080c18;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+  }
+
+  .deep-card-header {
+    margin-bottom: 12px;
+  }
+
+  .deep-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-top: 8px;
+  }
+
+  .deep-text {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .deep-bullet-box {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .deep-bullet-item {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+    padding: 14px;
+  }
+
+  .deep-bullet-item strong {
+    font-size: 13px;
+    color: #f1f5f9;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .deep-bullet-item p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  /* Why Section */
+  .why-section {
+    padding: 50px 0;
+    background: #040711;
+  }
+
+  .why-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    text-align: center;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .why-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-top: 10px;
+    margin-bottom: 16px;
+  }
+
+  .why-quote {
+    font-size: 18px;
+    font-style: italic;
+    color: #cbd5e1;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .why-meta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .why-meta strong {
+    color: var(--accent-blue);
+  }
+
+  /* CTA Section */
+  .cta-section {
+    padding: 70px 0 80px;
+  }
+
+  .cta-box {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(129, 140, 248, 0.1) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: var(--radius-lg);
+    padding: 48px 32px;
+    text-align: center;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .cta-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 12px;
+  }
+
+  .cta-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto 28px;
+    line-height: 1.6;
+  }
+
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+</style>

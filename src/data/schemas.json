@@ -28,7 +28,7 @@
     "id": "registry-project",
     "name": "Registry Project Paged Schema",
     "filename": "registry_project_paged_schema.json",
-    "description": "Standard schema for querying and enumerating monorepo projects, dependencies, targets, and division classifications.",
+    "description": "Standard schema for querying and enumerating HFLabs projects, dependencies, targets, and division classifications.",
     "version": "1.0.0",
     "fields": [
       { "name": "projectId", "type": "string", "required": true, "desc": "Unique identifier of the project." },

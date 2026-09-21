@@ -90,7 +90,8 @@ const products = [
     badgeColor: "#f43f5e",
     tagline: "Managed .NET wrapper for Intel Level Zero GPU compute with 26 precompiled OpenCL C kernels across 11 Intel hardware targets.",
     status: "Production Ready",
-    href: "/docs#levelzero-net",
+    href: "/docs/levelzero-net",
+    buttonText: "View LevelZero.NET Docs →",
     features: [
       "16 domain kernel wrappers (fitness, PSO, SNN/STDP, N-body, dominance)",
       "26 precompiled OpenCL C kernel sources in SPIR-V & native zebin",
@@ -105,12 +106,29 @@ const products = [
     badgeColor: "#34d399",
     tagline: "Unified hardware-accelerator layer, IPU SQL query acceleration, Poplar.NET IPU shims, and Abigen C/C++ binding generator.",
     status: "Production Ready",
-    href: "/docs#accelerator-interop",
+    href: "/products/accelerator",
+    buttonText: "Explore Accelerator Product Page →",
     features: [
       "gRPC plan execution across IPU, CUDA, OpenCL, Level Zero, FPGA, DMA/RDMA",
       "IPU SQL query acceleration for PostgreSQL & SQL Server CLR (aggregates & distance)",
       "Poplar.NET managed .NET wrapper for Graphcore Poplar/PopART",
       "Abigen libclang-driven C ABI shim and C# binding synthesizer"
+    ]
+  },
+  {
+    id: "queryaccel-ipu",
+    name: "QueryAccel IPU Database Layer",
+    badge: "Database Acceleration",
+    badgeColor: "#38bdf8",
+    tagline: "Push SQL's heaviest operations onto IPU hardware, transparently. Native PostgreSQL FDW and SQL Server CLR bridge.",
+    status: "Production Ready",
+    href: "/products/queryaccel",
+    buttonText: "Explore QueryAccel Product Page →",
+    features: [
+      "PostgreSQL native C/C++ Foreign Data Wrapper with cost-based pushdown",
+      "SQL Server CLR assembly executing IPU inference with single T-SQL EXEC",
+      "Hardware offload for COUNT, SUM, AVG, MIN, MAX and dense vector metrics",
+      "100% graceful degradation to CPU path when no IPU hardware is present"
     ]
   }
 ];

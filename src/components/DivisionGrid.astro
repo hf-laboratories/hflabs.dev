@@ -76,6 +76,20 @@ import divisions from '../data/divisions.json';
                       </a>
                     </div>
                   )}
+                  {p.name === "Accelerator" && (
+                    <div style="margin-top:8px;">
+                      <a href="/products/accelerator" class="btn-primary" style="font-size:11px; padding:4px 10px; display:inline-flex; align-items:center; gap:4px;">
+                        Accelerator Product Page &rarr;
+                      </a>
+                    </div>
+                  )}
+                  {(p.name.includes("QueryAccel") || p.name.includes("IPU SQL")) && (
+                    <div style="margin-top:8px;">
+                      <a href="/products/queryaccel" class="btn-primary" style="font-size:11px; padding:4px 10px; display:inline-flex; align-items:center; gap:4px;">
+                        QueryAccel Product Page &rarr;
+                      </a>
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>
