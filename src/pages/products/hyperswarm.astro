@@ -8,7 +8,7 @@ const capabilities = [
     icon: "🐝",
     title: "Broad algorithm coverage",
     tagline: "35 Optimizers across 4 Families",
-    desc: "12 core swarm algorithms (PSO, Ant Colony, Bee Colony, Bat, Grey Wolf, Fish School, Firefly, Glowworm, Cuckoo, Krill Herd, Synchronizing Firefly, OfBatsAndBeacons), 14 hybrid metaheuristics, and 6 advanced global search routines.",
+    desc: "11 core swarm algorithms (PSO, Ant Colony, Bee Colony, Bat, Grey Wolf, Fish School, Firefly, Glowworm, Cuckoo, Krill Herd, Synchronizing Firefly), 14 hybrid metaheuristics, 7 advanced metaheuristics (including OfBatsAndBeacons, ILS, MAP-Elites), and 3 multi-objective engines.",
     color: "#818cf8"
   },
   {
@@ -65,7 +65,7 @@ const capabilities = [
 const algorithmTaxonomy = [
   {
     category: "Core Swarm Optimizers",
-    count: 12,
+    count: 11,
     badge: "Population Metaheuristics",
     color: "#818cf8",
     items: [
@@ -79,8 +79,7 @@ const algorithmTaxonomy = [
       { name: "Glowworm Swarm (GSO)", desc: "Luciferin-induced variable neighborhood search for simultaneous multimodal peak capture." },
       { name: "Cuckoo Search (CS)", desc: "Lévy flights and parasitic egg replacement mechanisms for scale-invariant exploration." },
       { name: "Krill Herd (KH)", desc: "Movement induced by other individuals, foraging activity, and random directional diffusion." },
-      { name: "Synchronizing Firefly", desc: "Coupled phase-oscillator synchrony with spatial coordinate updates." },
-      { name: "OfBatsAndBeaconsSwarm", desc: "Specialized hybrid acoustic-beacon navigation swarm with directional beacon vectors." }
+      { name: "Synchronizing Firefly", desc: "Coupled phase-oscillator synchrony with spatial coordinate updates." }
     ]
   },
   {
@@ -107,10 +106,11 @@ const algorithmTaxonomy = [
   },
   {
     category: "Advanced Metaheuristics & MO",
-    count: 9,
+    count: 10,
     badge: "High-Dimensional & Pareto",
     color: "#f59e0b",
     items: [
+      { name: "Of Bats and Beacons Swarm", desc: "Models the search interplay of four archetypal characters—Batman, Robin, Gordon, and Joker—following their classic tropes (vigilante tracking, loyal support, signal coordination, and chaotic disruption)." },
       { name: "Iterated Local Search (ILS)", desc: "Perturbation and local neighborhood search cycles for combinatorial spaces." },
       { name: "MAP-Elites", desc: "Multi-dimensional Archive of Phenotypic Elites illuminating diverse behavioral niches." },
       { name: "Parallel Tempering", desc: "Replica exchange across heated energy levels to traverse rugged objective barriers." },
@@ -308,7 +308,7 @@ const hardwareOffloads = [
         <span class="badge badge-purple">ALGORITHM VISUAL BLUEPRINT</span>
         <h2 class="section-title">The 35 Optimizer Modes</h2>
         <p class="section-subtitle">
-          Comprehensive visual inventory across 12 Core Swarms, 14 Hybrids, 6 Advanced Metaheuristics, and 3 Multi-Objective engines in <code>SwarmAlgorithms</code>.
+          Comprehensive visual inventory across 11 Core Swarms, 14 Hybrids, 7 Advanced Metaheuristics, and 3 Multi-Objective engines in <code>SwarmAlgorithms</code>.
         </p>
       </div>
 

@@ -90,14 +90,6 @@ const coreSwarms = [
     sub: "Coupled Phase Oscillators",
     family: "Core Swarm",
     color: "#00e5ff"
-  },
-  {
-    id: "bats-beacons",
-    abbr: "BEACONS",
-    name: "BATS & BEACONS",
-    sub: "Acoustic Beacon Navigation",
-    family: "Core Swarm",
-    color: "#00e5ff"
   }
 ];
 
@@ -160,6 +152,13 @@ const metaheuristics = [
     name: "AUGMENTED LAGRANGIAN",
     sub: "Constrained penalty convergence",
     color: "#f43f5e"
+  },
+  {
+    id: "bats-beacons",
+    abbr: "BATS & BEACONS",
+    name: "OF BATS & BEACONS",
+    sub: "Batman, Robin, Gordon & Joker Dynamics",
+    color: "#f43f5e"
   }
 ];
 
@@ -194,17 +193,17 @@ const multiObjective = [
     <div class="title-wrap">
       <h2 class="bp-title">35 SWARM OPTIMIZERS</h2>
       <p class="bp-subtitle">
-        HyperSwarm Optimization Suite &bull; <strong>12 CORE SWARM</strong> &bull; <strong>14 HYBRID</strong> &bull; <strong>6 METAHEURISTIC</strong> &bull; <strong>3 MULTI-OBJECTIVE</strong>
+        HyperSwarm Optimization Suite &bull; <strong>11 CORE SWARM</strong> &bull; <strong>14 HYBRID</strong> &bull; <strong>7 METAHEURISTIC</strong> &bull; <strong>3 MULTI-OBJECTIVE</strong>
       </p>
       <span class="bp-caption">One tile per optimizer class in <code>SwarmAlgorithms</code></span>
     </div>
   </div>
 
-  <!-- SECTION 1: CORE SWARM ALGORITHMS (12) -->
+  <!-- SECTION 1: CORE SWARM ALGORITHMS (11) -->
   <div class="blueprint-section">
     <div class="section-banner banner-cyan">
       <span class="sec-bar bar-cyan"></span>
-      <h3 class="sec-heading">CORE SWARM ALGORITHMS &mdash; 12</h3>
+      <h3 class="sec-heading">CORE SWARM ALGORITHMS &mdash; 11</h3>
     </div>
 
     <div class="tiles-grid">
@@ -487,28 +486,6 @@ const multiObjective = [
         </div>
         <div class="tile-footer"><span class="tile-title">SYNCHRONIZING FIREFLY</span></div>
       </div>
-
-      <!-- 12: Bats & Beacons -->
-      <div class="bp-tile tile-cyan" data-algo="bats-beacons">
-        <div class="tile-corner tl"></div><div class="tile-corner tr"></div>
-        <div class="tile-corner bl"></div><div class="tile-corner br"></div>
-        <div class="tile-top-tag"><span class="tag-fam">CORE SWARM</span><span class="tag-code">BEACON</span></div>
-        <div class="tile-canvas">
-          <svg viewBox="0 0 160 110" class="tile-svg">
-            <!-- 3 Triangular Beacons -->
-            <polygon points="45,30 40,40 50,40" fill="#00e5ff" filter="drop-shadow(0 0 4px #00e5ff)" />
-            <polygon points="120,40 115,50 125,50" fill="#00e5ff" filter="drop-shadow(0 0 4px #00e5ff)" />
-            <polygon points="80,75 75,85 85,85" fill="#ffffff" filter="drop-shadow(0 0 6px #00e5ff)" />
-            <!-- Concentric Broadcast Waves -->
-            <circle cx="45" cy="35" r="16" fill="none" stroke="rgba(0,229,255,0.3)" />
-            <circle cx="45" cy="35" r="28" fill="none" stroke="rgba(0,229,255,0.15)" />
-            <circle cx="120" cy="45" r="16" fill="none" stroke="rgba(0,229,255,0.3)" />
-            <circle cx="80" cy="80" r="18" fill="none" stroke="rgba(0,229,255,0.5)" />
-            <circle cx="80" cy="80" r="32" fill="none" stroke="rgba(0,229,255,0.2)" />
-          </svg>
-        </div>
-        <div class="tile-footer"><span class="tile-title">BATS &amp; BEACONS</span></div>
-      </div>
     </div>
   </div>
 
@@ -555,11 +532,11 @@ const multiObjective = [
     </div>
   </div>
 
-  <!-- SECTION 3: ADVANCED METAHEURISTICS (6) -->
+  <!-- SECTION 3: ADVANCED METAHEURISTICS (7) -->
   <div class="blueprint-section" style="margin-top:40px;">
     <div class="section-banner banner-rose">
       <span class="sec-bar bar-rose"></span>
-      <h3 class="sec-heading">ADVANCED METAHEURISTICS &mdash; 6</h3>
+      <h3 class="sec-heading">ADVANCED METAHEURISTICS &mdash; 7</h3>
     </div>
 
     <div class="tiles-grid">
@@ -716,6 +693,43 @@ const multiObjective = [
         </div>
         <div class="tile-footer"><span class="tile-title">AUGMENTED LAGRANGIAN</span></div>
       </div>
+
+      <!-- 7: Of Bats and Beacons -->
+      <div class="bp-tile tile-rose" data-algo="bats-beacons">
+        <div class="tile-corner tl"></div><div class="tile-corner tr"></div>
+        <div class="tile-corner bl"></div><div class="tile-corner br"></div>
+        <div class="tile-top-tag"><span class="tag-fam" style="color:#fb7185;">METAHEURISTIC</span><span class="tag-desc" style="color:#fca5a5;">4-Agent Character Trope</span></div>
+        <div class="tile-canvas">
+          <svg viewBox="0 0 160 110" class="tile-svg">
+            <!-- Gordon's Beacon Spotlight Beam -->
+            <polygon points="30,95 65,20 95,20 38,95" fill="rgba(244,63,94,0.12)" />
+            <ellipse cx="80" cy="20" rx="16" ry="7" fill="rgba(244,63,94,0.25)" stroke="#f43f5e" stroke-width="0.8" />
+            <!-- Bat Silhouette / Beacon Insignia -->
+            <path d="M74,21 Q77,18 80,21 Q83,18 86,21 Q84,23 80,22 Q76,23 74,21 Z" fill="#ffffff" filter="drop-shadow(0 0 3px #f43f5e)" />
+            
+            <!-- Gordon Emitter (Searchlight Base) -->
+            <circle cx="34" cy="95" r="3.5" fill="#f43f5e" />
+            <text x="34" y="105" fill="#fb7185" font-size="6" font-family="monospace" text-anchor="middle">GORDON</text>
+
+            <!-- Batman Node (Primary Tracker) -->
+            <circle cx="75" cy="50" r="4.5" fill="#ffffff" filter="drop-shadow(0 0 6px #f43f5e)" />
+            <path d="M71,46 L75,41 L79,46 Z" fill="#f43f5e" />
+            <line x1="75" y1="50" x2="80" y2="25" stroke="#ffffff" stroke-width="1.2" stroke-dasharray="2 2" />
+            <text x="88" y="52" fill="#ffffff" font-size="6.5" font-weight="bold" font-family="monospace">BATMAN</text>
+
+            <!-- Robin Node (Supporting Wingman) -->
+            <circle cx="56" cy="68" r="3" fill="#fb7185" />
+            <line x1="56" y1="68" x2="72" y2="52" stroke="rgba(251,113,133,0.6)" stroke-width="1" />
+            <text x="56" y="79" fill="#fb7185" font-size="6" font-family="monospace" text-anchor="middle">ROBIN</text>
+
+            <!-- Joker Node (Chaotic Disrupter / Perturbation Vector) -->
+            <circle cx="125" cy="62" r="3.5" fill="#c084fc" filter="drop-shadow(0 0 4px #c084fc)" />
+            <path d="M125,62 Q105,75 90,60 T75,50" fill="none" stroke="rgba(192,132,252,0.6)" stroke-width="1" stroke-dasharray="2 2" />
+            <text x="125" y="74" fill="#c084fc" font-size="6" font-family="monospace" text-anchor="middle">JOKER</text>
+          </svg>
+        </div>
+        <div class="tile-footer"><span class="tile-title">OF BATS &amp; BEACONS</span></div>
+      </div>
     </div>
   </div>
 
@@ -821,9 +835,13 @@ const multiObjective = [
     background-size: 32px 32px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-lg);
-    padding: 40px 32px;
+    padding: 36px 24px;
     position: relative;
     box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
   }
 
   .blueprint-main-header {
@@ -846,6 +864,7 @@ const multiObjective = [
     color: var(--text-secondary);
     font-family: var(--font-mono);
     margin-bottom: 4px;
+    line-height: 1.5;
   }
 
   .bp-subtitle strong {
@@ -868,12 +887,14 @@ const multiObjective = [
     align-items: center;
     gap: 12px;
     margin-bottom: 20px;
+    flex-wrap: wrap;
   }
 
   .sec-bar {
     width: 4px;
     height: 18px;
     border-radius: 2px;
+    flex-shrink: 0;
   }
 
   .bar-cyan { background: #00e5ff; box-shadow: 0 0 8px #00e5ff; }
@@ -894,34 +915,39 @@ const multiObjective = [
   .banner-rose .sec-heading { color: #fb7185; }
   .banner-lime .sec-heading { color: #a3e635; }
 
-  /* Tiles Grid: 7 columns on full desktop */
+  /* Tiles Grid: Flexible auto-fit grid that always wraps to fit the container width */
   .tiles-grid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+    width: 100%;
+    min-width: 0;
   }
 
-  @media (max-width: 1350px) {
+  @media (min-width: 1280px) {
     .tiles-grid {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fill, minmax(138px, 1fr));
+      gap: 14px;
     }
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 640px) {
+    .swarm-blueprint-container {
+      padding: 24px 16px;
+    }
     .tiles-grid {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+      gap: 10px;
+    }
+    .bp-title {
+      font-size: 24px;
     }
   }
 
-  @media (max-width: 650px) {
+  @media (max-width: 400px) {
     .tiles-grid {
       grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (max-width: 420px) {
-    .tiles-grid {
-      grid-template-columns: 1fr;
+      gap: 8px;
     }
   }
 
@@ -935,7 +961,10 @@ const multiObjective = [
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 175px;
+    min-height: 170px;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
     transition: all 0.2s ease;
   }
 
@@ -1002,6 +1031,7 @@ const multiObjective = [
     gap: 1px;
     text-align: center;
     margin-bottom: 4px;
+    min-width: 0;
   }
 
   .tag-fam {
@@ -1011,12 +1041,18 @@ const multiObjective = [
     letter-spacing: 0.05em;
     color: #38bdf8;
     text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .tag-code {
     font-family: var(--font-mono);
     font-size: 7.5px;
     color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .tag-desc {
@@ -1036,11 +1072,14 @@ const multiObjective = [
     align-items: center;
     justify-content: center;
     padding: 4px 0;
+    min-width: 0;
+    width: 100%;
   }
 
   .tile-svg {
     width: 100%;
-    height: 85px;
+    max-width: 100%;
+    height: 80px;
     display: block;
   }
 
@@ -1049,6 +1088,7 @@ const multiObjective = [
     border-top: 1px solid rgba(255, 255, 255, 0.06);
     padding-top: 6px;
     text-align: center;
+    min-width: 0;
   }
 
   .tile-title {

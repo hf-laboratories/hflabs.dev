@@ -1,0 +1,1343 @@
+---
+// src/pages/products/ml-suite.astro
+import Layout from '../../layouts/Layout.astro';
+
+const modules = [
+  {
+    id: "hpo",
+    name: "Hyperparameter Optimization",
+    badge: "Resumable & Checkpointed",
+    icon: "🎯",
+    color: "#38bdf8",
+    tagline: "Bayesian, Hyperband, BOHB, ASHA-BOHB & TuRBO",
+    desc: "A complete HPO framework built around resumable sessions. You ask for the next trial, report a result, and the framework handles budgets, early stopping, and JSON checkpointing.",
+    features: [
+      "Five core algorithms: Bayesian Optimization (Gaussian Process surrogate), Hyperband, BOHB, ASHA-BOHB, and TuRBO (trust-region Bayesian optimization)",
+      "Continuous, integer, and categorical parameter spaces with minimizing or maximizing objectives",
+      "Disk-persisted JSON checkpointing ensuring long exploratory searches survive system restarts",
+      "Built-in benchmark suite to evaluate and compare optimizer convergence against your own objectives"
+    ]
+  },
+  {
+    id: "kge",
+    name: "Knowledge Graph Embeddings",
+    badge: "SIMD & IPU Native",
+    icon: "🕸️",
+    color: "#818cf8",
+    tagline: "6 Scoring Functions & Ontology Extractors",
+    desc: "Learn from the structure of a graph and predict missing links with high-dimensional geometric embedding spaces and automated ontology induction.",
+    features: [
+      "Six scoring functions: TransE, RotatE, ComplEx, DistMult, ZPinch-TransE (anchors schema entities near origin), and Dual-Conjugate ComplEx (inverse relations)",
+      "Dual acceleration: SIMD Vector/TensorPrimitives CPU backend and Poplar-native backend for Graphcore IPUs",
+      "Ranking evaluator computing Mean Reciprocal Rank (MRR), Hits@1, Hits@3, and Hits@10",
+      "Ontology auto-extractors building graphs from codebases, schemas, plans, skill files, and white papers"
+    ]
+  },
+  {
+    id: "l0llm",
+    name: "Local LLM Inference (Level Zero)",
+    badge: "From-Scratch .NET Runtime",
+    icon: "⚡",
+    color: "#06b6d4",
+    tagline: "Native Safetensors, RoPE & Intel GPU Kernels",
+    desc: "A pure from-scratch transformer runtime in .NET—not a wrapper around llama.cpp or an external server. Targets Intel Level Zero GPUs directly.",
+    features: [
+      "Direct Hugging Face safetensors loader with built-in BPE tokenizer and Qwen chat templating",
+      "Decoder layers, rotary position embeddings (RoPE), linear attention, dynamic KV cache, and configurable precision (FP16/BF16/FP32)",
+      "High-throughput beam search and group beam search decoding",
+      "Ships with `l0llm` standalone command-line interactive chat tool"
+    ]
+  },
+  {
+    id: "graph-decoding",
+    name: "Graph-Constrained Decoding",
+    badge: "Hallucination Defense",
+    icon: "🛡️",
+    color: "#10b981",
+    tagline: "Tri-Beam Token Trie Verification",
+    desc: "Constrains LLM output strictly to what a knowledge graph supports. Eliminates factual hallucinations by construction rather than post-hoc validation.",
+    features: [
+      "Tri-beam decoder that synchronizes beam search candidates against knowledge graph entity boundaries",
+      "Token trie constructed directly over graph entities, ensuring generated text only names valid entities",
+      "Zero post-processing overhead by enforcing graph schema validity during the forward generation pass",
+      "Seamless bridge to Hypertensor GraphRAG in-memory property graph stores"
+    ]
+  },
+  {
+    id: "graph-inference",
+    name: "Inference over Graphs",
+    badge: "Dynamic & Multi-Graph",
+    icon: "🔄",
+    color: "#f59e0b",
+    tagline: "Contextual, Inter-Graph & Sidecar Telemetry",
+    desc: "Contextual bias engines, inter-graph multi-topology synchronization, and autonomous sidecar telemetry observers.",
+    features: [
+      "Contextual inference: biases agent and swarm parameters from history using k-means clustering and weighted regression with 8 confidence factors",
+      "Inter-graph inference: runs multiple loosely coupled graphs with excitatory, inhibitory, and modulatory couplings",
+      "Cross-correlation and mutual-information normalization with iterative multi-graph convergence tracking",
+      "Sidecar graphs: observer graphs monitoring compute timing, memory pressure, and bandwidth to forecast bottlenecks"
+    ]
+  },
+  {
+    id: "snn",
+    name: "Spiking Neural Networks",
+    badge: "Neuromorphic CPU Sim",
+    icon: "⚡",
+    color: "#ec4899",
+    tagline: "Leaky Integrate-and-Fire & STDP Plasticity",
+    desc: "A high-performance reference CPU simulator for neuromorphic and event-driven computation with biological plasticity rules.",
+    features: [
+      "Grouped Leaky Integrate-and-Fire (LIF) neurons with event-driven spike scheduling and hop-derived delays",
+      "Biologically grounded Spike-Timing-Dependent Plasticity (STDP) and homeostatic activity gating",
+      "Comprehensive spike-correlation, inter-spike-interval (ISI) analysis, and burst detection diagnostics",
+      "Refractory periods and configurable membrane voltage leak dynamics"
+    ]
+  },
+  {
+    id: "utilities",
+    name: "Model & Evaluation Utilities",
+    badge: "Diagnostics & Tooling",
+    icon: "🛠️",
+    color: "#a855f7",
+    tagline: "ONNX Analysis, Drift Detection & Time-Series",
+    desc: "Production-grade utility toolkit for model profiling, feature extraction, and drift monitoring.",
+    features: [
+      "ONNX operator compatibility analyzer pinpointing IPU bottlenecks and unsupported kernels",
+      "Feature extraction suite including sliding-window time-series feature generators",
+      "Statistical distribution drift detector flagging live inference distribution shifts",
+      "Ranking optimizer and benchmark provider for persisting and comparing multi-run metrics"
+    ]
+  }
+];
+
+const agenticPrimitives = [
+  {
+    category: "Planning & Search",
+    color: "#38bdf8",
+    items: [
+      { name: "Hierarchical Planner", desc: "Decomposes complex multi-stage objectives into recursive sub-goal execution trees." },
+      { name: "MCTS Exploration Engine", desc: "Monte Carlo Tree Search for structured decision spaces with upper confidence bound (UCB1) selection." },
+      { name: "Prioritized Task Scheduler", desc: "Dynamic priority queue scheduler balancing dependency constraints and resource limits." },
+      { name: "Goal-Progress Monitor", desc: "Continuous state evaluator tracking milestone completion and convergence trajectories." }
+    ]
+  },
+  {
+    category: "Reasoning & Verification",
+    color: "#818cf8",
+    items: [
+      { name: "Reflection Loop", desc: "Self-evaluating critique cycle prompting recursive self-correction and plan refinement." },
+      { name: "Chain-of-Verification Pipeline", desc: "Generates baseline responses, formulates factual verification questions, and reconciles answers." },
+      { name: "Multi-Persona Debate", desc: "Orchestrates multi-agent dialectic consensus between competing analytical personas." },
+      { name: "Program-Aided Reasoning", desc: "Synthesizes and executes deterministic code snippets to verify mathematical logic." },
+      { name: "Judge Evaluator", desc: "Independent scoring arbiter assessing plan validity, hallucination risk, and goal adherence." }
+    ]
+  },
+  {
+    category: "Coordination & Routing",
+    color: "#f59e0b",
+    items: [
+      { name: "Blackboard Architecture", desc: "Shared in-memory workspace for asynchronous multi-agent collaboration and state updates." },
+      { name: "Semantic Router", desc: "Embedding-driven dynamic intent classifier dispatching tasks to specialized agents." },
+      { name: "Topology Manager", desc: "Defines and enforces agent communication topologies (Ring, Mesh, Star, Hierarchical)." },
+      { name: "Fallback Chain", desc: "Deterministic retry and degradation handler with graceful recovery strategies." },
+      { name: "Tool Registry", desc: "Typed tool manifest with parameter validation, schema reflection, and execution sandboxing." },
+      { name: "Agent Cards", desc: "Standardized metadata manifests specifying capabilities, constraints, and latency profiles." }
+    ]
+  },
+  {
+    category: "Safety & Control",
+    color: "#f43f5e",
+    items: [
+      { name: "Guardrail Pipeline", desc: "Pre- and post-execution policy enforcement intercepting unsafe or out-of-bounds operations." },
+      { name: "Human-in-the-Loop Gate", desc: "Configurable approval interceptor pausing execution for human operator sign-off." },
+      { name: "Resource Budget Ledger", desc: "Strict token, compute time, and memory budget tracker with automatic circuit breakers." }
+    ]
+  },
+  {
+    category: "Memory & Adaptation",
+    color: "#10b981",
+    items: [
+      { name: "Memory Bank", desc: "Episodic and working memory store with decay curves and associative retrieval." },
+      { name: "Context Compactor", desc: "Lossless context summarizer preserving critical causal links while reducing token usage." },
+      { name: "Evolutionary Adaptation", desc: "Genetic prompt and parameter mutator selecting high-performing agent configurations." }
+    ]
+  }
+];
+
+const reasoningAlgorithms = [
+  {
+    name: "Multi-Hop Causal Path Reasoning",
+    icon: "🔗",
+    tagline: "IKnowledgeGraph Traversal",
+    desc: "Discovers and scores directed causal inference paths across heterogeneous entity relationships with confidence decay."
+  },
+  {
+    name: "Grounding Verifier",
+    icon: "🔍",
+    tagline: "Fact Verification Engine",
+    desc: "Cross-checks LLM assertions against verified graph subgraphs, flagging unsupported claims and entity hallucination."
+  },
+  {
+    name: "TAPE Rollout Planning",
+    icon: "🗺️",
+    tagline: "Task-Aware Planning & Execution",
+    desc: "Rolls out predictive state trajectories over graph-represented domain models before committing actions."
+  },
+  {
+    name: "Belief-Desire-Intention (BDI) Engine",
+    icon: "🧠",
+    tagline: "Formal Agent Psychology",
+    desc: "Maintains formal world beliefs, updates goal desires, and generates committed intention plans based on graph state."
+  },
+  {
+    name: "Cognitive-Bias Detection & Debiasing",
+    icon: "⚖️",
+    tagline: "Analytical Rigor",
+    desc: "Detects confirmation bias, anchoring, and availability heuristics in agent reasoning steps and injects counter-arguments."
+  }
+];
+
+const kgeScoringFunctions = [
+  { name: "TransE", math: "||h + r - t||", desc: "Translational distance model in continuous vector space." },
+  { name: "RotatE", math: "||h ∘ r - t||", desc: "Complex vector rotation modeling symmetry, antisymmetry, and composition." },
+  { name: "ComplEx", math: "Re(⟨w_r, e_s, e_o⟩)", desc: "Hermitian dot product in complex embeddings for asymmetric relations." },
+  { name: "DistMult", math: "⟨h, diag(r), t⟩", desc: "Bilinear diagonal formulation for symmetric interaction scoring." },
+  { name: "ZPinch-TransE", math: "||(h + r - t) ⊙ z||", desc: "HFLabs proprietary variant anchoring schema-level ontology roots near origin." },
+  { name: "Dual-Conjugate ComplEx", math: "Re(⟨w_r, e_s*, e_o⟩)", desc: "HFLabs proprietary dual-conjugate space preserving inverse-relation topology." }
+];
+---
+
+<Layout 
+  title="HFLabs Machine Learning Suite — Optimization, Inference & Agent Reasoning (.NET)"
+  description="Composable .NET libraries for HPO, knowledge graph embeddings, local Level Zero LLM inference, graph-constrained decoding, SNNs, and open agentic primitives."
+>
+  <!-- Top Breadcrumb Bar -->
+  <div class="product-top-bar">
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="sep">/</span>
+        <a href="/products">Products</a>
+        <span class="sep">/</span>
+        <span class="curr">HFLabs Machine Learning Suite</span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="product-hero">
+    <div class="container">
+      <div class="hero-badge-row">
+        <span class="badge badge-cyan">.NET 10 ECOSYSTEM</span>
+        <span class="badge badge-purple">ZERO CLOUD DEPENDENCIES</span>
+        <span class="badge badge-emerald">LEVEL ZERO &amp; IPU ACCELERATED</span>
+        <span class="badge badge-amber">OPEN CORE ARCHITECTURE</span>
+      </div>
+
+      <div class="hero-layout">
+        <div class="hero-main">
+          <h1 class="hero-title">HFLabs Machine Learning Suite</h1>
+          <p class="hero-tagline">
+            Optimization, inference, and agent reasoning in one .NET library set, with no cloud service in the loop.
+          </p>
+          <p class="hero-intro">
+            The <strong>ML Suite</strong> is a family of composable .NET libraries for tuning models, learning over knowledge graphs, running LLMs locally, and building agents that plan and verify their own work. Each library stands alone and has a small surface. They share the same graph and telemetry model, so you can adopt one piece or wire them together. It runs on ordinary CPUs with SIMD acceleration, and targets Intel Level Zero GPUs and Graphcore IPUs when available.
+          </p>
+
+          <div class="hero-actions">
+            <a href="https://github.com/hf-laboratories/IPUServices" target="_blank" rel="noopener noreferrer" class="btn-primary">
+              <span>View on GitHub</span>
+              <span class="btn-arrow">&rarr;</span>
+            </a>
+            <a href="/docs" class="btn-secondary">
+              <span>Read the Docs</span>
+            </a>
+            <a href="/products/ht-graphrag#licensing" class="btn-secondary">
+              <span>Talk to Us About Licensing</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-specs-card">
+          <div class="specs-header">
+            <span class="specs-title">ML Suite Technical Specifications</span>
+            <span class="specs-pill">Standalone .NET 10</span>
+          </div>
+          <div class="specs-list">
+            <div class="spec-row">
+              <span class="spec-label">Target Framework</span>
+              <span class="spec-value">.NET 10 / C# 13 (Native AOT compatible)</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Hardware Acceleration</span>
+              <span class="spec-value">SIMD (AVX-512/Neon), Intel Level Zero, Graphcore IPU</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Cloud Requirement</span>
+              <span class="spec-value highlight-green">0% — 100% Local Air-Gapped Execution</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">HPO Engines</span>
+              <span class="spec-value">Bayesian, Hyperband, BOHB, ASHA-BOHB, TuRBO</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Embedding Models</span>
+              <span class="spec-value">TransE, RotatE, ComplEx, DistMult, ZPinch, Dual-Conj</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">LLM Runtime</span>
+              <span class="spec-value">From-scratch Safetensors + Level Zero Kernels</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Agentic Primitives</span>
+              <span class="spec-value highlight-cyan">22 Dependency-Free Open Blocks</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Architecture Modules -->
+  <section id="modules" class="section-padding bg-darker">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-cyan">COMPOSABLE LIBRARIES</span>
+        <h2 class="section-title">Core Subsystems &amp; Engines</h2>
+        <p class="section-subtitle">
+          Seven modular libraries designed to stand alone or compose into high-performance local AI pipelines.
+        </p>
+      </div>
+
+      <div class="modules-grid">
+        {modules.map((m) => (
+          <div class="module-card" style={`--mod-color: ${m.color};`}>
+            <div class="mod-header">
+              <div class="mod-icon-box" style={`background: ${m.color}15; border-color: ${m.color}40;`}>
+                <span class="mod-icon">{m.icon}</span>
+              </div>
+              <div>
+                <div class="mod-badge" style={`color:${m.color}; border: 1px solid ${m.color}35;`}>{m.badge}</div>
+                <h3 class="mod-name">{m.name}</h3>
+              </div>
+            </div>
+            <p class="mod-tagline" style={`color:${m.color};`}>{m.tagline}</p>
+            <p class="mod-desc">{m.desc}</p>
+            <ul class="mod-feature-list">
+              {m.features.map((f) => (
+                <li>
+                  <span class="bullet" style={`background:${m.color};`}></span>
+                  <span>{f}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep Dive: Knowledge Graph Embeddings & Scoring Functions -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-purple">GEOMETRIC EMBEDDINGS</span>
+        <h2 class="section-title">Knowledge Graph Embedding Scoring Functions</h2>
+        <p class="section-subtitle">
+          Mathematical formulations optimized with SIMD TensorPrimitives and IPU Poplar native tensor ops.
+        </p>
+      </div>
+
+      <div class="kge-grid">
+        {kgeScoringFunctions.map((kge) => (
+          <div class="kge-card">
+            <div class="kge-name-row">
+              <h3 class="kge-name">{kge.name}</h3>
+              <code class="kge-math">{kge.math}</code>
+            </div>
+            <p class="kge-desc">{kge.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <!-- Ontology Auto-Extractors Callout -->
+      <div class="ontology-callout">
+        <div class="callout-icon-large">🧬</div>
+        <div class="callout-content">
+          <h3>Built-in Ontology Auto-Extractors</h3>
+          <p>
+            Automatically construct typed knowledge graphs from uncurated artifacts: <strong>codebases</strong> (AST/symbol resolution), <strong>database schemas</strong> (foreign key topologies), <strong>architectural plans</strong>, <strong>agent skill files</strong>, <strong>hardware descriptions</strong> (VHDL/Verilog/pinmaps), and <strong>white papers</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep Dive: Graph-Constrained Decoding & Local LLM -->
+  <section class="section-padding bg-darker">
+    <div class="container">
+      <div class="dual-feature-grid">
+        <!-- Feature 1: Local LLM -->
+        <div class="deep-card">
+          <div class="deep-card-header">
+            <span class="badge badge-cyan">LEVEL ZERO RUNTIME</span>
+            <h3 class="deep-title">Local LLM Inference (Level Zero)</h3>
+          </div>
+          <p class="deep-text">
+            A from-scratch transformer runtime implemented in clean .NET without wrapping external processes or servers.
+          </p>
+          <div class="deep-bullet-box">
+            <div class="deep-bullet-item">
+              <strong>Native Checkpoint Loader</strong>
+              <p>Loads Hugging Face <code>.safetensors</code> directly into mapped pinned buffers with BPE tokenization and Qwen chat formatting.</p>
+            </div>
+            <div class="deep-bullet-item">
+              <strong>Full Layer Implementation</strong>
+              <p>Rotary position embeddings (RoPE), linear multi-head attention, dynamic KV-cache management, and selectable FP16/BF16/FP32 precisions.</p>
+            </div>
+            <div class="deep-bullet-item">
+              <strong>Standalone CLI Tool (<code>l0llm</code>)</strong>
+              <p>Ships with a standalone command-line chat application targeting Intel Iris Xe, Arc, Meteor Lake, and GPU Max accelerators.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 2: Graph-Constrained Decoding -->
+        <div class="deep-card">
+          <div class="deep-card-header">
+            <span class="badge badge-emerald">ZERO HALLUCINATION</span>
+            <h3 class="deep-title">Graph-Constrained Decoding</h3>
+          </div>
+          <p class="deep-text">
+            A tri-beam decoder that synchronizes beam search candidates against a token trie built over knowledge graph entities.
+          </p>
+          <div class="deep-bullet-box">
+            <div class="deep-bullet-item">
+              <strong>Token Trie Constrained Masking</strong>
+              <p>At each generation step, logit masks are dynamically computed from valid continuation paths in the knowledge graph trie.</p>
+            </div>
+            <div class="deep-bullet-item">
+              <strong>Hallucination Defense by Construction</strong>
+              <p>Generated answers are mathematically forbidden from naming entities, relations, or identifiers not present in the graph.</p>
+            </div>
+            <div class="deep-bullet-item">
+              <strong>Tri-Beam Synchronizer</strong>
+              <p>Explores simultaneous structural, semantic, and token-level beams without post-generation fact-checking penalties.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 22 Agentic Primitives (ML.Agentic) -->
+  <section id="agentic" class="section-padding">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-amber">OPEN CORE PRIMITIVES</span>
+        <h2 class="section-title">ML.Agentic: 22 Building Blocks for Multi-Agent Systems</h2>
+        <p class="section-subtitle">
+          Dependency-free primitives requiring no external configuration or graph store. Adopt freely for custom agent runtimes.
+        </p>
+      </div>
+
+      <div class="primitives-categories">
+        {agenticPrimitives.map((cat) => (
+          <div class="primitive-category-card" style={`--cat-color: ${cat.color};`}>
+            <div class="cat-header">
+              <span class="cat-bar" style={`background:${cat.color};`}></span>
+              <h3 class="cat-title">{cat.category}</h3>
+              <span class="cat-count" style={`color:${cat.color};`}>{cat.items.length} Primitives</span>
+            </div>
+
+            <div class="primitives-grid">
+              {cat.items.map((item) => (
+                <div class="primitive-item">
+                  <h4 class="primitive-name">{item.name}</h4>
+                  <p class="primitive-desc">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ML.Reasoning (Graph-Grounded Reasoning) -->
+  <section class="section-padding bg-darker">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-purple">GRAPH-GROUNDED REASONING</span>
+        <h2 class="section-title">ML.Reasoning Algorithms</h2>
+        <p class="section-subtitle">
+          Five core algorithms that execute against any data structure implementing the open <code>IKnowledgeGraph</code> interface.
+        </p>
+      </div>
+
+      <div class="reasoning-grid">
+        {reasoningAlgorithms.map((algo) => (
+          <div class="reasoning-card">
+            <div class="reasoning-icon-row">
+              <span class="reasoning-icon">{algo.icon}</span>
+              <span class="reasoning-tagline">{algo.tagline}</span>
+            </div>
+            <h3 class="reasoning-name">{algo.name}</h3>
+            <p class="reasoning-desc">{algo.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Open Core vs Commercial Add-On -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="open-core-container">
+        <div class="open-core-header">
+          <span class="badge badge-emerald">LICENSING ARCHITECTURE</span>
+          <h2 class="section-title">Open Core &amp; Agentic Integration</h2>
+          <p class="section-subtitle">
+            Clean division between open mathematical primitives and enterprise-governed integration infrastructure.
+          </p>
+        </div>
+
+        <div class="open-core-grid">
+          <div class="tier-card tier-open">
+            <div class="tier-badge-label">OPEN CORE &bull; PERMISSIVE</div>
+            <h3 class="tier-title">Open Source Primitives</h3>
+            <p class="tier-desc">All algorithmic implementations, inference engines, and multi-agent primitives are completely open.</p>
+            <ul class="tier-list">
+              <li>✅ 5 Hyperparameter Optimization Engines (Bayesian, BOHB, TuRBO)</li>
+              <li>✅ 6 Knowledge Graph Embedding Models &amp; Scoring Functions</li>
+              <li>✅ From-scratch Level Zero LLM transformer runtime</li>
+              <li>✅ Graph-constrained tri-beam decoder</li>
+              <li>✅ SNN Leaky Integrate-and-Fire simulator with STDP</li>
+              <li>✅ 22 ML.Agentic dependency-free multi-agent primitives</li>
+              <li>✅ 5 ML.Reasoning graph algorithms (IKnowledgeGraph)</li>
+            </ul>
+          </div>
+
+          <div class="tier-card tier-commercial">
+            <div class="tier-badge-label">COMMERCIAL ADD-ON</div>
+            <h3 class="tier-title">Hypertensor Agentic Integration</h3>
+            <p class="tier-desc">The paid layer providing managed governance, persistence, security, and orchestration around the open primitives.</p>
+            <ul class="tier-list">
+              <li>💎 Hypertensor GraphRAG persistent store &amp; vector indexing</li>
+              <li>💎 Multi-Level Security (MLS) clearance and RBAC governance</li>
+              <li>💎 Production REST endpoints &amp; worker microservice orchestration</li>
+              <li>💎 Distributed telemetry sidecars &amp; telemetry-aware budgeting</li>
+              <li>💎 Enterprise SLA &amp; dedicated compiler optimization support</li>
+            </ul>
+            <div style="margin-top:24px;">
+              <a href="/products/ht-graphrag#licensing" class="btn-primary" style="width:100%; justify-content:center;">
+                View Commercial Licensing Tiers &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why This Exists Banner -->
+  <section class="why-section">
+    <div class="container">
+      <div class="why-card">
+        <span class="badge badge-cyan">ENGINEERING PHILOSOPHY</span>
+        <h2 class="why-title">Why This Exists</h2>
+        <p class="why-quote">
+          &ldquo;Access to serious optimization, inference, and agent tooling shouldn't depend on a cloud contract or a multi-million dollar GPU cluster. Everything here runs on a workstation, and the hardware backends are optional accelerators, not requirements.&rdquo;
+        </p>
+        <div class="why-meta">
+          <strong>HFLabs MonoRepo Architecture</strong> &bull; Local-First, High-Assurance .NET Systems
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Global CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-box">
+        <h2 class="cta-title">Build High-Assurance Machine Learning in .NET</h2>
+        <p class="cta-desc">
+          Explore the open source repositories, read our in-depth developer manuals, or inquire about commercial integration licenses.
+        </p>
+        <div class="cta-buttons">
+          <a href="https://github.com/hf-laboratories/IPUServices" target="_blank" rel="noopener noreferrer" class="btn-primary">
+            View on GitHub &rarr;
+          </a>
+          <a href="/docs" class="btn-secondary">
+            Read the Docs
+          </a>
+          <a href="/products/ht-graphrag#licensing" class="btn-secondary">
+            Talk to Us About Licensing
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .product-top-bar {
+    background: rgba(15, 23, 42, 0.6);
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 0;
+    font-size: 13px;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .breadcrumb a {
+    color: var(--text-secondary);
+  }
+
+  .breadcrumb a:hover {
+    color: var(--accent-blue);
+  }
+
+  .breadcrumb .sep {
+    color: var(--border-color);
+  }
+
+  .breadcrumb .curr {
+    color: var(--text-primary);
+  }
+
+  /* Hero */
+  .product-hero {
+    padding: 60px 0 45px;
+    position: relative;
+  }
+
+  .hero-badge-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .badge-purple {
+    background: rgba(129, 140, 248, 0.12);
+    color: var(--accent-purple);
+    border: 1px solid rgba(129, 140, 248, 0.3);
+  }
+
+  .badge-cyan {
+    background: rgba(56, 189, 248, 0.12);
+    color: var(--accent-blue);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+  }
+
+  .badge-emerald {
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--accent-emerald);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .badge-amber {
+    background: rgba(245, 158, 11, 0.12);
+    color: var(--accent-amber);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+  }
+
+  .hero-layout {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  @media (max-width: 1024px) {
+    .hero-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .hero-title {
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #f8fafc;
+    margin-bottom: 14px;
+  }
+
+  .hero-tagline {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--accent-blue);
+    line-height: 1.4;
+    margin-bottom: 18px;
+  }
+
+  .hero-intro {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 28px;
+  }
+
+  .hero-intro strong {
+    color: #f1f5f9;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn-arrow {
+    transition: transform 0.2s ease;
+  }
+
+  .btn-primary:hover .btn-arrow {
+    transform: translateX(3px);
+  }
+
+  /* Specs Card */
+  .hero-specs-card {
+    background: #080c18;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  .specs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .specs-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+
+  .specs-pill {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent-blue);
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .specs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12.5px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .spec-label {
+    color: var(--text-secondary);
+  }
+
+  .spec-value {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: #e2e8f0;
+    text-align: right;
+  }
+
+  .highlight-green {
+    color: var(--accent-emerald) !important;
+    font-weight: 700;
+  }
+
+  .highlight-cyan {
+    color: var(--accent-blue) !important;
+    font-weight: 700;
+  }
+
+  /* Section Padding */
+  .section-padding {
+    padding: 70px 0;
+  }
+
+  .bg-darker {
+    background: #050812;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .section-header {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 48px;
+  }
+
+  .section-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-top: 10px;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+
+  .section-subtitle {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Modules Grid */
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .modules-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .module-card {
+    background: #090e1c;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease;
+  }
+
+  .module-card:hover {
+    border-color: var(--mod-color);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  }
+
+  .mod-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .mod-icon-box {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .mod-icon {
+    font-size: 22px;
+  }
+
+  .mod-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+  }
+
+  .mod-name {
+    font-size: 18px;
+    font-weight: 800;
+    color: #f8fafc;
+  }
+
+  .mod-tagline {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .mod-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin-bottom: 16px;
+  }
+
+  .mod-feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 14px;
+  }
+
+  .mod-feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+  }
+
+  .bullet {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  /* KGE Grid */
+  .kge-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 900px) {
+    .kge-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .kge-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .kge-card {
+    background: #080c18;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 18px;
+  }
+
+  .kge-name-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .kge-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+
+  .kge-math {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent-purple);
+    background: rgba(168, 85, 247, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .kge-desc {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+  }
+
+  /* Ontology Callout */
+  .ontology-callout {
+    background: rgba(56, 189, 248, 0.05);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    border-radius: var(--radius-md);
+    padding: 20px 24px;
+    display: flex;
+    gap: 18px;
+    align-items: center;
+  }
+
+  .callout-icon-large {
+    font-size: 32px;
+    flex-shrink: 0;
+  }
+
+  .callout-content h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 4px;
+  }
+
+  .callout-content p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .callout-content strong {
+    color: var(--accent-blue);
+  }
+
+  /* Dual Feature Grid */
+  .dual-feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  @media (max-width: 900px) {
+    .dual-feature-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .deep-card {
+    background: #080c18;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+  }
+
+  .deep-card-header {
+    margin-bottom: 12px;
+  }
+
+  .deep-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-top: 8px;
+  }
+
+  .deep-text {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .deep-bullet-box {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .deep-bullet-item {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+    padding: 14px;
+  }
+
+  .deep-bullet-item strong {
+    font-size: 13px;
+    color: #f1f5f9;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .deep-bullet-item p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  /* 22 Agentic Primitives */
+  .primitives-categories {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .primitive-category-card {
+    background: #080c18;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+  }
+
+  .cat-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .cat-bar {
+    width: 4px;
+    height: 18px;
+    border-radius: 2px;
+  }
+
+  .cat-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #f8fafc;
+    flex: 1;
+  }
+
+  .cat-count {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .primitives-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+  }
+
+  .primitive-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+    padding: 12px;
+  }
+
+  .primitive-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 4px;
+  }
+
+  .primitive-desc {
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  /* Reasoning Grid */
+  .reasoning-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 18px;
+  }
+
+  .reasoning-card {
+    background: #090e1c;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+  }
+
+  .reasoning-icon-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .reasoning-icon {
+    font-size: 24px;
+  }
+
+  .reasoning-tagline {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent-purple);
+  }
+
+  .reasoning-name {
+    font-size: 16px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 8px;
+  }
+
+  .reasoning-desc {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Open Core Container */
+  .open-core-container {
+    background: #080c18;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 36px;
+  }
+
+  .open-core-header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .open-core-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  @media (max-width: 850px) {
+    .open-core-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .tier-card {
+    border-radius: var(--radius-md);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tier-open {
+    background: rgba(16, 185, 129, 0.04);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .tier-commercial {
+    background: rgba(56, 189, 248, 0.06);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+  }
+
+  .tier-badge-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+
+  .tier-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 8px;
+  }
+
+  .tier-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+
+  .tier-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 12.5px;
+    color: #e2e8f0;
+  }
+
+  /* Why Section */
+  .why-section {
+    padding: 50px 0;
+    background: #040711;
+  }
+
+  .why-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    text-align: center;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .why-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-top: 10px;
+    margin-bottom: 16px;
+  }
+
+  .why-quote {
+    font-size: 18px;
+    font-style: italic;
+    color: #cbd5e1;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .why-meta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .why-meta strong {
+    color: var(--accent-blue);
+  }
+
+  /* CTA Section */
+  .cta-section {
+    padding: 70px 0 80px;
+  }
+
+  .cta-box {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(129, 140, 248, 0.1) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: var(--radius-lg);
+    padding: 48px 32px;
+    text-align: center;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .cta-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 12px;
+  }
+
+  .cta-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto 28px;
+    line-height: 1.6;
+  }
+
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+</style>
