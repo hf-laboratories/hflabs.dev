@@ -1,0 +1,215 @@
+---
+// src/pages/products/index.astro
+import Layout from '../../layouts/Layout.astro';
+
+const products = [
+  {
+    id: "ht-graphrag",
+    name: "In-Memory Hypertensor GraphRAG & SIMD Vectors",
+    badge: "Flagship Product",
+    badgeColor: "#38bdf8",
+    tagline: "Sub-millisecond multi-hop graph reasoning, 128-dim SIMD vector embeddings, FastMCP host, and zero-copy topological memory.",
+    status: "Production Ready",
+    href: "/products/ht-graphrag",
+    features: [
+      "< 0.8 ms multi-hop graph traversal",
+      "128d & 512d SIMD AVX-512 float index",
+      "FastMCP SSE agent host bridge",
+      "Tiered Open-Core & Commercial Licensing"
+    ]
+  },
+  {
+    id: "hyperswarm",
+    name: "HyperSwarm Optimization Suite",
+    badge: "Swarm Metaheuristics",
+    badgeColor: "#818cf8",
+    tagline: "Integrated swarm metaheuristics with dynamic Director authority, entropy monitoring, and autonomous threshold tuning.",
+    status: "Production Ready",
+    href: "/docs#swarm-benchmark",
+    features: [
+      "Dynamic Director authority switching",
+      "270-case CEC benchmark matrix sweeps",
+      "SwarmML hyperparameter optimization",
+      "SwarmDev algorithmic workbench"
+    ]
+  },
+  {
+    id: "levelzero-net",
+    name: "LevelZero.NET & L0 Kernel Catalog",
+    badge: "GPU Substrate",
+    badgeColor: "#f43f5e",
+    tagline: "Direct Intel Level Zero GPU compute interop with zero-overhead C# P/Invoke bindings and precompiled zebin kernel catalog.",
+    status: "Production Ready",
+    href: "/docs#levelzero-net",
+    features: [
+      "Zero-overhead C# native P/Invoke",
+      "18+ precompiled Iris Xe GT2 & Arc zebins",
+      "Direct ABI probes & hardware validation",
+      "Raw SPIR-V module compilation toolchain"
+    ]
+  },
+  {
+    id: "accelerator-stack",
+    name: "Accelerator & IPU SQL Query Acceleration",
+    badge: "Compute Acceleration",
+    badgeColor: "#34d399",
+    tagline: "High-performance compute orchestration fabric, database query acceleration, Poplar.NET IPU shims, and ABIGen synthesizers.",
+    status: "Production Ready",
+    href: "/docs#accelerator-interop",
+    features: [
+      "Near-zero wait task DAG execution",
+      "Sub-millisecond relational scan offloading",
+      "Graphcore IPU hardware shims via Poplar.NET",
+      "Compile-time automated ABI synthesis"
+    ]
+  }
+];
+---
+
+<Layout title="HFLabs Products • High-Assurance Systems & Runtimes" description="Explore HFLabs core product suite: In-Memory Hypertensor GraphRAG, HyperSwarm, LevelZero.NET, and Accelerator.">
+  <div class="container" style="padding:60px 0 80px;">
+    <div style="margin-bottom:32px;">
+      <a href="/" style="font-size:12px; font-family:var(--font-mono); color:var(--text-muted);">&larr; Back to HFLabs Overview</a>
+    </div>
+
+    <div class="section-header" style="text-align:center; max-width:800px; margin:0 auto 48px;">
+      <div class="badge" style="background:rgba(56,189,248,0.15); color:var(--accent-blue); border:1px solid rgba(56,189,248,0.3); margin-bottom:12px;">
+        Core Systems &amp; Products
+      </div>
+      <h1 style="font-size:36px; font-weight:800; margin-bottom:16px;">HFLabs Product Portfolio</h1>
+      <p style="font-size:15px; color:var(--text-secondary); line-height:1.6;">
+        Specialized low-latency engines and high-assurance compute substrates designed for autonomous agents, metaheuristic optimization, and direct hardware execution.
+      </p>
+    </div>
+
+    <div class="products-grid">
+      {products.map(p => (
+        <div class="product-card" style={`--prod-accent:${p.badgeColor};`}>
+          <div class="card-top">
+            <div class="badge-row">
+              <span class="prod-badge">{p.badge}</span>
+              <span class="status-badge">{p.status}</span>
+            </div>
+            <h2 class="prod-name">{p.name}</h2>
+            <p class="prod-tagline">{p.tagline}</p>
+          </div>
+
+          <div class="prod-features">
+            <h4>Key Capabilities</h4>
+            <ul>
+              {p.features.map(f => (
+                <li>
+                  <span class="check-mark">✓</span>
+                  <span>{f}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="card-footer">
+            <a href={p.href} class="btn-primary" style="width:100%; text-align:center; padding:10px 16px; font-size:13px;">
+              {p.id === 'ht-graphrag' ? 'View Product & Licensing Tiers →' : 'View Documentation & Guides →'}
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 28px;
+  }
+
+  .product-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-top: 3px solid var(--prod-accent);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .badge-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .prod-badge {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--prod-accent);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+
+  .status-badge {
+    font-size: 10px;
+    color: var(--accent-emerald);
+    background: rgba(52, 211, 153, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .prod-name {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .prod-tagline {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+
+  .prod-features {
+    background: rgba(11, 15, 25, 0.5);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .prod-features h4 {
+    font-size: 10px;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .prod-features ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .prod-features li {
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .check-mark {
+    color: var(--prod-accent);
+    font-weight: 700;
+  }
+
+  .card-footer {
+    margin-top: auto;
+  }
+</style>

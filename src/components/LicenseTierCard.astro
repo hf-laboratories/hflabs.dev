@@ -1,17 +1,29 @@
 ---
 // LicenseTierCard.astro
 import tiers from '../data/licensing.json';
+
+interface Props {
+  badge?: string;
+  title?: string;
+  subtitle?: string;
+}
+
+const {
+  badge = "HT GraphRAG Commercial & Open-Core Licensing",
+  title = "Hypertensor GraphRAG Licensing Tiers",
+  subtitle = "Tiered runtime limits, SIMD vector dimension allowances, topological capacity, and cryptographic governance for HT GraphRAG deployments."
+} = Astro.props;
 ---
 
 <section id="licensing" class="licensing-section">
   <div class="container">
     <div class="section-header">
       <div class="badge" style="background:rgba(251,191,36,0.15); color:var(--accent-amber); border:1px solid rgba(251,191,36,0.3); margin-bottom:12px;">
-        Licensing &amp; Tier Governance
+        {badge}
       </div>
-      <h2 class="section-title">Transparent, High-Assurance Licensing</h2>
+      <h2 class="section-title">{title}</h2>
       <p class="section-desc">
-        From open-core community deployments to air-gapped defense contracts with HMAC cryptographic signature validation.
+        {subtitle}
       </p>
     </div>
 

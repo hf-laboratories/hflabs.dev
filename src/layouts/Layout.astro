@@ -1,4 +1,6 @@
 ---
+import '../styles/global.css';
+
 interface Props {
   title?: string;
   description?: string;
@@ -17,11 +19,12 @@ const {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
   <meta name="description" content={description} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/src/styles/global.css" />
 </head>
 <body>
   <header class="site-header">
@@ -31,11 +34,10 @@ const {
         <span>HFLabs</span>
       </a>
       <nav class="nav-links">
-        <a href="/#divisions" class="nav-link">Divisions</a>
-        <a href="/#products" class="nav-link">Products</a>
-        <a href="/wiki" class="nav-link">Polyglot Wiki</a>
+        <a href="/#divisions" class="nav-link">Core Systems</a>
+        <a href="/products/ht-graphrag" class="nav-link">HT GraphRAG</a>
+        <a href="/wiki" class="nav-link">Polyglot Matrix</a>
         <a href="/schemas" class="nav-link">Schemas</a>
-        <a href="/licensing" class="nav-link">Licensing</a>
         <a href="/docs" class="nav-link">Docs</a>
         <a href="https://github.com/hf-laboratories/IPUServices" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="padding:6px 12px; font-size:12px;">
           GitHub &rarr;
@@ -66,10 +68,12 @@ const {
       <div class="footer-col">
         <h4>Architecture</h4>
         <ul>
-          <li><a href="/#divisions">6 Core Divisions</a></li>
-          <li><a href="/docs/graphrag-operator">In-Memory GraphRAG</a></li>
-          <li><a href="/docs/swarm-benchmark">HyperSwarm Director</a></li>
-          <li><a href="/docs/levelzero-net">LevelZero.NET</a></li>
+          <li><a href="/#divisions">Core Systems Stack</a></li>
+          <li><a href="/products/ht-graphrag">HT GraphRAG Product Page</a></li>
+          <li><a href="/docs#graphrag-operator">In-Memory Hypertensor GraphRAG Manual</a></li>
+          <li><a href="/docs#swarm-benchmark">HyperSwarm &amp; SwarmDev</a></li>
+          <li><a href="/docs#levelzero-net">LevelZero.NET &amp; L0 Kernels</a></li>
+          <li><a href="/docs#accelerator-interop">Accelerator &amp; IPU SQL</a></li>
         </ul>
       </div>
 
@@ -78,15 +82,16 @@ const {
         <ul>
           <li><a href="/wiki">Polyglot Matrix (C/C++/C#/CL/PS1/VL/SVL)</a></li>
           <li><a href="/schemas">Published JSON Schemas</a></li>
-          <li><a href="/#research">110 Research Preprints</a></li>
-          <li><a href="/#patterns">245+ C# Patterns</a></li>
+          <li><a href="/#acceleration">HFLabs Machine Learning Suite</a></li>
+          <li><a href="/#hardware">Poplar.NET &amp; ABIGen</a></li>
         </ul>
       </div>
 
       <div class="footer-col">
         <h4>Governance</h4>
         <ul>
-          <li><a href="/licensing">Licensing Tiers & SLA</a></li>
+          <li><a href="/products/ht-graphrag#licensing">HT GraphRAG Licensing Tiers</a></li>
+          <li><a href="mailto:alix@hflabs.dev">Contact: alix@hflabs.dev</a></li>
           <li><a href="/schemas/paged_response_schema.json">API Schema Registry</a></li>
           <li><a href="https://github.com/hf-laboratories/IPUServices" target="_blank" rel="noopener noreferrer">Source Repository</a></li>
         </ul>

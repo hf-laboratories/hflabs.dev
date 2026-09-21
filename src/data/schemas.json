@@ -33,7 +33,7 @@
     "fields": [
       { "name": "projectId", "type": "string", "required": true, "desc": "Unique identifier of the project." },
       { "name": "projectName", "type": "string", "required": true, "desc": "Formal name of the assembly / component." },
-      { "name": "division", "type": "string", "required": true, "desc": "One of: Products, Research, Books, Patterns, Hardware, Internal." },
+      { "name": "division", "type": "string", "required": true, "desc": "One of: Cognition, Acceleration, Hardware." },
       { "name": "targetFramework", "type": "string", "required": true, "desc": "Target runtime framework (e.g. net10.0)." },
       { "name": "isTestProject", "type": "boolean", "required": true, "desc": "Flags whether the project contains unit or verification tests." }
     ],

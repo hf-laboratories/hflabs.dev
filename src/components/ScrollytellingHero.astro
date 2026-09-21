@@ -26,53 +26,53 @@
       <div class="scrolly-narrative">
         <div class="narrative-card active" data-step="1">
           <div class="step-num">01 / GRAPH COGNITION</div>
-          <h3>In-Memory GraphRAG &amp; SIMD Vectors</h3>
+          <h3>In-Memory Hypertensor GraphRAG &amp; SIMD Vectors</h3>
           <p>
-            Traditional RAG flattens codebase context into disconnected text chunks. HFLabs In-Memory GraphRAG indexes entire workspace topologies into high-dimensional SIMD vector spaces with typed semantic relation edges.
+            Traditional RAG flattens codebase context into disconnected text chunks. HFLabs In-Memory Hypertensor GraphRAG indexes entire workspace topologies into high-dimensional SIMD vector spaces with typed semantic relation edges.
           </p>
           <ul class="step-metrics">
             <li><strong>&lt; 0.8 ms</strong> 2-hop traversal latency</li>
             <li><strong>128-dim</strong> SIMD AVX-512 vector index</li>
-            <li><strong>Zero-copy</strong> in-process memory residency</li>
+            <li><strong>FastMCP</strong> in-process memory residency</li>
           </ul>
         </div>
 
         <div class="narrative-card" data-step="2">
           <div class="step-num">02 / METAHEURISTIC SWARM</div>
-          <h3>HyperSwarm Director Authority</h3>
+          <h3>HyperSwarm Optimization Suite &amp; SwarmDev</h3>
           <p>
-            Complex optimization spaces require multi-algorithm cooperation. The HyperSwarm Director monitors population entropy and dynamically switches authority between PSO, Ant Colony, Firefly, and CMA-ES optimizers.
+            Complex optimization spaces require multi-algorithm cooperation. The HyperSwarm Director monitors population entropy, working alongside the SwarmML App and SwarmDev workbench for automated hyperparameter search and algorithmic analysis.
           </p>
           <ul class="step-metrics">
-            <li><strong>270-case</strong> sweep matrix validation</li>
-            <li><strong>100%</strong> feasibility on CEC constrained benchmarks</li>
-            <li><strong>Director</strong> autonomous threshold tuning</li>
+            <li><strong>SwarmML</strong> automated hyperparameter tuning</li>
+            <li><strong>SwarmDev</strong> algorithmic benchmark suite</li>
+            <li><strong>Dynamic</strong> Director authority switching</li>
           </ul>
         </div>
 
         <div class="narrative-card" data-step="3">
           <div class="step-num">03 / HARDWARE SUBSTRATE</div>
-          <h3>Direct Level Zero GPU Compute</h3>
+          <h3>LevelZero.NET &amp; L0 Kernel Catalog</h3>
           <p>
-            No heavy vendor wrappers. LevelZero.NET communicates directly with the Intel Level Zero native C ABI, loading precompiled zebin compute kernels onto Iris Xe and Arc GPUs for swarm acceleration.
+            No heavy vendor wrappers. LevelZero.NET communicates directly with the Intel Level Zero native C ABI, dispatching the curated L0 Kernel Catalog of precompiled zebin compute kernels onto Iris Xe and Arc GPUs.
           </p>
           <ul class="step-metrics">
-            <li><strong>18+</strong> native GPU zebin kernels</li>
+            <li><strong>18+</strong> native GPU zebin kernels in L0 Catalog</li>
             <li><strong>tgllp</strong> Iris Xe GT2 hardware validation</li>
             <li><strong>Direct ABI</strong> zero-overhead C# P/Invoke</li>
           </ul>
         </div>
 
         <div class="narrative-card" data-step="4">
-          <div class="step-num">04 / HIGH-ASSURANCE GOVERNANCE</div>
-          <h3>Capability Sandbox &amp; Tri-Beam Verification</h3>
+          <div class="step-num">04 / ACCELERATION &amp; INTEROP</div>
+          <h3>Accelerator, IPU SQL, Poplar.NET &amp; ABIGen</h3>
           <p>
-            Autonomous agent workflows operate under strict formal constraints. High-Assurance Shield enforces multi-level security (MLS) clearance tokens, metamorphic test oracles, and air-gapped cryptographic signatures.
+            Unified compute orchestration via the Accelerator fabric, hardware-level IPU SQL Query Acceleration for high-throughput streaming, low-level Poplar.NET hardware driver shims, and compile-time ABIGen code synthesis.
           </p>
           <ul class="step-metrics">
-            <li><strong>HMAC-SHA256</strong> cryptographic validation</li>
-            <li><strong>MLS</strong> multi-level clearance tiers</li>
-            <li><strong>BESS</strong> evolutionary invariant prover</li>
+            <li><strong>IPU SQL</strong> relational streaming speedup</li>
+            <li><strong>Poplar.NET</strong> Graphcore IPU hardware shims</li>
+            <li><strong>ABIGen</strong> automated native interop synthesis</li>
           </ul>
         </div>
       </div>
@@ -380,7 +380,7 @@
 
   const configs = {
     1: {
-      title: 'GraphRAG SIMD Vector Substrate',
+      title: 'Hypertensor GraphRAG & SIMD Vectors',
       badge: 'STAGE 01',
       regime: 'SIMD AVX-512',
       throughput: '12,400 qps',
@@ -388,28 +388,28 @@
       terminal: '[GraphRAG SIMD] Traversal complete: 2 hops in 0.74 ms (128d AVX-512)'
     },
     2: {
-      title: 'HyperSwarm Director Authority',
+      title: 'HyperSwarm & SwarmDev / SwarmML',
       badge: 'STAGE 02',
       regime: 'Multi-Algorithm',
-      throughput: '270 cases / min',
-      assurance: '100% Feasibility',
-      terminal: '[Director Matrix] Swarm Coherence: 0.942 | Authority: Adaptive PSO-Firefly'
+      throughput: 'SwarmML & Dev',
+      assurance: 'Adaptive Authority',
+      terminal: '[SwarmDev] SwarmML hyperparameter search converged | Director active'
     },
     3: {
-      title: 'Level Zero Hardware Kernel Dispatch',
+      title: 'LevelZero.NET & L0 Kernel Catalog',
       badge: 'STAGE 03',
       regime: 'Intel Iris Xe GT2',
       throughput: '18 Zebin Kernels',
       assurance: 'Hardware ABI Clean',
-      terminal: '[LevelZero.NET] Executed fitness_kernel on tgllp in 0.042 ms'
+      terminal: '[LevelZero.NET] Executed L0 Catalog kernel on tgllp in 0.042 ms'
     },
     4: {
-      title: 'High-Assurance Shield Governance',
+      title: 'Accelerator, IPU SQL, Poplar.NET & ABIGen',
       badge: 'STAGE 04',
-      regime: 'MLS Tiered Air-Gap',
-      throughput: 'Cryptographic',
-      assurance: 'HMAC-SHA256 Signed',
-      terminal: '[Security Shield] Capability token verified. Clearance: HIGH_ASSURANCE'
+      regime: 'IPU & Hardware Interop',
+      throughput: 'Sub-ms Query Accel',
+      assurance: 'Synthesized ABI',
+      terminal: '[Accelerator] IPU SQL streaming active | Poplar.NET shims loaded via ABIGen'
     }
   };
 

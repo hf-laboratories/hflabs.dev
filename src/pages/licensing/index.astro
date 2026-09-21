@@ -4,11 +4,22 @@ import Layout from '../../layouts/Layout.astro';
 import LicenseTierCard from '../../components/LicenseTierCard.astro';
 ---
 
-<Layout title="Licensing Tiers &amp; SLA &bull; HFLabs" description="Transparent licensing models: Community Free, Developer Pro, and High-Assurance Enterprise with HMAC cryptographic signatures.">
+<Layout title="Licensing Tiers &amp; SLA &bull; HFLabs" description="Transparent licensing models: Community Free, Developer Pro, and High-Assurance Enterprise with HMAC cryptographic signatures for Hypertensor GraphRAG.">
   <div class="container" style="padding-top:40px;">
-    <div style="margin-bottom:24px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
       <a href="/" style="font-size:12px; font-family:var(--font-mono);">&larr; Back to HFLabs Overview</a>
+      <a href="/products/ht-graphrag" class="btn-secondary" style="font-size:12px; padding:6px 14px;">
+        View HT GraphRAG Product Page &rarr;
+      </a>
+    </div>
+    <div style="background:rgba(56,189,248,0.08); border:1px solid rgba(56,189,248,0.25); border-radius:var(--radius-md); padding:16px 20px; margin-bottom:12px; font-size:13px; color:var(--text-secondary); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+      <span><strong>Product Scope:</strong> These tiered licensing models and runtime allowances govern <strong>In-Memory Hypertensor GraphRAG &amp; SIMD Vectors</strong>.</span>
+      <a href="/products/ht-graphrag#licensing" style="color:var(--accent-blue); font-weight:600; font-size:12px;">Go to HT GraphRAG Licensing &rarr;</a>
     </div>
   </div>
-  <LicenseTierCard />
+  <LicenseTierCard 
+    badge="HT GraphRAG Commercial &amp; Open-Core Licensing"
+    title="Hypertensor GraphRAG Licensing Tiers"
+    subtitle="From open-core community deployments to air-gapped defense contracts with HMAC cryptographic signature validation for Hypertensor GraphRAG."
+  />
 </Layout>

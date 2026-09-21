@@ -4,44 +4,47 @@ import Layout from '../../layouts/Layout.astro';
 
 const guides = [
   {
-    title: "GraphRAG Operator Manual",
+    title: "In-Memory Hypertensor GraphRAG & SIMD Vectors",
     slug: "graphrag-operator",
-    badge: "Runtime",
-    desc: "How to deploy, configure, and operate the In-Memory GraphRAG server, Headless CLI daemon, and FastMCP agent bridge.",
+    badge: "Vector Cognition",
+    desc: "Deploy, configure, and operate the In-Memory Hypertensor GraphRAG engine, SIMD vector index, and FastMCP host bridge.",
     commands: [
-      "dotnet run --project src/HFLabs/Products/GraphRAG/Server/HFLabs.GraphRAG.Server.csproj -c Release",
-      "dotnet run --project src/HFLabs/Products/GraphRAG/App/HFLabs.GraphRAG.App.csproj -c Release -- --headless --query \"Director\"",
+      "dotnet run --project src/HFLabs/Products/HypertensorGraphRAG/Server/Server.csproj -c Release",
+      "dotnet run --project src/HFLabs/Products/HypertensorGraphRAG/App/App.csproj -c Release -- --headless --query \"Director\"",
       "python -m mcp_graphrag.server --transport sse --port 8000"
     ]
   },
   {
-    title: "HyperSwarm Benchmark Runner & Sweeps",
+    title: "HyperSwarm Optimization Suite, SwarmML & SwarmDev",
     slug: "swarm-benchmark",
-    badge: "Optimization",
-    desc: "Executing 270-case matrix sweeps, threshold tuning, and Director authority validation harnesses.",
+    badge: "Swarm Metaheuristics",
+    desc: "Execute matrix sweeps, dynamic Director authority switching, SwarmML hyperparameter search, and SwarmDev benchmarks.",
     commands: [
-      "dotnet run --project src/HFLabs/Products/SwarmAlgorithms/BenchmarkRunner/BenchmarkRunner.csproj -c Release -- matrix-sweep",
-      "dotnet run --project BenchmarkRunner.csproj -- hypercache-export --mode 2"
+      "dotnet run --project src/HFLabs/Products/HyperSwarmOptimizationSuite/BenchmarkRunner.csproj -c Release -- matrix-sweep",
+      "dotnet run --project src/HFLabs/Products/SwarmDev/SwarmDev.csproj -c Release -- run-benchmarks",
+      "dotnet run --project src/HFLabs/Products/AutoMLApp/SwarmML.csproj -- optimize --iterations 500"
     ]
   },
   {
-    title: "Intel Level Zero Acceleration Substrate",
+    title: "LevelZero.NET & L0 Kernel Catalog",
     slug: "levelzero-net",
-    badge: "Hardware",
-    desc: "Auditing SPIR-V kernels, compiling zebin binaries for Iris Xe GT2 (tgllp), and ABI probe patterns.",
+    badge: "GPU Substrate",
+    desc: "Auditing SPIR-V kernels, executing precompiled zebin binaries on Intel Iris Xe GT2 (tgllp) and Arc GPUs, and native ABI probes.",
     commands: [
       "pwsh -File src/HFLabs/Hardware/LevelZero.Toolchain/Audit-SpvKernels.ps1",
-      "pwsh -File src/HFLabs/Hardware/LevelZero.Toolchain/Test-LevelZeroAbi.ps1"
+      "pwsh -File src/HFLabs/Hardware/LevelZero.Toolchain/Test-LevelZeroAbi.ps1",
+      "dotnet test src/HFLabs/Hardware/KernelCatalog/KernelCatalog.Tests.csproj"
     ]
   },
   {
-    title: "Deterministic Restructuring & Migration",
-    slug: "restructuring-engine",
-    badge: "Governance",
-    desc: "5-layer graph stack for clean monorepo migration, universal IPUServices scrubbing, and dry-run validation.",
+    title: "Accelerator, IPU SQL, Poplar.NET & ABIGen",
+    slug: "accelerator-interop",
+    badge: "Compute Acceleration",
+    desc: "Hardware-accelerated database queries, Graphcore IPU hardware shims via Poplar.NET, task DAG acceleration, and automated ABIGen synthesizers.",
     commands: [
-      "pwsh -File Scripts/Apply-MonorepoRestructuring.ps1 -WhatIf",
-      "pwsh -File Scripts/Rollback-MonorepoRestructuring.ps1 -WhatIf"
+      "dotnet run --project src/HFLabs/Products/QueryAccel/QueryAccel.csproj -c Release -- --benchmark",
+      "dotnet run --project src/HFLabs/Hardware/Poplar.NET/PoplarDriver.csproj -c Release",
+      "dotnet run --project src/HFLabs/DevTools/ABIGen/ABIGen.csproj -- --generate-bindings"
     ]
   }
 ];
@@ -63,7 +66,7 @@ const guides = [
 
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(400px, 1fr)); gap:24px;">
       {guides.map(g => (
-        <div style="background:var(--bg-card); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:28px; display:flex; flex-direction:column; gap:16px;">
+        <div id={g.slug} style="background:var(--bg-card); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:28px; display:flex; flex-direction:column; gap:16px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <h3 style="font-size:18px; font-weight:700; color:var(--text-primary);">{g.title}</h3>
             <span class="badge" style="background:rgba(56,189,248,0.1); color:var(--accent-blue); font-size:10px;">{g.badge}</span>
