@@ -1,0 +1,967 @@
+---
+// src/pages/polyglot.astro
+import Layout from '../layouts/Layout.astro';
+import polyglotData from '../data/polyglot.json';
+
+const languages = [
+  { id: 'c', name: 'C', badge: 'Bare Metal ABI', color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.12)', desc: 'Explicit unmanaged memory, struct packing, and POSIX atomic memory orderings.' },
+  { id: 'cpp', name: 'C++20/23', badge: 'Low-Latency RAII', color: '#38bdf8', bg: 'rgba(56, 189, 248, 0.12)', desc: 'Deterministic RAII, custom memory allocators (pmr), lock-free wait-free algorithms, and SYCL USM.' },
+  { id: 'cs', name: 'C# .NET 10', badge: 'Zero-Alloc SIMD', color: '#10b981', bg: 'rgba(16, 185, 129, 0.12)', desc: 'Span<T> and Memory<T> zero-copy slicing, Vector512<T> hardware intrinsics, and blittable P/Invoke.' },
+  { id: 'cl', name: 'OpenCL C', badge: 'Heterogeneous SIMD', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.12)', desc: 'Explicit address spaces (__global, __local, __private), workgroup synchronization, and NDRange grids.' },
+  { id: 'ps_1', name: 'PowerShell 7+', badge: 'Toolchain Automation', color: '#a855f7', bg: 'rgba(168, 85, 247, 0.12)', desc: 'Thread-level Runspace pools, dynamic in-memory P/Invoke compilation, and SPIR-V binary auditing.' },
+  { id: 'vl', name: 'Verilog RTL', badge: 'Silicon Synthesis', color: '#ec4899', bg: 'rgba(236, 72, 153, 0.12)', desc: 'Synthesizable hardware registers, DSP48 MAC slices, BRAM memory arrays, and cycle-accurate clocks.' },
+  { id: 'svl', name: 'SystemVerilog (SVA)', badge: 'Formal Verification', color: '#f43f5e', bg: 'rgba(244, 63, 94, 0.12)', desc: 'Direct Programming Interface (DPI-C), SystemVerilog Assertions (SVA), mailboxes, and packed structs.' }
+];
+
+const categories = Array.from(new Set(polyglotData.map(d => d.category || "General Architecture")));
+---
+
+<Layout 
+  title="Hyperpolyglot Systems Matrix • HF Labs" 
+  description="Comparative architectural matrix across 7 hardware and runtime languages: C, C++, C# .NET 10, OpenCL, PowerShell, Verilog RTL, and SystemVerilog."
+>
+  <!-- Top Breadcrumbs & Quick Bar -->
+  <div class="polyglot-top-bar">
+    <div class="container">
+      <div class="top-bar-inner">
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="sep">/</span>
+          <a href="/wiki">Wiki</a>
+          <span class="sep">/</span>
+          <span class="curr">Hyperpolyglot Systems Matrix</span>
+        </nav>
+        <div class="stats-pills">
+          <span class="stat-pill"><strong>7</strong> Hardware &amp; Runtime Languages</span>
+          <span class="stat-pill"><strong>5</strong> Systems Domains</span>
+          <span class="stat-pill highlight">Zero-Allocation Contracts</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="polyglot-page">
+    <!-- Hero Header -->
+    <section class="polyglot-hero">
+      <div class="container">
+        <div class="hero-badge-row">
+          <span class="badge badge-purple">POLYGLOT SYSTEMS ARCHITECTURE</span>
+          <span class="badge badge-cyan">DIRECT OBJECT-LINKED COMPARISON</span>
+          <span class="badge badge-emerald">SILICON TO HIGH-LEVEL RUNTIMES</span>
+        </div>
+
+        <h1 class="hero-title">
+          The Hyperpolyglot Matrix:<br />
+          <span class="gradient-text">7 Languages Across the Compute Stack</span>
+        </h1>
+
+        <p class="hero-lead">
+          HFLabs systems operate from raw silicon gates and hardware supersteps up to zero-allocation managed runtimes and orchestration tooling. Explore side-by-side comparative paradigms, syntax contracts, and production snippets across our complete 7-language matrix.
+        </p>
+
+        <!-- Language Quick Filter Grid -->
+        <div class="lang-cards-grid">
+          {languages.map(l => (
+            <button class="lang-quick-card active" data-lang-id={l.id} style={`--accent:${l.color}; --bg-accent:${l.bg};`}>
+              <div class="lang-card-top">
+                <span class="lang-chip-badge">{l.badge}</span>
+                <span class="lang-card-status">Active</span>
+              </div>
+              <strong class="lang-card-name">{l.name}</strong>
+              <p class="lang-card-desc">{l.desc}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Matrix Explorer Workspace -->
+    <section class="matrix-workspace-section">
+      <div class="container">
+        <!-- Control Toolbar -->
+        <div class="workspace-toolbar">
+          <!-- Search Box -->
+          <div class="search-box-wrapper">
+            <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input 
+              type="text" 
+              id="polyglot-search" 
+              placeholder="Search paradigms, intrinsics, keywords (e.g., Vector512, malloc, SYCL, DPI-C)..." 
+              autocomplete="off"
+            />
+          </div>
+
+          <!-- Category Filter Chips -->
+          <div class="category-filters">
+            <button class="cat-filter-btn active" data-category="all">All Domains</button>
+            {categories.map(cat => (
+              <button class="cat-filter-btn" data-category={cat}>{cat}</button>
+            ))}
+          </div>
+
+          <!-- View Mode Toggle -->
+          <div class="view-mode-toggle">
+            <button id="view-mode-cards" class="toggle-btn active" title="Bento Card View">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+              <span>Cards</span>
+            </button>
+            <button id="view-mode-table" class="toggle-btn" title="Dense Table Matrix View">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+              <span>Matrix Table</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Bento Cards View Container -->
+        <div id="matrix-cards-container" class="matrix-topics-container">
+          {polyglotData.map(topic => (
+            <div class="topic-bento-block" data-topic-id={topic.id} data-category={topic.category || "General Architecture"}>
+              <div class="topic-header-bar">
+                <div class="topic-title-group">
+                  <span class="topic-domain-pill">{topic.category}</span>
+                  <h2 class="topic-main-title">{topic.topic}</h2>
+                </div>
+                <p class="topic-lead-desc">{topic.description}</p>
+              </div>
+
+              <div class="entries-grid">
+                {languages.map(l => {
+                  const entry = (topic.entries as any)[l.id];
+                  if (!entry) return null;
+                  return (
+                    <div 
+                      class="lang-entry-card" 
+                      data-lang-target={l.id}
+                      data-search-text={`${l.name} ${entry.paradigm} ${entry.notes} ${entry.snippet} ${entry.syntax}`.toLowerCase()}
+                      style={`--border-active:${l.color};`}
+                    >
+                      <div class="entry-header">
+                        <div class="entry-lang-identity">
+                          <span class="entry-dot" style={`background:${l.color};`}></span>
+                          <span class="entry-lang-name">{l.name}</span>
+                          <span class="entry-paradigm-badge">{entry.paradigm}</span>
+                        </div>
+                        <button class="copy-snippet-btn" data-snippet={entry.snippet} title="Copy code snippet">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                          </svg>
+                          <span>Copy</span>
+                        </button>
+                      </div>
+
+                      <div class="entry-syntax-box">
+                        <span class="syntax-label">Syntax / Primary Call:</span>
+                        <code>{entry.syntax}</code>
+                      </div>
+
+                      <div class="entry-code-box">
+                        <pre><code>{entry.snippet}</code></pre>
+                      </div>
+
+                      <p class="entry-notes-text">{entry.notes}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Dense Matrix Table View (Hidden by default) -->
+        <div id="matrix-table-container" class="matrix-table-wrapper hidden">
+          <div class="table-scroll-surface">
+            <table class="dense-polyglot-table">
+              <thead>
+                <tr>
+                  <th style="min-width: 220px;">Architectural Domain</th>
+                  {languages.map(l => (
+                    <th style={`color:${l.color}; min-width: 280px;`}>
+                      <div class="th-lang-header">
+                        <span>{l.name}</span>
+                        <span class="th-badge">{l.badge}</span>
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {polyglotData.map(topic => (
+                  <tr data-topic-id={topic.id} data-category={topic.category || "General Architecture"}>
+                    <td class="topic-td-header">
+                      <span class="table-domain-tag">{topic.category}</span>
+                      <strong>{topic.topic}</strong>
+                      <p>{topic.description}</p>
+                    </td>
+                    {languages.map(l => {
+                      const entry = (topic.entries as any)[l.id];
+                      if (!entry) return <td class="empty-cell">—</td>;
+                      return (
+                        <td class="entry-table-cell" data-lang-target={l.id}>
+                          <div class="cell-paradigm">{entry.paradigm}</div>
+                          <pre class="cell-code"><code>{entry.snippet}</code></pre>
+                          <div class="cell-notes">{entry.notes}</div>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- No Results Warning -->
+        <div id="no-polyglot-results" class="no-results-banner hidden">
+          <h3>No matching language entries found</h3>
+          <p>Try clearing your search query or enabling all language filter buttons above.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  // State management
+  const activeLanguages = new Set(['c', 'cpp', 'cs', 'cl', 'ps_1', 'vl', 'svl']);
+  let activeCategory = 'all';
+  let searchQuery = '';
+
+  const quickCards = document.querySelectorAll('.lang-quick-card');
+  const catFilterBtns = document.querySelectorAll('.cat-filter-btn');
+  const searchInput = document.getElementById('polyglot-search') as HTMLInputElement;
+  const bentoBlocks = document.querySelectorAll('.topic-bento-block');
+  const tableRows = document.querySelectorAll('.dense-polyglot-table tbody tr');
+  const noResultsBanner = document.getElementById('no-polyglot-results');
+
+  // View toggle
+  const viewModeCards = document.getElementById('view-mode-cards');
+  const viewModeTable = document.getElementById('view-mode-table');
+  const cardsContainer = document.getElementById('matrix-cards-container');
+  const tableContainer = document.getElementById('matrix-table-container');
+
+  if (viewModeCards && viewModeTable && cardsContainer && tableContainer) {
+    viewModeCards.addEventListener('click', () => {
+      viewModeCards.classList.add('active');
+      viewModeTable.classList.remove('active');
+      cardsContainer.classList.remove('hidden');
+      tableContainer.classList.add('hidden');
+    });
+
+    viewModeTable.addEventListener('click', () => {
+      viewModeTable.classList.add('active');
+      viewModeCards.classList.remove('active');
+      tableContainer.classList.remove('hidden');
+      cardsContainer.classList.add('hidden');
+    });
+  }
+
+  // Language Toggle Filters
+  quickCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const langId = card.getAttribute('data-lang-id');
+      if (!langId) return;
+
+      if (activeLanguages.has(langId)) {
+        if (activeLanguages.size > 1) {
+          activeLanguages.delete(langId);
+          card.classList.remove('active');
+          const statusEl = card.querySelector('.lang-card-status');
+          if (statusEl) statusEl.textContent = 'Hidden';
+        }
+      } else {
+        activeLanguages.add(langId);
+        card.classList.add('active');
+        const statusEl = card.querySelector('.lang-card-status');
+        if (statusEl) statusEl.textContent = 'Active';
+      }
+
+      applyFilters();
+    });
+  });
+
+  // Category Filter Buttons
+  catFilterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      catFilterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCategory = btn.getAttribute('data-category') || 'all';
+      applyFilters();
+    });
+  });
+
+  // Search Input
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      searchQuery = searchInput.value.toLowerCase().trim();
+      applyFilters();
+    });
+  }
+
+  // Unified Filter Function
+  function applyFilters() {
+    let totalCardsVisible = 0;
+
+    bentoBlocks.forEach(block => {
+      const cat = block.getAttribute('data-category') || '';
+      const matchesCat = activeCategory === 'all' || cat === activeCategory;
+      let blockVisibleEntries = 0;
+
+      const entries = block.querySelectorAll('.lang-entry-card');
+      entries.forEach(entry => {
+        const langTarget = entry.getAttribute('data-lang-target') || '';
+        const isLangActive = activeLanguages.has(langTarget);
+        const searchText = entry.getAttribute('data-search-text') || '';
+        const matchesSearch = searchQuery === '' || searchText.includes(searchQuery);
+
+        if (isLangActive && matchesSearch && matchesCat) {
+          (entry as HTMLElement).style.display = 'flex';
+          blockVisibleEntries++;
+          totalCardsVisible++;
+        } else {
+          (entry as HTMLElement).style.display = 'none';
+        }
+      });
+
+      if (blockVisibleEntries === 0 || !matchesCat) {
+        (block as HTMLElement).style.display = 'none';
+      } else {
+        (block as HTMLElement).style.display = 'block';
+      }
+    });
+
+    // Also update table cells visibility
+    document.querySelectorAll('.entry-table-cell').forEach(cell => {
+      const langTarget = cell.getAttribute('data-lang-target') || '';
+      if (activeLanguages.has(langTarget)) {
+        (cell as HTMLElement).style.display = 'table-cell';
+      } else {
+        (cell as HTMLElement).style.display = 'none';
+      }
+    });
+
+    // Table th visibility
+    document.querySelectorAll('.dense-polyglot-table thead th').forEach((th, idx) => {
+      if (idx > 0) {
+        const langIdx = idx - 1;
+        const allLangs = ['c', 'cpp', 'cs', 'cl', 'ps_1', 'vl', 'svl'];
+        const langId = allLangs[langIdx];
+        if (activeLanguages.has(langId)) {
+          (th as HTMLElement).style.display = 'table-cell';
+        } else {
+          (th as HTMLElement).style.display = 'none';
+        }
+      }
+    });
+
+    // Table rows category match
+    tableRows.forEach(row => {
+      const cat = row.getAttribute('data-category') || '';
+      const matchesCat = activeCategory === 'all' || cat === activeCategory;
+      if (matchesCat) {
+        (row as HTMLElement).style.display = 'table-row';
+      } else {
+        (row as HTMLElement).style.display = 'none';
+      }
+    });
+
+    // Toggle No Results Banner
+    if (noResultsBanner) {
+      if (totalCardsVisible === 0) {
+        noResultsBanner.classList.remove('hidden');
+      } else {
+        noResultsBanner.classList.add('hidden');
+      }
+    }
+  }
+
+  // Copy Snippet functionality
+  document.querySelectorAll('.copy-snippet-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const snippet = btn.getAttribute('data-snippet') || '';
+      if (!snippet) return;
+
+      navigator.clipboard.writeText(snippet).then(() => {
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = `<span>Copied!</span>`;
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.innerHTML = originalHtml;
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+  });
+</script>
+
+<style>
+  .polyglot-page {
+    background: #060912;
+    min-height: calc(100vh - 70px);
+    padding-bottom: 90px;
+  }
+
+  /* Top Bar */
+  .polyglot-top-bar {
+    background: #080c18;
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 0;
+  }
+
+  .top-bar-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .breadcrumb a {
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--accent-blue);
+  }
+
+  .breadcrumb .sep {
+    color: rgba(255, 255, 255, 0.2);
+  }
+
+  .breadcrumb .curr {
+    color: var(--text-primary);
+  }
+
+  .stats-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .stat-pill {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .stat-pill.highlight {
+    color: var(--accent-emerald);
+    border-color: rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.08);
+  }
+
+  /* Hero Section */
+  .polyglot-hero {
+    padding: 50px 0 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.05) 0%, transparent 70%);
+  }
+
+  .hero-badge-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .hero-title {
+    font-size: 38px;
+    font-weight: 900;
+    color: #f8fafc;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-lead {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    max-width: 820px;
+    margin-bottom: 32px;
+  }
+
+  /* Language Quick Filter Grid */
+  .lang-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+  }
+
+  .lang-quick-card {
+    background: #080c18;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .lang-quick-card:hover {
+    border-color: var(--accent);
+    background: #0b1122;
+  }
+
+  .lang-quick-card.active {
+    border-color: var(--accent);
+    background: var(--bg-accent);
+  }
+
+  .lang-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .lang-chip-badge {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  .lang-card-status {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--text-muted);
+  }
+
+  .lang-quick-card.active .lang-card-status {
+    color: var(--accent-emerald);
+    font-weight: 700;
+  }
+
+  .lang-card-name {
+    font-size: 15px;
+    font-weight: 800;
+    color: #f8fafc;
+  }
+
+  .lang-card-desc {
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  /* Workspace Section */
+  .matrix-workspace-section {
+    padding-top: 36px;
+  }
+
+  .workspace-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+
+  .search-box-wrapper {
+    position: relative;
+    flex: 1;
+    min-width: 260px;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  .search-box-wrapper input {
+    width: 100%;
+    background: #080c18;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    padding: 9px 12px 9px 34px;
+    font-size: 12.5px;
+    color: #f1f5f9;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .search-box-wrapper input:focus {
+    border-color: var(--accent-blue);
+  }
+
+  .category-filters {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .cat-filter-btn {
+    background: #080c18;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
+    font-size: 11.5px;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .cat-filter-btn:hover {
+    color: #f1f5f9;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .cat-filter-btn.active {
+    background: rgba(56, 189, 248, 0.12);
+    border-color: var(--accent-blue);
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  .view-mode-toggle {
+    display: flex;
+    background: #080c18;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+    padding: 2px;
+  }
+
+  .toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 11.5px;
+    cursor: pointer;
+  }
+
+  .toggle-btn.active {
+    background: rgba(255, 255, 255, 0.08);
+    color: #f8fafc;
+    font-weight: 700;
+  }
+
+  /* Bento Blocks */
+  .matrix-topics-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .topic-bento-block {
+    background: #080c18;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  .topic-header-bar {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .topic-domain-pill {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--accent-blue);
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+
+  .topic-main-title {
+    font-size: 22px;
+    font-weight: 900;
+    color: #f8fafc;
+    margin-bottom: 6px;
+  }
+
+  .topic-lead-desc {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .entries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+
+  .lang-entry-card {
+    background: #050811;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-top: 3px solid var(--border-active);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: transform 0.15s ease;
+  }
+
+  .lang-entry-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .entry-lang-identity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .entry-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .entry-lang-name {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #f8fafc;
+  }
+
+  .entry-paradigm-badge {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.04);
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+
+  .copy-snippet-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-family: var(--font-mono);
+    cursor: pointer;
+  }
+
+  .copy-snippet-btn:hover {
+    color: #ffffff;
+    border-color: var(--accent-blue);
+  }
+
+  .copy-snippet-btn.copied {
+    color: var(--accent-emerald);
+    border-color: var(--accent-emerald);
+  }
+
+  .entry-syntax-box {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+  }
+
+  .syntax-label {
+    display: block;
+    font-size: 9.5px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    margin-bottom: 2px;
+  }
+
+  .entry-syntax-box code {
+    color: var(--accent-blue);
+    font-family: var(--font-mono);
+    word-break: break-all;
+  }
+
+  .entry-code-box pre {
+    background: #020409;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+    padding: 10px;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: #e2e8f0;
+    overflow-x: auto;
+    max-height: 180px;
+    line-height: 1.45;
+  }
+
+  .entry-notes-text {
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+  }
+
+  /* Dense Table View */
+  .matrix-table-wrapper {
+    background: #080c18;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .table-scroll-surface {
+    overflow-x: auto;
+  }
+
+  .dense-polyglot-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .dense-polyglot-table th {
+    background: #050811;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .th-lang-header {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .th-badge {
+    font-size: 9.5px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .dense-polyglot-table td {
+    padding: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    vertical-align: top;
+  }
+
+  .topic-td-header {
+    background: rgba(255, 255, 255, 0.01);
+  }
+
+  .table-domain-tag {
+    font-size: 9.5px;
+    font-family: var(--font-mono);
+    color: var(--accent-blue);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .topic-td-header strong {
+    font-size: 13.5px;
+    color: #f8fafc;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .topic-td-header p {
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  .entry-table-cell {
+    background: #060914;
+  }
+
+  .cell-paradigm {
+    font-size: 10.5px;
+    font-family: var(--font-mono);
+    color: var(--accent-purple);
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+
+  .cell-code {
+    background: #020409;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+    padding: 8px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: #e2e8f0;
+    margin: 0 0 8px 0;
+    overflow-x: auto;
+    max-height: 140px;
+  }
+
+  .cell-notes {
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  .no-results-banner {
+    background: #080c18;
+    border: 1px dashed rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    text-align: center;
+    color: var(--text-secondary);
+  }
+
+  .no-results-banner h3 {
+    color: #f8fafc;
+    margin-bottom: 6px;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+</style>

@@ -3,6 +3,7 @@
     "id": "memory-layout",
     "topic": "Memory Management & Pointer Semantics",
     "description": "How each language handles pointer arithmetic, contiguous allocation, cache locality, and lifetime bounds.",
+    "category": "Memory & Pointers",
     "entries": {
       "c": {
         "syntax": "void* ptr = malloc(size); ... free(ptr);",
@@ -52,6 +53,7 @@
     "id": "concurrency",
     "topic": "Concurrency, Parallelism & Work Dispatch",
     "description": "Thread model, synchronization primitives, workgroup grids, and clock-edge execution.",
+    "category": "Concurrency & Parallelism",
     "entries": {
       "c": {
         "syntax": "pthread_create(&th, NULL, worker, arg);",
@@ -101,6 +103,7 @@
     "id": "hardware-accel",
     "topic": "Hardware Acceleration & Driver Interface",
     "description": "Direct compute invocation, kernel loading, register programming, and accelerator offloading.",
+    "category": "Hardware & Drivers",
     "entries": {
       "c": {
         "syntax": "zeCommandListAppendLaunchKernel(cmdList, kernel, ...);",
@@ -143,6 +146,106 @@
         "paradigm": "Formal Verification (SVA) of Hardware Interfaces",
         "notes": "SystemVerilog Assertions (SVA) verifying latency, protocol timing, and cache coherency.",
         "snippet": "property p_coherence_handshake;\n    @(posedge clk) disable iff (!rst_n)\n    req |-> ##1 ack;\nendproperty\nassert property (p_coherence_handshake);"
+      }
+    }
+  },
+  {
+    "id": "simd-vector",
+    "topic": "SIMD Vector Primitives & Vectorized Math",
+    "description": "Hardware vector instruction sets (AVX-512, NEON, OpenCL vector types, and hardware systolic arrays).",
+    "category": "SIMD & Vector Math",
+    "entries": {
+      "c": {
+        "syntax": "__m512 v = _mm512_loadu_ps(ptr);",
+        "paradigm": "AVX-512 / AVX2 Intel Intrinsic Primitives",
+        "notes": "Direct hardware instruction mapping with zero compiler abstraction overhead.",
+        "snippet": "__m512 va = _mm512_loadu_ps(a);\n__m512 vb = _mm512_loadu_ps(b);\n__m512 vdot = _mm512_fmadd_ps(va, vb, _mm512_setzero_ps());"
+      },
+      "cpp": {
+        "syntax": "std::experimental::simd<float> v(ptr, std::experimental::element_aligned);",
+        "paradigm": "C++ Parallel STL & Portable std::simd",
+        "notes": "Type-safe compile-time vectorized math with auto-vectorization loop hints.",
+        "snippet": "#pragma omp simd reduction(+:dot)\nfor (int i = 0; i < N; ++i) dot += a[i] * b[i];"
+      },
+      "cs": {
+        "syntax": "Vector512<float> v = Vector512.Load(ptr);",
+        "paradigm": ".NET 10 Hardware-Accelerated Vector<T> & Vector512<T>",
+        "notes": "JIT-compiled direct machine code generation for AVX-512, AVX2, and ARM AdvSIMD.",
+        "snippet": "var va = Vector512.Load(pA);\nvar vb = Vector512.Load(pB);\nvar dot = Vector512.Dot(va, vb);"
+      },
+      "cl": {
+        "syntax": "float16 v = vload16(0, ptr);",
+        "paradigm": "OpenCL Native Vector Types (float4, float8, float16)",
+        "notes": "Built-in SIMD types and dot(), cross(), normalize(), and mad() intrinsic functions.",
+        "snippet": "float8 va = vload8(0, a_ptr + offset);\nfloat8 vb = vload8(0, b_ptr + offset);\nfloat8 res = mad(va, vb, (float8)(0.0f));"
+      },
+      "ps_1": {
+        "syntax": "[System.Numerics.Vector]::Dot($v1, $v2)",
+        "paradigm": "PowerShell Vector Math via System.Numerics",
+        "notes": "Direct invocation of hardware-accelerated CLR SIMD vectors from script automation.",
+        "snippet": "$v1 = [System.Numerics.Vector[float]]::new($arr1)\n$v2 = [System.Numerics.Vector[float]]::new($arr2)\n$res = [System.Numerics.Vector]::Dot($v1, $v2)"
+      },
+      "vl": {
+        "syntax": "generate for (i=0; i<16; i=i+1) ... endgenerate",
+        "paradigm": "Parallel Hardware Multiplier Arrays",
+        "notes": "Instantiates 16 parallel hardware multiply-accumulate units in physical silicon.",
+        "snippet": "genvar i;\ngenerate\n    for (i = 0; i < 16; i = i + 1) begin : MAC_ARRAY\n        mac_unit u_mac (.clk(clk), .a(a[i]), .b(b[i]), .out(mac_res[i]));\n    end\nendgenerate"
+      },
+      "svl": {
+        "syntax": "typedef logic [31:0] vec16_t [16];",
+        "paradigm": "Vectorized SystemVerilog Dynamic Arrays & Structs",
+        "notes": "Array reduction methods (.sum(), .and(), .xor()) for cycle-accurate scoreboard verification.",
+        "snippet": "logic [31:0] vals[16];\nint total_sum = vals.sum() with (item * 2);"
+      }
+    }
+  },
+  {
+    "id": "ffi-abi",
+    "topic": "Foreign Function Interface (FFI) & Native ABI Shims",
+    "description": "Cross-language binary compatibility, symbol export, struct packing, and interop bindings.",
+    "category": "Interop & ABI Contracts",
+    "entries": {
+      "c": {
+        "syntax": "EXPORT int query_accel_exec(const void* in, void* out);",
+        "paradigm": "Standard C ABI Symbol Export (`extern \"C\"`)",
+        "notes": "The universal lingua franca for systems interop; deterministic calling conventions (__cdecl, __stdcall).",
+        "snippet": "#define EXPORT __attribute__((visibility(\"default\")))\nEXPORT int hflabs_kernel_dispatch(const uint8_t* in_buf, size_t len);"
+      },
+      "cpp": {
+        "syntax": "extern \"C\" { EXPORT void* create_engine(); }",
+        "paradigm": "C-Linkage Facades over C++ Class Hierarchies",
+        "notes": "Exposes object pointers as opaque handles across DLL/so boundaries without ABI breakage.",
+        "snippet": "extern \"C\" EXPORT EngineHandle* create_graph_engine() {\n    return reinterpret_cast<EngineHandle*>(new GraphEngine());\n}"
+      },
+      "cs": {
+        "syntax": "[LibraryImport(\"libqueryaccel.so\")] static partial int Exec();",
+        "paradigm": ".NET 10 Source-Generated P/Invoke with Blittable Structs",
+        "notes": "Zero-overhead source generator emitting compile-time native stubs without runtime reflection.",
+        "snippet": "[LibraryImport(\"levelzero_shim.dll\")]\n[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]\ninternal static partial int ZeLaunch([MarshalAs(UnmanagedType.LPStruct)] KernelArgs args);"
+      },
+      "cl": {
+        "syntax": "clGetExtensionFunctionAddressForPlatform(platform, \"cl...\");",
+        "paradigm": "OpenCL Driver ICD Extension Function Loader",
+        "notes": "Dynamic runtime resolution of vendor-specific device extensions and custom memory allocators.",
+        "snippet": "auto clImportMemoryINTEL = (clImportMemoryINTEL_fn)\n    clGetExtensionFunctionAddressForPlatform(platform, \"clImportMemoryINTEL\");"
+      },
+      "ps_1": {
+        "syntax": "Add-Type -MemberDefinition '[DllImport(\"l0.dll\")] ...' -Name 'L0'",
+        "paradigm": "PowerShell Dynamic Native DLL Binding Compilation",
+        "notes": "Compiles inline C# P/Invoke definitions into temporary in-memory assemblies for rapid CLI probing.",
+        "snippet": "$Signature = @'\n[DllImport(\"LevelZeroDriver.dll\")]\npublic static extern int zeInit(int flags);\n'@\nAdd-Type -MemberDefinition $Signature -Name \"L0Driver\" -Namespace \"HFLabs\""
+      },
+      "vl": {
+        "syntax": "import \"DPI-C\" function int c_oracle_calc(input int a);",
+        "paradigm": "Verilog PLI (Programming Language Interface)",
+        "notes": "Legacy hardware-to-software co-simulation bridges interfacing simulator runtimes with C.",
+        "snippet": "initial begin\n    $display(\"Initializing PLI Co-simulation Engine...\");\n    $c_oracle_init();\nend"
+      },
+      "svl": {
+        "syntax": "import \"DPI-C\" context function int compute_golden_vector(input int v);",
+        "paradigm": "SystemVerilog Direct Programming Interface (DPI-C)",
+        "notes": "Zero-overhead bi-directional C/C++ function calls directly inside hardware simulation loops.",
+        "snippet": "import \"DPI-C\" context task c_eval_graph(input string query, output int score);\ninitial begin\n    c_eval_graph(\"MATCH (n) RETURN n\", score);\nend"
       }
     }
   }
