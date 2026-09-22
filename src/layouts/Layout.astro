@@ -32,6 +32,21 @@ const {
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body class={isFullPage ? 'fullpage-body' : ''}>
+  <!-- Global Living Ambient Canvas (Constellation & Data Streams) -->
+  <canvas id="global-ambient-canvas" class="global-ambient-canvas"></canvas>
+
+  <!-- Luminous Ambient Light Array at the Top of Viewport -->
+  <div class="top-light-rig" aria-hidden="true">
+    <div class="top-light-filament"></div>
+    <div class="top-light-glow-bloom">
+      <div class="light-emitter emitter-cyan"></div>
+      <div class="light-emitter emitter-purple"></div>
+      <div class="light-emitter emitter-amber"></div>
+      <div class="light-emitter emitter-emerald"></div>
+      <div class="light-emitter emitter-rose"></div>
+    </div>
+  </div>
+
   <header class="site-header">
     <div class="container header-content">
       <a href="/" class="site-logo">
@@ -44,7 +59,7 @@ const {
         <a href="/schemas" class="nav-link">Schemas</a>
         <a href="/docs" class="nav-link">Docs</a>
         <a href="/about" class="nav-link">About</a>
-        <a href="https://github.com/hf-laboratories/IPUServices" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="padding:6px 12px; font-size:12px;">
+        <a href="https://github.com/hf-laboratories" target="_blank" rel="noopener noreferrer" class="btn-secondary main-github-link" style="padding:6px 12px; font-size:12px;" data-main-github="true" title="HF Laboratories GitHub Profile">
           GitHub &rarr;
         </a>
       </nav>
@@ -81,7 +96,8 @@ const {
             <li><a href="/products/ml-suite">ML Suite Product Page</a></li>
             <li><a href="/products/hyperswarm">HyperSwarm Product Page</a></li>
             <li><a href="/products/swarmdev">SwarmDev Product Page</a></li>
-            <li><a href="/products/automlapp">AutoMLApp Product Page</a></li>
+            <li><a href="/products/automlapp">AutoMLApp (in dev)</a></li>
+            <li><a href="/products/abigen">Abigen (in dev)</a></li>
             <li><a href="/products/accelerator">Accelerator Product Page</a></li>
             <li><a href="/products/queryaccel">QueryAccel Product Page</a></li>
             <li><a href="/docs/graphrag-operator">In-Memory Hypertensor GraphRAG Manual</a></li>
@@ -108,11 +124,515 @@ const {
             <li><a href="/products/ht-graphrag#licensing">HT GraphRAG Licensing Tiers</a></li>
             <li><a href="mailto:alix@hflabs.dev">Contact: alix@hflabs.dev</a></li>
             <li><a href="/schemas/paged_response_schema.json">API Schema Registry</a></li>
-            <li><a href="https://github.com/hf-laboratories/IPUServices" target="_blank" rel="noopener noreferrer">Source Repository</a></li>
+            <li><a href="https://github.com/hf-laboratories/IPUServices" target="_blank" rel="noopener noreferrer" class="repo-under-construction">Source Repository</a></li>
           </ul>
         </div>
       </div>
     </footer>
   )}
+
+  <!-- Sawhorse Construction Floating Popover -->
+  <div id="githubConstructionPopover" class="github-construction-popover" aria-hidden="true">
+    <div class="hazard-stripe-bar"></div>
+    <div class="popover-inner">
+      <div class="sawhorse-graphic" aria-hidden="true">
+        <!-- SVG Sawhorse Barrier -->
+        <svg width="28" height="22" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="sawhorse-svg">
+          <!-- Legs -->
+          <line x1="8" y1="12" x2="3" y2="30" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
+          <line x1="12" y1="12" x2="17" y2="30" stroke="#d97706" stroke-width="3" stroke-linecap="round"/>
+          <line x1="28" y1="12" x2="23" y2="30" stroke="#d97706" stroke-width="3" stroke-linecap="round"/>
+          <line x1="32" y1="12" x2="37" y2="30" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
+          <!-- Leg Braces -->
+          <line x1="5" y1="22" x2="15" y2="22" stroke="#92400e" stroke-width="2"/>
+          <line x1="25" y1="22" x2="35" y2="22" stroke="#92400e" stroke-width="2"/>
+          <!-- Top Barrier Plank with Hazard Stripes -->
+          <rect x="2" y="6" width="36" height="8" rx="2" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+          <path d="M6 6L2 14M14 6L6 14M22 6L14 14M30 6L22 14M38 6L30 14" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="popover-text-box">
+        <div class="popover-title">
+          <span class="warning-icon">🚧</span>
+          <strong>Repos Under Construction.</strong>
+          <span class="warning-icon">🚧</span>
+        </div>
+        <div class="popover-sub">Repository updates in progress &bull; Direct access temporarily paused</div>
+      </div>
+      <div class="sawhorse-graphic" aria-hidden="true">
+        <svg width="28" height="22" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="sawhorse-svg">
+          <line x1="8" y1="12" x2="3" y2="30" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
+          <line x1="12" y1="12" x2="17" y2="30" stroke="#d97706" stroke-width="3" stroke-linecap="round"/>
+          <line x1="28" y1="12" x2="23" y2="30" stroke="#d97706" stroke-width="3" stroke-linecap="round"/>
+          <line x1="32" y1="12" x2="37" y2="30" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
+          <line x1="5" y1="22" x2="15" y2="22" stroke="#92400e" stroke-width="2"/>
+          <line x1="25" y1="22" x2="35" y2="22" stroke="#92400e" stroke-width="2"/>
+          <rect x="2" y="6" width="36" height="8" rx="2" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+          <path d="M6 6L2 14M14 6L6 14M22 6L14 14M30 6L22 14M38 6L30 14" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* Construction Popover Styling */
+    .github-construction-popover {
+      position: fixed;
+      z-index: 999999;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(8px) scale(0.95);
+      transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      background: rgba(15, 23, 42, 0.96);
+      border: 1.5px solid #f59e0b;
+      border-radius: var(--radius-md);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7), 0 0 24px rgba(245, 158, 11, 0.3);
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+      max-width: 380px;
+    }
+
+    .github-construction-popover.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .github-construction-popover.shake {
+      animation: cautionShake 0.4s ease;
+    }
+
+    @keyframes cautionShake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
+    }
+
+    .hazard-stripe-bar {
+      height: 4px;
+      width: 100%;
+      background: repeating-linear-gradient(
+        45deg,
+        #fbbf24,
+        #fbbf24 10px,
+        #1e293b 10px,
+        #1e293b 20px
+      );
+    }
+
+    .popover-inner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+    }
+
+    .sawhorse-graphic {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sawhorse-svg {
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+    }
+
+    .popover-text-box {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      text-align: center;
+    }
+
+    .popover-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: var(--font-sans);
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #fbbf24;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+
+    .warning-icon {
+      font-size: 14px;
+    }
+
+    .popover-sub {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: #94a3b8;
+      white-space: nowrap;
+    }
+
+    /* Luminous Ambient Light Array at the Top of Viewport */
+    .top-light-rig {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 380px;
+      pointer-events: none;
+      z-index: 50;
+      overflow: hidden;
+    }
+
+    .top-light-filament {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(56, 189, 248, 0.95) 15%,
+        rgba(168, 85, 247, 0.9) 35%,
+        rgba(244, 63, 94, 0.9) 55%,
+        rgba(251, 191, 36, 0.95) 75%,
+        rgba(52, 211, 153, 0.95) 90%,
+        transparent 100%
+      );
+      box-shadow: 
+        0 0 12px 2px rgba(56, 189, 248, 0.8),
+        0 0 30px 6px rgba(168, 85, 247, 0.4),
+        0 0 60px 12px rgba(251, 191, 36, 0.3);
+      z-index: 52;
+    }
+
+    .top-light-glow-bloom {
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1200px;
+      max-width: 100vw;
+      height: 320px;
+      display: flex;
+      justify-content: space-around;
+      filter: blur(55px);
+      opacity: 0.65;
+      mix-blend-mode: screen;
+      z-index: 51;
+    }
+
+    .light-emitter {
+      border-radius: 50%;
+      height: 220px;
+      width: 220px;
+      flex-shrink: 0;
+      animation: lightPulse 8s ease-in-out infinite alternate;
+    }
+
+    .emitter-cyan {
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.85) 0%, rgba(56, 189, 248, 0) 70%);
+      animation-delay: 0s;
+    }
+
+    .emitter-purple {
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.8) 0%, rgba(168, 85, 247, 0) 70%);
+      animation-delay: 2s;
+    }
+
+    .emitter-amber {
+      background: radial-gradient(circle, rgba(251, 191, 36, 0.75) 0%, rgba(251, 191, 36, 0) 70%);
+      animation-delay: 4s;
+    }
+
+    .emitter-emerald {
+      background: radial-gradient(circle, rgba(52, 211, 153, 0.7) 0%, rgba(52, 211, 153, 0) 70%);
+      animation-delay: 1.5s;
+    }
+
+    .emitter-rose {
+      background: radial-gradient(circle, rgba(244, 63, 94, 0.75) 0%, rgba(244, 63, 94, 0) 70%);
+      animation-delay: 3.5s;
+    }
+
+    .global-ambient-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.95;
+    }
+
+    @keyframes lightPulse {
+      0% { transform: scale(0.9) translateY(0); opacity: 0.55; }
+      50% { transform: scale(1.1) translateY(15px); opacity: 0.85; }
+      100% { transform: scale(1) translateY(5px); opacity: 0.6; }
+    }
+  </style>
+
+  <script>
+    // Global Ambient Starfield & Constellation Network Renderer
+    function initGlobalAmbientBackground() {
+      const canvas = document.getElementById('global-ambient-canvas') as HTMLCanvasElement;
+      if (!canvas) return;
+
+      const ctx = canvas.getContext('2d', { alpha: true });
+      if (!ctx) return;
+
+      let width = 0;
+      let height = 0;
+      let animId: number | null = null;
+      let mouseX = -1000;
+      let mouseY = -1000;
+
+      interface AmbientNode {
+        x: number;
+        y: number;
+        vx: number;
+        vy: number;
+        radius: number;
+        alpha: number;
+        color: string;
+        pulsePhase: number;
+        pulseSpeed: number;
+      }
+
+      const colors = ['#38bdf8', '#818cf8', '#c084fc', '#34d399', '#f43f5e'];
+      const nodes: AmbientNode[] = [];
+      const nodeCount = 60;
+
+      function resize() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        ctx.resetTransform();
+        ctx.scale(dpr, dpr);
+      }
+
+      function initNodes() {
+        nodes.length = 0;
+        for (let i = 0; i < nodeCount; i++) {
+          nodes.push({
+            x: Math.random() * (width || window.innerWidth),
+            y: Math.random() * (height || window.innerHeight),
+            vx: (Math.random() - 0.5) * 0.4,
+            vy: (Math.random() - 0.5) * 0.4,
+            radius: Math.random() * 2.2 + 1.2,
+            alpha: Math.random() * 0.6 + 0.35,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            pulsePhase: Math.random() * Math.PI * 2,
+            pulseSpeed: Math.random() * 0.02 + 0.01
+          });
+        }
+      }
+
+      window.addEventListener('resize', () => {
+        resize();
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      window.addEventListener('mouseleave', () => {
+        mouseX = -1000;
+        mouseY = -1000;
+      });
+
+      function render() {
+        ctx.clearRect(0, 0, width, height);
+        const t = performance.now() * 0.001;
+
+        // Draw Ambient Wave Mesh
+        ctx.beginPath();
+        for (let x = 0; x < width; x += 40) {
+          const y = height * 0.5 + Math.sin(x * 0.003 + t * 0.4) * 45 + Math.cos(x * 0.006 + t * 0.2) * 25;
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.04)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Update and draw nodes
+        for (let i = 0; i < nodes.length; i++) {
+          const n = nodes[i];
+          n.x += n.vx;
+          n.y += n.vy;
+
+          if (n.x < -20) n.x = width + 20;
+          if (n.x > width + 20) n.x = -20;
+          if (n.y < -20) n.y = height + 20;
+          if (n.y > height + 20) n.y = -20;
+
+          // Mouse gentle repulsion / pull
+          const dxMouse = n.x - mouseX;
+          const dyMouse = n.y - mouseY;
+          const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
+          if (distMouse < 160 && distMouse > 0) {
+            const force = (160 - distMouse) / 160 * 0.35;
+            n.x += (dxMouse / distMouse) * force;
+            n.y += (dyMouse / distMouse) * force;
+          }
+
+          n.pulsePhase += n.pulseSpeed;
+          const pulse = 0.6 + 0.4 * Math.sin(n.pulsePhase);
+          const currentRadius = n.radius * pulse;
+
+          // Glowing Halo
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, currentRadius * 3.5, 0, Math.PI * 2);
+          ctx.fillStyle = n.color === '#38bdf8' 
+            ? `rgba(56, 189, 248, ${0.18 * n.alpha})`
+            : n.color === '#c084fc'
+            ? `rgba(192, 132, 252, ${0.18 * n.alpha})`
+            : `rgba(244, 63, 94, ${0.18 * n.alpha})`;
+          ctx.fill();
+
+          // Radiant Core
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, currentRadius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(248, 250, 252, ${0.9 * n.alpha})`;
+          ctx.fill();
+
+          // Constellation links
+          for (let j = i + 1; j < nodes.length; j++) {
+            const n2 = nodes[j];
+            const dx = n.x - n2.x;
+            const dy = n.y - n2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < 140) {
+              const linkAlpha = (1 - dist / 140) * 0.28 * n.alpha * n2.alpha;
+              ctx.beginPath();
+              ctx.moveTo(n.x, n.y);
+              ctx.lineTo(n2.x, n2.y);
+              ctx.strokeStyle = `rgba(56, 189, 248, ${linkAlpha})`;
+              ctx.lineWidth = 1;
+              ctx.stroke();
+
+              // Light packet
+              if (dist < 100 && (i + j) % 3 === 0) {
+                const pktPos = (t * 0.6 + (i + j) * 0.1) % 1;
+                const px = n.x + (n2.x - n.x) * pktPos;
+                const py = n.y + (n2.y - n.y) * pktPos;
+                ctx.beginPath();
+                ctx.arc(px, py, 1.4, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${linkAlpha * 2.5})`;
+                ctx.fill();
+              }
+            }
+          }
+        }
+
+        animId = requestAnimationFrame(render);
+      }
+
+      resize();
+      initNodes();
+      render();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initGlobalAmbientBackground);
+    } else {
+      initGlobalAmbientBackground();
+    }
+    document.addEventListener('astro:page-load', initGlobalAmbientBackground);
+
+    // Global GitHub Link Hover & Click Interceptor
+    function initGitHubConstructionInterceptor() {
+      const popover = document.getElementById('githubConstructionPopover');
+      if (!popover) return;
+
+      // Select all links with href containing github.com
+      const allGithubLinks = Array.from(document.querySelectorAll('a[href*="github.com"]')) as HTMLAnchorElement[];
+
+      allGithubLinks.forEach(link => {
+        // Skip the main account link (e.g., data-main-github="true" or exact match to account page)
+        const isMainAccount = link.getAttribute('data-main-github') === 'true' || 
+                              link.classList.contains('main-github-link') ||
+                              link.href.trim() === 'https://github.com/hf-laboratories' ||
+                              link.href.trim() === 'https://github.com/hf-laboratories/';
+
+        if (isMainAccount) {
+          // Allow normal navigation to the user's account page
+          return;
+        }
+
+        // For all repository links under construction:
+        link.classList.add('repo-under-construction');
+        link.style.cursor = 'not-allowed';
+
+        // Mouse Enter / Over: Show Sawhorses & Message
+        const handleMouseEnter = (e: MouseEvent) => {
+          positionPopover(e, link);
+          popover.classList.add('visible');
+          popover.setAttribute('aria-hidden', 'false');
+        };
+
+        // Mouse Move: Follow smoothly
+        const handleMouseMove = (e: MouseEvent) => {
+          positionPopover(e, link);
+        };
+
+        // Mouse Leave: Hide
+        const handleMouseLeave = () => {
+          popover.classList.remove('visible');
+          popover.setAttribute('aria-hidden', 'true');
+        };
+
+        // Click: Do NOTHING on click
+        const handleClick = (e: MouseEvent) => {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          // Trigger attention shake animation on popover
+          popover.classList.remove('shake');
+          void popover.offsetWidth; // trigger reflow
+          popover.classList.add('shake');
+          
+          return false;
+        };
+
+        link.addEventListener('mouseenter', handleMouseEnter);
+        link.addEventListener('mousemove', handleMouseMove);
+        link.addEventListener('mouseleave', handleMouseLeave);
+        link.addEventListener('click', handleClick);
+      });
+
+      function positionPopover(e: MouseEvent, targetLink: HTMLElement) {
+        const rect = targetLink.getBoundingClientRect();
+        const popoverWidth = popover.offsetWidth || 320;
+        const popoverHeight = popover.offsetHeight || 60;
+
+        let top = rect.top - popoverHeight - 10;
+        let left = rect.left + (rect.width / 2) - (popoverWidth / 2);
+
+        // Boundary checks to stay in viewport
+        if (top < 10) {
+          top = rect.bottom + 10;
+        }
+        if (left < 10) {
+          left = 10;
+        } else if (left + popoverWidth > window.innerWidth - 10) {
+          left = window.innerWidth - popoverWidth - 10;
+        }
+
+        popover.style.top = `${top}px`;
+        popover.style.left = `${left}px`;
+      }
+    }
+
+    // Run on DOMContentLoaded and on page view transitions
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initGitHubConstructionInterceptor);
+    } else {
+      initGitHubConstructionInterceptor();
+    }
+    document.addEventListener('astro:page-load', initGitHubConstructionInterceptor);
+  </script>
 </body>
 </html>

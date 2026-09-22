@@ -50,7 +50,7 @@ import divisions from '../data/divisions.json';
          PAGE 1 / SLIDE 0: EXECUTIVE HERO & HIGH-ASSURANCE ARCHITECTURE OVERVIEW
          ========================================================================= -->
     <section class="page-slide slide-hero active-slide" id="page-0" data-page-index="0">
-      <DivisionBackgroundOverlay id="hero-bg-overlay" initialDivision={0} opacity={0.65} />
+      <DivisionBackgroundOverlay id="hero-bg-overlay" initialDivision={0} opacity={1.0} />
       
       <div class="container slide-content">
         <div class="hero-top-badges">
@@ -96,8 +96,8 @@ import divisions from '../data/divisions.json';
               <span class="hud-dot" style="background:#a855f7;"></span>
               <span class="hud-code">LEVEL ZERO &amp; POPLAR</span>
             </div>
-            <div class="hud-metric">26 Native Zebins</div>
-            <div class="hud-sub">Precompiled compute kernels spanning 11 Intel hardware targets.</div>
+            <div class="hud-metric">407 Kernel Modules</div>
+            <div class="hud-sub">37 distinct kernels precompiled across 11 Intel GPU targets.</div>
           </div>
 
           <div class="hud-card" style="--card-border: #f43f5e;">
@@ -148,7 +148,7 @@ import divisions from '../data/divisions.json';
          PAGE 2 / SLIDE 1: INTERACTIVE TOPOLOGY STAGE & NARRATIVE SCROLLYTELLING
          ========================================================================= -->
     <section class="page-slide slide-stage" id="page-1" data-page-index="1">
-      <DivisionBackgroundOverlay id="stage-bg-overlay" initialDivision={0} opacity={0.88} />
+      <DivisionBackgroundOverlay id="stage-bg-overlay" initialDivision={0} opacity={1.0} />
 
       <div class="container slide-content">
         <!-- Stage Top Header -->
@@ -189,35 +189,37 @@ import divisions from '../data/divisions.json';
                 <span id="stageDivBadge" class="div-identity-badge">DIVISION 01</span>
                 <span class="cycle-status-pill">
                   <span class="pulse-dot"></span>
-                  <span id="cycleStatusText">Active Cycle (5s)</span>
+                  <span id="cycleStatusText">Active Cycle (15s)</span>
                 </span>
               </div>
 
-              <h3 id="stageDivTitle" class="stage-narrative-heading">Cognition &amp; Swarm Intelligence</h3>
-              <p id="stageDivDesc" class="stage-narrative-body">
-                In-memory graph retrieval, SIMD vector search, and multi-algorithm swarm optimization. Keeps the entire graph resident in RAM to eliminate disk-bound lookups, powering agent reasoning through FastMCP and desktop visualization HUDs.
-              </p>
+              <div class="stage-card-anim-target" id="stageNarrativeAnimGroup">
+                <h3 id="stageDivTitle" class="stage-narrative-heading">Cognition &amp; Swarm Intelligence</h3>
+                <p id="stageDivDesc" class="stage-narrative-body">
+                  In-memory graph retrieval, SIMD vector search, and multi-algorithm swarm optimization. Keeps the entire graph resident in RAM to eliminate disk-bound lookups, powering agent reasoning through FastMCP and desktop visualization HUDs.
+                </p>
 
-              <!-- Dynamic Project Badges -->
-              <div id="stageProjectPills" class="stage-pills-row">
-                <span class="stage-pill">Hypertensor GraphRAG</span>
-                <span class="stage-pill">HyperSwarm Suite</span>
-                <span class="stage-pill">SwarmDev</span>
-              </div>
+                <!-- Dynamic Project Badges -->
+                <div id="stageProjectPills" class="stage-pills-row">
+                  <span class="stage-pill">Hypertensor GraphRAG</span>
+                  <span class="stage-pill">HyperSwarm Suite</span>
+                  <span class="stage-pill">SwarmDev</span>
+                </div>
 
-              <!-- Metric Stats Grid -->
-              <div class="stage-metrics-trio">
-                <div class="metric-trio-item">
-                  <span id="stageMetricLbl1" class="metric-lbl">2-Hop Traversal</span>
-                  <strong id="stageMetricVal1" class="metric-val">0.15–1.95 ms</strong>
-                </div>
-                <div class="metric-trio-item">
-                  <span id="stageMetricLbl2" class="metric-lbl">SIMD Vectors</span>
-                  <strong id="stageMetricVal2" class="metric-val">128-d Default</strong>
-                </div>
-                <div class="metric-trio-item">
-                  <span id="stageMetricLbl3" class="metric-lbl">MCP Connectivity</span>
-                  <strong id="stageMetricVal3" class="metric-val">65+ Tools</strong>
+                <!-- Metric Stats Grid -->
+                <div class="stage-metrics-trio">
+                  <div class="metric-trio-item">
+                    <span id="stageMetricLbl1" class="metric-lbl">2-Hop Traversal</span>
+                    <strong id="stageMetricVal1" class="metric-val">0.15–1.95 ms</strong>
+                  </div>
+                  <div class="metric-trio-item">
+                    <span id="stageMetricLbl2" class="metric-lbl">SIMD Vectors</span>
+                    <strong id="stageMetricVal2" class="metric-val">128-d Default</strong>
+                  </div>
+                  <div class="metric-trio-item">
+                    <span id="stageMetricLbl3" class="metric-lbl">MCP Connectivity</span>
+                    <strong id="stageMetricVal3" class="metric-val">65+ Tools</strong>
+                  </div>
                 </div>
               </div>
 
@@ -244,72 +246,74 @@ import divisions from '../data/divisions.json';
                 <span id="visHeaderBadge" class="vis-header-tag">DIVISION 01</span>
               </div>
 
-              <!-- Live Node Mesh Diagram -->
-              <div class="diagram-mesh-wrapper">
-                <div class="diagram-nodes-grid" id="stageNodesGrid">
-                  <div class="diagram-node node-primary" id="vnode-1">
-                    <span class="node-icon">🧠</span>
-                    <div class="node-text">
-                      <span class="node-title">Hypertensor GraphRAG</span>
-                      <span class="node-sub">In-Memory Typed Store</span>
+              <div class="stage-vis-anim-target" id="stageVisAnimGroup">
+                <!-- Live Node Mesh Diagram -->
+                <div class="diagram-mesh-wrapper">
+                  <div class="diagram-nodes-grid" id="stageNodesGrid">
+                    <div class="diagram-node node-primary" id="vnode-1">
+                      <span class="node-icon">🧠</span>
+                      <div class="node-text">
+                        <span class="node-title">Hypertensor GraphRAG</span>
+                        <span class="node-sub">In-Memory Typed Store</span>
+                      </div>
                     </div>
-                  </div>
-                  <div class="diagram-link link-h" id="vlink-1">
-                    <span class="link-pulse"></span>
-                  </div>
-                  <div class="diagram-node node-secondary" id="vnode-2">
-                    <span class="node-icon">⚡</span>
-                    <div class="node-text">
-                      <span class="node-title">SIMD TensorPrimitives</span>
-                      <span class="node-sub">128-d Vector Cosine</span>
+                    <div class="diagram-link link-h" id="vlink-1">
+                      <span class="link-pulse"></span>
                     </div>
-                  </div>
-                  <div class="diagram-node node-secondary" id="vnode-3">
-                    <span class="node-icon">🐝</span>
-                    <div class="node-text">
-                      <span class="node-title">HyperSwarm Suite</span>
-                      <span class="node-sub">Director Authority</span>
+                    <div class="diagram-node node-secondary" id="vnode-2">
+                      <span class="node-icon">⚡</span>
+                      <div class="node-text">
+                        <span class="node-title">SIMD TensorPrimitives</span>
+                        <span class="node-sub">128-d Vector Cosine</span>
+                      </div>
                     </div>
-                  </div>
-                  <div class="diagram-link link-h" id="vlink-2">
-                    <span class="link-pulse"></span>
-                  </div>
-                  <div class="diagram-node node-primary" id="vnode-4">
-                    <span class="node-icon">🔌</span>
-                    <div class="node-text">
-                      <span class="node-title">FastMCP Server</span>
-                      <span class="node-sub">65+ Agent Tools</span>
+                    <div class="diagram-node node-secondary" id="vnode-3">
+                      <span class="node-icon">🐝</span>
+                      <div class="node-text">
+                        <span class="node-title">HyperSwarm Suite</span>
+                        <span class="node-sub">Director Authority</span>
+                      </div>
+                    </div>
+                    <div class="diagram-link link-h" id="vlink-2">
+                      <span class="link-pulse"></span>
+                    </div>
+                    <div class="diagram-node node-primary" id="vnode-4">
+                      <span class="node-icon">🔌</span>
+                      <div class="node-text">
+                        <span class="node-title">FastMCP Server</span>
+                        <span class="node-sub">65+ Agent Tools</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <!-- Dynamic Terminal Telemetry Stream -->
-              <div class="stage-terminal-stream">
-                <div class="term-header">
-                  <span class="term-dot red"></span>
-                  <span class="term-dot yellow"></span>
-                  <span class="term-dot green"></span>
-                  <span class="term-title">HFLABS TELEMETRY KERNEL</span>
+                <!-- Dynamic Terminal Telemetry Stream -->
+                <div class="stage-terminal-stream">
+                  <div class="term-header">
+                    <span class="term-dot red"></span>
+                    <span class="term-dot yellow"></span>
+                    <span class="term-dot green"></span>
+                    <span class="term-title">HFLABS TELEMETRY KERNEL</span>
+                  </div>
+                  <code id="stageTerminalText" class="term-output">
+                    [Cognition &amp; Swarm] Hypertensor GraphRAG: 2-hop traversal in 0.15 ms | SIMD 128d | FastMCP 65+ tools active
+                  </code>
                 </div>
-                <code id="stageTerminalText" class="term-output">
-                  [Cognition &amp; Swarm] Hypertensor GraphRAG: 2-hop traversal in 0.15 ms | SIMD 128d | FastMCP 65+ tools active
-                </code>
-              </div>
 
-              <!-- Stage Bottom Hardware Telemetry -->
-              <div class="stage-vis-footer">
-                <div class="vis-footer-stat">
-                  <span id="visStatLbl1" class="vf-lbl">Graph Residency</span>
-                  <strong id="visStatVal1" class="vf-val">In-Memory RAM</strong>
-                </div>
-                <div class="vis-footer-stat">
-                  <span id="visStatLbl2" class="vf-lbl">Vector Engine</span>
-                  <strong id="visStatVal2" class="vf-val">SIMD TensorPrimitives</strong>
-                </div>
-                <div class="vis-footer-stat">
-                  <span id="visStatLbl3" class="vf-lbl">Agent Protocol</span>
-                  <strong id="visStatVal3" class="vf-val">FastMCP (65+ Tools)</strong>
+                <!-- Stage Bottom Hardware Telemetry -->
+                <div class="stage-vis-footer">
+                  <div class="vis-footer-stat">
+                    <span id="visStatLbl1" class="vf-lbl">Graph Residency</span>
+                    <strong id="visStatVal1" class="vf-val">In-Memory RAM</strong>
+                  </div>
+                  <div class="vis-footer-stat">
+                    <span id="visStatLbl2" class="vf-lbl">Vector Engine</span>
+                    <strong id="visStatVal2" class="vf-val">SIMD TensorPrimitives</strong>
+                  </div>
+                  <div class="vis-footer-stat">
+                    <span id="visStatLbl3" class="vf-lbl">Agent Protocol</span>
+                    <strong id="visStatVal3" class="vf-val">FastMCP (65+ Tools)</strong>
+                  </div>
                 </div>
               </div>
             </div>
@@ -322,7 +326,7 @@ import divisions from '../data/divisions.json';
          PAGE 3 / SLIDE 2: CORE TECHNOLOGY STACK & DIVISIONS GRID (+ FOOTER)
          ========================================================================= -->
     <section class="page-slide slide-divisions" id="page-2" data-page-index="2">
-      <DivisionBackgroundOverlay id="divisions-bg-overlay" initialDivision={0} opacity={0.85} />
+      <DivisionBackgroundOverlay id="divisions-bg-overlay" initialDivision={0} opacity={1.0} />
 
       <div class="container slide-content divisions-slide-inner">
         <!-- Section Header -->
@@ -395,7 +399,10 @@ import divisions from '../data/divisions.json';
                         <a href="/products/queryaccel" class="p-link-btn">QueryAccel Product Page &rarr;</a>
                       )}
                       {p.name.includes("LevelZero") && (
-                        <a href="/docs/levelzero-net" class="p-link-btn">LevelZero.NET Manual &rarr;</a>
+                        <a href="/products/levelzero" class="p-link-btn">LevelZero.NET Product Page &rarr;</a>
+                      )}
+                      {p.name.includes("Abigen") && (
+                        <a href="/products/abigen" class="p-link-btn">Abigen Product Page &rarr;</a>
                       )}
                     </li>
                   ))}
@@ -599,18 +606,22 @@ import divisions from '../data/divisions.json';
   }
 
   .hud-card {
-    background: rgba(10, 15, 28, 0.75);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(12, 18, 34, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     border-top: 2px solid var(--card-border);
     border-radius: var(--radius-md);
     padding: 12px 14px;
-    backdrop-filter: blur(8px);
-    transition: transform 0.2s ease;
+    backdrop-filter: blur(8px) saturate(200%);
+    -webkit-backdrop-filter: blur(8px) saturate(200%);
+    box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.2), 0 8px 24px -4px rgba(0, 0, 0, 0.35);
+    transition: all 0.2s ease;
   }
 
   .hud-card:hover {
     transform: translateY(-2px);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(22, 33, 62, 0.45);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: inset 0 1px 2px 0 rgba(255, 255, 255, 0.3), 0 12px 30px -4px rgba(0, 0, 0, 0.45), 0 0 16px rgba(56, 189, 248, 0.2);
   }
 
   .hud-header {
@@ -752,7 +763,7 @@ import divisions from '../data/divisions.json';
 
   .stage-tab.active .tab-cycle-progress {
     width: 100%;
-    transition: width 5.2s linear;
+    transition: width 15s linear;
   }
 
   .stage-workspace-grid {
@@ -763,15 +774,28 @@ import divisions from '../data/divisions.json';
   }
 
   .stage-narrative-card {
-    background: rgba(8, 12, 24, 0.85);
-    border: 1px solid var(--border-color);
+    background: rgba(12, 18, 34, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: var(--radius-lg);
     padding: 22px;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(8px) saturate(200%);
+    -webkit-backdrop-filter: blur(8px) saturate(200%);
+    box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.2), 0 12px 32px 0 rgba(0, 0, 0, 0.35);
+  }
+
+  .stage-card-anim-target,
+  .stage-vis-anim-target {
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .stage-card-anim-target.fading,
+  .stage-vis-anim-target.fading {
+    opacity: 0.1;
+    transform: translateY(4px);
   }
 
   .card-top-meta {
@@ -896,14 +920,17 @@ import divisions from '../data/divisions.json';
 
   /* Visualizer Display Box */
   .visualizer-display-box {
-    background: #050811;
-    border: 1px solid var(--border-color);
+    background: rgba(10, 15, 28, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: var(--radius-lg);
     padding: 16px;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    backdrop-filter: blur(8px) saturate(200%);
+    -webkit-backdrop-filter: blur(8px) saturate(200%);
+    box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.18), 0 12px 32px 0 rgba(0, 0, 0, 0.35);
   }
 
   .visualizer-bar {
@@ -1143,8 +1170,8 @@ import divisions from '../data/divisions.json';
 
   .division-card-interactive {
     position: relative;
-    background: rgba(8, 12, 24, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(12, 18, 34, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     border-top: 3px solid var(--div-accent);
     border-radius: var(--radius-lg);
     padding: 16px 18px;
@@ -1155,20 +1182,23 @@ import divisions from '../data/divisions.json';
     justify-content: space-between;
     gap: 10px;
     cursor: pointer;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(8px) saturate(200%);
+    -webkit-backdrop-filter: blur(8px) saturate(200%);
+    box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.2), 0 8px 32px 0 rgba(0, 0, 0, 0.35);
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     box-sizing: border-box;
   }
 
   .division-card-interactive:hover {
-    border-color: rgba(255, 255, 255, 0.25);
-    background: rgba(12, 18, 36, 0.9);
+    border-color: rgba(255, 255, 255, 0.32);
+    background: rgba(22, 33, 62, 0.45);
+    box-shadow: inset 0 1px 2px 0 rgba(255, 255, 255, 0.3), 0 12px 36px 0 rgba(0, 0, 0, 0.45);
   }
 
   .division-card-interactive.focused {
     border-color: var(--div-accent);
-    background: rgba(14, 22, 44, 0.95);
-    box-shadow: 0 0 24px rgba(0, 0, 0, 0.6), 0 0 20px color-mix(in srgb, var(--div-accent) 25%, transparent);
+    background: rgba(20, 30, 58, 0.55);
+    box-shadow: inset 0 1px 2px 0 rgba(255, 255, 255, 0.3), 0 0 28px rgba(0, 0, 0, 0.6), 0 0 24px color-mix(in srgb, var(--div-accent) 35%, transparent);
     transform: translateY(-2px);
   }
 
@@ -1218,7 +1248,7 @@ import divisions from '../data/divisions.json';
 
   .division-card-interactive.focused .focus-countdown-bar {
     width: 100%;
-    transition: width 5.2s linear;
+    transition: width 15s linear;
   }
 
   .div-card-head {
@@ -1506,25 +1536,25 @@ import divisions from '../data/divisions.json';
       badge: 'DIVISION 03',
       badgeColor: '#f43f5e',
       title: 'Hardware & Native Substrates',
-      desc: 'Intel Level Zero interop, precompiled kernels, Graphcore Poplar bindings, and header-to-binding generation. Direct C ABI shims, zero-overhead C# P/Invoke, and 26 OpenCL C kernels precompiled into native zebins across 11 Intel targets.',
-      pills: ['LevelZero.NET', 'L0 Kernel Catalog', 'Poplar.NET', 'Abigen'],
+      desc: 'Intel GPU compute from .NET in one single DLL with no driver SDK to install. Managed API, native shim, and 407 precompiled kernel modules (37 distinct kernels across 11 Intel targets: 37 × 11 = 407) with 37 typed kernel wrappers and auto device detection.',
+      pills: ['LevelZero.NET', 'Kernel Catalog', 'Poplar.NET', 'Abigen'],
       metrics: [
-        { lbl: 'Native Interop', val: 'Managed C# P/Invoke' },
-        { lbl: 'GPU Kernels', val: '26 Zebin & SPIR-V' },
-        { lbl: 'Intel Targets', val: '11 Hardware Targets' }
+        { lbl: 'Precompiled Binaries', val: '407 Modules' },
+        { lbl: 'Kernel Wrappers', val: '37 Wrappers' },
+        { lbl: 'Intel GPU Targets', val: '11 Hardware Targets' }
       ],
-      link: '/docs/levelzero-net',
+      link: '/products/levelzero',
       nodes: [
-        { icon: '⚙️', title: 'Abigen Clang Engine', sub: 'C ABI Shim Generator' },
-        { icon: '📦', title: 'Native C ABI Shim', sub: 'Zero-Overhead P/Invoke' },
-        { icon: '🖥️', title: 'LevelZero.NET', sub: '16 Domain Wrappers' },
-        { icon: '⚡', title: 'L0 Kernel Catalog', sub: '26 Precompiled Zebins' }
+        { icon: '⚙️', title: 'ComputeDevice USM', sub: 'Typed Span<T> Access' },
+        { icon: '📦', title: 'Single DLL Runtime', sub: 'API + Shim + 407 Kernels' },
+        { icon: '🖥️', title: 'LevelZero.NET', sub: '37 Kernel Wrappers' },
+        { icon: '⚡', title: 'Kernel Catalog', sub: 'Auto Target Detection' }
       ],
-      terminal: '[Hardware Substrate] LevelZero.NET initialized | 26 kernels precompiled across 11 Intel targets (Iris Xe to Panther Lake)',
+      terminal: '[Hardware Substrate] LevelZero.NET initialized | 407 kernel modules embedded across 11 Intel targets (Iris Xe to Panther Lake)',
       stats: [
-        { lbl: 'Native Interop', val: 'Managed C# P/Invoke' },
-        { lbl: 'GPU Kernels', val: '26 Zebin & SPIR-V' },
-        { lbl: 'Intel Targets', val: '11 Hardware Targets' }
+        { lbl: 'Deployment Model', val: 'One Single DLL' },
+        { lbl: 'GPU Kernels', val: '407 Pre-Compiled (37×11)' },
+        { lbl: 'Hardware Targets', val: '11 Intel Silicon' }
       ]
     }
   ];
@@ -1713,7 +1743,7 @@ import divisions from '../data/divisions.json';
   let stageCurrentDiv = 0;
   let stageCycleTimer: number | null = null;
   let isStagePaused = false;
-  const stageDuration = 5200; // 5.2 seconds per division animation cycle
+  const stageDuration = 15000; // 15 seconds per division animation cycle
 
   const stageTabs = document.querySelectorAll('.stage-tab');
   const stageDivBadge = document.getElementById('stageDivBadge');
@@ -1740,6 +1770,9 @@ import divisions from '../data/divisions.json';
   const visStatLbl3 = document.getElementById('visStatLbl3');
   const visStatVal3 = document.getElementById('visStatVal3');
 
+  const stageNarrativeAnimGroup = document.getElementById('stageNarrativeAnimGroup');
+  const stageVisAnimGroup = document.getElementById('stageVisAnimGroup');
+
   function setStageDivision(divIdx: number) {
     stageCurrentDiv = divIdx;
     const data = divisionData[divIdx];
@@ -1754,77 +1787,86 @@ import divisions from '../data/divisions.json';
       }
     });
 
-    // Update Narrative content
-    if (stageDivBadge) {
-      stageDivBadge.textContent = data.badge;
-      stageDivBadge.style.color = data.badgeColor;
-      stageDivBadge.style.borderColor = `${data.badgeColor}4D`;
-      stageDivBadge.style.background = `${data.badgeColor}1A`;
-    }
-    if (stageDivTitle) stageDivTitle.textContent = data.title;
-    if (stageDivDesc) stageDivDesc.textContent = data.desc;
-
-    if (stageProjectPills) {
-      stageProjectPills.innerHTML = data.pills.map(p => `<span class="stage-pill">${p}</span>`).join('');
-    }
-
-    if (stageMetricLbl1 && stageMetricVal1) {
-      stageMetricLbl1.textContent = data.metrics[0].lbl;
-      stageMetricVal1.textContent = data.metrics[0].val;
-    }
-    if (stageMetricLbl2 && stageMetricVal2) {
-      stageMetricLbl2.textContent = data.metrics[1].lbl;
-      stageMetricVal2.textContent = data.metrics[1].val;
-    }
-    if (stageMetricLbl3 && stageMetricVal3) {
-      stageMetricLbl3.textContent = data.metrics[2].lbl;
-      stageMetricVal3.textContent = data.metrics[2].val;
-    }
-    if (stageProductLink) stageProductLink.href = data.link;
-
-    // Update Visualizer Header & Terminal
-    if (visHeaderTitle) visHeaderTitle.textContent = data.title;
-    if (visHeaderBadge) {
-      visHeaderBadge.textContent = data.badge;
-      visHeaderBadge.style.color = data.badgeColor;
-    }
-    if (stageTerminalText) stageTerminalText.textContent = data.terminal;
-
-    // Update Visualizer Diagram Nodes
-    const nodeIds = ['vnode-1', 'vnode-2', 'vnode-3', 'vnode-4'];
-    data.nodes.forEach((n, idx) => {
-      const nodeEl = document.getElementById(nodeIds[idx]);
-      if (nodeEl) {
-        const icon = nodeEl.querySelector('.node-icon');
-        const title = nodeEl.querySelector('.node-title');
-        const sub = nodeEl.querySelector('.node-sub');
-        if (icon) icon.textContent = n.icon;
-        if (title) title.textContent = n.title;
-        if (sub) sub.textContent = n.sub;
-      }
-    });
-
-    // Update Stats
-    if (visStatLbl1 && visStatVal1) {
-      visStatLbl1.textContent = data.stats[0].lbl;
-      visStatVal1.textContent = data.stats[0].val;
-    }
-    if (visStatLbl2 && visStatVal2) {
-      visStatLbl2.textContent = data.stats[1].lbl;
-      visStatVal2.textContent = data.stats[1].val;
-    }
-    if (visStatLbl3 && visStatVal3) {
-      visStatLbl3.textContent = data.stats[2].lbl;
-      visStatVal3.textContent = data.stats[2].val;
-    }
-
-    // Dispatch background overlay update for stage
+    // Dispatch background overlay update immediately to trigger particle morphing wave
     window.dispatchEvent(new CustomEvent('division-change', {
       detail: {
         targetOverlayId: 'stage-bg-overlay',
         divisionIndex: divIdx
       }
     }));
+
+    // Soft fade transition on panel contents
+    if (stageNarrativeAnimGroup) stageNarrativeAnimGroup.classList.add('fading');
+    if (stageVisAnimGroup) stageVisAnimGroup.classList.add('fading');
+
+    setTimeout(() => {
+      // Update Narrative content
+      if (stageDivBadge) {
+        stageDivBadge.textContent = data.badge;
+        stageDivBadge.style.color = data.badgeColor;
+        stageDivBadge.style.borderColor = `${data.badgeColor}4D`;
+        stageDivBadge.style.background = `${data.badgeColor}1A`;
+      }
+      if (stageDivTitle) stageDivTitle.textContent = data.title;
+      if (stageDivDesc) stageDivDesc.textContent = data.desc;
+
+      if (stageProjectPills) {
+        stageProjectPills.innerHTML = data.pills.map(p => `<span class="stage-pill">${p}</span>`).join('');
+      }
+
+      if (stageMetricLbl1 && stageMetricVal1) {
+        stageMetricLbl1.textContent = data.metrics[0].lbl;
+        stageMetricVal1.textContent = data.metrics[0].val;
+      }
+      if (stageMetricLbl2 && stageMetricVal2) {
+        stageMetricLbl2.textContent = data.metrics[1].lbl;
+        stageMetricVal2.textContent = data.metrics[1].val;
+      }
+      if (stageMetricLbl3 && stageMetricVal3) {
+        stageMetricLbl3.textContent = data.metrics[2].lbl;
+        stageMetricVal3.textContent = data.metrics[2].val;
+      }
+      if (stageProductLink) stageProductLink.href = data.link;
+
+      // Update Visualizer Header & Terminal
+      if (visHeaderTitle) visHeaderTitle.textContent = data.title;
+      if (visHeaderBadge) {
+        visHeaderBadge.textContent = data.badge;
+        visHeaderBadge.style.color = data.badgeColor;
+      }
+      if (stageTerminalText) stageTerminalText.textContent = data.terminal;
+
+      // Update Visualizer Diagram Nodes
+      const nodeIds = ['vnode-1', 'vnode-2', 'vnode-3', 'vnode-4'];
+      data.nodes.forEach((n, idx) => {
+        const nodeEl = document.getElementById(nodeIds[idx]);
+        if (nodeEl) {
+          const icon = nodeEl.querySelector('.node-icon');
+          const title = nodeEl.querySelector('.node-title');
+          const sub = nodeEl.querySelector('.node-sub');
+          if (icon) icon.textContent = n.icon;
+          if (title) title.textContent = n.title;
+          if (sub) sub.textContent = n.sub;
+        }
+      });
+
+      // Update Stats
+      if (visStatLbl1 && visStatVal1) {
+        visStatLbl1.textContent = data.stats[0].lbl;
+        visStatVal1.textContent = data.stats[0].val;
+      }
+      if (visStatLbl2 && visStatVal2) {
+        visStatLbl2.textContent = data.stats[1].lbl;
+        visStatVal2.textContent = data.stats[1].val;
+      }
+      if (visStatLbl3 && visStatVal3) {
+        visStatLbl3.textContent = data.stats[2].lbl;
+        visStatVal3.textContent = data.stats[2].val;
+      }
+
+      if (stageNarrativeAnimGroup) stageNarrativeAnimGroup.classList.remove('fading');
+      if (stageVisAnimGroup) stageVisAnimGroup.classList.remove('fading');
+    }, 180);
   }
 
   function startStageCycle() {
@@ -1866,7 +1908,7 @@ import divisions from '../data/divisions.json';
       } else {
         startStageCycle();
         stagePauseBtn.innerHTML = `<span class="pause-icon">&#10074;&#10074;</span><span class="pause-text">Pause</span>`;
-        cycleStatusText.textContent = 'Active Cycle (5s)';
+        cycleStatusText.textContent = 'Active Cycle (15s)';
         cycleStatusText.style.color = 'var(--accent-emerald)';
       }
     });
@@ -1877,7 +1919,7 @@ import divisions from '../data/divisions.json';
   // ==========================================
   let divisionsCurrentDiv = 0;
   let divisionsCycleTimer: number | null = null;
-  const divisionsDuration = 5200; // 5.2 seconds per division animation cycle
+  const divisionsDuration = 15000; // 15 seconds per division animation cycle
 
   const divisionCards = document.querySelectorAll('.division-card-interactive');
 

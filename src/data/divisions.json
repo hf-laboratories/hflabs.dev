@@ -36,10 +36,10 @@
     "color": "#06b6d4",
     "projects": [
       {
-        "name": "AutoMLApp",
+        "name": "AutoMLApp (in development)",
         "description": "Windows node-graph editor (.NET 10/WinForms) for composing, validating and running ML and accelerator pipelines. Visual front end for IPUServices with 185+ node types, F7 validation, and pluggable HyperSwarm backend.",
         "path": "src/HFLabs/Products/AutoMLApp",
-        "status": "Production Desktop"
+        "status": "In Development"
       },
       {
         "name": "HFLabs Machine Learning Suite",
@@ -70,15 +70,9 @@
     "color": "#f43f5e",
     "projects": [
       {
-        "name": "LevelZero.NET",
-        "description": "Managed .NET wrapper for Intel Level Zero GPU compute with an HFLabs ABI shim and typed shared-memory buffers. It has 16 domain kernel wrappers (fitness, PSO, SNN/STDP, N-body, dominance and others) and automatic device detection. It needs an Intel Level Zero driver.",
+        "name": "LevelZero.NET & Kernel Catalog",
+        "description": "Single-DLL managed API, native shim, and 407 pre-compiled kernel modules (37 distinct kernels across 11 Intel GPU targets). 37 kernel wrappers across Swarm, SNN, LLM Inference, and Knowledge Retrieval with typed Unified Shared Memory and auto device detection.",
         "path": "src/HFLabs/Hardware/LevelZero.NET",
-        "status": "Production"
-      },
-      {
-        "name": "L0 Kernel Catalog",
-        "description": "26 OpenCL C kernel sources for swarm optimization, multi-objective, GraphRAG vector search and LLM workloads. They are precompiled to SPIR-V and native zebin for 11 Intel targets, from Iris Xe (tgllp) through Arc, Meteor/Arrow/Lunar/Panther Lake and Data Center GPU Max.",
-        "path": "LevelZero.NET/LevelZero.Kernels",
         "status": "Production"
       },
       {
@@ -88,10 +82,10 @@
         "status": "In Development"
       },
       {
-        "name": "Abigen",
-        "description": "libclang-driven generator that reads C/C++ headers and emits a C ABI shim plus C# bindings. It has export, naming and ownership policies, opaque-handle support, unsupported-API analysis, and lock/manifest tracking. A Windows desktop front end is included.",
+        "name": "Abigen (in development)",
+        "description": "libclang-driven generator that reads C/C++ headers, emits reviewed/verified C# bindings, and manages upstream release tracking. Features fail-closed validation, manifest reproducibility, and a Windows desktop dashboard.",
         "path": "src/HFLabs/DevTools/CodeGen/Abigen.Core, src/HFLabs/Products/Abigen.Desktop",
-        "status": "Production"
+        "status": "In Development"
       }
     ]
   }

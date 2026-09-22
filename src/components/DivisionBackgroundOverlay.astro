@@ -6,7 +6,7 @@ interface Props {
   opacity?: number;
 }
 
-const { id = "division-bg-overlay", initialDivision = 0, opacity = 0.85 } = Astro.props;
+const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro.props;
 ---
 
 <div id={id} class="division-bg-overlay-wrapper" data-active-division={initialDivision} style={`--overlay-opacity: ${opacity};`}>
@@ -34,32 +34,32 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 0.85 } = Astr
     pointer-events: none;
     overflow: hidden;
     z-index: 0;
-    opacity: var(--overlay-opacity, 0.85);
-    transition: opacity 0.5s ease;
+    opacity: var(--overlay-opacity, 1.0);
+    transition: opacity 0.6s ease;
   }
 
-  /* Ambient Glow Layers */
+  /* Ambient Glow Layers with Silk-Smooth Cross-Fade */
   .ambient-glow {
     position: absolute;
     inset: -20%;
     width: 140%;
     height: 140%;
     opacity: 0;
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s ease;
+    transition: opacity 2.4s cubic-bezier(0.4, 0, 0.2, 1), transform 2.8s cubic-bezier(0.4, 0, 0.2, 1);
     mix-blend-mode: screen;
     pointer-events: none;
   }
 
   .glow-cognition {
-    background: radial-gradient(circle at 35% 45%, rgba(56, 189, 248, 0.16) 0%, rgba(99, 102, 241, 0.08) 40%, transparent 70%);
+    background: radial-gradient(circle at 35% 45%, rgba(56, 189, 248, 0.38) 0%, rgba(99, 102, 241, 0.24) 40%, transparent 75%);
   }
 
   .glow-acceleration {
-    background: radial-gradient(circle at 60% 40%, rgba(6, 182, 212, 0.16) 0%, rgba(168, 85, 247, 0.1) 45%, transparent 70%);
+    background: radial-gradient(circle at 60% 40%, rgba(6, 182, 212, 0.38) 0%, rgba(168, 85, 247, 0.28) 45%, transparent 75%);
   }
 
   .glow-hardware {
-    background: radial-gradient(circle at 45% 55%, rgba(244, 63, 94, 0.16) 0%, rgba(251, 191, 36, 0.08) 45%, transparent 70%);
+    background: radial-gradient(circle at 45% 55%, rgba(244, 63, 94, 0.38) 0%, rgba(251, 191, 36, 0.24) 45%, transparent 75%);
   }
 
   [data-active-division="0"] .glow-cognition {
@@ -105,66 +105,116 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 0.85 } = Astr
 </style>
 
 <script>
-  // Dynamic Canvas Generator for Division Background Overlay
+  // Helper for color interpolation
+  function lerpColor(c1: [number, number, number], c2: [number, number, number], t: number): [number, number, number] {
+    return [
+      Math.round(c1[0] + (c2[0] - c1[0]) * t),
+      Math.round(c1[1] + (c2[1] - c1[1]) * t),
+      Math.round(c1[2] + (c2[2] - c1[2]) * t)
+    ];
+  }
+
+  const PALETTES: Array<{ primary: [number, number, number]; secondary: [number, number, number]; accent: [number, number, number] }> = [
+    // 0: Cognition & Swarm (Sky / Indigo / White)
+    { primary: [56, 189, 248], secondary: [129, 140, 248], accent: [224, 242, 254] },
+    // 1: ML & Acceleration (Teal / Purple / Cyan)
+    { primary: [6, 182, 212], secondary: [168, 85, 247], accent: [192, 132, 252] },
+    // 2: Hardware Substrates (Rose / Amber / Gold)
+    { primary: [244, 63, 94], secondary: [251, 191, 36], accent: [254, 240, 138] }
+  ];
+
+  interface UnifiedParticle {
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    baseVx: number;
+    baseVy: number;
+    size: number;
+    alpha: number;
+    phase: number;
+    speed: number;
+    
+    // Kinetic Burst & Swirl during transition
+    burstVx: number;
+    burstVy: number;
+    swirlAngle: number;
+    swirlSpeed: number;
+    swirlRadius: number;
+    
+    // Trail historical points for motion dissipation streak
+    prevX: number;
+    prevY: number;
+
+    // Target positioning for structured modes
+    targetX: number;
+    targetY: number;
+    isGridNode: boolean;
+    isCircuitRunner: boolean;
+    circuitIndex: number;
+    circuitProgress: number;
+    circuitSpeed: number;
+    isRegisterBlock: boolean;
+  }
+
+  interface CircuitPath {
+    x: number;
+    y: number;
+    len: number;
+    dir: 'h' | 'v';
+    pulsePos: number;
+    speed: number;
+  }
+
+  // Dynamic Canvas Generator for Division Background Overlay with Pre-Transition Glow & Motion Dissipation
   class DivisionOverlayRenderer {
     container: HTMLElement;
     canvas: HTMLCanvasElement;
     ctx: CanvasRenderingContext2D;
     width = 0;
     height = 0;
-    currentDivision = 0; // 0 = Cognition, 1 = Acceleration, 2 = Hardware
+    
+    currentDivision = 0;
+    prevDivision = 0;
     targetDivision = 0;
-    divisionTransition = 1.0;
+    
+    // Cycle Timing & Pre-Transition Glow Anticipation
+    lastDivisionChangeTime = performance.now();
+    cycleDuration = 15000; // 15 seconds cycle
+    preChargeDuration = 3200; // Glow starts ramping up 3.2 seconds before transition
+    
+    transitionStartTime = 0;
+    transitionDuration = 2600; // 2.6 seconds of energetic swirl and smooth fade
+    transitionProgress = 1.0;
+    activeBurstGlow = 0.0;
+    
     animFrameId: number | null = null;
     isVisible = false;
-    particles: Array<{
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      size: number;
-      alpha: number;
-      phase: number;
-      speed: number;
-      color: string;
-      divId: number;
-    }> = [];
-
-    // Hardware trace segments for Division 2
-    circuits: Array<{
-      x: number;
-      y: number;
-      len: number;
-      dir: 'h' | 'v';
-      pulsePos: number;
-      speed: number;
-    }> = [];
-
-    // Tensor matrix lines for Division 1
-    tensorNodes: Array<{
-      col: number;
-      row: number;
-      x: number;
-      y: number;
-      activity: number;
-    }> = [];
+    
+    particles: UnifiedParticle[] = [];
+    circuits: CircuitPath[] = [];
 
     constructor(container: HTMLElement) {
       this.container = container;
       this.canvas = container.querySelector('.division-canvas') as HTMLCanvasElement;
       this.ctx = this.canvas.getContext('2d', { alpha: true }) as CanvasRenderingContext2D;
-      this.currentDivision = parseInt(container.getAttribute('data-active-division') || '0', 10);
-      this.targetDivision = this.currentDivision;
-
-      this.initParticles();
-      this.initCircuits();
-      this.initTensorNodes();
+      
+      const initDiv = parseInt(container.getAttribute('data-active-division') || '0', 10);
+      this.currentDivision = initDiv;
+      this.prevDivision = initDiv;
+      this.targetDivision = initDiv;
+      this.transitionProgress = 1.0;
+      this.lastDivisionChangeTime = performance.now();
 
       this.resize = this.resize.bind(this);
       this.render = this.render.bind(this);
 
       window.addEventListener('resize', this.resize);
       this.resize();
+
+      this.initCircuits();
+      this.initParticles();
+      this.assignDivisionTargets(this.currentDivision);
 
       // Intersection Observer for viewport visibility
       const observer = new IntersectionObserver((entries) => {
@@ -189,7 +239,6 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 0.85 } = Astr
       window.addEventListener('division-change', (e: Event) => {
         const customEvent = e as CustomEvent;
         if (customEvent.detail && typeof customEvent.detail.divisionIndex === 'number') {
-          // If this overlay is designated or global, update
           const targetOverlayId = customEvent.detail.targetOverlayId;
           if (!targetOverlayId || targetOverlayId === this.container.id) {
             this.setDivision(customEvent.detail.divisionIndex);
@@ -200,9 +249,44 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 0.85 } = Astr
 
     setDivision(index: number) {
       if (this.targetDivision !== index) {
+        this.prevDivision = this.targetDivision;
         this.targetDivision = index;
-        this.currentDivision = index;
         this.container.setAttribute('data-active-division', index.toString());
+        
+        const now = performance.now();
+        this.transitionStartTime = now;
+        this.lastDivisionChangeTime = now;
+        this.transitionProgress = 0;
+        this.activeBurstGlow = 1.0; // Peak energy charge at the instant transition begins!
+        
+        // Re-assign formation targets for the incoming division
+        this.assignDivisionTargets(index);
+        
+        // Give particles a massive kinetic burst & swirling acceleration wave
+        const cx = this.width * 0.5;
+        const cy = this.height * 0.5;
+        
+        this.particles.forEach((p, i) => {
+          const dx = p.x - cx;
+          const dy = p.y - cy;
+          const angle = Math.atan2(dy, dx);
+          
+          // Tangential vortex burst (clockwise / counter-clockwise alternating)
+          const spinDir = (i % 2 === 0 ? 1 : -1);
+          const tangentialAngle = angle + (Math.PI / 2) * spinDir;
+          
+          // High speed burst magnitude
+          const burstMag = Math.random() * 8 + 6;
+          p.burstVx = Math.cos(tangentialAngle) * burstMag + (Math.random() - 0.5) * 4;
+          p.burstVy = Math.sin(tangentialAngle) * burstMag + (Math.random() - 0.5) * 4;
+          
+          p.swirlAngle = Math.random() * Math.PI * 2;
+          p.swirlSpeed = (Math.random() * 0.06 + 0.03) * spinDir;
+          p.swirlRadius = Math.random() * 90 + 40;
+          
+          p.prevX = p.x;
+          p.prevY = p.y;
+        });
       }
     }
 
@@ -215,55 +299,145 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 0.85 } = Astr
       this.canvas.height = this.height * dpr;
       this.ctx.resetTransform();
       this.ctx.scale(dpr, dpr);
-    }
 
-    initParticles() {
-      this.particles = [];
-      const count = 55;
-      for (let i = 0; i < count; i++) {
-        this.particles.push({
-          x: Math.random() * 1200,
-          y: Math.random() * 800,
-          vx: (Math.random() - 0.5) * 0.45,
-          vy: (Math.random() - 0.5) * 0.45,
-          size: Math.random() * 2.5 + 1.2,
-          alpha: Math.random() * 0.7 + 0.3,
-          phase: Math.random() * Math.PI * 2,
-          speed: Math.random() * 0.015 + 0.008,
-          color: '#38bdf8',
-          divId: 0
-        });
+      if (this.particles.length > 0) {
+        this.assignDivisionTargets(this.targetDivision);
       }
     }
 
     initCircuits() {
       this.circuits = [];
-      for (let i = 0; i < 24; i++) {
+      const count = 28;
+      for (let i = 0; i < count; i++) {
         this.circuits.push({
-          x: Math.random() * 1200,
-          y: Math.random() * 800,
-          len: Math.random() * 140 + 60,
-          dir: Math.random() > 0.5 ? 'h' : 'v',
+          x: Math.random() * (this.width || 1200),
+          y: Math.random() * (this.height || 800),
+          len: Math.random() * 200 + 100,
+          dir: Math.random() > 0.45 ? 'h' : 'v',
           pulsePos: Math.random(),
-          speed: Math.random() * 0.008 + 0.004
+          speed: Math.random() * 0.012 + 0.006
         });
       }
     }
 
-    initTensorNodes() {
-      this.tensorNodes = [];
-      const cols = 8;
-      const rows = 5;
-      for (let c = 0; c < cols; c++) {
-        for (let r = 0; r < rows; r++) {
-          this.tensorNodes.push({
-            col: c,
-            row: r,
-            x: 0,
-            y: 0,
-            activity: Math.random()
-          });
-        }
+    initParticles() {
+      this.particles = [];
+      const count = 80;
+      for (let i = 0; i < count; i++) {
+        const bvx = (Math.random() - 0.5) * 0.6;
+        const bvy = (Math.random() - 0.5) * 0.6;
+        const startX = Math.random() * (this.width || 1200);
+        const startY = Math.random() * (this.height || 800);
+        
+        this.particles.push({
+          x: startX,
+          y: startY,
+          vx: bvx,
+          vy: bvy,
+          baseVx: bvx,
+          baseVy: bvy,
+          size: Math.random() * 2.6 + 1.4,
+          alpha: Math.random() * 0.55 + 0.45,
+          phase: Math.random() * Math.PI * 2,
+          speed: Math.random() * 0.015 + 0.008,
+          burstVx: 0,
+          burstVy: 0,
+          swirlAngle: 0,
+          swirlSpeed: 0,
+          swirlRadius: 50,
+          prevX: startX,
+          prevY: startY,
+          targetX: 0,
+          targetY: 0,
+          isGridNode: false,
+          isCircuitRunner: false,
+          circuitIndex: i % Math.max(1, this.circuits.length),
+          circuitProgress: Math.random(),
+          circuitSpeed: Math.random() * 0.01 + 0.005,
+          isRegisterBlock: false
+        });
+      }
+    }
+
+    assignDivisionTargets(divIdx: number) {
+      const w = this.width || 1200;
+      const h = this.height || 800;
+      const cx = w * 0.5;
+      const cy = h * 0.5;
+
+      if (divIdx === 0) {
+        // DIVISION 0: Cognition & Swarm (Organic Orbital Swarm + Graph Constellation)
+        this.particles.forEach((p, i) => {
+          p.isGridNode = false;
+          p.isCircuitRunner = false;
+          p.isRegisterBlock = false;
+          
+          // Orbital constellation shells around center
+          const angle = (i / this.particles.length) * Math.PI * 2 + Math.random() * 0.5;
+          const radius = 120 + ((i % 4) * 80) + Math.random() * 60;
+          p.targetX = cx + Math.cos(angle) * radius;
+          p.targetY = cy + Math.sin(angle) * (radius * 0.65);
+        });
+      } else if (divIdx === 1) {
+        // DIVISION 1: ML & Acceleration (2D Tensor Matrix Grid & Conduit Streamers)
+        const cols = 8;
+        const rows = 5;
+        const marginX = w * 0.1;
+        const marginY = h * 0.14;
+        const stepX = (w - marginX * 2) / (cols - 1);
+        const stepY = (h - marginY * 2) / (rows - 1);
+
+        this.particles.forEach((p, i) => {
+          p.isCircuitRunner = false;
+          p.isRegisterBlock = false;
+
+          if (i < cols * rows) {
+            // Grid intersection points
+            p.isGridNode = true;
+            const c = i % cols;
+            const r = Math.floor(i / cols);
+            p.targetX = marginX + c * stepX;
+            p.targetY = marginY + r * stepY;
+          } else {
+            // Conduit travelling pulse packets
+            p.isGridNode = false;
+            const rowIdx = i % rows;
+            p.targetX = marginX + ((i * 70) % (w - marginX * 2));
+            p.targetY = marginY + rowIdx * stepY;
+          }
+        });
+      } else {
+        // DIVISION 2: Hardware Substrates (Silicon Circuit Traces & Register Core Array)
+        const regCx = w * 0.68;
+        const regCy = h * 0.44;
+
+        this.particles.forEach((p, i) => {
+          p.isGridNode = false;
+
+          if (i < 16) {
+            // 4x4 Register Array Matrix Block
+            p.isRegisterBlock = true;
+            p.isCircuitRunner = false;
+            const ri = i % 4;
+            const rj = Math.floor(i / 4);
+            p.targetX = regCx + ri * 26;
+            p.targetY = regCy + rj * 26;
+          } else {
+            // Silicon bus runner
+            p.isRegisterBlock = false;
+            p.isCircuitRunner = true;
+            const cIdx = i % Math.max(1, this.circuits.length);
+            p.circuitIndex = cIdx;
+            const circ = this.circuits[cIdx] || { x: w * 0.5, y: h * 0.5, len: 100, dir: 'h' };
+            if (circ.dir === 'h') {
+              p.targetX = circ.x + circ.len * p.circuitProgress;
+              p.targetY = circ.y;
+            } else {
+              p.targetX = circ.x;
+              p.targetY = circ.y + circ.len * p.circuitProgress;
+            }
+          }
+        });
       }
     }
 
@@ -274,213 +448,331 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 0.85 } = Astr
       }
 
       this.ctx.clearRect(0, 0, this.width, this.height);
+      const now = performance.now();
+      const t = now * 0.001;
 
-      const t = performance.now() * 0.001;
-
-      if (this.currentDivision === 0) {
-        // DIVISION 01: COGNITION & SWARM (GraphRAG Constellation + Swarm Flocking)
-        this.renderCognitionSwarm(t);
-      } else if (this.currentDivision === 1) {
-        // DIVISION 02: MACHINE LEARNING & ACCELERATION (Heterogeneous Tensor Flow & gRPC Nodes)
-        this.renderAccelerationTensor(t);
-      } else {
-        // DIVISION 03: HARDWARE & NATIVE SUBSTRATES (Silicon Traces & Level Zero Register Bursts)
-        this.renderHardwareSubstrates(t);
+      // Update transition progress
+      if (this.transitionProgress < 1.0) {
+        const elapsed = now - this.transitionStartTime;
+        this.transitionProgress = Math.min(1.0, elapsed / this.transitionDuration);
       }
+
+      // Smooth Quintic Ease-In-Out for natural acceleration & deceleration
+      const p = this.transitionProgress;
+      const ease = p < 0.5 
+        ? 16 * p * p * p * p * p 
+        : 1 - Math.pow(-2 * p + 2, 5) / 2;
+
+      // Dynamic Kinetic Energy Wave: swells during transition
+      const kineticWave = Math.sin(Math.PI * p) * (1 - p * 0.2);
+
+      // =========================================================
+      // Pre-Transition Charging Glow & In-Motion Dissipation Logic
+      // =========================================================
+      // 1. Anticipation: As cycle approaches next transition, particles start to charge up and glow
+      const timeSinceLastChange = now - this.lastDivisionChangeTime;
+      const timeInCycle = timeSinceLastChange % this.cycleDuration;
+      const timeUntilNext = this.cycleDuration - timeInCycle;
+
+      let preChargeGlow = 0;
+      if (this.transitionProgress >= 1.0 && timeUntilNext <= this.preChargeDuration) {
+        const chargeProgress = 1.0 - (timeUntilNext / this.preChargeDuration);
+        // Exponential ramp up: accelerates as transition nears
+        preChargeGlow = Math.pow(Math.max(0, Math.min(1, chargeProgress)), 1.7);
+      }
+
+      // 2. Motion Dissipation: As particles accelerate and move, the intense charge dissipates smoothly
+      const motionDissipation = Math.pow(Math.max(0, 1.0 - ease), 1.5);
+      const activeMotionGlow = this.activeBurstGlow * motionDissipation;
+
+      // Composite Glow Intensity (0.0 to 1.0+)
+      const glowIntensity = Math.max(preChargeGlow, activeMotionGlow);
+
+      // Color Palette Interpolation
+      const prevPalette = PALETTES[this.prevDivision] || PALETTES[0];
+      const targetPalette = PALETTES[this.targetDivision] || PALETTES[0];
+      const currentPrimary = lerpColor(prevPalette.primary, targetPalette.primary, ease);
+      const currentSecondary = lerpColor(prevPalette.secondary, targetPalette.secondary, ease);
+      const currentAccent = lerpColor(prevPalette.accent, targetPalette.accent, ease);
+
+      const colorPrimaryStr = `rgb(${currentPrimary.join(',')})`;
+      const colorSecondaryStr = `rgb(${currentSecondary.join(',')})`;
+
+      // Render Division Structures with Smooth Cross-Fade
+      this.renderDivisionStructures(t, ease, colorPrimaryStr, colorSecondaryStr);
+
+      // Update and Render Unified Morphing Particles with Dynamic Glow and Dissipation
+      this.updateAndDrawParticles(
+        t, 
+        ease, 
+        kineticWave, 
+        glowIntensity, 
+        currentPrimary, 
+        currentSecondary, 
+        currentAccent
+      );
 
       this.animFrameId = requestAnimationFrame(this.render);
     }
 
-    renderCognitionSwarm(t: number) {
+    renderDivisionStructures(t: number, ease: number, colorPrimaryStr: string, colorSecondaryStr: string) {
+      const ctx = this.ctx;
+      const w = this.width;
+      const h = this.height;
+
+      // Calculate opacity for outgoing and incoming division structures
+      const fromDiv = this.prevDivision;
+      const toDiv = this.targetDivision;
+      const alphaOut = 1 - ease;
+      const alphaIn = ease;
+
+      const drawDivBackground = (divIdx: number, alpha: number) => {
+        if (alpha <= 0.01) return;
+
+        if (divIdx === 0) {
+          // Division 0: Swarm Orbital Ring Pulse
+          const cx = w * 0.5;
+          const cy = h * 0.5;
+          ctx.beginPath();
+          ctx.arc(cx, cy, 160 + Math.sin(t * 1.2) * 18, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(56, 189, 248, ${0.22 * alpha})`;
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([8, 14]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        } else if (divIdx === 1) {
+          // Division 1: Tensor Conduit Highways
+          const cols = 8;
+          const rows = 5;
+          const marginX = w * 0.1;
+          const marginY = h * 0.14;
+          const stepX = (w - marginX * 2) / (cols - 1);
+          const stepY = (h - marginY * 2) / (rows - 1);
+
+          for (let r = 0; r < rows; r++) {
+            const y = marginY + r * stepY;
+            const wave = Math.sin(t * 1.8 + r * 0.8) * 0.5 + 0.5;
+            ctx.beginPath();
+            ctx.moveTo(marginX, y);
+            ctx.lineTo(w - marginX, y);
+            ctx.strokeStyle = `rgba(6, 182, 212, ${(0.14 + wave * 0.18) * alpha})`;
+            ctx.lineWidth = 1.2;
+            ctx.stroke();
+          }
+
+          for (let c = 0; c < cols; c++) {
+            const x = marginX + c * stepX;
+            ctx.beginPath();
+            ctx.moveTo(x, marginY);
+            ctx.lineTo(x, h - marginY);
+            ctx.strokeStyle = `rgba(168, 85, 247, ${0.14 * alpha})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        } else if (divIdx === 2) {
+          // Division 2: Silicon Circuit Traces
+          this.circuits.forEach(c => {
+            c.pulsePos = (c.pulsePos + c.speed) % 1;
+            ctx.beginPath();
+            if (c.dir === 'h') {
+              ctx.moveTo(c.x, c.y);
+              ctx.lineTo(c.x + c.len, c.y);
+            } else {
+              ctx.moveTo(c.x, c.y);
+              ctx.lineTo(c.x, c.y + c.len);
+            }
+            ctx.strokeStyle = `rgba(244, 63, 94, ${0.2 * alpha})`;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+          });
+        }
+      };
+
+      if (fromDiv === toDiv) {
+        drawDivBackground(toDiv, 1.0);
+      } else {
+        drawDivBackground(fromDiv, alphaOut);
+        drawDivBackground(toDiv, alphaIn);
+      }
+    }
+
+    updateAndDrawParticles(
+      t: number, 
+      ease: number, 
+      kineticWave: number, 
+      glowIntensity: number,
+      colorPrimary: [number, number, number], 
+      colorSecondary: [number, number, number], 
+      colorAccent: [number, number, number]
+    ) {
       const ctx = this.ctx;
       const pts = this.particles;
+      const w = this.width;
+      const h = this.height;
 
-      // Update and draw swarm particles
+      // 1. Update Particle Physics & Kinetic Morphing
       for (let i = 0; i < pts.length; i++) {
         const p = pts[i];
-        p.x += p.vx + Math.sin(t * 0.5 + p.phase) * 0.2;
-        p.y += p.vy + Math.cos(t * 0.5 + p.phase) * 0.2;
+        p.prevX = p.x;
+        p.prevY = p.y;
 
-        if (p.x < -20) p.x = this.width + 20;
-        if (p.x > this.width + 20) p.x = -20;
-        if (p.y < -20) p.y = this.height + 20;
-        if (p.y > this.height + 20) p.y = -20;
+        if (kineticWave > 0.01) {
+          // Energetic Transition Phase: Swirl, burst velocity, and high mobility
+          p.swirlAngle += p.swirlSpeed;
+          const swirlX = Math.cos(p.swirlAngle) * p.swirlRadius * kineticWave * 0.12;
+          const swirlY = Math.sin(p.swirlAngle) * p.swirlRadius * kineticWave * 0.12;
 
-        const pulse = 0.5 + 0.5 * Math.sin(t * 2 + p.phase);
-        const radius = p.size * (0.8 + 0.4 * pulse);
+          p.x += p.burstVx * kineticWave + swirlX + p.baseVx;
+          p.y += p.burstVy * kineticWave + swirlY + p.baseVy;
 
-        // Node Glow
+          // Elastic magnetic steer toward target position
+          const dxTarget = p.targetX - p.x;
+          const dyTarget = p.targetY - p.y;
+          const pullStrength = ease * 0.08;
+          p.x += dxTarget * pullStrength;
+          p.y += dyTarget * pullStrength;
+        } else {
+          // Settled Division State
+          if (this.targetDivision === 0) {
+            // Free organic swarm flocking
+            p.x += p.baseVx + Math.sin(t * 0.6 + p.phase) * 0.35;
+            p.y += p.baseVy + Math.cos(t * 0.6 + p.phase) * 0.35;
+          } else if (this.targetDivision === 1) {
+            // Tensor Grid alignment & conduit pulse travel
+            if (p.isGridNode) {
+              p.x += (p.targetX - p.x) * 0.15;
+              p.y += (p.targetY - p.y) * 0.15;
+            } else {
+              p.x += (Math.sin(t * 2 + i) * 1.5 + 2.0);
+              if (p.x > w * 0.9) p.x = w * 0.1;
+              p.y += (p.targetY - p.y) * 0.1;
+            }
+          } else {
+            // Hardware Substrates silicon runner & register array
+            if (p.isRegisterBlock) {
+              p.x += (p.targetX - p.x) * 0.15;
+              p.y += (p.targetY - p.y) * 0.15;
+            } else if (p.isCircuitRunner) {
+              const circ = this.circuits[p.circuitIndex] || { x: w * 0.5, y: h * 0.5, len: 100, dir: 'h' };
+              p.circuitProgress = (p.circuitProgress + p.circuitSpeed) % 1;
+              if (circ.dir === 'h') {
+                p.x = circ.x + circ.len * p.circuitProgress;
+                p.y += (circ.y - p.y) * 0.15;
+              } else {
+                p.x += (circ.x - p.x) * 0.15;
+                p.y = circ.y + circ.len * p.circuitProgress;
+              }
+            }
+          }
+        }
+
+        // Screen wrap
+        if (p.x < -40) { p.x = w + 40; p.prevX = p.x; }
+        if (p.x > w + 40) { p.x = -40; p.prevX = p.x; }
+        if (p.y < -40) { p.y = h + 40; p.prevY = p.y; }
+        if (p.y > h + 40) { p.y = -40; p.prevY = p.y; }
+
+        // Draw Motion Trail during glowing movement (dissipating streak)
+        if (glowIntensity > 0.08 && (p.x !== p.prevX || p.y !== p.prevY)) {
+          const moveDx = p.x - p.prevX;
+          const moveDy = p.y - p.prevY;
+          const moveDist = Math.sqrt(moveDx * moveDx + moveDy * moveDy);
+          
+          if (moveDist > 1.0 && moveDist < 80) {
+            ctx.beginPath();
+            ctx.moveTo(p.prevX, p.prevY);
+            ctx.lineTo(p.x, p.y);
+            ctx.strokeStyle = `rgba(${colorAccent.join(',')}, ${0.45 * glowIntensity * p.alpha})`;
+            ctx.lineWidth = p.size * (1.2 + glowIntensity * 1.5);
+            ctx.lineCap = 'round';
+            ctx.stroke();
+          }
+        }
+
+        // Particle Glow & Radiant Halo Calculation
+        const fastShimmer = 0.85 + 0.15 * Math.sin(t * 14 + p.phase);
+        const naturalPulse = 0.5 + 0.5 * Math.sin(t * 2.8 + p.phase);
+        const baseRadius = p.size * (0.85 + 0.45 * naturalPulse);
+
+        // 1. High-Energy Outer Radiant Aura (charges before transition, dissipates as they move)
+        if (glowIntensity > 0.01) {
+          const auraRadius = baseRadius * (3.5 + 8.5 * glowIntensity * fastShimmer);
+          const auraGradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, auraRadius);
+          auraGradient.addColorStop(0, `rgba(${colorAccent.join(',')}, ${0.7 * glowIntensity * p.alpha})`);
+          auraGradient.addColorStop(0.35, `rgba(${colorPrimary.join(',')}, ${0.4 * glowIntensity * p.alpha})`);
+          auraGradient.addColorStop(1, `rgba(${colorSecondary.join(',')}, 0)`);
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, auraRadius, 0, Math.PI * 2);
+          ctx.fillStyle = auraGradient;
+          ctx.fill();
+        }
+
+        // 2. Mid Corona Halo
+        const coronaRadius = baseRadius * (3.2 + 2.8 * glowIntensity);
         ctx.beginPath();
-        ctx.arc(p.x, p.y, radius * 2.2, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(56, 189, 248, ${0.08 * p.alpha})`;
+        ctx.arc(p.x, p.y, coronaRadius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${colorPrimary.join(',')}, ${0.22 * p.alpha + glowIntensity * 0.35})`;
         ctx.fill();
 
-        // Node Core
+        // 3. Ultra-Bright Radiant Core
+        const coreRadius = baseRadius * (1.0 + 0.45 * glowIntensity);
         ctx.beginPath();
-        ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(186, 230, 253, ${0.65 * p.alpha})`;
+        ctx.arc(p.x, p.y, coreRadius, 0, Math.PI * 2);
+        if (glowIntensity > 0.3) {
+          ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1.0, 0.9 + glowIntensity * 0.1)})`;
+        } else {
+          ctx.fillStyle = `rgba(${colorAccent.join(',')}, ${0.95 * p.alpha})`;
+        }
         ctx.fill();
 
-        // Connect nearest neighbors (In-memory GraphRAG Edges)
+        // 4. Interconnection Constellation Links (GraphRAG in Div 0, active during transition)
+        const linkThreshold = this.targetDivision === 0 ? 140 : (120 * (1 - ease * 0.6) + 40);
         for (let j = i + 1; j < pts.length; j++) {
           const p2 = pts[j];
           const dx = p.x - p2.x;
           const dy = p.y - p2.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 110) {
-            const edgeAlpha = (1 - dist / 110) * 0.22 * p.alpha * p2.alpha;
+          if (dist < linkThreshold) {
+            const linkAlpha = (1 - dist / linkThreshold) * (0.38 + glowIntensity * 0.3) * p.alpha * p2.alpha;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(56, 189, 248, ${edgeAlpha})`;
-            ctx.lineWidth = 1;
+            ctx.strokeStyle = glowIntensity > 0.4 
+              ? `rgba(${colorAccent.join(',')}, ${linkAlpha})` 
+              : `rgba(${colorPrimary.join(',')}, ${linkAlpha})`;
+            ctx.lineWidth = 1.2 + glowIntensity * 0.8;
             ctx.stroke();
 
-            // Edge data packet pulse
-            const packetPos = (t * 0.6 + (i + j) * 0.1) % 1;
-            const px = p.x + (p2.x - p.x) * packetPos;
-            const py = p.y + (p2.y - p.y) * packetPos;
-            ctx.beginPath();
-            ctx.arc(px, py, 1.2, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(224, 242, 254, ${edgeAlpha * 2})`;
-            ctx.fill();
+            // Light packet travelling along link
+            if (dist < 110 && (i + j) % 3 === 0) {
+              const pktPos = (t * 0.9 + (i + j) * 0.1) % 1;
+              const px = p.x + (p2.x - p.x) * pktPos;
+              const py = p.y + (p2.y - p.y) * pktPos;
+              ctx.beginPath();
+              ctx.arc(px, py, 1.8 + glowIntensity * 1.5, 0, Math.PI * 2);
+              ctx.fillStyle = `rgba(255, 255, 255, ${linkAlpha * 2.8})`;
+              ctx.fill();
+            }
           }
-        }
-      }
-
-      // Swarm Center Ring
-      const cx = this.width * 0.5;
-      const cy = this.height * 0.5;
-      ctx.beginPath();
-      ctx.arc(cx, cy, 140 + Math.sin(t) * 10, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(56, 189, 248, 0.05)`;
-      ctx.setLineDash([6, 12]);
-      ctx.stroke();
-      ctx.setLineDash([]);
-    }
-
-    renderAccelerationTensor(t: number) {
-      const ctx = this.ctx;
-      const cols = 7;
-      const rows = 5;
-      const marginX = this.width * 0.12;
-      const marginY = this.height * 0.15;
-      const stepX = (this.width - marginX * 2) / (cols - 1);
-      const stepY = (this.height - marginY * 2) / (rows - 1);
-
-      // Horizontal and Vertical Conduits (Unified gRPC Fabric)
-      for (let r = 0; r < rows; r++) {
-        const y = marginY + r * stepY;
-        const wave = Math.sin(t * 1.5 + r * 0.8) * 0.5 + 0.5;
-        ctx.beginPath();
-        ctx.moveTo(marginX, y);
-        ctx.lineTo(this.width - marginX, y);
-        ctx.strokeStyle = `rgba(6, 182, 212, ${0.04 + wave * 0.06})`;
-        ctx.lineWidth = 1;
-        ctx.stroke();
-
-        // Traveling gRPC pulse along row
-        const pulseX = marginX + ((t * 220 + r * 140) % (this.width - marginX * 2));
-        ctx.beginPath();
-        ctx.arc(pulseX, y, 2.5, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(168, 85, 247, 0.65)`;
-        ctx.fill();
-      }
-
-      for (let c = 0; c < cols; c++) {
-        const x = marginX + c * stepX;
-        ctx.beginPath();
-        ctx.moveTo(x, marginY);
-        ctx.lineTo(x, this.height - marginY);
-        ctx.strokeStyle = `rgba(168, 85, 247, 0.05)`;
-        ctx.lineWidth = 1;
-        ctx.stroke();
-      }
-
-      // Grid Intersection Tensor Nodes
-      for (let c = 0; c < cols; c++) {
-        for (let r = 0; r < rows; r++) {
-          const x = marginX + c * stepX;
-          const y = marginY + r * stepY;
-          const act = Math.sin(t * 2 + c * 0.7 + r * 0.9) * 0.5 + 0.5;
-
-          ctx.beginPath();
-          ctx.rect(x - 3, y - 3, 6, 6);
-          ctx.fillStyle = act > 0.6 ? `rgba(6, 182, 212, 0.5)` : `rgba(148, 163, 184, 0.15)`;
-          ctx.fill();
-
-          if (act > 0.85) {
-            ctx.beginPath();
-            ctx.arc(x, y, 12, 0, Math.PI * 2);
-            ctx.strokeStyle = `rgba(6, 182, 212, 0.25)`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          }
-        }
-      }
-    }
-
-    renderHardwareSubstrates(t: number) {
-      const ctx = this.ctx;
-
-      // Render Silicon Circuit Traces (Level Zero / Poplar Bus)
-      this.circuits.forEach(c => {
-        c.pulsePos += c.speed;
-        if (c.pulsePos > 1) c.pulsePos = 0;
-
-        ctx.beginPath();
-        if (c.dir === 'h') {
-          ctx.moveTo(c.x, c.y);
-          ctx.lineTo(c.x + c.len, c.y);
-          ctx.strokeStyle = 'rgba(244, 63, 94, 0.08)';
-          ctx.lineWidth = 1.2;
-          ctx.stroke();
-
-          // Silicon clock electron pulse
-          const px = c.x + c.len * c.pulsePos;
-          ctx.beginPath();
-          ctx.arc(px, c.y, 2, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(251, 191, 36, 0.8)';
-          ctx.fill();
-        } else {
-          ctx.moveTo(c.x, c.y);
-          ctx.lineTo(c.x, c.y + c.len);
-          ctx.strokeStyle = 'rgba(244, 63, 94, 0.08)';
-          ctx.lineWidth = 1.2;
-          ctx.stroke();
-
-          const py = c.y + c.len * c.pulsePos;
-          ctx.beginPath();
-          ctx.arc(c.x, py, 2, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(244, 63, 94, 0.8)';
-          ctx.fill();
-        }
-      });
-
-      // Register Block Matrix Clusters
-      const cx = this.width * 0.7;
-      const cy = this.height * 0.45;
-      for (let i = 0; i < 4; i++) {
-        for (let j = 0; j < 4; j++) {
-          const bx = cx + i * 22;
-          const by = cy + j * 22;
-          const active = ((Math.floor(t * 4) + i * 2 + j) % 5 === 0);
-
-          ctx.beginPath();
-          ctx.rect(bx, by, 16, 16);
-          ctx.fillStyle = active ? 'rgba(244, 63, 94, 0.25)' : 'rgba(255, 255, 255, 0.02)';
-          ctx.strokeStyle = active ? 'rgba(251, 191, 36, 0.5)' : 'rgba(244, 63, 94, 0.12)';
-          ctx.lineWidth = 1;
-          ctx.fill();
-          ctx.stroke();
         }
       }
     }
   }
 
-  // Initialize all instances
-  document.querySelectorAll('.division-bg-overlay-wrapper').forEach(el => {
-    new DivisionOverlayRenderer(el as HTMLElement);
-  });
+  // Initialize all overlay renderers on page
+  function initDivisionOverlays() {
+    const overlays = document.querySelectorAll('.division-bg-overlay-wrapper');
+    overlays.forEach(container => {
+      new DivisionOverlayRenderer(container as HTMLElement);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDivisionOverlays);
+  } else {
+    initDivisionOverlays();
+  }
+  document.addEventListener('astro:page-load', initDivisionOverlays);
 </script>

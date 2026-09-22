@@ -53,11 +53,11 @@ const products = [
   },
   {
     id: "automlapp",
-    name: "AutoMLApp",
+    name: "AutoMLApp (in development)",
     badge: "Node-Graph Editor",
     badgeColor: "#06b6d4",
     tagline: "Design ML pipelines on a canvas. Run them on your hardware with 185+ node types across 25+ domains.",
-    status: "Active Desktop App",
+    status: "In Development",
     href: "/products/automlapp",
     buttonText: "Explore AutoMLApp Product Page →",
     features: [
@@ -65,6 +65,22 @@ const products = [
       "Topologically sorted plan compilation with domain-specific step handlers",
       "F7 instant invariant validation (cycles, orphans, duplicate IDs, types)",
       "Pluggable HyperSwarm-backed AutoML & telemetry-aware cost scoring"
+    ]
+  },
+  {
+    id: "abigen",
+    name: "Abigen (in development)",
+    badge: "C/C++ Binding Engine",
+    badgeColor: "#f43f5e",
+    tagline: "Point it at a C/C++ header, get reviewed, verified C# bindings — and keep them in sync as the native library moves.",
+    status: "In Development",
+    href: "/products/abigen",
+    buttonText: "Explore Abigen Product Page →",
+    features: [
+      "Narrow, fail-closed generator: binds top-level C functions, scalar fields & opaque handles",
+      "Full manifest tracking with resolved libclang SHA-256 fingerprint & Clang args",
+      "Release tracking for GitHub repos & build feeds with API word count diffs",
+      "Desktop dashboard with 5-stage verification (smoke test, deterministic rerun, schema)"
     ]
   },
   {
@@ -85,18 +101,18 @@ const products = [
   },
   {
     id: "levelzero-net",
-    name: "LevelZero.NET & L0 Kernel Catalog",
+    name: "LevelZero.NET & Kernel Catalog",
     badge: "GPU Substrate",
     badgeColor: "#f43f5e",
-    tagline: "Managed .NET wrapper for Intel Level Zero GPU compute with 26 precompiled OpenCL C kernels across 11 Intel hardware targets.",
+    tagline: "Intel GPU compute from .NET, one DLL, no driver SDK to install.",
     status: "Production Ready",
-    href: "/docs/levelzero-net",
-    buttonText: "View LevelZero.NET Docs →",
+    href: "/products/levelzero",
+    buttonText: "Explore LevelZero.NET Product Page →",
     features: [
-      "16 domain kernel wrappers (fitness, PSO, SNN/STDP, N-body, dominance)",
-      "26 precompiled OpenCL C kernel sources in SPIR-V & native zebin",
-      "11 Intel targets: Iris Xe (tgllp), Arc, Meteor/Arrow/Lunar/Panther Lake, GPU Max",
-      "Typed shared-memory buffers & automatic device detection"
+      "Single DLL: Managed API, native shim, and 407 pre-compiled kernel modules (37 × 11 targets)",
+      "37 kernel wrappers across Swarm, SNN, LLM Inference & Knowledge Retrieval",
+      "11 Intel GPU targets from 11th-gen Iris Xe to Battlemage & Panther Lake",
+      "Zero boilerplate with ComputeDevice, SharedBuffer<T>, and auto device detection"
     ]
   },
   {
@@ -193,14 +209,25 @@ const products = [
   }
 
   .product-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
+    background: rgba(13, 19, 36, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-top: 3px solid var(--prod-accent);
     border-radius: var(--radius-lg);
     padding: 28px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.15), 0 8px 32px 0 rgba(0, 0, 0, 0.35);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .product-card:hover {
+    background: rgba(22, 33, 62, 0.65);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: inset 0 1px 2px 0 rgba(255, 255, 255, 0.25), 0 16px 40px 0 rgba(0, 0, 0, 0.45), 0 0 20px color-mix(in srgb, var(--prod-accent) 25%, transparent);
+    transform: translateY(-2px);
   }
 
   .badge-row {
@@ -243,10 +270,12 @@ const products = [
   }
 
   .prod-features {
-    background: rgba(11, 15, 25, 0.5);
+    background: rgba(8, 12, 24, 0.55);
     border-radius: var(--radius-sm);
     padding: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.06);
   }
 
   .prod-features h4 {

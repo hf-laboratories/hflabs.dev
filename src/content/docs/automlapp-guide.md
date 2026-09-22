@@ -3,7 +3,7 @@ title: "AutoMLApp Node-Graph Guide"
 description: "Visual pipeline editor with 185+ node types across 25+ domains, F7 invariant validation, and HyperSwarm integration."
 category: "Optimization & Swarms"
 order: 3
-badge: "Desktop App"
+badge: "In Development"
 tags: ["AutoMLApp", "NodeGraph", "WinForms", ".NET 10", "AutoML"]
 ---
 

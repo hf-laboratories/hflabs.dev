@@ -1,0 +1,1072 @@
+---
+// src/pages/products/levelzero.astro
+import Layout from '../../layouts/Layout.astro';
+
+const metrics = [
+  { label: "Deployment Footprint", value: "One Single DLL", detail: "Managed API, native shim & embedded pre-built kernels in one assembly" },
+  { label: "Precompiled Modules", value: "407 Kernel Binaries", detail: "37 distinct OpenCL C kernels precompiled across 11 Intel GPU hardware targets (37 × 11 = 407)" },
+  { label: "Kernel Wrappers", value: "37 Typed Wrappers", detail: "Typed execution across Swarm (14), SNN (3), LLM (15) & Retrieval (5)" },
+  { label: "Memory Substrate", value: "Unified Shared Memory", detail: "Zero-copy SharedBuffer<T> exposed directly as typed Span<T>" },
+  { label: "Target Detection", value: "Auto-Probing + Override", detail: "DeviceCapabilityDetector selects hardware target automatically with runtime pin support" }
+];
+
+const hardwareTargets = [
+  { target: "tgllp", arch: "Gen12", example: "11th Gen Iris Xe", category: "Client Integrated" },
+  { target: "dg1", arch: "Gen12", example: "Iris Xe MAX", category: "Client Discrete" },
+  { target: "acm-g10 / g11 / g12", arch: "Xe-HPG", example: "Arc A770/A750, A580/A380, A310", category: "Discrete Gaming & Pro" },
+  { target: "pvc", arch: "Xe-HPC", example: "Data Center GPU Max (Ponte Vecchio)", category: "Data Center & HPC" },
+  { target: "mtl", arch: "Xe-LPG", example: "Core Ultra 100 (Meteor Lake)", category: "AI PC Integrated" },
+  { target: "arl-h", arch: "Xe-LPG+", example: "Core Ultra 200 (Arrow Lake)", category: "High-Performance Mobile" },
+  { target: "bmg-g21", arch: "Xe2-HPG", example: "Arc B580/B570 (Battlemage)", category: "Next-Gen Discrete" },
+  { target: "lnl-m", arch: "Xe2-LPG", example: "Core Ultra 200V (Lunar Lake)", category: "Ultra-Low Power AI PC" },
+  { target: "ptl-h", arch: "Xe3-LPG", example: "Core Ultra 300 (Panther Lake)", category: "Future Native Substrate" }
+];
+
+const kernelDomains = [
+  {
+    title: "Swarm & Evolutionary Optimization",
+    count: "14 Kernels",
+    color: "#38bdf8",
+    icon: "🐝",
+    desc: "Parallel particle swarm mechanics, multi-objective Pareto sorting, hypervolume calculus, and topological layout algorithms.",
+    kernels: [
+      { name: "fitness_evaluation", desc: "Batch evaluation for multi-dimensional objective functions" },
+      { name: "pso_velocity_position", desc: "Parallel velocity/position update with dynamic inertial clamping" },
+      { name: "differential_evolution", desc: "DE mutation, vector recombination, and boundary reflection" },
+      { name: "cma_es_covariance", desc: "Covariance matrix adaptation and rank-μ update acceleration" },
+      { name: "ant_colony_selection", desc: "Pheromone matrix transition probability and path exploration" },
+      { name: "pareto_dominance_count", desc: "GPU-parallel non-dominated sorting and rank assignment" },
+      { name: "monte_carlo_hypervolume", desc: "High-dimensional hypervolume estimation for Pareto fronts" },
+      { name: "igd_plus_distance", desc: "Inverted Generational Distance (IGD+) directional quality" },
+      { name: "firefly_attraction", desc: "Light intensity attenuation and mutual brightness convergence" },
+      { name: "pairwise_distance", desc: "Dense Euclidean and Manhattan particle distance matrices" },
+      { name: "exchange_topology_weights", desc: "Island-model migration topologies and synchronization" },
+      { name: "tile_placement_cost", desc: "Spatial floorplan constraint cost and wirelength minimization" },
+      { name: "nbody_force_layout", desc: "Pairwise repulsive/attractive graph layout simulation" },
+      { name: "hypergraph_scoring", desc: "Higher-order hyperedge connectivity and modularity scoring" }
+    ]
+  },
+  {
+    title: "Local LLM Inference (Full Decode Path)",
+    count: "15 Kernels",
+    color: "#a855f7",
+    icon: "🧠",
+    desc: "Complete autoregressive token generation decode path with bit-faithful quantization and fused operations.",
+    kernels: [
+      { name: "gemm_gemv_dense", desc: "High-throughput general matrix-matrix and matrix-vector multiplication" },
+      { name: "fused_self_attention", desc: "Fused query-key-value scaled dot-product flash attention" },
+      { name: "rope_embedding", desc: "Rotary positional embeddings with precomputed frequency angles" },
+      { name: "rmsnorm_layer", desc: "Root Mean Square normalization with learnable scale parameters" },
+      { name: "swiglu_activation", desc: "Gated SwiGLU feed-forward network activation and gating" },
+      { name: "embedding_lookup", desc: "Token vocabulary vector extraction and scaling" },
+      { name: "logits_sampling", desc: "GPU-side temperature, top-k, top-p and min-p token selection" },
+      { name: "kv_cache_store", desc: "Continuous rolling key-value cache buffer management" },
+      { name: "residual_add", desc: "In-place element-wise residual connection addition" },
+      { name: "bias_add", desc: "Channel-wise and tensor-wise bias broadcasting" },
+      { name: "buffer_copy_stride", desc: "Non-contiguous tensor strided memory transfers" },
+      { name: "output_sigmoid_gate", desc: "Calibrated logistic gating for output projection layers" },
+      { name: "int8_quantized_matmul", desc: "Int8 weight-only quantized matmul with bit-faithful CPU reference model" },
+      { name: "kv_cache_defrag", desc: "Paged attention KV-cache compaction and defragmentation" },
+      { name: "context_shift_register", desc: "Sliding-window token state window shifting" }
+    ]
+  },
+  {
+    title: "Spiking Neural Networks (SNN)",
+    count: "3 Kernels",
+    color: "#10b981",
+    icon: "⚡",
+    desc: "Biologically plausible temporal neural substrates with continuous membrane dynamics and synaptic plasticity.",
+    kernels: [
+      { name: "spike_correlation", desc: "Pairwise spike-train synchrony and temporal correlation metrics" },
+      { name: "lif_membrane_update", desc: "Leaky integrate-and-fire membrane potential Euler integration" },
+      { name: "stdp_weight_trace", desc: "Spike-timing-dependent plasticity with exponential eligibility traces" }
+    ]
+  },
+  {
+    title: "Recommendation & Knowledge Retrieval",
+    count: "5 Kernels",
+    color: "#f59e0b",
+    icon: "🔍",
+    desc: "GraphRAG dense similarity search, cognitive weaving, and asynchronous streaming pipelines.",
+    kernels: [
+      { name: "suggestion_scoring", desc: "Collaborative and content-based recommendation candidate scoring" },
+      { name: "ranker_preparation", desc: "Feature normalization and dense candidate tensor collation" },
+      { name: "chain_boost_accumulation", desc: "Multi-hop graph edge weight accumulation and boosting" },
+      { name: "graphrag_dense_vector_search", desc: "High-dimensional cosine and dot similarity across resident graph embeddings" },
+      { name: "async_host_gpu_pipeline", desc: "Asynchronous host-to-GPU streaming pipeline for Pixie cognitive weaver & BESS reasoner" }
+    ]
+  }
+];
+---
+
+<Layout 
+  title="LevelZero.NET & L0 Kernel Catalog • Intel GPU Compute for .NET"
+  description="Intel GPU compute from .NET, one DLL, no driver SDK to install. Managed API, native shim, and 407 pre-compiled kernel modules spanning 11 Intel GPU targets."
+>
+  <!-- Top Breadcrumb -->
+  <div class="product-top-bar">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Overview</a>
+        <span class="sep">/</span>
+        <a href="/#products">Products</a>
+        <span class="sep">/</span>
+        <span class="curr">LevelZero.NET &amp; Kernel Catalog</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="product-hero">
+    <div class="container">
+      <div class="hero-badge-row">
+        <span class="badge badge-accent">
+          Hardware &amp; Native Substrate
+        </span>
+        <span class="badge badge-green">
+          Production Runtime (.NET 10 &bull; C ABI)
+        </span>
+        <span class="badge badge-purple">
+          407 Pre-Compiled Kernels (37 &times; 11 Targets)
+        </span>
+      </div>
+
+      <h1 class="hero-title">
+        LevelZero.NET &amp; <br />
+        <span class="text-gradient">Kernel Catalog</span>
+      </h1>
+
+      <p class="hero-tagline">
+        Intel GPU compute from .NET, one DLL, no driver SDK to install.
+      </p>
+
+      <p class="hero-desc">
+        LevelZero.NET is a .NET wrapper for Intel Level Zero GPU compute, carrying a large catalog of pre-built kernels for the workloads that recur across HF Labs' own work: swarm optimization, spiking neural networks, and local LLM inference. Everything ships in a single DLL: managed API, an HFLabs-authored native shim, and 407 pre-compiled kernel modules (37 distinct kernels compiled for each of 11 Intel GPU targets, from 11th-gen Iris Xe through Battlemage and Panther Lake). You still need Intel's own Level Zero driver on the target machine, but nothing else. The vendor loader itself is not redistributed.
+      </p>
+
+      <!-- Primary Action CTAs -->
+      <div class="hero-actions">
+        <a href="https://github.com/hf-laboratories/IPUServices" target="_blank" rel="noopener noreferrer" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span>View on GitHub</span>
+        </a>
+        <a href="/docs/levelzero-net" class="btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          <span>Read the Docs</span>
+        </a>
+        <a href="/about#contact" class="btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+          <span>Contact Us</span>
+        </a>
+      </div>
+
+      <!-- Live Metrics Strip -->
+      <div class="metrics-strip">
+        {metrics.map(m => (
+          <div class="metric-card">
+            <span class="metric-val">{m.value}</span>
+            <span class="metric-label">{m.label}</span>
+            <span class="metric-detail">{m.detail}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Zero Boilerplate & Interactive Code Showcase -->
+  <section class="code-showcase-section">
+    <div class="container">
+      <div class="section-grid-2col">
+        <div class="code-narrative">
+          <div class="badge badge-accent" style="margin-bottom:12px;">Zero Boilerplate</div>
+          <h2 class="section-heading">Immediate Execution, Typed Span&lt;T&gt; Memory</h2>
+          <p class="section-text">
+            <code>ComputeDevice</code> handles driver initialization, context, queue and command-list setup for you. <code>SharedBuffer&lt;T&gt;</code> wraps unified shared memory allocations behind a typed <code>Span&lt;T&gt;</code>, so kernel I/O reads like ordinary array access.
+          </p>
+
+          <div class="feature-bullets">
+            <div class="f-bullet">
+              <span class="fb-icon">⚙️</span>
+              <div>
+                <strong>Automatic Initialization &amp; Teardown:</strong>
+                <span>Direct driver discovery and context cleanup via standard .NET <code>IDisposable</code> patterns.</span>
+              </div>
+            </div>
+            <div class="f-bullet">
+              <span class="fb-icon">⚡</span>
+              <div>
+                <strong>Zero-Copy Memory Transfers:</strong>
+                <span>Unified Shared Memory (USM) pointers mapped straight into high-performance managed spans.</span>
+              </div>
+            </div>
+            <div class="f-bullet">
+              <span class="fb-icon">🎯</span>
+              <div>
+                <strong>Automatic Hardware Target Detection:</strong>
+                <span><code>DeviceCapabilityDetector</code> probes installed Intel silicon and dispatches the exact matching precompiled binary automatically.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-editor-box">
+          <div class="editor-header">
+            <div class="editor-dots">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+            <span class="editor-filename">OptimizationKernelUsage.cs</span>
+            <button class="copy-code-btn" id="copyCodeBtn" title="Copy code snippet">Copy</button>
+          </div>
+          <pre class="code-pre"><code class="language-csharp"><span class="kw">using</span> <span class="kw">var</span> device = <span class="type">LevelZeroRuntime</span>.<span class="call">GetDefaultDevice</span>();
+<span class="kw">using</span> <span class="kw">var</span> fitness = <span class="type">FitnessKernel</span>.<span class="call">Create</span>(device);
+
+<span class="comment">// Execute 1,000 10-dimensional particle fitness evaluations in parallel on Intel GPU</span>
+<span class="type">float</span>[] results = fitness.<span class="call">Evaluate</span>(positions, count: <span class="num">1000</span>, dimensions: <span class="num">10</span>);</code></pre>
+          
+          <div class="editor-footer">
+            <span class="ef-status">● Intel Level Zero Driver Active</span>
+            <span class="ef-target">Target: Auto-Detected (e.g. bmg-g21)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Over 35 Kernel Wrappers Across 4 Domains -->
+  <section class="domains-section">
+    <div class="container">
+      <div class="section-center-header">
+        <div class="badge badge-purple" style="margin-bottom:12px;">Pre-Built Acceleration Catalog</div>
+        <h2 class="section-heading">37 Kernel Wrappers, Across Four Domains</h2>
+        <p class="section-subtext">
+          Carrying 407 precompiled kernel binaries (37 kernels &times; 11 hardware targets) compiled directly from OpenCL C into optimized SPIR-V and device-native Zebins across all four operational domains.
+        </p>
+      </div>
+
+      <div class="domains-grid">
+        {kernelDomains.map(dom => (
+          <div class="domain-card" style={`--domain-color:${dom.color};`}>
+            <div class="domain-header">
+              <span class="domain-icon">{dom.icon}</span>
+              <div>
+                <h3 class="domain-title">{dom.title}</h3>
+                <span class="domain-count">{dom.count}</span>
+              </div>
+            </div>
+            
+            <p class="domain-desc">{dom.desc}</p>
+
+            <div class="domain-kernels-list">
+              <h4>Included Kernel Implementations</h4>
+              <ul class="kernels-scroll">
+                {dom.kernels.map(k => (
+                  <li class="kernel-item">
+                    <code class="k-name">{k.name}</code>
+                    <span class="k-desc">{k.desc}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Auto Device Detection & Manual Override -->
+  <section class="device-detection-section">
+    <div class="container">
+      <div class="detection-box">
+        <div class="detection-content">
+          <div class="badge badge-accent" style="margin-bottom:12px;">Dynamic Hardware Routing</div>
+          <h2 class="section-heading">Auto Device Detection, with Manual Override</h2>
+          <p class="section-text">
+            <code>DeviceCapabilityDetector</code> probes the installed GPU and picks the matching kernel target automatically, so <code>FitnessKernel.Create(device)</code> just works. When you need to pin a target, <code>KernelCatalog.SetDeviceTarget("bmg-g21")</code> overrides it at runtime, and <code>KernelCatalog.LoadEmbeddedSpirv</code> can load a specific device's kernel directly. 
+          </p>
+          <p class="section-text">
+            <code>KernelCatalog.EmbeddedDeviceTargets</code> discovers targets from what's actually embedded in the DLL, rather than a fixed list, so it stays correct as targets are added.
+          </p>
+        </div>
+
+        <div class="detection-code-card">
+          <div class="term-header-bar">
+            <span class="dot-sm"></span>
+            <span>Target Control &amp; Introspection</span>
+          </div>
+          <pre class="term-code"><code class="language-csharp"><span class="comment">// 1. Automatic target detection (Default)</span>
+<span class="kw">using</span> <span class="kw">var</span> device = <span class="type">LevelZeroRuntime</span>.<span class="call">GetDefaultDevice</span>();
+
+<span class="comment">// 2. Dynamic introspection of embedded hardware targets</span>
+<span class="type">IReadOnlyList</span>&lt;<span class="type">string</span>&gt; targets = <span class="type">KernelCatalog</span>.<span class="prop">EmbeddedDeviceTargets</span>;
+
+<span class="comment">// 3. Runtime explicit hardware pinning override</span>
+<span class="type">KernelCatalog</span>.<span class="call">SetDeviceTarget</span>(<span class="str">"bmg-g21"</span>);
+
+<span class="comment">// 4. Direct embedded SPIR-V / Zebin extraction</span>
+<span class="type">ReadOnlySpan</span>&lt;<span class="type">byte</span>&gt; binary = <span class="type">KernelCatalog</span>.<span class="call">LoadEmbeddedSpirv</span>(<span class="str">"fitness_sphere"</span>, <span class="str">"bmg-g21"</span>);</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Supported Hardware Matrix -->
+  <section class="hardware-table-section">
+    <div class="container">
+      <div class="section-center-header">
+        <div class="badge badge-green" style="margin-bottom:12px;">Silicon Compatibility</div>
+        <h2 class="section-heading">Supported Hardware Matrix</h2>
+        <p class="section-subtext">
+          37 distinct kernels compiled into native binaries for each of the 11 Intel GPU architectural targets (37 &times; 11 = 407 kernel modules):
+        </p>
+      </div>
+
+      <div class="table-responsive-wrapper">
+        <table class="hardware-table">
+          <thead>
+            <tr>
+              <th>Target ID</th>
+              <th>Microarchitecture</th>
+              <th>Example Silicon / Product Lines</th>
+              <th>Deployment Tier</th>
+            </tr>
+          </thead>
+          <tbody>
+            {hardwareTargets.map(hw => (
+              <tr>
+                <td><code class="target-badge">{hw.target}</code></td>
+                <td><span class="arch-badge">{hw.arch}</span></td>
+                <td class="example-cell">{hw.example}</td>
+                <td><span class="cat-pill">{hw.category}</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why This Exists (Architectural Rationale) -->
+  <section class="rationale-section">
+    <div class="container">
+      <div class="rationale-card">
+        <div class="rationale-content">
+          <div class="badge badge-purple" style="margin-bottom:12px;">Engineering Purpose</div>
+          <h2 class="rationale-title">Why This Exists</h2>
+          <p class="rationale-text">
+            Getting a .NET application onto Intel GPU compute normally means hand-rolling SPIR-V, wiring up the Level Zero loader, and reimplementing device detection per target. LevelZero.NET does that work once, ships it precompiled, and gets out of the way. 
+          </p>
+          <p class="rationale-text">
+            It backs HF Labs' own swarm optimizers, spiking-network simulators, local LLM runtime and GraphRAG retrieval, and it's built to be dropped into anything else that needs the same class of parallel kernel.
+          </p>
+
+          <div class="rationale-action-row">
+            <a href="https://github.com/hf-laboratories/IPUServices" target="_blank" rel="noopener noreferrer" class="btn-primary">
+              <span>View on GitHub &rarr;</span>
+            </a>
+            <a href="/docs/levelzero-net" class="btn-secondary">
+              <span>Read LevelZero.NET Docs &rarr;</span>
+            </a>
+            <a href="/about#contact" class="btn-secondary">
+              <span>Contact HFLabs Systems &rarr;</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Base Layout & Top Bar */
+  .product-top-bar {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(6, 9, 19, 0.55);
+    padding: 12px 0;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+  }
+
+  .breadcrumb a {
+    color: var(--text-secondary);
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--accent-blue);
+  }
+
+  .breadcrumb .sep {
+    color: rgba(255, 255, 255, 0.2);
+  }
+
+  .breadcrumb .curr {
+    color: #f8fafc;
+    font-weight: 600;
+  }
+
+  /* Badges */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.03em;
+  }
+
+  .badge-accent {
+    background: rgba(244, 63, 94, 0.14);
+    color: #f43f5e;
+    border: 1px solid rgba(244, 63, 94, 0.35);
+  }
+
+  .badge-green {
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--accent-emerald);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .badge-purple {
+    background: rgba(168, 85, 247, 0.14);
+    color: var(--accent-purple);
+    border: 1px solid rgba(168, 85, 247, 0.35);
+  }
+
+  /* Hero Section */
+  .product-hero {
+    padding: 60px 0 40px;
+    background: radial-gradient(circle at 50% -10%, rgba(244, 63, 94, 0.15), transparent 70%);
+  }
+
+  .hero-badge-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .hero-title {
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: #f8fafc;
+    margin-bottom: 16px;
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #f43f5e, #fb7185, #38bdf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-tagline {
+    font-size: 20px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 16px;
+    line-height: 1.35;
+  }
+
+  .hero-desc {
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    max-width: 900px;
+    margin-bottom: 28px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #f43f5e, #e11d48);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 12px 22px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 20px rgba(244, 63, 94, 0.35);
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(244, 63, 94, 0.5);
+    color: #fff;
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(15, 23, 42, 0.85);
+    color: #e2e8f0;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: all 0.2s ease;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(30, 41, 59, 0.9);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  /* Metrics Strip */
+  .metrics-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    margin-top: 10px;
+  }
+
+  .metric-card {
+    background: rgba(13, 19, 36, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-top: 2px solid #f43f5e;
+    border-radius: var(--radius-md);
+    padding: 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.15), 0 8px 24px -4px rgba(0, 0, 0, 0.4);
+    transition: all 0.25s ease;
+  }
+
+  .metric-card:hover {
+    background: rgba(22, 33, 62, 0.65);
+    border-color: rgba(255, 255, 255, 0.24);
+    border-top-color: #f43f5e;
+    transform: translateY(-2px);
+    box-shadow: inset 0 1px 2px 0 rgba(255, 255, 255, 0.25), 0 12px 30px -4px rgba(0, 0, 0, 0.5), 0 0 16px rgba(244, 63, 94, 0.2);
+  }
+
+  .metric-val {
+    font-size: 18px;
+    font-weight: 800;
+    color: #f8fafc;
+  }
+
+  .metric-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #f43f5e;
+    letter-spacing: 0.04em;
+  }
+
+  .metric-detail {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.35;
+  }
+
+  /* Code Showcase Section */
+  .code-showcase-section {
+    padding: 50px 0;
+    background: rgba(6, 10, 20, 0.5);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .section-grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .section-heading {
+    font-size: 28px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 14px;
+    letter-spacing: -0.02em;
+  }
+
+  .section-text {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+  }
+
+  .section-text code {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .feature-bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 20px;
+  }
+
+  .f-bullet {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .fb-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .f-bullet strong {
+    display: block;
+    font-size: 13.5px;
+    color: #f8fafc;
+    margin-bottom: 2px;
+  }
+
+  .f-bullet span {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+  }
+
+  .code-editor-box {
+    background: #03060f;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+  }
+
+  .editor-header {
+    background: rgba(15, 23, 42, 0.85);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .editor-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+  }
+
+  .dot.red { background: #ef4444; }
+  .dot.yellow { background: #eab308; }
+  .dot.green { background: #22c55e; }
+
+  .editor-filename {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+
+  .copy-code-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 2px 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .copy-code-btn:hover {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .code-pre {
+    margin: 0;
+    padding: 20px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: #e2e8f0;
+    overflow-x: auto;
+  }
+
+  .kw { color: #f43f5e; font-weight: 700; }
+  .type { color: #38bdf8; }
+  .call { color: #34d399; }
+  .num { color: #fbbf24; }
+  .str { color: #f59e0b; }
+  .comment { color: #64748b; font-style: italic; }
+
+  .editor-footer {
+    background: rgba(10, 15, 28, 0.9);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 10px;
+  }
+
+  .ef-status { color: var(--accent-emerald); }
+  .ef-target { color: var(--text-muted); }
+
+  /* Domains Grid Section */
+  .domains-section {
+    padding: 60px 0;
+  }
+
+  .section-center-header {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 40px;
+  }
+
+  .section-subtext {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .domains-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .domain-card {
+    background: rgba(13, 19, 36, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-top: 3px solid var(--domain-color);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.15), 0 8px 32px 0 rgba(0, 0, 0, 0.35);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .domain-card:hover {
+    background: rgba(22, 33, 62, 0.65);
+    border-color: rgba(255, 255, 255, 0.25);
+    border-top-color: var(--domain-color);
+    box-shadow: inset 0 1px 2px 0 rgba(255, 255, 255, 0.25), 0 16px 40px 0 rgba(0, 0, 0, 0.45), 0 0 20px color-mix(in srgb, var(--domain-color) 25%, transparent);
+    transform: translateY(-2px);
+  }
+
+  .domain-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .domain-icon {
+    font-size: 26px;
+  }
+
+  .domain-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 2px;
+  }
+
+  .domain-count {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--domain-color);
+  }
+
+  .domain-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .domain-kernels-list h4 {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+  }
+
+  .kernels-scroll {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-right: 0;
+  }
+
+  .kernel-item {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 6px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .k-name {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: #38bdf8;
+  }
+
+  .k-desc {
+    font-size: 10.5px;
+    color: var(--text-secondary);
+    line-height: 1.35;
+  }
+
+  /* Auto Device Detection Section */
+  .device-detection-section {
+    padding: 50px 0;
+    background: rgba(6, 10, 20, 0.5);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .detection-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .detection-code-card {
+    background: #02050e;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .term-header-bar {
+    background: rgba(15, 23, 42, 0.85);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+
+  .dot-sm {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    box-shadow: 0 0 6px var(--accent-blue);
+  }
+
+  .term-code {
+    margin: 0;
+    padding: 16px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    line-height: 1.6;
+    color: #e2e8f0;
+    overflow-x: auto;
+  }
+
+  .prop { color: #f59e0b; }
+
+  /* Hardware Table Section */
+  .hardware-table-section {
+    padding: 60px 0;
+  }
+
+  .table-responsive-wrapper {
+    background: rgba(8, 12, 24, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    overflow-x: auto;
+    backdrop-filter: blur(8px);
+  }
+
+  .hardware-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 13px;
+  }
+
+  .hardware-table th {
+    background: rgba(15, 23, 42, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 18px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .hardware-table td {
+    padding: 12px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+  }
+
+  .hardware-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .target-badge {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: #f43f5e;
+    background: rgba(244, 63, 94, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(244, 63, 94, 0.25);
+  }
+
+  .arch-badge {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--accent-blue);
+  }
+
+  .example-cell {
+    color: #f8fafc;
+    font-weight: 600;
+  }
+
+  .cat-pill {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  /* Rationale Section (Why this exists) */
+  .rationale-section {
+    padding: 50px 0 80px;
+  }
+
+  .rationale-card {
+    background: radial-gradient(circle at 50% 0%, rgba(244, 63, 94, 0.18) 0%, rgba(14, 20, 38, 0.6) 75%);
+    border: 1px solid rgba(244, 63, 94, 0.35);
+    border-radius: var(--radius-xl);
+    padding: 40px;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: inset 0 1px 2px 0 rgba(255, 255, 255, 0.2), 0 20px 48px rgba(0, 0, 0, 0.6), 0 0 32px rgba(244, 63, 94, 0.15);
+  }
+
+  .rationale-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .rationale-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    max-width: 900px;
+    margin-bottom: 16px;
+  }
+
+  .rationale-action-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+  }
+
+  /* Responsive Rules */
+  @media (max-width: 1024px) {
+    .metrics-strip {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .section-grid-2col, .detection-box {
+      grid-template-columns: 1fr;
+    }
+    .domains-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-title {
+      font-size: 36px;
+    }
+  }
+</style>
+
+<script>
+  // Simple code copy handler
+  const copyBtn = document.getElementById('copyCodeBtn');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      const code = `using var device = LevelZeroRuntime.GetDefaultDevice();
+using var fitness = FitnessKernel.Create(device);
+float[] results = fitness.Evaluate(positions, count: 1000, dimensions: 10);`;
+      navigator.clipboard.writeText(code).then(() => {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => {
+          copyBtn.textContent = 'Copy';
+        }, 2000);
+      });
+    });
+  }
+</script>
