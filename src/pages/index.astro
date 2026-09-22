@@ -49,7 +49,7 @@ import divisions from '../data/divisions.json';
     <!-- =========================================================================
          PAGE 1 / SLIDE 0: EXECUTIVE HERO & HIGH-ASSURANCE ARCHITECTURE OVERVIEW
          ========================================================================= -->
-    <section class="page-slide slide-hero" id="page-0" data-page-index="0">
+    <section class="page-slide slide-hero active-slide" id="page-0" data-page-index="0">
       <DivisionBackgroundOverlay id="hero-bg-overlay" initialDivision={0} opacity={0.65} />
       
       <div class="container slide-content">
@@ -137,9 +137,9 @@ import divisions from '../data/divisions.json';
         </div>
 
         <!-- Slide Scroll Prompt -->
-        <div class="scroll-prompt-bar">
+        <div class="scroll-prompt-bar jump-to-stage-btn" data-jump-to="1" style="cursor: pointer;">
           <span class="prompt-mouse-pulse"></span>
-          <span>Scroll down (3 clicks of scroll wheel) or press &darr; to explore</span>
+          <span>Scroll down (3 clicks of scroll wheel) or click to jump &darr;</span>
         </div>
       </div>
     </section>
@@ -444,9 +444,9 @@ import divisions from '../data/divisions.json';
     height: 100%;
     opacity: 0;
     pointer-events: none;
-    transform: translateY(40px) scale(0.98);
-    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(30px) scale(0.985);
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -661,6 +661,11 @@ import divisions from '../data/divisions.json';
     font-family: var(--font-mono);
     font-size: 11px;
     color: var(--text-muted);
+    transition: color 0.2s;
+  }
+
+  .scroll-prompt-bar:hover {
+    color: var(--accent-blue);
   }
 
   .prompt-mouse-pulse {
@@ -978,8 +983,8 @@ import divisions from '../data/divisions.json';
   }
 
   .node-sub {
-    font-size: 9.5px;
     font-family: var(--font-mono);
+    font-size: 9.5px;
     color: var(--text-muted);
   }
 
@@ -1072,18 +1077,36 @@ import divisions from '../data/divisions.json';
   }
 
   /* Page 3 (Divisions Stack) Styles */
-  .divisions-slide-inner {
+  .slide-divisions {
+    align-items: stretch;
+    overflow: hidden;
+  }
+
+  .slide-divisions .slide-content {
+    height: 100%;
+    max-height: calc(100vh - 65px);
+    padding: 16px 0 14px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+  }
+
+  .divisions-slide-inner {
+    display: flex;
+    flex-direction: column;
     height: 100%;
+    min-height: 0;
+    justify-content: space-between;
+    gap: 12px;
   }
 
   .divisions-top-bar {
+    flex-shrink: 0;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: 14px;
+    margin-bottom: 4px;
     flex-wrap: wrap;
     gap: 8px;
   }
@@ -1095,39 +1118,46 @@ import divisions from '../data/divisions.json';
   }
 
   .divisions-main-heading {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 800;
     color: #f8fafc;
     letter-spacing: -0.02em;
   }
 
   .divisions-sub-desc {
-    font-size: 12.5px;
+    font-size: 12px;
     color: var(--text-secondary);
     max-width: 620px;
     line-height: 1.4;
   }
 
   .divisions-grid-trio {
+    flex: 1;
+    min-height: 0;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
-    margin-bottom: 14px;
+    margin-bottom: 8px;
+    align-items: stretch;
   }
 
   .division-card-interactive {
     position: relative;
-    background: rgba(8, 12, 24, 0.82);
+    background: rgba(8, 12, 24, 0.85);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-top: 3px solid var(--div-accent);
     border-radius: var(--radius-lg);
-    padding: 16px;
+    padding: 16px 18px;
+    height: 100%;
+    min-height: 0;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 10px;
     cursor: pointer;
     backdrop-filter: blur(10px);
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
   }
 
   .division-card-interactive:hover {
@@ -1143,19 +1173,20 @@ import divisions from '../data/divisions.json';
   }
 
   .card-focus-indicator {
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     background: rgba(0, 0, 0, 0.3);
     border-radius: 4px;
-    padding: 3px 8px;
+    padding: 4px 8px;
     position: relative;
     overflow: hidden;
   }
 
   .focus-ring {
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: var(--text-muted);
   }
@@ -1191,41 +1222,52 @@ import divisions from '../data/divisions.json';
   }
 
   .div-card-head {
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     gap: 10px;
   }
 
   .div-card-icon {
-    font-size: 20px;
+    font-size: 22px;
   }
 
   .div-card-name {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 800;
     color: #f8fafc;
-    line-height: 1.2;
+    line-height: 1.25;
   }
 
   .div-card-badge {
     font-family: var(--font-mono);
-    font-size: 9.5px;
+    font-size: 10px;
     color: var(--div-accent);
   }
 
   .div-card-tagline {
+    flex-shrink: 0;
     font-size: 11.5px;
     color: var(--text-secondary);
-    line-height: 1.4;
+    line-height: 1.45;
+  }
+
+  .div-card-projects {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
 
   .div-card-projects h4 {
+    flex-shrink: 0;
     font-family: var(--font-mono);
     font-size: 10px;
     text-transform: uppercase;
     color: var(--text-muted);
     margin-bottom: 8px;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.05em;
   }
 
   .projects-scroller {
@@ -1233,19 +1275,44 @@ import divisions from '../data/divisions.json';
     display: flex;
     flex-direction: column;
     gap: 8px;
-    max-height: 180px;
+    flex: 1;
+    min-height: 0;
+    max-height: none;
     overflow-y: auto;
-    padding-right: 4px;
+    padding-right: 6px;
+  }
+
+  .projects-scroller::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .projects-scroller::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+
+  .projects-scroller::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+  }
+
+  .projects-scroller::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-blue);
   }
 
   .project-mini-item {
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 6px;
-    padding: 8px;
+    background: rgba(0, 0, 0, 0.38);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 8px;
+    padding: 10px 12px;
     display: flex;
     flex-direction: column;
     gap: 4px;
+    transition: border-color 0.2s;
+  }
+
+  .project-mini-item:hover {
+    border-color: rgba(255, 255, 255, 0.2);
   }
 
   .proj-title-row {
@@ -1255,47 +1322,49 @@ import divisions from '../data/divisions.json';
   }
 
   .p-name {
-    font-size: 12px;
+    font-size: 12.5px;
+    font-weight: 700;
     color: #f8fafc;
   }
 
   .p-status {
     font-family: var(--font-mono);
     font-size: 9px;
-    padding: 1px 5px;
-    border-radius: 3px;
+    padding: 1px 6px;
+    border-radius: 4px;
     background: rgba(255, 255, 255, 0.06);
     color: var(--text-secondary);
   }
 
   .status-production {
     color: var(--accent-emerald);
-    background: rgba(16, 185, 129, 0.1);
+    background: rgba(16, 185, 129, 0.12);
   }
 
   .status-mvp {
     color: var(--accent-amber);
-    background: rgba(251, 191, 36, 0.1);
+    background: rgba(251, 191, 36, 0.12);
   }
 
   .status-in-development {
     color: var(--accent-purple);
-    background: rgba(168, 85, 247, 0.1);
+    background: rgba(168, 85, 247, 0.12);
   }
 
   .p-desc {
-    font-size: 10.5px;
+    font-size: 11px;
     color: var(--text-secondary);
-    line-height: 1.35;
+    line-height: 1.4;
   }
 
   .p-link-btn {
     display: inline-flex;
     align-items: center;
-    font-size: 10px;
+    font-size: 10.5px;
     font-family: var(--font-mono);
     color: var(--accent-blue);
     margin-top: 2px;
+    font-weight: 600;
   }
 
   .p-link-btn:hover {
@@ -1304,6 +1373,7 @@ import divisions from '../data/divisions.json';
 
   /* Slide Footer Ribbon */
   .slide-footer-ribbon {
+    flex-shrink: 0;
     background: rgba(8, 12, 24, 0.9);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-md);
@@ -1465,8 +1535,10 @@ import divisions from '../data/divisions.json';
   const totalPages = 3;
   let currentPage = 0;
   let isPageTransitioning = false;
-  let wheelAccumulator = 0; // -3 to +3 clicks
+  let wheelClicks = 0; // Discrete clicks in current direction (0 to 3)
+  let wheelDirection = 0; // 1 = Down, -1 = Up
   let wheelResetTimer: number | null = null;
+  let accumulatedPixelDelta = 0;
 
   const slides = document.querySelectorAll('.page-slide');
   const navDots = document.querySelectorAll('.nav-dot');
@@ -1477,7 +1549,7 @@ import divisions from '../data/divisions.json';
   ];
 
   function updateWheelVisuals(count: number) {
-    const absCount = Math.min(3, Math.abs(count));
+    const absCount = Math.min(3, Math.max(0, count));
     tickEls.forEach((el, idx) => {
       if (el) {
         if (idx < absCount) {
@@ -1491,8 +1563,7 @@ import divisions from '../data/divisions.json';
 
   function goToPage(pageIdx: number) {
     if (pageIdx < 0 || pageIdx >= totalPages) return;
-    if (pageIdx === currentPage && slides[pageIdx].classList.contains('active-slide')) return;
-
+    
     isPageTransitioning = true;
     currentPage = pageIdx;
 
@@ -1517,55 +1588,71 @@ import divisions from '../data/divisions.json';
 
     setTimeout(() => {
       isPageTransitioning = false;
-    }, 600);
+    }, 500);
   }
 
-  // Initialize first page
-  goToPage(0);
-
-  // Wheel Restrictor (3 clicks to jump)
-  window.addEventListener('wheel', (e: WheelEvent) => {
+  // Wheel Restrictor (Exact 3 clicks/notches of the scroll wheel to jump)
+  function handleWheelEvent(e: WheelEvent) {
     // Only lock when inside desktop viewport
     if (window.innerWidth <= 1024) return;
 
+    // Prevent default browser scrolling so we control the 3-click jump
     e.preventDefault();
     if (isPageTransitioning) return;
 
-    const delta = e.deltaY;
-    if (Math.abs(delta) < 15) return; // Ignore micro jitter
-
-    const dir = delta > 0 ? 1 : -1;
-
-    if (dir > 0) {
-      if (wheelAccumulator < 0) wheelAccumulator = 0;
-      wheelAccumulator += 1;
-    } else {
-      if (wheelAccumulator > 0) wheelAccumulator = 0;
-      wheelAccumulator -= 1;
+    // Determine raw and normalized delta
+    let rawDelta = e.deltaY;
+    if (e.deltaMode === 1) {
+      // Line mode (Firefox/Linux): each event is a distinct wheel notch!
+      rawDelta = rawDelta * 50;
+    } else if (e.deltaMode === 2) {
+      rawDelta = rawDelta * 500;
     }
 
-    updateWheelVisuals(wheelAccumulator);
+    if (rawDelta === 0) return;
 
+    const currentDir = rawDelta > 0 ? 1 : -1;
+
+    // If direction changed, reset accumulator
+    if (currentDir !== wheelDirection) {
+      wheelDirection = currentDir;
+      wheelClicks = 0;
+      accumulatedPixelDelta = 0;
+    }
+
+    // Accumulate ticks
+    accumulatedPixelDelta += Math.abs(rawDelta);
+    // 1 click of mouse wheel is typically 50-100px of delta
+    const calculatedClicks = Math.floor(accumulatedPixelDelta / 60) + 1;
+    wheelClicks = Math.min(3, Math.max(wheelClicks + 1, calculatedClicks));
+
+    updateWheelVisuals(wheelClicks);
+
+    // Reset accumulator after 800ms of user hesitation
     if (wheelResetTimer) clearTimeout(wheelResetTimer);
     wheelResetTimer = window.setTimeout(() => {
-      wheelAccumulator = 0;
+      wheelClicks = 0;
+      accumulatedPixelDelta = 0;
+      wheelDirection = 0;
       updateWheelVisuals(0);
-    }, 750);
+    }, 800);
 
-    if (wheelAccumulator >= 3) {
-      if (currentPage < totalPages - 1) {
+    // Trigger jump on 3 clicks
+    if (wheelClicks >= 3) {
+      if (wheelDirection > 0 && currentPage < totalPages - 1) {
         goToPage(currentPage + 1);
-      }
-      wheelAccumulator = 0;
-      updateWheelVisuals(0);
-    } else if (wheelAccumulator <= -3) {
-      if (currentPage > 0) {
+      } else if (wheelDirection < 0 && currentPage > 0) {
         goToPage(currentPage - 1);
       }
-      wheelAccumulator = 0;
+      wheelClicks = 0;
+      accumulatedPixelDelta = 0;
+      wheelDirection = 0;
       updateWheelVisuals(0);
     }
-  }, { passive: false });
+  }
+
+  window.addEventListener('wheel', handleWheelEvent, { passive: false });
+  document.addEventListener('wheel', handleWheelEvent, { passive: false });
 
   // Navigation Dots Click
   navDots.forEach(dot => {
@@ -1575,7 +1662,7 @@ import divisions from '../data/divisions.json';
     });
   });
 
-  // Jump buttons on Hero
+  // Jump buttons on Hero and throughout the slides
   document.querySelectorAll('[data-jump-to]').forEach(btn => {
     btn.addEventListener('click', () => {
       const page = parseInt(btn.getAttribute('data-jump-to') || '0', 10);
@@ -1611,7 +1698,7 @@ import divisions from '../data/divisions.json';
   window.addEventListener('touchend', (e: TouchEvent) => {
     const touchEndY = e.changedTouches[0].clientY;
     const diff = touchStartY - touchEndY;
-    if (Math.abs(diff) > 50) {
+    if (Math.abs(diff) > 40) {
       if (diff > 0 && currentPage < totalPages - 1) {
         goToPage(currentPage + 1);
       } else if (diff < 0 && currentPage > 0) {
@@ -1864,6 +1951,45 @@ import divisions from '../data/divisions.json';
     }
   }
 
-  // Initial call
+  // Intercept header navigation links on the home page for instant slide transitions
+  document.querySelectorAll('a[href^="/#"], a[href^="#"], [data-section-target]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href') || '';
+      const explicitTarget = link.getAttribute('data-section-target');
+      
+      let targetPage = -1;
+      if (explicitTarget !== null && explicitTarget !== '') {
+        targetPage = parseInt(explicitTarget, 10);
+      } else if (href.includes('#core-systems') || href.includes('#systems') || href.includes('#stage') || href.includes('#section-2')) {
+        targetPage = 1;
+      } else if (href.includes('#products') || href.includes('#divisions') || href.includes('#stack') || href.includes('#section-3')) {
+        targetPage = 2;
+      } else if (href.includes('#overview') || href.includes('#hero') || href.includes('#section-1')) {
+        targetPage = 0;
+      }
+
+      if (targetPage >= 0) {
+        e.preventDefault();
+        goToPage(targetPage);
+      }
+    });
+  });
+
+  // Check URL hash on page load and hashchange
+  function handleHashNavigation() {
+    const hash = window.location.hash.toLowerCase();
+    if (hash.includes('core-systems') || hash.includes('systems') || hash.includes('stage') || hash.includes('section-2')) {
+      goToPage(1);
+    } else if (hash.includes('products') || hash.includes('divisions') || hash.includes('stack') || hash.includes('section-3')) {
+      goToPage(2);
+    } else if (hash.includes('overview') || hash.includes('hero') || hash.includes('section-1')) {
+      goToPage(0);
+    }
+  }
+
+  window.addEventListener('hashchange', handleHashNavigation);
+
+  // Initialize
   handleSectionInViewChange();
+  handleHashNavigation();
 </script>
