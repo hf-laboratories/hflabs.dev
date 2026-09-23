@@ -1,0 +1,798 @@
+---
+// src/pages/products/poplar.astro
+import Layout from '../../layouts/Layout.astro';
+
+const metrics = [
+  { label: "Hardware Target", value: "Graphcore Colossus IPU", detail: "MK2 GC200 with 1,472 parallel processing tiles & 900MB high-speed In-Processor SRAM" },
+  { label: "Binding Pattern", value: "Safe Native Handles", detail: "Zero-leak C ABI shim and SafeHandle subclasses for devices, graphs, engines & streams" },
+  { label: "Stream Engine", value: "Ring-Pipe IPC", detail: "Asynchronous host-to-device streaming across zero-copy pinned buffers with token flow control" },
+  { label: "Exception Hierarchy", value: "Typed .NET Errors", detail: "Translates Poplar recovery actions & engine codes into rich, actionable C# exceptions" }
+];
+
+const architecturePillars = [
+  {
+    icon: "🔌",
+    name: "Native C ABI Shim (libpoplar_shim)",
+    badge: "Native Layer",
+    badgeColor: "#f43f5e",
+    desc: "A thin C++ wrapper library compiling against the Graphcore Poplar & PopART SDK headers. Flattens C++ class hierarchies, complex templates, and virtual method tables into pure extern \"C\" exported function symbols for zero-overhead P/Invoke interoperability."
+  },
+  {
+    icon: "🛡️",
+    name: "Managed Driver API (Poplar.NET)",
+    badge: "Managed C#",
+    badgeColor: "#38bdf8",
+    desc: "Idiomatic .NET 10 surface with safe wrappers for Device, Graph, Engine, Session, and Tensor. Encapsulates raw native pointers inside SafeHandle implementations with deterministic IDisposable cleanup, preventing device tile memory leaks."
+  },
+  {
+    icon: "⚡",
+    name: "PopART Graph & ONNX Execution",
+    badge: "Model Engine",
+    badgeColor: "#10b981",
+    desc: "Construct computational graphs programmatically or load pre-trained ONNX models directly into IPU tile memory. Supports both training and inference sessions with hardware optimizer bindings (SGD, Adam, LAMB)."
+  },
+  {
+    icon: "🌉",
+    name: "Accelerator & QueryAccel Interop",
+    badge: "Ecosystem Bridge",
+    badgeColor: "#818cf8",
+    desc: "Serves as the IPU compute backend for HFLabs Accelerator Layer (heterogeneous plan routing) and QueryAccel (PostgreSQL Foreign Data Wrapper and SQL Server CLR aggregate pushdown)."
+  }
+];
+
+const driverComponents = [
+  {
+    component: "IPUDeviceManager",
+    role: "Device Discovery & Tile Partitioning",
+    color: "#38bdf8",
+    items: [
+      "Enumerates physical IPU devices, multi-IPU PCIe topologies, and IPU-Link bridges",
+      "Configures virtual device targets and offline simulated device profiles",
+      "Performs tile health verification and memory allocation checks"
+    ]
+  },
+  {
+    component: "PoplarGraphBuilder",
+    role: "Computational Graph Construction",
+    color: "#a855f7",
+    items: [
+      "Adds tensor nodes with custom tile-mapping heuristics and data layouts",
+      "Connects computation vertices across arithmetic, reduction, and activation domains",
+      "Configures deterministic tile sync barriers and exchange phases"
+    ]
+  },
+  {
+    component: "EngineSessionHost",
+    role: "Compilation & Execution Lifecycle",
+    color: "#10b981",
+    items: [
+      "Compiles Poplar graph targets into optimized executable engine artifacts",
+      "Maintains warm in-memory engine caches for instantaneous query execution",
+      "Coordinates ring-pipe streams with non-blocking async completion tokens"
+    ]
+  },
+  {
+    component: "PoplarExceptionBridge",
+    role: "Fault Isolation & Recovery Mapping",
+    color: "#f43f5e",
+    items: [
+      "Translates Poplar SDK recovery actions into typed C# exception classes",
+      "Propagates cancellation tokens to abort in-flight tile execution immediately",
+      "Captures detailed tile trace dumps and engine diagnostics on assertion failure"
+    ]
+  }
+];
+
+const downstreamProducts = [
+  {
+    name: "QueryAccel IPU Database Layer",
+    href: "/products/queryaccel",
+    badge: "Database Offload",
+    badgeColor: "#38bdf8",
+    desc: "Leverages Poplar.NET to offload SQL relational aggregations (COUNT, SUM, AVG) and 1536-dim vector distance metrics directly to IPU SRAM tiles from PostgreSQL and SQL Server."
+  },
+  {
+    name: "Accelerator & Heterogeneous Engines",
+    href: "/products/accelerator",
+    badge: "Compute Fabric",
+    badgeColor: "#34d399",
+    desc: "A unified gRPC service that coordinates execution plans across Poplar.NET IPU, LevelZero.NET Intel GPU, CUDA, OpenCL, FPGA, and DMA/RDMA backends."
+  },
+  {
+    name: "HFLabs Machine Learning Suite",
+    href: "/products/ml-suite",
+    badge: "Local ML",
+    badgeColor: "#10b981",
+    desc: "Uses Poplar.NET for Spiking Neural Network (SNN) membrane potential updates and Knowledge Graph Embedding (KGE) batch scoring."
+  },
+  {
+    name: "AutoMLApp",
+    href: "/products/automlapp",
+    badge: "Node-Graph Editor",
+    badgeColor: "#06b6d4",
+    desc: "Features 16 dedicated IPU node types for visually designing, compiling, and running Poplar compute graphs on hardware."
+  }
+];
+---
+
+<Layout 
+  title="Poplar.NET (in development) • Graphcore IPU Driver Bindings & PopART Execution | HF Labs"
+  description="C ABI shim and high-performance managed .NET bindings for Graphcore Poplar and PopART computational graph execution."
+>
+  <!-- Top Breadcrumb Bar -->
+  <div class="product-top-bar">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Overview</a>
+        <span class="sep">/</span>
+        <a href="/products">Products</a>
+        <span class="sep">/</span>
+        <span class="curr">Poplar.NET (in development)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="product-hero">
+    <div class="container">
+      <div class="hero-badge-row">
+        <span class="badge badge-amber">In Development</span>
+        <span class="badge badge-cyan">Graphcore IPU</span>
+        <span class="badge badge-purple">Poplar &amp; PopART SDK</span>
+        <span class="badge badge-rose">Hardware &amp; Native Substrate</span>
+      </div>
+
+      <h1 class="hero-title">Poplar.NET <span style="font-size:24px; font-weight:500; color:var(--text-muted);">(in development)</span></h1>
+      
+      <p class="hero-lead">
+        C ABI shim and managed .NET wrapper for Graphcore Poplar/PopART computational graph compilation and execution.
+      </p>
+
+      <p class="hero-desc">
+        Poplar.NET provides a safe, idiomatic .NET 10 surface for interacting with Graphcore IPUs. By pairing a thin native C ABI shim (<code style="color:var(--accent-pink);">libpoplar_shim</code>) with managed <code style="color:var(--accent-blue);">SafeHandle</code> lifecycle management, it allows .NET applications to construct tensor graphs, manage multi-tile SRAM allocations, execute asynchronous ring-pipe streams, and run PopART ONNX models on bare-metal IPU accelerators without memory leaks or unsafe pointer arithmetic.
+      </p>
+
+      <!-- Primary Action CTAs -->
+      <div class="hero-actions">
+        <a href="https://github.com/hf-laboratories/IPUServices" target="_blank" rel="noopener noreferrer" class="btn-primary" style="padding:12px 24px; font-size:14px;">
+          View on GitHub
+        </a>
+        <a href="/docs/query-accel-ipu" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
+          IPU SQL &amp; Poplar Docs &rarr;
+        </a>
+        <a href="/products/queryaccel" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
+          QueryAccel Integration &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Metrics Ribbon -->
+  <section class="metrics-ribbon-section">
+    <div class="container">
+      <div class="metrics-grid">
+        {metrics.map(m => (
+          <div class="metric-card">
+            <span class="metric-label">{m.label}</span>
+            <strong class="metric-value">{m.value}</strong>
+            <p class="metric-detail">{m.detail}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture Pillars -->
+  <section class="section-container">
+    <div class="container">
+      <div class="section-header">
+        <div class="badge badge-blue">Architecture</div>
+        <h2 class="section-heading">4 Core Architectural Pillars</h2>
+        <p class="section-sub">
+          A layered bridge between the native Graphcore C++ ecosystem and modern managed .NET 10 applications.
+        </p>
+      </div>
+
+      <div class="pillars-grid">
+        {architecturePillars.map(p => (
+          <div class="pillar-card">
+            <div class="pillar-top">
+              <span class="pillar-icon">{p.icon}</span>
+              <span class="badge" style={`color:${p.badgeColor}; background:rgba(255,255,255,0.05); border:1px solid ${p.badgeColor}40;`}>
+                {p.badge}
+              </span>
+            </div>
+            <h3 class="pillar-title">{p.name}</h3>
+            <p class="pillar-desc">{p.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Driver Subsystems Grid -->
+  <section class="section-container bg-subtle">
+    <div class="container">
+      <div class="section-header">
+        <div class="badge badge-purple">Subsystem Breakdown</div>
+        <h2 class="section-heading">Driver Subsystem Capabilities</h2>
+        <p class="section-sub">
+          Comprehensive managed abstractions covering physical hardware discovery, graph construction, engine compilation, and error handling.
+        </p>
+      </div>
+
+      <div class="subsystems-grid">
+        {driverComponents.map(c => (
+          <div class="subsystem-card" style={`--accent-border:${c.color};`}>
+            <div class="subsystem-head">
+              <h3 class="subsystem-title" style={`color:${c.color};`}>{c.component}</h3>
+              <span class="subsystem-role">{c.role}</span>
+            </div>
+            <ul class="subsystem-list">
+              {c.items.map(item => (
+                <li>
+                  <span class="bullet-dot" style={`background:${c.color};`}></span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Code Example & Workflow -->
+  <section class="section-container">
+    <div class="container">
+      <div class="section-header">
+        <div class="badge badge-emerald">C# Driver API</div>
+        <h2 class="section-heading">Idiomatic .NET IPU Graph Execution</h2>
+        <p class="section-sub">
+          Safe, clean C# syntax with automatic unmanaged resource cleanup and stream synchronization.
+        </p>
+      </div>
+
+      <div class="code-showcase-box">
+        <div class="code-header">
+          <div class="window-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="code-file-label">PoplarGraphExecutionExample.cs</span>
+        </div>
+        <pre class="code-block"><code><span class="token-keyword">using</span> <span class="token-type">System</span>;
+<span class="token-keyword">using</span> <span class="token-type">System.Threading.Tasks</span>;
+<span class="token-keyword">using</span> <span class="token-type">HFLabs.Hardware.Poplar</span>;
+
+<span class="token-comment">// 1. Discover physical IPU devices or attach to virtual simulator</span>
+<span class="token-keyword">using var</span> device = <span class="token-type">IPUDevice</span>.<span class="token-method">Create</span>(deviceId: <span class="token-number">0</span>, <span class="token-type">IPUModel</span>.ColossusMK2);
+
+<span class="token-comment">// 2. Construct computational graph with target-mapped tensors</span>
+<span class="token-keyword">using var</span> graph = <span class="token-keyword">new</span> <span class="token-type">PoplarGraph</span>(device.Target);
+<span class="token-keyword">var</span> inputTensor = graph.<span class="token-method">AddVariable</span>(<span class="token-type">DataType</span>.Float32, <span class="token-keyword">new</span>[] &#123; <span class="token-number">1024</span>, <span class="token-number">1536</span> &#125;, <span class="token-string">"embeddings"</span>);
+<span class="token-keyword">var</span> weights = graph.<span class="token-method">AddConstant</span>(<span class="token-type">DataType</span>.Float32, <span class="token-keyword">new</span>[] &#123; <span class="token-number">1536</span>, <span class="token-number">512</span> &#125;, weightData);
+
+<span class="token-comment">// 3. Add tile-optimized matrix multiplication vertex</span>
+<span class="token-keyword">var</span> outputTensor = graph.<span class="token-method">MatMul</span>(inputTensor, weights);
+graph.<span class="token-method">CreateHostWrite</span>(<span class="token-string">"in_stream"</span>, inputTensor);
+graph.<span class="token-method">CreateHostRead</span>(<span class="token-string">"out_stream"</span>, outputTensor);
+
+<span class="token-comment">// 4. Compile engine and execute asynchronously via ring-pipe streams</span>
+<span class="token-keyword">using var</span> engine = graph.<span class="token-method">CompileEngine</span>(<span class="token-keyword">new</span> <span class="token-type">EngineOptions</span> &#123; OptimizationLevel = <span class="token-number">3</span> &#125;);
+<span class="token-keyword">using var</span> session = engine.<span class="token-method">CreateSession</span>(device);
+
+<span class="token-keyword">await</span> session.<span class="token-method">WriteStreamAsync</span>(<span class="token-string">"in_stream"</span>, batchPayloadMemory);
+<span class="token-keyword">await</span> session.<span class="token-method">RunAsync</span>(cancellationToken);
+<span class="token-keyword">await</span> session.<span class="token-method">ReadStreamAsync</span>(<span class="token-string">"out_stream"</span>, resultBufferMemory);</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Downstream Integrations Grid -->
+  <section class="section-container bg-subtle">
+    <div class="container">
+      <div class="section-header">
+        <div class="badge badge-cyan">Ecosystem Synergy</div>
+        <h2 class="section-heading">Connected HFLabs Products</h2>
+        <p class="section-sub">
+          Poplar.NET serves as the core IPU hardware substrate across the entire HFLabs product ecosystem.
+        </p>
+      </div>
+
+      <div class="downstream-grid">
+        {downstreamProducts.map(p => (
+          <a href={p.href} class="downstream-card">
+            <div class="downstream-head">
+              <h3 class="downstream-name">{p.name}</h3>
+              <span class="badge" style={`color:${p.badgeColor}; background:rgba(255,255,255,0.05); border:1px solid ${p.badgeColor}40;`}>
+                {p.badge}
+              </span>
+            </div>
+            <p class="downstream-desc">{p.desc}</p>
+            <span class="downstream-link">Explore Integration &rarr;</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom CTA Box -->
+  <section class="section-container">
+    <div class="container">
+      <div class="cta-box">
+        <div class="cta-content">
+          <span class="badge badge-amber" style="margin-bottom:12px;">Active Development</span>
+          <h2 class="cta-title">Explore HFLabs Hardware &amp; Native Substrates</h2>
+          <p class="cta-desc">
+            Learn how Poplar.NET, LevelZero.NET, and Abigen combine to deliver zero-compromise hardware compute for .NET systems.
+          </p>
+          <div class="cta-btn-row">
+            <a href="/products" class="btn-primary" style="padding:12px 24px;">
+              View All Products
+            </a>
+            <a href="/products/levelzero" class="btn-secondary" style="padding:12px 24px;">
+              LevelZero.NET Catalog &rarr;
+            </a>
+            <a href="/products/abigen" class="btn-secondary" style="padding:12px 24px;">
+              Abigen Binding Engine &rarr;
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .product-top-bar {
+    background: rgba(15, 23, 42, 0.6);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 12px 0;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-family: var(--font-mono);
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: #fff;
+  }
+
+  .breadcrumb .sep {
+    color: rgba(255, 255, 255, 0.2);
+  }
+
+  .breadcrumb .curr {
+    color: var(--accent-blue);
+    font-weight: 600;
+  }
+
+  .product-hero {
+    padding: 60px 0 40px;
+    position: relative;
+  }
+
+  .hero-badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-amber {
+    background: rgba(251, 191, 36, 0.12);
+    color: #fbbf24;
+    border: 1px solid rgba(251, 191, 36, 0.3);
+  }
+
+  .badge-blue {
+    background: rgba(56, 189, 248, 0.12);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+  }
+
+  .badge-cyan {
+    background: rgba(6, 182, 212, 0.12);
+    color: #06b6d4;
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+
+  .badge-purple {
+    background: rgba(168, 85, 247, 0.12);
+    color: #a855f7;
+    border: 1px solid rgba(168, 85, 247, 0.3);
+  }
+
+  .badge-rose {
+    background: rgba(244, 63, 94, 0.12);
+    color: #f43f5e;
+    border: 1px solid rgba(244, 63, 94, 0.3);
+  }
+
+  .badge-emerald {
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .hero-title {
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .hero-lead {
+    font-size: 19px;
+    font-weight: 500;
+    color: #e2e8f0;
+    line-height: 1.5;
+    max-width: 840px;
+    margin-bottom: 16px;
+  }
+
+  .hero-desc {
+    font-size: 14.5px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: 860px;
+    margin-bottom: 32px;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .metrics-ribbon-section {
+    padding: 20px 0 40px;
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .metric-card {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .metric-card:hover {
+    border-color: rgba(56, 189, 248, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .metric-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .metric-value {
+    font-size: 17px;
+    font-weight: 700;
+    color: #f8fafc;
+  }
+
+  .metric-detail {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+  }
+
+  .section-container {
+    padding: 60px 0;
+  }
+
+  .bg-subtle {
+    background: rgba(15, 23, 42, 0.4);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .section-header {
+    margin-bottom: 40px;
+  }
+
+  .section-heading {
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+    margin: 8px 0 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .section-sub {
+    font-size: 15px;
+    color: var(--text-secondary);
+    max-width: 680px;
+    line-height: 1.6;
+  }
+
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  .pillar-card {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.25s ease;
+  }
+
+  .pillar-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px);
+  }
+
+  .pillar-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pillar-icon {
+    font-size: 26px;
+  }
+
+  .pillar-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #f8fafc;
+    line-height: 1.3;
+  }
+
+  .pillar-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .subsystems-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .subsystem-card {
+    background: rgba(10, 16, 30, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 3px solid var(--accent-border, #38bdf8);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .subsystem-head {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .subsystem-title {
+    font-size: 16px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+  }
+
+  .subsystem-role {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .subsystem-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .subsystem-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .bullet-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  .code-showcase-box {
+    background: #030712;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+  }
+
+  .code-header {
+    background: #0b1120;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .window-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .window-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .window-dots span:nth-child(1) { background: #f43f5e; }
+  .window-dots span:nth-child(2) { background: #fbbf24; }
+  .window-dots span:nth-child(3) { background: #10b981; }
+
+  .code-file-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .code-block {
+    padding: 24px;
+    margin: 0;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.65;
+    color: #e2e8f0;
+  }
+
+  .token-keyword { color: #f43f5e; font-weight: 600; }
+  .token-type { color: #38bdf8; }
+  .token-method { color: #a855f7; }
+  .token-string { color: #10b981; }
+  .token-number { color: #fbbf24; }
+  .token-comment { color: #64748b; font-style: italic; }
+
+  .downstream-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .downstream-card {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: all 0.25s ease;
+  }
+
+  .downstream-card:hover {
+    border-color: rgba(56, 189, 248, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .downstream-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .downstream-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #f8fafc;
+  }
+
+  .downstream-desc {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    flex: 1;
+  }
+
+  .downstream-link {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent-blue);
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  .cta-box {
+    background: radial-gradient(circle at 100% 0%, rgba(251, 191, 36, 0.12), transparent 45%),
+                radial-gradient(circle at 0% 100%, rgba(56, 189, 248, 0.12), transparent 45%),
+                rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    padding: 48px;
+    text-align: center;
+  }
+
+  .cta-content {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .cta-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.01em;
+  }
+
+  .cta-desc {
+    font-size: 14.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .cta-btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 8px;
+  }
+</style>

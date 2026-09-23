@@ -1,0 +1,657 @@
+---
+// src/pages/book/index.astro
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const allBookPages = await getCollection('book');
+
+// Find default landing doc: index or 00-overview
+const defaultPage = allBookPages.find(p => p.id === 'index' || p.id === '00-overview') || allBookPages[0];
+const { Content, headings } = await render(defaultPage);
+
+// Categorize all book entries
+const parts = [
+  "Introduction",
+  "Part I — Production Readiness",
+  "Part II — Component Library",
+  "Part III — Appendix"
+];
+
+const pagesByPart: Record<string, typeof allBookPages> = {};
+parts.forEach(p => { pagesByPart[p] = []; });
+
+allBookPages.forEach(p => {
+  const part = p.data.part || "Part I — Production Readiness";
+  if (!pagesByPart[part]) pagesByPart[part] = [];
+  pagesByPart[part].push(p);
+});
+
+// Sort each part
+Object.keys(pagesByPart).forEach(part => {
+  pagesByPart[part].sort((a, b) => {
+    if ((a.data.order ?? 99) !== (b.data.order ?? 99)) {
+      return (a.data.order ?? 99) - (b.data.order ?? 99);
+    }
+    return a.data.title.localeCompare(b.data.title);
+  });
+});
+---
+
+<Layout 
+  title="Reaching Production Readiness: FPGA-Based PCIe DMA Engines — HFLabs Book"
+  description="A practical engineering field guide to building, hardening, and verifying FPGA-based PCIe DMA engines and PTP synchronization."
+>
+  <div class="book-container">
+    <!-- Top Mobile Drawer Header -->
+    <div class="book-mobile-bar">
+      <button id="book-mobile-toggle" class="book-toggle-btn" aria-label="Toggle Book Navigation">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+        <span>Book Index</span>
+      </button>
+      <span class="mobile-current-title">{defaultPage.data.title}</span>
+    </div>
+
+    <div class="book-layout container">
+      <!-- Left Sidebar: Book Table of Contents -->
+      <aside id="book-sidebar" class="book-sidebar">
+        <div class="book-sidebar-header">
+          <div class="book-brand-badge">
+            <span class="badge-icon">📖</span>
+            <span class="badge-title">FPGA Field Guide</span>
+          </div>
+          <h2 class="book-sidebar-title">Reaching Production Readiness</h2>
+          <span class="book-sidebar-sub">PCIe Gen3 x8 DMA &bull; Stratix V</span>
+          
+          <div class="book-search-box">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="book-search-input" placeholder="Search chapters & modules..." autocomplete="off" />
+          </div>
+        </div>
+
+        <nav class="book-nav" id="book-nav">
+          {parts.map(partName => {
+            const items = pagesByPart[partName] || [];
+            if (items.length === 0) return null;
+            return (
+              <div class="book-part-group" data-part={partName}>
+                <div class="book-part-header">
+                  <span>{partName}</span>
+                  <span class="part-count">{items.length}</span>
+                </div>
+                <ul class="book-part-list">
+                  {items.map(item => {
+                    const isActive = item.id === defaultPage.id;
+                    const cleanSlug = item.id === 'index' ? '/book' : `/book/${item.id}`;
+                    return (
+                      <li class={`book-nav-item ${isActive ? 'active' : ''}`} data-title={item.data.title.toLowerCase()} data-tags={item.data.tags?.join(' ').toLowerCase() || ''}>
+                        <a href={cleanSlug} class="book-nav-link">
+                          <span class="nav-label">{item.data.chapter || item.data.title}</span>
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            );
+          })}
+          <div id="no-book-results" class="no-results hidden">
+            No matching chapters or modules.
+          </div>
+        </nav>
+
+        <div class="book-sidebar-footer">
+          <a href="/docs" class="footer-back-link">
+            <span>&larr; Back to HFLabs Docs</span>
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Reader Area -->
+      <main class="book-content-area">
+        <div class="book-breadcrumbs">
+          <a href="/">Home</a>
+          <span class="sep">/</span>
+          <a href="/book">Book</a>
+          <span class="sep">/</span>
+          <span class="curr">{defaultPage.data.title}</span>
+        </div>
+
+        <article class="book-article">
+          <header class="book-article-header">
+            <div class="book-meta-chips">
+              <span class="chip chip-cyan">{defaultPage.data.part?.toUpperCase() || 'FPGA BOOK'}</span>
+              <span class="chip chip-emerald">PRODUCTION READY</span>
+              <span class="chip chip-mono">CATAPULT PTP</span>
+            </div>
+            <h1 class="book-heading-title">{defaultPage.data.title}</h1>
+            {defaultPage.data.description && (
+              <p class="book-heading-desc">{defaultPage.data.description}</p>
+            )}
+          </header>
+
+          <div class="markdown-body book-body">
+            <Content />
+          </div>
+
+          <div class="book-bottom-nav">
+            <a href="/book/00-overview" class="btn-primary" style="padding: 10px 20px; font-size: 13px;">
+              Start Reading Chapter 0: Overview &rarr;
+            </a>
+            <a href="/book/02-component-library" class="btn-secondary" style="padding: 10px 20px; font-size: 13px;">
+              Browse Component Library (80+ Modules)
+            </a>
+          </div>
+        </article>
+      </main>
+
+      <!-- Right On-Page Outline -->
+      {headings && headings.length > 0 && (
+        <aside class="book-toc-sidebar">
+          <div class="book-toc-card">
+            <span class="toc-header">Chapter Outline</span>
+            <ul class="toc-items">
+              {headings.filter(h => h.depth <= 3).map(h => (
+                <li class={`toc-entry depth-${h.depth}`}>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </aside>
+      )}
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // Live filter for book sidebar
+  const search = document.getElementById('book-search-input') as HTMLInputElement;
+  const items = document.querySelectorAll('.book-part-list .book-nav-item');
+  const groups = document.querySelectorAll('.book-part-group');
+  const noRes = document.getElementById('no-book-results');
+
+  if (search) {
+    search.addEventListener('input', () => {
+      const q = search.value.toLowerCase().trim();
+      let total = 0;
+
+      groups.forEach(g => {
+        let count = 0;
+        g.querySelectorAll('.book-nav-item').forEach(it => {
+          const title = it.getAttribute('data-title') || '';
+          const tags = it.getAttribute('data-tags') || '';
+          if (title.includes(q) || tags.includes(q) || q === '') {
+            (it as HTMLElement).style.display = 'block';
+            count++;
+            total++;
+          } else {
+            (it as HTMLElement).style.display = 'none';
+          }
+        });
+        (g as HTMLElement).style.display = (count === 0 && q !== '') ? 'none' : 'block';
+      });
+
+      if (noRes) {
+        if (total === 0 && q !== '') noRes.classList.remove('hidden');
+        else noRes.classList.add('hidden');
+      }
+    });
+  }
+
+  // Mobile sidebar toggle
+  const toggleBtn = document.getElementById('book-mobile-toggle');
+  const sidebar = document.getElementById('book-sidebar');
+  if (toggleBtn && sidebar) {
+    toggleBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+    });
+  }
+
+  // Add copy button to code blocks
+  document.querySelectorAll('.book-body pre').forEach((pre) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'code-block-wrapper';
+    pre.parentNode?.insertBefore(wrapper, pre);
+    wrapper.appendChild(pre);
+
+    const btn = document.createElement('button');
+    btn.className = 'copy-code-btn';
+    btn.innerHTML = `<span>Copy</span>`;
+    btn.addEventListener('click', async () => {
+      const code = pre.querySelector('code')?.innerText || pre.innerText;
+      await navigator.clipboard.writeText(code);
+      btn.innerHTML = `<span style="color:#10b981">Copied!</span>`;
+      setTimeout(() => { btn.innerHTML = `<span>Copy</span>`; }, 2000);
+    });
+    wrapper.appendChild(btn);
+  });
+</script>
+
+<style>
+  .book-container {
+    min-height: calc(100vh - 70px);
+    background: #060912;
+  }
+
+  .book-mobile-bar {
+    display: none;
+    background: #090e1c;
+    border-bottom: 1px solid var(--border-color);
+    padding: 10px 16px;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 60px;
+    z-index: 90;
+  }
+
+  @media (max-width: 900px) {
+    .book-mobile-bar {
+      display: flex;
+    }
+  }
+
+  .book-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: var(--accent-blue);
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .mobile-current-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #f8fafc;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .book-layout {
+    display: grid;
+    grid-template-columns: 290px 1fr 240px;
+    gap: 32px;
+    padding-top: 32px;
+    padding-bottom: 80px;
+  }
+
+  @media (max-width: 1200px) {
+    .book-layout {
+      grid-template-columns: 280px 1fr;
+    }
+    .book-toc-sidebar {
+      display: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .book-layout {
+      grid-template-columns: 1fr;
+      padding-top: 18px;
+    }
+    .book-sidebar {
+      display: none;
+      position: fixed;
+      top: 105px;
+      left: 0;
+      width: 320px;
+      height: calc(100vh - 105px);
+      z-index: 95;
+      background: #080c18;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    }
+    .book-sidebar.open {
+      display: flex;
+    }
+  }
+
+  /* Left Book Sidebar */
+  .book-sidebar {
+    background: #080c18;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 110px);
+    position: sticky;
+    top: 90px;
+    overflow: hidden;
+  }
+
+  .book-sidebar-header {
+    padding: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .book-brand-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(251, 191, 36, 0.1);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    color: #fbbf24;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10.5px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    font-family: var(--font-mono);
+  }
+
+  .book-sidebar-title {
+    font-size: 14.5px;
+    font-weight: 800;
+    color: #f8fafc;
+    letter-spacing: -0.01em;
+    margin: 0 0 2px 0;
+    line-height: 1.2;
+  }
+
+  .book-sidebar-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .book-search-box {
+    position: relative;
+  }
+
+  .book-search-box svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  .book-search-box input {
+    width: 100%;
+    background: #050811;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    padding: 8px 10px 8px 30px;
+    font-size: 12px;
+    color: #f1f5f9;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .book-search-box input:focus {
+    border-color: var(--accent-blue);
+  }
+
+  .book-nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .book-part-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .book-part-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-family: var(--font-mono);
+  }
+
+  .part-count {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 10px;
+  }
+
+  .book-part-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .book-nav-item {
+    border-radius: var(--radius-sm);
+    transition: background 0.15s ease;
+  }
+
+  .book-nav-item.active {
+    background: rgba(56, 189, 248, 0.12);
+    border-left: 2px solid var(--accent-blue);
+  }
+
+  .book-nav-link {
+    display: block;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    line-height: 1.35;
+  }
+
+  .book-nav-item:hover:not(.active) .book-nav-link {
+    color: #f1f5f9;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-sm);
+  }
+
+  .book-nav-item.active .book-nav-link {
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  .book-sidebar-footer {
+    padding: 12px 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    background: #050811;
+  }
+
+  .footer-back-link {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    text-decoration: none;
+  }
+
+  .footer-back-link:hover {
+    color: var(--accent-blue);
+  }
+
+  /* Content area */
+  .book-breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    margin-bottom: 16px;
+  }
+
+  .book-breadcrumbs a {
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+
+  .book-breadcrumbs a:hover {
+    color: var(--accent-blue);
+  }
+
+  .book-breadcrumbs .sep {
+    color: rgba(255, 255, 255, 0.2);
+  }
+
+  .book-breadcrumbs .curr {
+    color: #f8fafc;
+  }
+
+  .book-article {
+    background: #080c18;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  @media (max-width: 768px) {
+    .book-article {
+      padding: 24px 18px;
+    }
+  }
+
+  .book-article-header {
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .book-meta-chips {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+
+  .chip-cyan {
+    background: rgba(56, 189, 248, 0.1);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+  }
+
+  .chip-emerald {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .chip-mono {
+    background: rgba(255, 255, 255, 0.06);
+    color: #cbd5e1;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .book-heading-title {
+    font-size: 32px;
+    font-weight: 900;
+    color: #f8fafc;
+    line-height: 1.15;
+    margin: 0 0 10px 0;
+    letter-spacing: -0.02em;
+  }
+
+  .book-heading-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .book-bottom-nav {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Right Outline */
+  .book-toc-sidebar {
+    height: calc(100vh - 110px);
+    position: sticky;
+    top: 90px;
+  }
+
+  .book-toc-card {
+    background: #080c18;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+  }
+
+  .toc-header {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    display: block;
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  .toc-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .toc-entry.depth-3 {
+    padding-left: 10px;
+  }
+
+  .toc-entry a {
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    line-height: 1.35;
+    display: block;
+  }
+
+  .toc-entry a:hover {
+    color: var(--accent-blue);
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  .no-results {
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 12px;
+    text-align: center;
+  }
+</style>

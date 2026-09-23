@@ -2,7 +2,7 @@
 // src/components/DivisionBackgroundOverlay.astro
 interface Props {
   id?: string;
-  initialDivision?: number; // 0, 1, 2
+  initialDivision?: number; // 0: Cognition (Quantum PSO), 1: ML (Tensor), 2: Hardware (Silicon)
   opacity?: number;
 }
 
@@ -15,7 +15,7 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
   <div class="ambient-glow glow-acceleration"></div>
   <div class="ambient-glow glow-hardware"></div>
 
-  <!-- Dynamic High-Performance Particle & Topology Canvas -->
+  <!-- Dynamic High-Performance Particle & Quantum PSO Canvas -->
   <canvas class="division-canvas"></canvas>
 
   <!-- Cybernetic Grid Overlay -->
@@ -51,7 +51,7 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
   }
 
   .glow-cognition {
-    background: radial-gradient(circle at 35% 45%, rgba(56, 189, 248, 0.38) 0%, rgba(99, 102, 241, 0.24) 40%, transparent 75%);
+    background: radial-gradient(circle at 35% 45%, rgba(56, 189, 248, 0.42) 0%, rgba(99, 102, 241, 0.28) 40%, transparent 75%);
   }
 
   .glow-acceleration {
@@ -115,13 +115,89 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
   }
 
   const PALETTES: Array<{ primary: [number, number, number]; secondary: [number, number, number]; accent: [number, number, number] }> = [
-    // 0: Cognition & Swarm (Sky / Indigo / White)
-    { primary: [56, 189, 248], secondary: [129, 140, 248], accent: [224, 242, 254] },
+    // 0: Cognition & Quantum PSO Swarm (Sky Blue / Deep Indigo / Pure White)
+    { primary: [56, 189, 248], secondary: [99, 102, 241], accent: [224, 242, 254] },
     // 1: ML & Acceleration (Teal / Purple / Cyan)
     { primary: [6, 182, 212], secondary: [168, 85, 247], accent: [192, 132, 252] },
     // 2: Hardware Substrates (Rose / Amber / Gold)
     { primary: [244, 63, 94], secondary: [251, 191, 36], accent: [254, 240, 138] }
   ];
+
+  // Quantum PSO Agent Interface
+  interface QPSOAgent {
+    id: number;
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    prevX: number;
+    prevY: number;
+    
+    // Quantum Personal Best
+    pbestX: number;
+    pbestY: number;
+    pbestFitness: number;
+    
+    // Standing Wave Generator
+    wavePhase: number;
+    waveFreq: number;
+    waveRings: Array<{ radius: number; maxRadius: number; speed: number; alpha: number }>;
+    
+    // Quantum State
+    state: 'EXPLORING' | 'OPTIMA_DETECTED' | 'PLACER_LOCKED' | 'TUNNELING';
+    slotAngle: number;
+    targetX: number;
+    targetY: number;
+    tunnelingEnergy: number;
+    phaseOffset: number;
+    size: number;
+    alpha: number;
+  }
+
+  // Fitness Optima Basin
+  interface OptimaBasin {
+    id: string;
+    x: number;
+    y: number;
+    targetX: number;
+    targetY: number;
+    vx: number;
+    vy: number;
+    radius: number;
+    isGlobal: boolean;
+    detected: boolean;
+    detectionStrength: number; // 0.0 to 1.0
+    lockedAgents: number;
+    placerRadius: number;
+    placerRotation: number;
+  }
+
+  // Hardware Substrate Silicon Decomposition Mote Interface
+  interface HardwareMote {
+    id: number;
+    x: number;
+    y: number;
+    prevX: number;
+    prevY: number;
+    vx: number;
+    vy: number;
+    originX: number;
+    originY: number;
+    targetX: number;
+    targetY: number;
+    color: [number, number, number];
+    targetColor: [number, number, number];
+    size: number;
+    alpha: number;
+    rotation: number;
+    rotSpeed: number;
+    swirlAngle: number;
+    swirlSpeed: number;
+    swirlRadius: number;
+    sparklePhase: number;
+    isCrystalline: boolean;
+    delay: number;
+  }
 
   interface UnifiedParticle {
     x: number;
@@ -146,7 +222,7 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
     prevX: number;
     prevY: number;
 
-    // Target positioning for structured modes
+    // Target positioning for structured modes (Div 1, Div 2)
     targetX: number;
     targetY: number;
     isGridNode: boolean;
@@ -166,7 +242,7 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
     speed: number;
   }
 
-  // Dynamic Canvas Generator for Division Background Overlay with Pre-Transition Glow & Motion Dissipation
+  // Dynamic Canvas Generator with Targeted Quantum PSO Standing Wave Placer
   class DivisionOverlayRenderer {
     container: HTMLElement;
     canvas: HTMLCanvasElement;
@@ -184,13 +260,34 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
     preChargeDuration = 3200; // Glow starts ramping up 3.2 seconds before transition
     
     transitionStartTime = 0;
-    transitionDuration = 2600; // 2.6 seconds of energetic swirl and smooth fade
+    transitionDuration = 2600; // 2.6 seconds transition
     transitionProgress = 1.0;
     activeBurstGlow = 0.0;
     
     animFrameId: number | null = null;
     isVisible = false;
     
+    // Quantum PSO Simulation Subsystem (Division 0)
+    qpsoAgents: QPSOAgent[] = [];
+    optimaBasins: OptimaBasin[] = [];
+    qpsoPhaseTime = 0;
+    qpsoState: 'SEARCH' | 'OPTIMA_LOCK' | 'STANDING_WAVE_PLACER' | 'TUNNEL_BURST' = 'SEARCH';
+    qpsoStateTimer = 0;
+
+    // Transformer Borg Cube Subsystem (Division 1)
+    transformerLayers: any[] = [];
+    transformerTokens: any[] = [];
+    transformerAttentionFlashes: any[] = [];
+    lastAttentionFlashTime = 0;
+
+    // Hardware Substrates Stratix V Silicon Fabric Subsystem (Division 2)
+    fpgaHardBlocks: any[] = [];
+    busConduits: any[] = [];
+    tlpPackets: any[] = [];
+    lastDmaBurstTime = 0;
+    hardwareMotes: HardwareMote[] = [];
+
+    // Generic Morphing Particles for Transition Bursts
     particles: UnifiedParticle[] = [];
     circuits: CircuitPath[] = [];
 
@@ -212,6 +309,9 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
       window.addEventListener('resize', this.resize);
       this.resize();
 
+      this.initQuantumPSO();
+      this.initTransformerBorgCube();
+      this.initHardwareFabric();
       this.initCircuits();
       this.initParticles();
       this.assignDivisionTargets(this.currentDivision);
@@ -247,8 +347,441 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
       });
     }
 
+    // =========================================================================
+    // QUANTUM PSO & STANDING WAVE PLACER SUBSYSTEM
+    // =========================================================================
+    initQuantumPSO() {
+      const w = this.width || 1200;
+      const h = this.height || 800;
+      const cx = w * 0.5;
+      const cy = h * 0.5;
+
+      // 1. Initialize Optima Basins (Global Optimum & Local Attractor)
+      this.optimaBasins = [
+        {
+          id: 'global-optimum',
+          x: cx + (Math.random() - 0.5) * w * 0.35,
+          y: cy + (Math.random() - 0.5) * h * 0.3,
+          targetX: cx,
+          targetY: cy,
+          vx: 0.2,
+          vy: 0.15,
+          radius: 130,
+          isGlobal: true,
+          detected: false,
+          detectionStrength: 0,
+          lockedAgents: 0,
+          placerRadius: Math.min(w, h) * 0.18,
+          placerRotation: 0
+        },
+        {
+          id: 'local-optimum',
+          x: cx + (Math.random() > 0.5 ? 1 : -1) * w * 0.32,
+          y: cy + (Math.random() > 0.5 ? 1 : -1) * h * 0.25,
+          targetX: cx * 0.4,
+          targetY: cy * 0.6,
+          vx: -0.15,
+          vy: 0.25,
+          radius: 90,
+          isGlobal: false,
+          detected: false,
+          detectionStrength: 0,
+          lockedAgents: 0,
+          placerRadius: Math.min(w, h) * 0.12,
+          placerRotation: 0
+        }
+      ];
+
+      // 2. Initialize Quantum PSO Agents (14-16 agents spawned across space)
+      this.qpsoAgents = [];
+      const numAgents = 16;
+      for (let i = 0; i < numAgents; i++) {
+        // Spawn randomly across space
+        const sx = Math.random() * (w * 0.85) + w * 0.075;
+        const sy = Math.random() * (h * 0.85) + h * 0.075;
+        const angle = (i / numAgents) * Math.PI * 2;
+        
+        // 3 concentric standing wave rings per agent with offset radiuses
+        const waveRings = [
+          { radius: 10, maxRadius: 180 + Math.random() * 60, speed: 1.2 + Math.random() * 0.6, alpha: 0.7 },
+          { radius: 70, maxRadius: 180 + Math.random() * 60, speed: 1.2 + Math.random() * 0.6, alpha: 0.5 },
+          { radius: 130, maxRadius: 180 + Math.random() * 60, speed: 1.2 + Math.random() * 0.6, alpha: 0.3 }
+        ];
+
+        this.qpsoAgents.push({
+          id: i,
+          x: sx,
+          y: sy,
+          vx: (Math.random() - 0.5) * 2.2,
+          vy: (Math.random() - 0.5) * 2.2,
+          prevX: sx,
+          prevY: sy,
+          pbestX: sx,
+          pbestY: sy,
+          pbestFitness: -9999,
+          wavePhase: Math.random() * Math.PI * 2,
+          waveFreq: 0.03 + Math.random() * 0.02,
+          waveRings,
+          state: 'EXPLORING',
+          slotAngle: angle,
+          targetX: sx,
+          targetY: sy,
+          tunnelingEnergy: 0,
+          phaseOffset: i * (Math.PI / 8),
+          size: 3.2,
+          alpha: 0.85
+        });
+      }
+
+      this.qpsoState = 'SEARCH';
+      this.qpsoStateTimer = performance.now();
+    }
+
+    // =========================================================================
+    // TRANSFORMER BORG CUBE SUBSYSTEM (DIVISION 1: ML & ACCELERATION)
+    // =========================================================================
+    initTransformerBorgCube() {
+      const w = this.width || 1200;
+      const h = this.height || 800;
+
+      // 4 Stratified Transformer Layers in Isometric 3D Space
+      const numLayers = 4;
+      this.transformerLayers = [];
+      this.transformerTokens = [];
+      this.transformerAttentionFlashes = [];
+      this.lastAttentionFlashTime = performance.now();
+
+      // Define 5 Interlocking "Tetris" Graph Shapes for the 4x4 Borg Grid
+      const blockTemplates = [
+        {
+          id: 'T_ATTENTION',
+          name: 'Multi-Head Attention (Q/K/V)',
+          type: 'ATTENTION',
+          cells: [[1, 0], [1, 1], [1, 2], [2, 1]],
+          color: [6, 182, 212], // Cyan
+          nodes: [
+            { id: 'q', rx: 0.5, ry: 0.2, label: 'Q' },
+            { id: 'k', rx: 0.2, ry: 0.5, label: 'K' },
+            { id: 'v', rx: 0.8, ry: 0.5, label: 'V' },
+            { id: 'attn', rx: 0.5, ry: 0.5, label: 'A_dot' },
+            { id: 'out', rx: 0.5, ry: 0.85, label: 'Proj' }
+          ],
+          edges: [['q', 'attn'], ['k', 'attn'], ['attn', 'v'], ['v', 'out']]
+        },
+        {
+          id: 'L_SWIGLU',
+          name: 'SwiGLU Gated Feed-Forward',
+          type: 'FFN',
+          cells: [[0, 0], [0, 1], [0, 2], [1, 0]],
+          color: [168, 85, 247], // Violet
+          nodes: [
+            { id: 'in', rx: 0.2, ry: 0.2, label: 'In' },
+            { id: 'gate', rx: 0.2, ry: 0.5, label: 'Gate' },
+            { id: 'up', rx: 0.6, ry: 0.2, label: 'Up' },
+            { id: 'act', rx: 0.2, ry: 0.8, label: 'SiLU' },
+            { id: 'down', rx: 0.5, ry: 0.8, label: 'Down' }
+          ],
+          edges: [['in', 'gate'], ['in', 'up'], ['gate', 'act'], ['up', 'act'], ['act', 'down']]
+        },
+        {
+          id: 'Z_RESIDUAL',
+          name: 'Residual Highway & RMSNorm',
+          type: 'RESIDUAL',
+          cells: [[2, 2], [2, 3], [3, 1], [3, 2]],
+          color: [56, 189, 248], // Sky Blue
+          nodes: [
+            { id: 'norm1', rx: 0.3, ry: 0.3, label: 'RMS1' },
+            { id: 'skip', rx: 0.7, ry: 0.3, label: 'Skip' },
+            { id: 'add', rx: 0.5, ry: 0.7, label: 'Add' },
+            { id: 'norm2', rx: 0.8, ry: 0.7, label: 'RMS2' }
+          ],
+          edges: [['norm1', 'skip'], ['skip', 'add'], ['add', 'norm2']]
+        },
+        {
+          id: 'I_KVCACHE',
+          name: 'KV Cache Vector Memory',
+          type: 'MEMORY',
+          cells: [[3, 0], [3, 1], [3, 2], [3, 3]],
+          color: [34, 211, 238], // Teal Neon
+          nodes: [
+            { id: 'kv0', rx: 0.2, ry: 0.5, label: 'K_0' },
+            { id: 'kv1', rx: 0.4, ry: 0.5, label: 'V_0' },
+            { id: 'kv2', rx: 0.6, ry: 0.5, label: 'K_1' },
+            { id: 'kv3', rx: 0.8, ry: 0.5, label: 'V_1' }
+          ],
+          edges: [['kv0', 'kv1'], ['kv1', 'kv2'], ['kv2', 'kv3']]
+        },
+        {
+          id: 'O_MOEROUTER',
+          name: 'MoE Expert Gate Router',
+          type: 'MOE',
+          cells: [[0, 3], [1, 3]],
+          color: [192, 132, 252], // Lavender
+          nodes: [
+            { id: 'router', rx: 0.5, ry: 0.3, label: 'Gate' },
+            { id: 'exp1', rx: 0.3, ry: 0.7, label: 'E1' },
+            { id: 'exp2', rx: 0.7, ry: 0.7, label: 'E2' }
+          ],
+          edges: [['router', 'exp1'], ['router', 'exp2']]
+        }
+      ];
+
+      for (let z = 0; z < numLayers; z++) {
+        this.transformerLayers.push({
+          layerIndex: z,
+          name: `Transformer Layer ${z}`,
+          blocks: blockTemplates.map(tmpl => ({
+            ...tmpl,
+            layerZ: z,
+            pulsePhase: Math.random() * Math.PI * 2,
+            activeEnergy: 0.4 + Math.random() * 0.4
+          }))
+        });
+      }
+
+      // Initialize Active Token Embedding Stream Packets
+      const numTokens = 32;
+      for (let i = 0; i < numTokens; i++) {
+        const startLayer = Math.floor(Math.random() * numLayers);
+        const blockIdx = Math.floor(Math.random() * blockTemplates.length);
+        const tmpl = blockTemplates[blockIdx];
+        const nodeIdx = Math.floor(Math.random() * tmpl.nodes.length);
+
+        this.transformerTokens.push({
+          id: i,
+          layerZ: startLayer,
+          blockIdx,
+          nodeIdx,
+          targetNodeIdx: (nodeIdx + 1) % tmpl.nodes.length,
+          progress: Math.random(),
+          speed: 0.012 + Math.random() * 0.018,
+          color: tmpl.color,
+          size: Math.random() * 2.5 + 1.8,
+          hopTimer: 0
+        });
+      }
+    }
+
+    // =========================================================================
+    // STRATIX V FPGA SILICON SUBSTRATE & HARD IP FABRIC (DIVISION 2)
+    // =========================================================================
+    initHardwareFabric() {
+      const w = this.width || 1200;
+      const h = this.height || 800;
+
+      this.fpgaHardBlocks = [
+        {
+          id: 'pcie_hip',
+          name: 'PCIe Gen3 x8 Hard IP Core',
+          shortName: 'PCIE3_HIP',
+          type: 'TRANSCEIVER',
+          rx: 0.18, ry: 0.28, rw: 0.22, rh: 0.26,
+          color: [244, 63, 94], // Rose 500
+          ports: [
+            { id: 'phy_lanes', label: '8x Gen3 PHY', side: 'left', pos: 0.5 },
+            { id: 'tlp_st', label: '256b AVALON-ST', side: 'right', pos: 0.4 },
+            { id: 'bar0_mmio', label: 'BAR0 MMIO', side: 'bottom', pos: 0.6 }
+          ]
+        },
+        {
+          id: 'dma_crossbar',
+          name: '16-Ch Work-Stealing DMA Engine',
+          shortName: '16CH_DMA_HUB',
+          type: 'DMA',
+          rx: 0.50, ry: 0.38, rw: 0.26, rh: 0.30,
+          color: [251, 191, 36], // Amber 400
+          ports: [
+            { id: 'dma_ingress', label: 'Host Ingress', side: 'left', pos: 0.35 },
+            { id: 'dma_egress', label: '512b Egress', side: 'right', pos: 0.5 },
+            { id: 'desc_ring', label: 'Ring Descriptors', side: 'top', pos: 0.5 },
+            { id: 'msix_out', label: 'MSI-X Irq', side: 'bottom', pos: 0.4 }
+          ]
+        },
+        {
+          id: 'ddr3_uniphy',
+          name: 'DDR3 UniPHY & ALTDQDQS Controller',
+          shortName: 'DDR3_UNIPHY',
+          type: 'MEMORY_CTRL',
+          rx: 0.82, ry: 0.35, rw: 0.22, rh: 0.32,
+          color: [244, 63, 94], // Rose 500
+          ports: [
+            { id: 'afi_512', label: '512b AFI Bus', side: 'left', pos: 0.45 },
+            { id: 'dram_phy', label: 'DRAM Pins (DQ/DQS)', side: 'right', pos: 0.5 },
+            { id: 'calib_seq', label: 'Seq Leveling', side: 'bottom', pos: 0.5 }
+          ]
+        },
+        {
+          id: 'ptp_phc',
+          name: 'IEEE 1588 PTPv2 PHC & OCXO Loop',
+          shortName: 'PTP_PHC_CLK',
+          type: 'TIMING',
+          rx: 0.24, ry: 0.74, rw: 0.24, rh: 0.22,
+          color: [254, 240, 138], // Gold Light
+          ports: [
+            { id: 'pps_in', label: '1PPS GPS / OCXO', side: 'left', pos: 0.5 },
+            { id: 'ptp_ts', label: '96b Timestamp TS', side: 'top', pos: 0.5 },
+            { id: 'drift_ctrl', label: 'PPB Tuning', side: 'right', pos: 0.5 }
+          ]
+        },
+        {
+          id: 'alm_lab_matrix',
+          name: 'ALM / DSP Logic Array Fabric',
+          shortName: 'ALM_LAB_CORE',
+          type: 'LOGIC',
+          rx: 0.62, ry: 0.76, rw: 0.26, rh: 0.22,
+          color: [251, 146, 60], // Orange 400
+          ports: [
+            { id: 'lab_bus', label: 'AXI-Stream Pipe', side: 'top', pos: 0.5 },
+            { id: 'dsp_pipe', label: 'MAC Accel', side: 'left', pos: 0.5 }
+          ]
+        }
+      ];
+
+      // Silicon Bus Conduits connecting hard macros
+      this.busConduits = [
+        { from: 'pcie_hip', fromPort: 'tlp_st', to: 'dma_crossbar', toPort: 'dma_ingress', width: 256, color: [244, 63, 94] },
+        { from: 'dma_crossbar', fromPort: 'dma_egress', to: 'ddr3_uniphy', toPort: 'afi_512', width: 512, color: [251, 191, 36] },
+        { from: 'ptp_phc', fromPort: 'ptp_ts', to: 'pcie_hip', toPort: 'bar0_mmio', width: 96, color: [254, 240, 138] },
+        { from: 'dma_crossbar', fromPort: 'msix_out', to: 'alm_lab_matrix', toPort: 'lab_bus', width: 64, color: [251, 146, 60] }
+      ];
+
+      // Streaming TLP & DMA Packet Bursts
+      this.tlpPackets = [];
+      for (let i = 0; i < 24; i++) {
+        const conduitIdx = i % this.busConduits.length;
+        this.tlpPackets.push({
+          id: i,
+          conduitIdx,
+          progress: Math.random(),
+          speed: 0.008 + Math.random() * 0.014,
+          payloadType: i % 3 === 0 ? 'MEM_WR_TLP' : (i % 3 === 1 ? 'MEM_RD_TLP' : 'DMA_BURST_512'),
+          size: Math.random() * 3 + 2.2
+        });
+      }
+      this.lastDmaBurstTime = performance.now();
+    }
+
+    // =========================================================================
+    // SILICON HARDWARE DECOMPOSITION INTO CRYSTALLINE MOTES (DIV 2 TRANSITION)
+    // =========================================================================
+    spawnHardwareDecompositionMotes(targetDiv: number) {
+      const w = this.width || 1200;
+      const h = this.height || 800;
+      this.hardwareMotes = [];
+
+      const targetPalette = PALETTES[targetDiv] || PALETTES[0];
+      const numMotes = 150;
+
+      // Sample origin locations across the 5 FPGA Hard Macros, Conduits, and Clock Net
+      for (let i = 0; i < numMotes; i++) {
+        let origX = w * 0.5;
+        let origY = h * 0.5;
+        let moteColor: [number, number, number] = [251, 191, 36]; // Default gold/amber
+
+        if (i < 80) {
+          // Sampled from Hard Macro Blocks
+          const blk = this.fpgaHardBlocks[i % this.fpgaHardBlocks.length];
+          if (blk) {
+            const bx = blk.rx * w - (blk.rw * w * 0.5);
+            const by = blk.ry * h - (blk.rh * h * 0.5);
+            const bw = blk.rw * w;
+            const bh = blk.rh * h;
+            origX = bx + Math.random() * bw;
+            origY = by + Math.random() * bh;
+            moteColor = blk.color;
+          }
+        } else if (i < 120) {
+          // Sampled from Bus Conduits
+          const conduit = this.busConduits[i % this.busConduits.length];
+          if (conduit) {
+            const blkFrom = this.fpgaHardBlocks.find(b => b.id === conduit.from);
+            const blkTo = this.fpgaHardBlocks.find(b => b.id === conduit.to);
+            if (blkFrom && blkTo) {
+              const p = Math.random();
+              origX = (blkFrom.rx * w) * (1 - p) + (blkTo.rx * w) * p;
+              origY = (blkFrom.ry * h) * (1 - p) + (blkTo.ry * h) * p;
+              moteColor = conduit.color;
+            }
+          }
+        } else {
+          // Sampled from Clock H-Tree Net
+          const rad = Math.min(w, h) * (0.15 + Math.random() * 0.35);
+          const ang = Math.random() * Math.PI * 2;
+          origX = w * 0.5 + Math.cos(ang) * rad;
+          origY = h * 0.52 + Math.sin(ang) * (rad * 0.7);
+          moteColor = [244, 63, 94];
+        }
+
+        // Determine destination coordinates based on target division
+        let destX = w * 0.5;
+        let destY = h * 0.5;
+
+        if (targetDiv === 0) {
+          // Target: Quantum Swarm Agents & Optima
+          if (this.qpsoAgents.length > 0) {
+            const agent = this.qpsoAgents[i % this.qpsoAgents.length];
+            destX = agent.x + (Math.random() - 0.5) * 40;
+            destY = agent.y + (Math.random() - 0.5) * 40;
+          } else {
+            destX = Math.random() * (w * 0.8) + w * 0.1;
+            destY = Math.random() * (h * 0.8) + h * 0.1;
+          }
+        } else if (targetDiv === 1) {
+          // Target: Multilayered Transformer Borg Cube 3D Isometric Cells
+          const layerZ = i % 4;
+          const gx = (i % 4) + (Math.random() - 0.5) * 0.4;
+          const gy = (Math.floor(i / 4) % 4) + (Math.random() - 0.5) * 0.4;
+          const tileSize = Math.min(w, h) * 0.075;
+          const layerHeight = Math.min(w, h) * 0.115;
+          const cos30 = Math.cos(Math.PI / 6);
+          const sin30 = Math.sin(Math.PI / 6);
+          const dx = gx - 1.5;
+          const dy = gy - 1.5;
+          destX = w * 0.5 + (dx - dy) * tileSize * cos30;
+          destY = h * 0.58 + (dx + dy) * tileSize * sin30 - layerZ * layerHeight;
+        } else {
+          destX = Math.random() * (w * 0.8) + w * 0.1;
+          destY = Math.random() * (h * 0.8) + h * 0.1;
+        }
+
+        // Kinetic explosion away from hardware center
+        const dxCenter = origX - (w * 0.5);
+        const dyCenter = origY - (h * 0.5);
+        const centerDist = Math.hypot(dxCenter, dyCenter) || 1;
+        const blastSpeed = Math.random() * 9 + 5;
+        const spinDir = i % 2 === 0 ? 1 : -1;
+
+        this.hardwareMotes.push({
+          id: i,
+          x: origX,
+          y: origY,
+          prevX: origX,
+          prevY: origY,
+          vx: (dxCenter / centerDist) * blastSpeed + (Math.random() - 0.5) * 6,
+          vy: (dyCenter / centerDist) * blastSpeed + (Math.random() - 0.5) * 6,
+          originX: origX,
+          originY: origY,
+          targetX: destX,
+          targetY: destY,
+          color: moteColor,
+          targetColor: targetPalette.primary,
+          size: Math.random() * 2.6 + 1.6,
+          alpha: Math.random() * 0.4 + 0.6,
+          rotation: Math.random() * Math.PI * 2,
+          rotSpeed: (Math.random() * 0.12 + 0.04) * spinDir,
+          swirlAngle: Math.random() * Math.PI * 2,
+          swirlSpeed: (Math.random() * 0.05 + 0.02) * spinDir,
+          swirlRadius: Math.random() * 110 + 50,
+          sparklePhase: Math.random() * Math.PI * 2,
+          isCrystalline: Math.random() > 0.35,
+          delay: (i / numMotes) * 0.25 // Staggered release
+        });
+      }
+    }
+
     setDivision(index: number) {
       if (this.targetDivision !== index) {
+        const fromDiv = this.targetDivision;
         this.prevDivision = this.targetDivision;
         this.targetDivision = index;
         this.container.setAttribute('data-active-division', index.toString());
@@ -257,12 +790,16 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
         this.transitionStartTime = now;
         this.lastDivisionChangeTime = now;
         this.transitionProgress = 0;
-        this.activeBurstGlow = 1.0; // Peak energy charge at the instant transition begins!
+        this.activeBurstGlow = 1.0;
         
-        // Re-assign formation targets for the incoming division
         this.assignDivisionTargets(index);
+
+        // If transitioning FROM Hardware Substrates (Division 2) -> Trigger Decomposition to Motes!
+        if (fromDiv === 2 && index !== 2) {
+          this.spawnHardwareDecompositionMotes(index);
+        }
         
-        // Give particles a massive kinetic burst & swirling acceleration wave
+        // Transition burst
         const cx = this.width * 0.5;
         const cy = this.height * 0.5;
         
@@ -270,23 +807,27 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
           const dx = p.x - cx;
           const dy = p.y - cy;
           const angle = Math.atan2(dy, dx);
-          
-          // Tangential vortex burst (clockwise / counter-clockwise alternating)
           const spinDir = (i % 2 === 0 ? 1 : -1);
           const tangentialAngle = angle + (Math.PI / 2) * spinDir;
-          
-          // High speed burst magnitude
           const burstMag = Math.random() * 8 + 6;
           p.burstVx = Math.cos(tangentialAngle) * burstMag + (Math.random() - 0.5) * 4;
           p.burstVy = Math.sin(tangentialAngle) * burstMag + (Math.random() - 0.5) * 4;
-          
           p.swirlAngle = Math.random() * Math.PI * 2;
           p.swirlSpeed = (Math.random() * 0.06 + 0.03) * spinDir;
           p.swirlRadius = Math.random() * 90 + 40;
-          
           p.prevX = p.x;
           p.prevY = p.y;
         });
+
+        // If transitioning back to Division 0, re-initialize QPSO agents with quantum energy
+        if (index === 0) {
+          this.qpsoAgents.forEach(a => {
+            a.tunnelingEnergy = 1.0;
+            a.state = 'EXPLORING';
+          });
+          this.qpsoState = 'SEARCH';
+          this.qpsoStateTimer = now;
+        }
       }
     }
 
@@ -302,6 +843,9 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
 
       if (this.particles.length > 0) {
         this.assignDivisionTargets(this.targetDivision);
+      }
+      if (this.qpsoAgents.length > 0 && this.optimaBasins.length > 0) {
+        this.optimaBasins[0].placerRadius = Math.min(this.width, this.height) * 0.2;
       }
     }
 
@@ -362,23 +906,8 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
     assignDivisionTargets(divIdx: number) {
       const w = this.width || 1200;
       const h = this.height || 800;
-      const cx = w * 0.5;
-      const cy = h * 0.5;
 
-      if (divIdx === 0) {
-        // DIVISION 0: Cognition & Swarm (Organic Orbital Swarm + Graph Constellation)
-        this.particles.forEach((p, i) => {
-          p.isGridNode = false;
-          p.isCircuitRunner = false;
-          p.isRegisterBlock = false;
-          
-          // Orbital constellation shells around center
-          const angle = (i / this.particles.length) * Math.PI * 2 + Math.random() * 0.5;
-          const radius = 120 + ((i % 4) * 80) + Math.random() * 60;
-          p.targetX = cx + Math.cos(angle) * radius;
-          p.targetY = cy + Math.sin(angle) * (radius * 0.65);
-        });
-      } else if (divIdx === 1) {
+      if (divIdx === 1) {
         // DIVISION 1: ML & Acceleration (2D Tensor Matrix Grid & Conduit Streamers)
         const cols = 8;
         const rows = 5;
@@ -392,21 +921,19 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
           p.isRegisterBlock = false;
 
           if (i < cols * rows) {
-            // Grid intersection points
             p.isGridNode = true;
             const c = i % cols;
             const r = Math.floor(i / cols);
             p.targetX = marginX + c * stepX;
             p.targetY = marginY + r * stepY;
           } else {
-            // Conduit travelling pulse packets
             p.isGridNode = false;
             const rowIdx = i % rows;
             p.targetX = marginX + ((i * 70) % (w - marginX * 2));
             p.targetY = marginY + rowIdx * stepY;
           }
         });
-      } else {
+      } else if (divIdx === 2) {
         // DIVISION 2: Hardware Substrates (Silicon Circuit Traces & Register Core Array)
         const regCx = w * 0.68;
         const regCy = h * 0.44;
@@ -415,7 +942,6 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
           p.isGridNode = false;
 
           if (i < 16) {
-            // 4x4 Register Array Matrix Block
             p.isRegisterBlock = true;
             p.isCircuitRunner = false;
             const ri = i % 4;
@@ -423,7 +949,6 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
             p.targetX = regCx + ri * 26;
             p.targetY = regCy + rj * 26;
           } else {
-            // Silicon bus runner
             p.isRegisterBlock = false;
             p.isCircuitRunner = true;
             const cIdx = i % Math.max(1, this.circuits.length);
@@ -457,19 +982,14 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
         this.transitionProgress = Math.min(1.0, elapsed / this.transitionDuration);
       }
 
-      // Smooth Quintic Ease-In-Out for natural acceleration & deceleration
       const p = this.transitionProgress;
       const ease = p < 0.5 
         ? 16 * p * p * p * p * p 
         : 1 - Math.pow(-2 * p + 2, 5) / 2;
 
-      // Dynamic Kinetic Energy Wave: swells during transition
       const kineticWave = Math.sin(Math.PI * p) * (1 - p * 0.2);
 
-      // =========================================================
-      // Pre-Transition Charging Glow & In-Motion Dissipation Logic
-      // =========================================================
-      // 1. Anticipation: As cycle approaches next transition, particles start to charge up and glow
+      // Pre-Transition Charging Glow
       const timeSinceLastChange = now - this.lastDivisionChangeTime;
       const timeInCycle = timeSinceLastChange % this.cycleDuration;
       const timeUntilNext = this.cycleDuration - timeInCycle;
@@ -477,15 +997,11 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
       let preChargeGlow = 0;
       if (this.transitionProgress >= 1.0 && timeUntilNext <= this.preChargeDuration) {
         const chargeProgress = 1.0 - (timeUntilNext / this.preChargeDuration);
-        // Exponential ramp up: accelerates as transition nears
         preChargeGlow = Math.pow(Math.max(0, Math.min(1, chargeProgress)), 1.7);
       }
 
-      // 2. Motion Dissipation: As particles accelerate and move, the intense charge dissipates smoothly
       const motionDissipation = Math.pow(Math.max(0, 1.0 - ease), 1.5);
       const activeMotionGlow = this.activeBurstGlow * motionDissipation;
-
-      // Composite Glow Intensity (0.0 to 1.0+)
       const glowIntensity = Math.max(preChargeGlow, activeMotionGlow);
 
       // Color Palette Interpolation
@@ -498,21 +1014,1038 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
       const colorPrimaryStr = `rgb(${currentPrimary.join(',')})`;
       const colorSecondaryStr = `rgb(${currentSecondary.join(',')})`;
 
-      // Render Division Structures with Smooth Cross-Fade
-      this.renderDivisionStructures(t, ease, colorPrimaryStr, colorSecondaryStr);
+      // Render Active Division Experience
+      const div0Alpha = this.targetDivision === 0 ? ease : (this.prevDivision === 0 ? 1 - ease : 0);
+      const div1Alpha = this.targetDivision === 1 ? ease : (this.prevDivision === 1 ? 1 - ease : 0);
+      const div2Alpha = this.targetDivision === 2 ? ease : (this.prevDivision === 2 ? 1 - ease : 0);
 
-      // Update and Render Unified Morphing Particles with Dynamic Glow and Dissipation
-      this.updateAndDrawParticles(
-        t, 
-        ease, 
-        kineticWave, 
-        glowIntensity, 
-        currentPrimary, 
-        currentSecondary, 
-        currentAccent
-      );
+      // Division 0: Quantum PSO Swarm & Standing Wave Placer
+      if (div0Alpha > 0.01) {
+        this.updateAndDrawQuantumPSO(t, now, div0Alpha, currentPrimary, currentSecondary, currentAccent);
+      }
+
+      // Division 1: Multilayered Transformer Borg Cube Network
+      if (div1Alpha > 0.01) {
+        this.updateAndDrawTransformerBorgCube(t, now, div1Alpha, currentPrimary, currentSecondary, currentAccent);
+      }
+
+      // Division 2: Stratix V FPGA Silicon Substrates & Hard IP Fabric
+      if (div2Alpha > 0.01) {
+        this.updateAndDrawHardwareFabric(t, now, div2Alpha, currentPrimary, currentSecondary, currentAccent);
+      }
+
+      // Silicon Decomposition to Motes Transition Layer (When leaving Division 2)
+      if (this.hardwareMotes.length > 0 && this.transitionProgress < 1.0) {
+        this.updateAndDrawDecompositionMotes(t, now, p, ease, currentPrimary, currentSecondary, currentAccent);
+      }
 
       this.animFrameId = requestAnimationFrame(this.render);
+    }
+
+    // =========================================================================
+    // QUANTUM PSO SIMULATION & STANDING WAVE PLACER RENDER ENGINE (DIVISION 0)
+    // =========================================================================
+    updateAndDrawQuantumPSO(
+      t: number, 
+      now: number, 
+      alphaMultiplier: number,
+      colorPrimary: [number, number, number],
+      colorSecondary: [number, number, number],
+      colorAccent: [number, number, number]
+    ) {
+      const ctx = this.ctx;
+      const w = this.width;
+      const h = this.height;
+      const agents = this.qpsoAgents;
+      const basins = this.optimaBasins;
+      const globalOptima = basins.find(b => b.isGlobal) || basins[0];
+
+      if (!globalOptima) return;
+
+      // -----------------------------------------------------------------------
+      // 1. Quantum State Machine & Dynamic Optima Drift
+      // -----------------------------------------------------------------------
+      const stateDuration = now - this.qpsoStateTimer;
+
+      // Allow optima to traverse across wider expanse of the space
+      globalOptima.placerRotation += 0.0035;
+      globalOptima.x += Math.sin(t * 0.4) * 0.55;
+      globalOptima.y += Math.cos(t * 0.35) * 0.45;
+
+      // Wider spatial bounds spanning full viewport margins
+      globalOptima.x = Math.max(w * 0.12, Math.min(w * 0.88, globalOptima.x));
+      globalOptima.y = Math.max(h * 0.14, Math.min(h * 0.86, globalOptima.y));
+
+      if (this.qpsoState === 'SEARCH') {
+        globalOptima.detectionStrength = Math.max(0, globalOptima.detectionStrength - 0.02);
+        
+        // Count how many agents have explored into the optima basin radius
+        let closeCount = 0;
+        agents.forEach(a => {
+          const dist = Math.hypot(a.x - globalOptima.x, a.y - globalOptima.y);
+          if (dist < globalOptima.radius * 1.6) {
+            closeCount++;
+          }
+        });
+
+        if (closeCount >= 3 || stateDuration > 7000) {
+          // OPTIMA DETECTED: Trigger Standing Wave Placer lock sequence
+          this.qpsoState = 'OPTIMA_LOCK';
+          this.qpsoStateTimer = now;
+          globalOptima.detected = true;
+        }
+      } else if (this.qpsoState === 'OPTIMA_LOCK') {
+        globalOptima.detectionStrength = Math.min(1.0, globalOptima.detectionStrength + 0.035);
+        if (stateDuration > 2200) {
+          this.qpsoState = 'STANDING_WAVE_PLACER';
+          this.qpsoStateTimer = now;
+        }
+      } else if (this.qpsoState === 'STANDING_WAVE_PLACER') {
+        globalOptima.detectionStrength = 1.0;
+        // Hold the standing wave placement equilibrium for 8.5 seconds
+        if (stateDuration > 8500) {
+          // Quantum Tunneling Burst: Agents tunnel out and begin new exploration phase
+          this.qpsoState = 'TUNNEL_BURST';
+          this.qpsoStateTimer = now;
+          agents.forEach(a => {
+            a.tunnelingEnergy = 1.0;
+            a.vx = (Math.random() - 0.5) * 8;
+            a.vy = (Math.random() - 0.5) * 8;
+          });
+
+          // Shift global optima significantly further across opposite sectors of the space
+          const currentX = globalOptima.x;
+          const currentY = globalOptima.y;
+          let newX = currentX;
+          let newY = currentY;
+          let attempts = 0;
+          const minShiftDist = Math.min(w, h) * 0.52; // Ensure huge spatial leap
+
+          while (attempts < 12) {
+            // Pick across far quadrants
+            const targetQuadX = currentX > w * 0.5 ? (Math.random() * 0.28 + 0.12) : (Math.random() * 0.28 + 0.6);
+            const targetQuadY = currentY > h * 0.5 ? (Math.random() * 0.28 + 0.14) : (Math.random() * 0.28 + 0.58);
+            newX = w * targetQuadX;
+            newY = h * targetQuadY;
+            if (Math.hypot(newX - currentX, newY - currentY) >= minShiftDist) {
+              break;
+            }
+            attempts++;
+          }
+
+          globalOptima.x = newX;
+          globalOptima.y = newY;
+        }
+      } else if (this.qpsoState === 'TUNNEL_BURST') {
+        globalOptima.detectionStrength = Math.max(0, 1.0 - (stateDuration / 2000));
+        if (stateDuration > 2000) {
+          this.qpsoState = 'SEARCH';
+          this.qpsoStateTimer = now;
+          globalOptima.detected = false;
+        }
+      }
+
+      // -----------------------------------------------------------------------
+      // 2. Compute Standing Wave Placer Equilibrium Geometry
+      // -----------------------------------------------------------------------
+      const numAgents = agents.length;
+      const placerRadius = globalOptima.placerRadius;
+      const baseRotation = globalOptima.placerRotation;
+
+      agents.forEach((agent, i) => {
+        // Calculate balanced standing wave node coordinate on the interference ring
+        const nodeAngle = baseRotation + (i / numAgents) * Math.PI * 2;
+        agent.targetX = globalOptima.x + Math.cos(nodeAngle) * placerRadius;
+        agent.targetY = globalOptima.y + Math.sin(nodeAngle) * (placerRadius * 0.85);
+      });
+
+      // -----------------------------------------------------------------------
+      // 3. Render Optima Basin Standing Wave Harmonic Potential Field
+      // -----------------------------------------------------------------------
+      const det = globalOptima.detectionStrength * alphaMultiplier;
+
+      // Draw Optima Center Beacon & Concentric Resonance Rings
+      if (det > 0.02) {
+        const pulse = Math.sin(t * 4) * 0.5 + 0.5;
+        
+        // Radiant Core of Optima
+        const coreGrad = ctx.createRadialGradient(
+          globalOptima.x, globalOptima.y, 0,
+          globalOptima.x, globalOptima.y, globalOptima.radius * (1.2 + pulse * 0.2)
+        );
+        coreGrad.addColorStop(0, `rgba(${colorAccent.join(',')}, ${0.45 * det})`);
+        coreGrad.addColorStop(0.3, `rgba(${colorPrimary.join(',')}, ${0.25 * det})`);
+        coreGrad.addColorStop(0.7, `rgba(${colorSecondary.join(',')}, ${0.08 * det})`);
+        coreGrad.addColorStop(1, `transparent`);
+
+        ctx.beginPath();
+        ctx.arc(globalOptima.x, globalOptima.y, globalOptima.radius * 1.4, 0, Math.PI * 2);
+        ctx.fillStyle = coreGrad;
+        ctx.fill();
+
+        // Standing Wave Placer Guide Rings (Interference Nodes)
+        for (let rStep = 1; rStep <= 3; rStep++) {
+          const ringR = placerRadius * (rStep * 0.5);
+          const ringAlpha = (0.28 / rStep) * det;
+          ctx.beginPath();
+          ctx.ellipse(globalOptima.x, globalOptima.y, ringR, ringR * 0.85, 0, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(${colorPrimary.join(',')}, ${ringAlpha})`;
+          ctx.lineWidth = rStep === 2 ? 1.8 : 1.0;
+          ctx.setLineDash(rStep === 2 ? [6, 8] : [3, 6]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+
+        // Standing Wave Placer Lattice Polygon (Connects all agent placement nodes)
+        if (this.qpsoState === 'STANDING_WAVE_PLACER' || this.qpsoState === 'OPTIMA_LOCK') {
+          ctx.beginPath();
+          agents.forEach((a, i) => {
+            if (i === 0) ctx.moveTo(a.targetX, a.targetY);
+            else ctx.lineTo(a.targetX, a.targetY);
+          });
+          ctx.closePath();
+          ctx.strokeStyle = `rgba(${colorAccent.join(',')}, ${0.35 * det})`;
+          ctx.lineWidth = 1.4;
+          ctx.stroke();
+
+          // Spoke guides from Optima Center to Nodes
+          agents.forEach((a, i) => {
+            if (i % 2 === 0) {
+              ctx.beginPath();
+              ctx.moveTo(globalOptima.x, globalOptima.y);
+              ctx.lineTo(a.targetX, a.targetY);
+              ctx.strokeStyle = `rgba(${colorPrimary.join(',')}, ${0.18 * det})`;
+              ctx.lineWidth = 0.8;
+              ctx.stroke();
+            }
+          });
+        }
+      }
+
+      // -----------------------------------------------------------------------
+      // 4. Update Agents & Emit Simulant Standing Waves
+      // -----------------------------------------------------------------------
+      agents.forEach((a, i) => {
+        a.prevX = a.x;
+        a.prevY = a.y;
+
+        // Dissipate quantum tunneling energy
+        if (a.tunnelingEnergy > 0.01) {
+          a.tunnelingEnergy *= 0.94;
+        } else {
+          a.tunnelingEnergy = 0;
+        }
+
+        // QPSO Kinematics
+        if (this.qpsoState === 'STANDING_WAVE_PLACER') {
+          // Standing Wave Placer forces lock agents evenly around optima
+          const dx = a.targetX - a.x;
+          const dy = a.targetY - a.y;
+          const dist = Math.hypot(dx, dy);
+
+          // Spring-damper relaxation into the standing wave node
+          a.vx = a.vx * 0.82 + dx * 0.065;
+          a.vy = a.vy * 0.82 + dy * 0.065;
+          a.x += a.vx;
+          a.y += a.vy;
+
+          // Harmonic phase synchronization
+          a.wavePhase += 0.06;
+        } else if (this.qpsoState === 'OPTIMA_LOCK') {
+          // Converging toward designated placer node
+          const dx = a.targetX - a.x;
+          const dy = a.targetY - a.y;
+          a.vx = a.vx * 0.9 + dx * 0.035;
+          a.vy = a.vy * 0.9 + dy * 0.035;
+          a.x += a.vx;
+          a.y += a.vy;
+          a.wavePhase += 0.045;
+        } else {
+          // Exploration Mode: Stochastic Quantum Delta-Potential Swarm Motion
+          const phi = Math.random();
+          const targetAttractorX = phi * globalOptima.x + (1 - phi) * (w * 0.5);
+          const targetAttractorY = phi * globalOptima.y + (1 - phi) * (h * 0.5);
+
+          // Quantum tunneling perturbation
+          const u = Math.max(0.001, Math.random());
+          const quantumDelta = (Math.random() > 0.5 ? 1 : -1) * (0.6 * Math.log(1 / u));
+
+          const pullX = (targetAttractorX - a.x) * 0.008 + quantumDelta * 0.8;
+          const pullY = (targetAttractorY - a.y) * 0.008 + quantumDelta * 0.8;
+
+          a.vx = a.vx * 0.94 + pullX + (Math.random() - 0.5) * 0.8;
+          a.vy = a.vy * 0.94 + pullY + (Math.random() - 0.5) * 0.8;
+
+          a.x += a.vx;
+          a.y += a.vy;
+          a.wavePhase += 0.035;
+        }
+
+        // Screen boundary bounce
+        if (a.x < 40) { a.x = 40; a.vx *= -1; }
+        if (a.x > w - 40) { a.x = w - 40; a.vx *= -1; }
+        if (a.y < 40) { a.y = 40; a.vy *= -1; }
+        if (a.y > h - 40) { a.y = h - 40; a.vy *= -1; }
+
+        // ---------------------------------------------------------------------
+        // 5. Emit Simulant Standing Waves Across Space
+        // ---------------------------------------------------------------------
+        // Each agent radiates concentric harmonic standing wave rings
+        a.waveRings.forEach(ring => {
+          ring.radius += ring.speed;
+          if (ring.radius > ring.maxRadius) {
+            ring.radius = 4;
+          }
+
+          const ringProgress = ring.radius / ring.maxRadius;
+          // Harmonic cosine standing wave envelope
+          const waveAmp = Math.cos(ringProgress * Math.PI * 2.5 - a.wavePhase);
+          const waveAlpha = Math.max(0, (1 - ringProgress) * ring.alpha * 0.28 * alphaMultiplier * Math.abs(waveAmp));
+
+          if (waveAlpha > 0.01) {
+            ctx.beginPath();
+            ctx.arc(a.x, a.y, ring.radius, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(${colorPrimary.join(',')}, ${waveAlpha})`;
+            ctx.lineWidth = 1.1;
+            ctx.stroke();
+          }
+        });
+
+        // ---------------------------------------------------------------------
+        // 6. Draw Inter-Agent Standing Wave Interference Beams
+        // ---------------------------------------------------------------------
+        for (let j = i + 1; j < agents.length; j++) {
+          const a2 = agents[j];
+          const dist = Math.hypot(a.x - a2.x, a.y - a2.y);
+          const linkRange = this.qpsoState === 'STANDING_WAVE_PLACER' ? 180 : 130;
+
+          if (dist < linkRange) {
+            const linkAlpha = (1 - dist / linkRange) * 0.42 * alphaMultiplier;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(a2.x, a2.y);
+            ctx.strokeStyle = this.qpsoState === 'STANDING_WAVE_PLACER'
+              ? `rgba(${colorAccent.join(',')}, ${linkAlpha * 1.2})`
+              : `rgba(${colorSecondary.join(',')}, ${linkAlpha})`;
+            ctx.lineWidth = 1.0;
+            ctx.stroke();
+
+            // Standing wave interference nodal packet
+            if (this.qpsoState === 'STANDING_WAVE_PLACER' && (i + j) % 2 === 0) {
+              const nodeX = (a.x + a2.x) * 0.5;
+              const nodeY = (a.y + a2.y) * 0.5;
+              ctx.beginPath();
+              ctx.arc(nodeX, nodeY, 1.8, 0, Math.PI * 2);
+              ctx.fillStyle = `rgba(255, 255, 255, ${linkAlpha * 1.5})`;
+              ctx.fill();
+            }
+          }
+        }
+
+        // ---------------------------------------------------------------------
+        // 7. Draw Quantum Agent Core & Probability Halo (|ψ|²)
+        // ---------------------------------------------------------------------
+        const agentPulse = Math.sin(t * 6 + a.phaseOffset) * 0.5 + 0.5;
+        const agentRadius = a.size * (1.0 + 0.35 * agentPulse + a.tunnelingEnergy * 1.5);
+
+        // Radiant Outer Probability Halo
+        const haloGrad = ctx.createRadialGradient(a.x, a.y, 0, a.x, a.y, agentRadius * 5);
+        haloGrad.addColorStop(0, `rgba(${colorAccent.join(',')}, ${0.8 * alphaMultiplier})`);
+        haloGrad.addColorStop(0.4, `rgba(${colorPrimary.join(',')}, ${0.35 * alphaMultiplier})`);
+        haloGrad.addColorStop(1, `transparent`);
+
+        ctx.beginPath();
+        ctx.arc(a.x, a.y, agentRadius * 5, 0, Math.PI * 2);
+        ctx.fillStyle = haloGrad;
+        ctx.fill();
+
+        // Intense Core
+        ctx.beginPath();
+        ctx.arc(a.x, a.y, agentRadius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.95 * alphaMultiplier})`;
+        ctx.fill();
+
+        // Motion trail during quantum tunneling
+        if (a.tunnelingEnergy > 0.05) {
+          ctx.beginPath();
+          ctx.moveTo(a.prevX, a.prevY);
+          ctx.lineTo(a.x, a.y);
+          ctx.strokeStyle = `rgba(${colorAccent.join(',')}, ${a.tunnelingEnergy * 0.6 * alphaMultiplier})`;
+          ctx.lineWidth = 3.5;
+          ctx.lineCap = 'round';
+          ctx.stroke();
+        }
+      });
+    }
+
+    // =========================================================================
+    // MULTILAYERED TRANSFORMER BORG CUBE RENDER ENGINE (DIVISION 1)
+    // =========================================================================
+    updateAndDrawTransformerBorgCube(
+      t: number, 
+      now: number, 
+      alphaMultiplier: number,
+      colorPrimary: [number, number, number],
+      colorSecondary: [number, number, number],
+      colorAccent: [number, number, number]
+    ) {
+      const ctx = this.ctx;
+      const w = this.width;
+      const h = this.height;
+
+      // Borg Cube Isometric Geometry Configuration
+      const cx = w * 0.5;
+      const cy = h * 0.58;
+      const tileSize = Math.min(w, h) * 0.075;
+      const layerHeight = Math.min(w, h) * 0.115;
+      const cos30 = Math.cos(Math.PI / 6);
+      const sin30 = Math.sin(Math.PI / 6);
+
+      // Gentle 3D Cube Floating & Breathing
+      const floatOffsetX = Math.sin(t * 0.5) * 8;
+      const floatOffsetY = Math.cos(t * 0.4) * 6;
+
+      // Coordinate Transform: 3D Grid (gx, gy, z) -> 2D Isometric (isoX, isoY)
+      const projectIso = (gx: number, gy: number, z: number) => {
+        const dx = gx - 1.5;
+        const dy = gy - 1.5;
+        const isoX = cx + (dx - dy) * tileSize * cos30 + floatOffsetX;
+        const isoY = cy + (dx + dy) * tileSize * sin30 - z * layerHeight + floatOffsetY;
+        return { x: isoX, y: isoY };
+      };
+
+      // -----------------------------------------------------------------------
+      // 1. Attention Flash Broadcast Management
+      // -----------------------------------------------------------------------
+      if (now - this.lastAttentionFlashTime > 2800) {
+        this.lastAttentionFlashTime = now;
+        const flashLayer = Math.floor(Math.random() * 4);
+        this.transformerAttentionFlashes.push({
+          layerZ: flashLayer,
+          startTime: now,
+          duration: 1600,
+          radius: 0
+        });
+      }
+
+      // Cleanup expired flashes
+      this.transformerAttentionFlashes = this.transformerAttentionFlashes.filter(f => (now - f.startTime) < f.duration);
+
+      // Active Vertical Scanning Plane (Inference Forward Pass)
+      const scanCycle = (t * 0.4) % 4; // Cycles through z: 0 -> 4
+      const scanZ = scanCycle;
+
+      // -----------------------------------------------------------------------
+      // 2. Draw Inter-Layer Vertical Tensor Conduits (Pillars between layers)
+      // -----------------------------------------------------------------------
+      for (let z = 0; z < 3; z++) {
+        // Vertical interconnects at key junction corners
+        const cornerPillars = [
+          [0, 0], [0, 3], [3, 0], [3, 3], [1.5, 1.5]
+        ];
+
+        cornerPillars.forEach(([gx, gy]) => {
+          const pBot = projectIso(gx, gy, z);
+          const pTop = projectIso(gx, gy, z + 1);
+
+          ctx.beginPath();
+          ctx.moveTo(pBot.x, pBot.y);
+          ctx.lineTo(pTop.x, pTop.y);
+          ctx.strokeStyle = `rgba(${colorPrimary.join(',')}, ${0.18 * alphaMultiplier})`;
+          ctx.lineWidth = 1.0;
+          ctx.setLineDash([3, 5]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // Data pulse streaming upward along pillar
+          const pillarPulse = (t * 1.5 + z * 0.3 + gx * 0.2) % 1;
+          const px = pBot.x + (pTop.x - pBot.x) * pillarPulse;
+          const py = pBot.y + (pTop.y - pBot.y) * pillarPulse;
+          ctx.beginPath();
+          ctx.arc(px, py, 1.8, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${colorAccent.join(',')}, ${0.8 * alphaMultiplier})`;
+          ctx.fill();
+        });
+      }
+
+      // -----------------------------------------------------------------------
+      // 3. Draw Stratified Transformer Layers (Z = 0 to 3, bottom-to-top)
+      // -----------------------------------------------------------------------
+      for (let z = 0; z < 4; z++) {
+        const layer = this.transformerLayers[z];
+        if (!layer) continue;
+
+        const isScanActive = Math.abs(scanZ - z) < 0.6;
+        const scanProximity = isScanActive ? (1 - Math.abs(scanZ - z) / 0.6) : 0;
+
+        // Draw Layer Ground Perimeter Grid
+        const p00 = projectIso(-0.5, -0.5, z);
+        const p30 = projectIso(3.5, -0.5, z);
+        const p33 = projectIso(3.5, 3.5, z);
+        const p03 = projectIso(-0.5, 3.5, z);
+
+        ctx.beginPath();
+        ctx.moveTo(p00.x, p00.y);
+        ctx.lineTo(p30.x, p30.y);
+        ctx.lineTo(p33.x, p33.y);
+        ctx.lineTo(p03.x, p03.y);
+        ctx.closePath();
+        ctx.strokeStyle = `rgba(${colorPrimary.join(',')}, ${(0.14 + scanProximity * 0.22) * alphaMultiplier})`;
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+
+        if (scanProximity > 0.1) {
+          ctx.fillStyle = `rgba(${colorAccent.join(',')}, ${0.04 * scanProximity * alphaMultiplier})`;
+          ctx.fill();
+        }
+
+        // Draw Interlocking "Tetris" Graph Blocks in Layer
+        layer.blocks.forEach((block: any) => {
+          // Render individual isometric cells of the tetris shape
+          block.cells.forEach(([gx, gy]: [number, number]) => {
+            const c0 = projectIso(gx - 0.45, gy - 0.45, z);
+            const c1 = projectIso(gx + 0.45, gy - 0.45, z);
+            const c2 = projectIso(gx + 0.45, gy + 0.45, z);
+            const c3 = projectIso(gx - 0.45, gy + 0.45, z);
+
+            ctx.beginPath();
+            ctx.moveTo(c0.x, c0.y);
+            ctx.lineTo(c1.x, c1.y);
+            ctx.lineTo(c2.x, c2.y);
+            ctx.lineTo(c3.x, c3.y);
+            ctx.closePath();
+
+            // Block fill
+            const blockColor = block.color || colorPrimary;
+            ctx.fillStyle = `rgba(${blockColor.join(',')}, ${(0.07 + scanProximity * 0.12) * alphaMultiplier})`;
+            ctx.fill();
+
+            // Cell border
+            ctx.strokeStyle = `rgba(${blockColor.join(',')}, ${(0.25 + scanProximity * 0.35) * alphaMultiplier})`;
+            ctx.lineWidth = 1.1;
+            ctx.stroke();
+          });
+
+          // Calculate Block Center in Isometric Space
+          let avgGx = 0;
+          let avgGy = 0;
+          block.cells.forEach(([gx, gy]: [number, number]) => {
+            avgGx += gx;
+            avgGy += gy;
+          });
+          avgGx /= block.cells.length;
+          avgGy /= block.cells.length;
+
+          // Render Sub-Graph Internal Synaptic Edges
+          const nodeCoordMap = new Map<string, { x: number; y: number }>();
+
+          block.nodes.forEach((node: any) => {
+            // Place node within block bounding cells
+            const minCellX = Math.min(...block.cells.map((c: number[]) => c[0]));
+            const maxCellX = Math.max(...block.cells.map((c: number[]) => c[0]));
+            const minCellY = Math.min(...block.cells.map((c: number[]) => c[1]));
+            const maxCellY = Math.max(...block.cells.map((c: number[]) => c[1]));
+
+            const nodeGx = minCellX + (maxCellX - minCellX + 1) * node.rx - 0.5;
+            const nodeGy = minCellY + (maxCellY - minCellY + 1) * node.ry - 0.5;
+            const pt = projectIso(nodeGx, nodeGy, z);
+            nodeCoordMap.set(node.id, pt);
+          });
+
+          // Draw Synapses
+          block.edges.forEach(([fromId, toId]: [string, string]) => {
+            const pFrom = nodeCoordMap.get(fromId);
+            const pTo = nodeCoordMap.get(toId);
+            if (pFrom && pTo) {
+              ctx.beginPath();
+              ctx.moveTo(pFrom.x, pFrom.y);
+              ctx.lineTo(pTo.x, pTo.y);
+              ctx.strokeStyle = `rgba(${block.color.join(',')}, ${(0.32 + scanProximity * 0.3) * alphaMultiplier})`;
+              ctx.lineWidth = 1.0;
+              ctx.stroke();
+
+              // Mini Synaptic Pulse
+              const synPulse = (t * 2.2 + z * 0.4 + avgGx) % 1;
+              const spX = pFrom.x + (pTo.x - pFrom.x) * synPulse;
+              const spY = pFrom.y + (pTo.y - pFrom.y) * synPulse;
+              ctx.beginPath();
+              ctx.arc(spX, spY, 1.4, 0, Math.PI * 2);
+              ctx.fillStyle = `rgba(255, 255, 255, ${0.75 * alphaMultiplier})`;
+              ctx.fill();
+            }
+          });
+
+          // Draw Sub-Nodes
+          block.nodes.forEach((node: any) => {
+            const pt = nodeCoordMap.get(node.id);
+            if (!pt) return;
+
+            const isAttnCenter = node.id === 'attn';
+            const nodeRadius = isAttnCenter ? 3.8 : 2.4;
+
+            // Halo
+            if (scanProximity > 0.2 || isAttnCenter) {
+              ctx.beginPath();
+              ctx.arc(pt.x, pt.y, nodeRadius * 2.5, 0, Math.PI * 2);
+              ctx.fillStyle = `rgba(${block.color.join(',')}, ${0.3 * alphaMultiplier})`;
+              ctx.fill();
+            }
+
+            // Core
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, nodeRadius, 0, Math.PI * 2);
+            ctx.fillStyle = isAttnCenter ? `rgba(255, 255, 255, ${0.95 * alphaMultiplier})` : `rgba(${colorAccent.join(',')}, ${0.85 * alphaMultiplier})`;
+            ctx.fill();
+          });
+        });
+      }
+
+      // -----------------------------------------------------------------------
+      // 4. Render Active Attention Flash Bursts Across Tetris Cube
+      // -----------------------------------------------------------------------
+      this.transformerAttentionFlashes.forEach(flash => {
+        const elapsed = now - flash.startTime;
+        const progress = elapsed / flash.duration;
+        const flashAlpha = Math.sin(progress * Math.PI) * alphaMultiplier;
+
+        // Attention Head Origin in Layer Z
+        const attnOrigin = projectIso(1.5, 1.0, flash.layerZ);
+        const maxFlashR = tileSize * 4.2;
+        const currentR = progress * maxFlashR;
+
+        // Radiating Attention Wave Ring
+        ctx.beginPath();
+        ctx.arc(attnOrigin.x, attnOrigin.y, currentR, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(6, 182, 212, ${flashAlpha * 0.6})`;
+        ctx.lineWidth = 1.8;
+        ctx.setLineDash([8, 12]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Radial Attention Energy Beams to Neighboring Tetris Blocks
+        for (let b = 0; b < 6; b++) {
+          const rayAngle = (b / 6) * Math.PI * 2 + progress * 0.8;
+          const rx = attnOrigin.x + Math.cos(rayAngle) * currentR;
+          const ry = attnOrigin.y + Math.sin(rayAngle) * (currentR * 0.7);
+
+          ctx.beginPath();
+          ctx.moveTo(attnOrigin.x, attnOrigin.y);
+          ctx.lineTo(rx, ry);
+          ctx.strokeStyle = `rgba(168, 85, 247, ${flashAlpha * 0.45})`;
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+        }
+      });
+
+      // -----------------------------------------------------------------------
+      // 5. Draw Active Token Stream Packets Streaming Through Borg Cube
+      // -----------------------------------------------------------------------
+      this.transformerTokens.forEach((tok: any) => {
+        tok.progress += tok.speed;
+
+        if (tok.progress >= 1.0) {
+          tok.progress = 0;
+          tok.nodeIdx = tok.targetNodeIdx;
+
+          // Occasionally hop to next transformer layer in the stack
+          if (Math.random() > 0.65) {
+            tok.layerZ = (tok.layerZ + 1) % 4;
+            tok.blockIdx = Math.floor(Math.random() * 5);
+          }
+
+          const layer = this.transformerLayers[tok.layerZ];
+          if (layer) {
+            const block = layer.blocks[tok.blockIdx];
+            if (block) {
+              tok.targetNodeIdx = (tok.nodeIdx + 1) % block.nodes.length;
+            }
+          }
+        }
+
+        const layer = this.transformerLayers[tok.layerZ];
+        if (!layer) return;
+        const block = layer.blocks[tok.blockIdx];
+        if (!block) return;
+
+        const n1 = block.nodes[tok.nodeIdx];
+        const n2 = block.nodes[tok.targetNodeIdx];
+        if (!n1 || !n2) return;
+
+        // Interpolate token coordinates
+        const minCellX = Math.min(...block.cells.map((c: number[]) => c[0]));
+        const maxCellX = Math.max(...block.cells.map((c: number[]) => c[0]));
+        const minCellY = Math.min(...block.cells.map((c: number[]) => c[1]));
+        const maxCellY = Math.max(...block.cells.map((c: number[]) => c[1]));
+
+        const gx1 = minCellX + (maxCellX - minCellX + 1) * n1.rx - 0.5;
+        const gy1 = minCellY + (maxCellY - minCellY + 1) * n1.ry - 0.5;
+        const gx2 = minCellX + (maxCellX - minCellX + 1) * n2.rx - 0.5;
+        const gy2 = minCellY + (maxCellY - minCellY + 1) * n2.ry - 0.5;
+
+        const p1 = projectIso(gx1, gy1, tok.layerZ);
+        const p2 = projectIso(gx2, gy2, tok.layerZ);
+
+        const tx = p1.x + (p2.x - p1.x) * tok.progress;
+        const ty = p1.y + (p2.y - p1.y) * tok.progress;
+
+        // Radiant Token Core & Halo
+        ctx.beginPath();
+        ctx.arc(tx, ty, tok.size * 2.2, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${tok.color.join(',')}, ${0.35 * alphaMultiplier})`;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(tx, ty, tok.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.92 * alphaMultiplier})`;
+        ctx.fill();
+      });
+    }
+
+    // =========================================================================
+    // STRATIX V FPGA SILICON SUBSTRATE RENDER ENGINE (DIVISION 2)
+    // =========================================================================
+    updateAndDrawHardwareFabric(
+      t: number,
+      now: number,
+      alphaMultiplier: number,
+      colorPrimary: [number, number, number],
+      colorSecondary: [number, number, number],
+      colorAccent: [number, number, number]
+    ) {
+      const ctx = this.ctx;
+      const w = this.width;
+      const h = this.height;
+
+      // Check if actively decomposing into motes (transitioning away from Div 2)
+      const isDecomposing = this.prevDivision === 2 && this.transitionProgress < 1.0;
+      const decompProgress = isDecomposing ? this.transitionProgress : 0;
+
+      // -----------------------------------------------------------------------
+      // 1. Render Synchronous 250 MHz Balanced Clock H-Tree Distribution Net
+      // -----------------------------------------------------------------------
+      const clockPulse = (t * 4.0) % 1; // 250 MHz Clock harmonic wave
+      const clockAlpha = (0.08 + Math.sin(clockPulse * Math.PI) * 0.12) * alphaMultiplier;
+
+      const drawHTree = (x: number, y: number, length: number, depth: number) => {
+        if (depth <= 0) return;
+
+        const half = length * 0.5;
+        ctx.beginPath();
+        ctx.moveTo(x - half, y);
+        ctx.lineTo(x + half, y);
+        ctx.moveTo(x - half, y - half);
+        ctx.lineTo(x - half, y + half);
+        ctx.moveTo(x + half, y - half);
+        ctx.lineTo(x + half, y + half);
+        ctx.strokeStyle = `rgba(${colorSecondary.join(',')}, ${clockAlpha / (4 - depth)})`;
+        ctx.lineWidth = depth === 3 ? 1.5 : 0.9;
+        
+        if (isDecomposing) {
+          ctx.setLineDash([Math.max(1, 10 * (1 - decompProgress)), Math.max(1, 14 * decompProgress + 2)]);
+        }
+        ctx.stroke();
+        if (isDecomposing) ctx.setLineDash([]);
+
+        // Recursively draw leaves
+        drawHTree(x - half, y - half, half, depth - 1);
+        drawHTree(x - half, y + half, half, depth - 1);
+        drawHTree(x + half, y - half, half, depth - 1);
+        drawHTree(x + half, y + half, half, depth - 1);
+      };
+
+      drawHTree(w * 0.5, h * 0.52, Math.min(w, h) * 0.65, 3);
+
+      // -----------------------------------------------------------------------
+      // 2. Render Micro-Etched Bus Conduits (256-bit / 512-bit Interconnects)
+      // -----------------------------------------------------------------------
+      const blockRects = new Map<string, { x: number; y: number; w: number; h: number; center: { x: number; y: number } }>();
+      this.fpgaHardBlocks.forEach(blk => {
+        const bx = blk.rx * w - (blk.rw * w * 0.5);
+        const by = blk.ry * h - (blk.rh * h * 0.5);
+        const bw = blk.rw * w;
+        const bh = blk.rh * h;
+        blockRects.set(blk.id, { x: bx, y: by, w: bw, h: bh, center: { x: bx + bw * 0.5, y: by + bh * 0.5 } });
+      });
+
+      this.busConduits.forEach(conduit => {
+        const fromRect = blockRects.get(conduit.from);
+        const toRect = blockRects.get(conduit.to);
+        if (!fromRect || !toRect) return;
+
+        ctx.beginPath();
+        ctx.moveTo(fromRect.center.x, fromRect.center.y);
+        
+        // Dog-leg Orthogonal Circuit Routing
+        const midX = (fromRect.center.x + toRect.center.x) * 0.5;
+        ctx.lineTo(midX, fromRect.center.y);
+        ctx.lineTo(midX, toRect.center.y);
+        ctx.lineTo(toRect.center.x, toRect.center.y);
+
+        ctx.strokeStyle = `rgba(${conduit.color.join(',')}, ${0.28 * alphaMultiplier})`;
+        ctx.lineWidth = conduit.width === 512 ? 3.0 : 1.8;
+        if (isDecomposing) {
+          ctx.setLineDash([Math.max(1, 8 * (1 - decompProgress)), Math.max(1, 16 * decompProgress)]);
+        }
+        ctx.stroke();
+        if (isDecomposing) ctx.setLineDash([]);
+
+        // Draw Parallel Bus Lane Tracks for 512-bit AFI / 256-bit TLP
+        [-4, 4].forEach(offset => {
+          ctx.beginPath();
+          ctx.moveTo(fromRect.center.x, fromRect.center.y + offset);
+          ctx.lineTo(midX + offset, fromRect.center.y + offset);
+          ctx.lineTo(midX + offset, toRect.center.y + offset);
+          ctx.lineTo(toRect.center.x, toRect.center.y + offset);
+          ctx.strokeStyle = `rgba(${conduit.color.join(',')}, ${0.12 * alphaMultiplier})`;
+          ctx.lineWidth = 1.0;
+          if (isDecomposing) {
+            ctx.setLineDash([Math.max(1, 6 * (1 - decompProgress)), Math.max(1, 18 * decompProgress)]);
+          }
+          ctx.stroke();
+          if (isDecomposing) ctx.setLineDash([]);
+        });
+      });
+
+      // -----------------------------------------------------------------------
+      // 3. Render Hard Macro Blocks (PCIe HIP, DDR3 UniPHY, DMA, PTP PHC, ALMs)
+      // -----------------------------------------------------------------------
+      this.fpgaHardBlocks.forEach(blk => {
+        const rect = blockRects.get(blk.id);
+        if (!rect) return;
+
+        // Block Glow Halo
+        const glowPulse = Math.sin(t * 3.5 + blk.rx * 10) * 0.5 + 0.5;
+        const blockGrad = ctx.createRadialGradient(
+          rect.center.x, rect.center.y, 0,
+          rect.center.y, rect.center.y, rect.w * 0.7
+        );
+        blockGrad.addColorStop(0, `rgba(${blk.color.join(',')}, ${(0.16 + glowPulse * 0.08) * alphaMultiplier})`);
+        blockGrad.addColorStop(1, `transparent`);
+
+        ctx.beginPath();
+        ctx.roundRect(rect.x, rect.y, rect.w, rect.h, 6);
+        ctx.fillStyle = blockGrad;
+        ctx.fill();
+
+        // Hard Block Outer Perimeter
+        ctx.strokeStyle = `rgba(${blk.color.join(',')}, ${(0.5 + glowPulse * 0.3) * alphaMultiplier})`;
+        ctx.lineWidth = 1.6;
+        if (isDecomposing) {
+          ctx.setLineDash([Math.max(1, 14 * (1 - decompProgress)), Math.max(1, 18 * decompProgress)]);
+        }
+        ctx.stroke();
+        if (isDecomposing) ctx.setLineDash([]);
+
+        // Corner Silicon Chamfers & Registration Marks
+        const cLen = 8;
+        ctx.beginPath();
+        ctx.moveTo(rect.x, rect.y + cLen); ctx.lineTo(rect.x, rect.y); ctx.lineTo(rect.x + cLen, rect.y);
+        ctx.moveTo(rect.x + rect.w - cLen, rect.y); ctx.lineTo(rect.x + rect.w, rect.y); ctx.lineTo(rect.x + rect.w, rect.y + cLen);
+        ctx.moveTo(rect.x + rect.w, rect.y + rect.h - cLen); ctx.lineTo(rect.x + rect.w, rect.y + rect.h); ctx.lineTo(rect.x + rect.w - cLen, rect.y + rect.h);
+        ctx.moveTo(rect.x + cLen, rect.y + rect.h); ctx.lineTo(rect.x, rect.y + rect.h); ctx.lineTo(rect.x, rect.y + rect.h - cLen);
+        ctx.strokeStyle = `rgba(255, 255, 255, ${0.7 * alphaMultiplier})`;
+        ctx.lineWidth = 1.8;
+        ctx.stroke();
+
+        // Internal Register Block Cell Grid
+        const numCols = 4;
+        const numRows = 3;
+        const padX = rect.w * 0.12;
+        const padY = rect.h * 0.22;
+        const cellW = (rect.w - padX * 2) / numCols;
+        const cellH = (rect.h - padY * 2) / numRows;
+
+        for (let r = 0; r < numRows; r++) {
+          for (let c = 0; c < numCols; c++) {
+            const cx = rect.x + padX + c * cellW + cellW * 0.5;
+            const cy = rect.y + padY + r * cellH + cellH * 0.5;
+            const cellActive = Math.sin(t * 6 + (c + r * numCols) * 0.8 + blk.rx * 5) > 0.1;
+
+            ctx.beginPath();
+            ctx.rect(cx - cellW * 0.35, cy - cellH * 0.35, cellW * 0.7, cellH * 0.7);
+            ctx.fillStyle = cellActive
+              ? `rgba(${blk.color.join(',')}, ${0.35 * alphaMultiplier})`
+              : `rgba(255, 255, 255, ${0.04 * alphaMultiplier})`;
+            ctx.fill();
+            ctx.strokeStyle = `rgba(${blk.color.join(',')}, ${0.25 * alphaMultiplier})`;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
+
+        // Port Tap Pins
+        blk.ports.forEach((port: any) => {
+          let px = rect.x;
+          let py = rect.y;
+          if (port.side === 'left') { px = rect.x; py = rect.y + rect.h * port.pos; }
+          else if (port.side === 'right') { px = rect.x + rect.w; py = rect.y + rect.h * port.pos; }
+          else if (port.side === 'top') { px = rect.x + rect.w * port.pos; py = rect.y; }
+          else if (port.side === 'bottom') { px = rect.x + rect.w * port.pos; py = rect.y + rect.h; }
+
+          ctx.beginPath();
+          ctx.arc(px, py, 3.2, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${0.85 * alphaMultiplier})`;
+          ctx.fill();
+          ctx.strokeStyle = `rgba(${blk.color.join(',')}, ${0.9 * alphaMultiplier})`;
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+        });
+      });
+
+      // -----------------------------------------------------------------------
+      // 4. Streaming High-Speed TLP / DMA Burst Packets Along Conduits
+      // -----------------------------------------------------------------------
+      this.tlpPackets.forEach(pkt => {
+        pkt.progress += pkt.speed;
+        if (pkt.progress >= 1.0) {
+          pkt.progress = 0;
+          pkt.conduitIdx = (pkt.conduitIdx + 1) % this.busConduits.length;
+        }
+
+        const conduit = this.busConduits[pkt.conduitIdx];
+        if (!conduit) return;
+        const fromRect = blockRects.get(conduit.from);
+        const toRect = blockRects.get(conduit.to);
+        if (!fromRect || !toRect) return;
+
+        const midX = (fromRect.center.x + toRect.center.x) * 0.5;
+        let px = 0;
+        let py = 0;
+
+        // Trace orthogonal path segment
+        if (pkt.progress < 0.33) {
+          const segP = pkt.progress / 0.33;
+          px = fromRect.center.x + (midX - fromRect.center.x) * segP;
+          py = fromRect.center.y;
+        } else if (pkt.progress < 0.66) {
+          const segP = (pkt.progress - 0.33) / 0.33;
+          px = midX;
+          py = fromRect.center.y + (toRect.center.y - fromRect.center.y) * segP;
+        } else {
+          const segP = (pkt.progress - 0.66) / 0.34;
+          px = midX + (toRect.center.x - midX) * segP;
+          py = toRect.center.y;
+        }
+
+        // Radiant Packet Flit Core
+        ctx.beginPath();
+        ctx.arc(px, py, pkt.size * 2.2, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${conduit.color.join(',')}, ${0.35 * alphaMultiplier})`;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(px, py, pkt.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.95 * alphaMultiplier})`;
+        ctx.fill();
+      });
+    }
+
+    // =========================================================================
+    // SILICON DECOMPOSITION MOTES ENGINE (TRANSITION FROM HARDWARE SUBSTRATE)
+    // =========================================================================
+    updateAndDrawDecompositionMotes(
+      t: number,
+      now: number,
+      p: number,
+      ease: number,
+      colorPrimary: [number, number, number],
+      colorSecondary: [number, number, number],
+      colorAccent: [number, number, number]
+    ) {
+      const ctx = this.ctx;
+      const w = this.width;
+      const h = this.height;
+
+      // Overall transition lifecycle of motes
+      // Fade in explosively at start (p: 0 -> 0.15), swirl vigorously (0.15 -> 0.7), coalesce into target (0.7 -> 1.0)
+      const globalMoteAlpha = p < 0.15 
+        ? (p / 0.15) 
+        : (p > 0.85 ? Math.max(0, (1 - p) / 0.15) : 1.0);
+
+      this.hardwareMotes.forEach(mote => {
+        mote.prevX = mote.x;
+        mote.prevY = mote.y;
+
+        // Individual progressive timeline with staggered delay
+        const localProgress = Math.max(0, Math.min(1.0, (p - mote.delay) / Math.max(0.01, 1.0 - mote.delay)));
+        const localEase = localProgress < 0.5
+          ? 4 * localProgress * localProgress * localProgress
+          : 1 - Math.pow(-2 * localProgress + 2, 3) / 2;
+
+        mote.rotation += mote.rotSpeed;
+        mote.swirlAngle += mote.swirlSpeed;
+
+        if (localProgress < 0.38) {
+          // Phase 1: High-energy explosive ejection & shattering outward from silicon die
+          const blastDecay = Math.pow(1.0 - (localProgress / 0.38), 1.4);
+          mote.x += mote.vx * blastDecay * 0.85 + Math.cos(mote.swirlAngle) * mote.swirlRadius * 0.04;
+          mote.y += mote.vy * blastDecay * 0.85 + Math.sin(mote.swirlAngle) * mote.swirlRadius * 0.04;
+        } else {
+          // Phase 2: Kinetic vortex swirl & magnetic attraction into target animation coordinates
+          const pullProgress = (localProgress - 0.38) / 0.62;
+          const pullStrength = Math.pow(pullProgress, 1.8) * 0.16;
+
+          const dxTarget = mote.targetX - mote.x;
+          const dyTarget = mote.targetY - mote.y;
+
+          const swirlInfluence = (1.0 - pullProgress) * mote.swirlRadius * 0.05;
+          const swirlX = Math.cos(mote.swirlAngle + t * 2) * swirlInfluence;
+          const swirlY = Math.sin(mote.swirlAngle + t * 2) * swirlInfluence;
+
+          mote.x += dxTarget * pullStrength + swirlX;
+          mote.y += dyTarget * pullStrength + swirlY;
+        }
+
+        // Color shift from Silicon Gold/Rose into Target Division Palette (Cyan/Violet)
+        const currentMoteColor = lerpColor(mote.color, mote.targetColor, localEase);
+        const sparkle = Math.sin(t * 8 + mote.sparklePhase) * 0.35 + 0.65;
+        const moteAlpha = mote.alpha * globalMoteAlpha * sparkle;
+
+        if (moteAlpha <= 0.01) return;
+
+        // 1. Draw Ionization Kinetic Trail (Streak from prev position)
+        ctx.beginPath();
+        ctx.moveTo(mote.prevX, mote.prevY);
+        ctx.lineTo(mote.x, mote.y);
+        ctx.strokeStyle = `rgba(${currentMoteColor.join(',')}, ${moteAlpha * 0.5})`;
+        ctx.lineWidth = mote.size * 0.8;
+        ctx.stroke();
+
+        // 2. Draw Crystalline Silicon Wafer Chiplet Mote Body
+        ctx.save();
+        ctx.translate(mote.x, mote.y);
+        ctx.rotate(mote.rotation);
+
+        // Radiant Halo
+        ctx.beginPath();
+        ctx.arc(0, 0, mote.size * 2.8, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${currentMoteColor.join(',')}, ${moteAlpha * 0.28})`;
+        ctx.fill();
+
+        if (mote.isCrystalline) {
+          // Diamond facet geometry
+          const s = mote.size * 1.4;
+          ctx.beginPath();
+          ctx.moveTo(0, -s);
+          ctx.lineTo(s * 0.8, 0);
+          ctx.lineTo(0, s);
+          ctx.lineTo(-s * 0.8, 0);
+          ctx.closePath();
+          ctx.fillStyle = `rgba(255, 255, 255, ${moteAlpha * 0.95})`;
+          ctx.fill();
+          ctx.strokeStyle = `rgba(${currentMoteColor.join(',')}, ${moteAlpha})`;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        } else {
+          // Circular energy micro-packet
+          ctx.beginPath();
+          ctx.arc(0, 0, mote.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${moteAlpha * 0.9})`;
+          ctx.fill();
+        }
+
+        ctx.restore();
+      });
     }
 
     renderDivisionStructures(t: number, ease: number, colorPrimaryStr: string, colorSecondaryStr: string) {
@@ -520,7 +2053,6 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
       const w = this.width;
       const h = this.height;
 
-      // Calculate opacity for outgoing and incoming division structures
       const fromDiv = this.prevDivision;
       const toDiv = this.targetDivision;
       const alphaOut = 1 - ease;
@@ -529,18 +2061,7 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
       const drawDivBackground = (divIdx: number, alpha: number) => {
         if (alpha <= 0.01) return;
 
-        if (divIdx === 0) {
-          // Division 0: Swarm Orbital Ring Pulse
-          const cx = w * 0.5;
-          const cy = h * 0.5;
-          ctx.beginPath();
-          ctx.arc(cx, cy, 160 + Math.sin(t * 1.2) * 18, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(56, 189, 248, ${0.22 * alpha})`;
-          ctx.lineWidth = 1.5;
-          ctx.setLineDash([8, 14]);
-          ctx.stroke();
-          ctx.setLineDash([]);
-        } else if (divIdx === 1) {
+        if (divIdx === 1) {
           // Division 1: Tensor Conduit Highways
           const cols = 8;
           const rows = 5;
@@ -610,14 +2131,13 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
       const w = this.width;
       const h = this.height;
 
-      // 1. Update Particle Physics & Kinetic Morphing
+      // Update Generic Morphing Particles for Div 1 & Div 2
       for (let i = 0; i < pts.length; i++) {
         const p = pts[i];
         p.prevX = p.x;
         p.prevY = p.y;
 
         if (kineticWave > 0.01) {
-          // Energetic Transition Phase: Swirl, burst velocity, and high mobility
           p.swirlAngle += p.swirlSpeed;
           const swirlX = Math.cos(p.swirlAngle) * p.swirlRadius * kineticWave * 0.12;
           const swirlY = Math.sin(p.swirlAngle) * p.swirlRadius * kineticWave * 0.12;
@@ -625,19 +2145,13 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
           p.x += p.burstVx * kineticWave + swirlX + p.baseVx;
           p.y += p.burstVy * kineticWave + swirlY + p.baseVy;
 
-          // Elastic magnetic steer toward target position
           const dxTarget = p.targetX - p.x;
           const dyTarget = p.targetY - p.y;
           const pullStrength = ease * 0.08;
           p.x += dxTarget * pullStrength;
           p.y += dyTarget * pullStrength;
         } else {
-          // Settled Division State
-          if (this.targetDivision === 0) {
-            // Free organic swarm flocking
-            p.x += p.baseVx + Math.sin(t * 0.6 + p.phase) * 0.35;
-            p.y += p.baseVy + Math.cos(t * 0.6 + p.phase) * 0.35;
-          } else if (this.targetDivision === 1) {
+          if (this.targetDivision === 1) {
             // Tensor Grid alignment & conduit pulse travel
             if (p.isGridNode) {
               p.x += (p.targetX - p.x) * 0.15;
@@ -647,7 +2161,7 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
               if (p.x > w * 0.9) p.x = w * 0.1;
               p.y += (p.targetY - p.y) * 0.1;
             }
-          } else {
+          } else if (this.targetDivision === 2) {
             // Hardware Substrates silicon runner & register array
             if (p.isRegisterBlock) {
               p.x += (p.targetX - p.x) * 0.15;
@@ -672,91 +2186,19 @@ const { id = "division-bg-overlay", initialDivision = 0, opacity = 1.0 } = Astro
         if (p.y < -40) { p.y = h + 40; p.prevY = p.y; }
         if (p.y > h + 40) { p.y = -40; p.prevY = p.y; }
 
-        // Draw Motion Trail during glowing movement (dissipating streak)
-        if (glowIntensity > 0.08 && (p.x !== p.prevX || p.y !== p.prevY)) {
-          const moveDx = p.x - p.prevX;
-          const moveDy = p.y - p.prevY;
-          const moveDist = Math.sqrt(moveDx * moveDx + moveDy * moveDy);
-          
-          if (moveDist > 1.0 && moveDist < 80) {
-            ctx.beginPath();
-            ctx.moveTo(p.prevX, p.prevY);
-            ctx.lineTo(p.x, p.y);
-            ctx.strokeStyle = `rgba(${colorAccent.join(',')}, ${0.45 * glowIntensity * p.alpha})`;
-            ctx.lineWidth = p.size * (1.2 + glowIntensity * 1.5);
-            ctx.lineCap = 'round';
-            ctx.stroke();
-          }
-        }
-
-        // Particle Glow & Radiant Halo Calculation
-        const fastShimmer = 0.85 + 0.15 * Math.sin(t * 14 + p.phase);
+        // Render Particle Body
         const naturalPulse = 0.5 + 0.5 * Math.sin(t * 2.8 + p.phase);
         const baseRadius = p.size * (0.85 + 0.45 * naturalPulse);
 
-        // 1. High-Energy Outer Radiant Aura (charges before transition, dissipates as they move)
-        if (glowIntensity > 0.01) {
-          const auraRadius = baseRadius * (3.5 + 8.5 * glowIntensity * fastShimmer);
-          const auraGradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, auraRadius);
-          auraGradient.addColorStop(0, `rgba(${colorAccent.join(',')}, ${0.7 * glowIntensity * p.alpha})`);
-          auraGradient.addColorStop(0.35, `rgba(${colorPrimary.join(',')}, ${0.4 * glowIntensity * p.alpha})`);
-          auraGradient.addColorStop(1, `rgba(${colorSecondary.join(',')}, 0)`);
-
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, auraRadius, 0, Math.PI * 2);
-          ctx.fillStyle = auraGradient;
-          ctx.fill();
-        }
-
-        // 2. Mid Corona Halo
-        const coronaRadius = baseRadius * (3.2 + 2.8 * glowIntensity);
         ctx.beginPath();
-        ctx.arc(p.x, p.y, coronaRadius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${colorPrimary.join(',')}, ${0.22 * p.alpha + glowIntensity * 0.35})`;
+        ctx.arc(p.x, p.y, baseRadius * 2.8, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${colorPrimary.join(',')}, ${0.25 * p.alpha})`;
         ctx.fill();
 
-        // 3. Ultra-Bright Radiant Core
-        const coreRadius = baseRadius * (1.0 + 0.45 * glowIntensity);
         ctx.beginPath();
-        ctx.arc(p.x, p.y, coreRadius, 0, Math.PI * 2);
-        if (glowIntensity > 0.3) {
-          ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1.0, 0.9 + glowIntensity * 0.1)})`;
-        } else {
-          ctx.fillStyle = `rgba(${colorAccent.join(',')}, ${0.95 * p.alpha})`;
-        }
+        ctx.arc(p.x, p.y, baseRadius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${colorAccent.join(',')}, ${0.9 * p.alpha})`;
         ctx.fill();
-
-        // 4. Interconnection Constellation Links (GraphRAG in Div 0, active during transition)
-        const linkThreshold = this.targetDivision === 0 ? 140 : (120 * (1 - ease * 0.6) + 40);
-        for (let j = i + 1; j < pts.length; j++) {
-          const p2 = pts[j];
-          const dx = p.x - p2.x;
-          const dy = p.y - p2.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < linkThreshold) {
-            const linkAlpha = (1 - dist / linkThreshold) * (0.38 + glowIntensity * 0.3) * p.alpha * p2.alpha;
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = glowIntensity > 0.4 
-              ? `rgba(${colorAccent.join(',')}, ${linkAlpha})` 
-              : `rgba(${colorPrimary.join(',')}, ${linkAlpha})`;
-            ctx.lineWidth = 1.2 + glowIntensity * 0.8;
-            ctx.stroke();
-
-            // Light packet travelling along link
-            if (dist < 110 && (i + j) % 3 === 0) {
-              const pktPos = (t * 0.9 + (i + j) * 0.1) % 1;
-              const px = p.x + (p2.x - p.x) * pktPos;
-              const py = p.y + (p2.y - p.y) * pktPos;
-              ctx.beginPath();
-              ctx.arc(px, py, 1.8 + glowIntensity * 1.5, 0, Math.PI * 2);
-              ctx.fillStyle = `rgba(255, 255, 255, ${linkAlpha * 2.8})`;
-              ctx.fill();
-            }
-          }
-        }
       }
     }
   }

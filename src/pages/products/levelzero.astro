@@ -1,11 +1,12 @@
 ---
 // src/pages/products/levelzero.astro
 import Layout from '../../layouts/Layout.astro';
+import KernelAtlas from '../../components/KernelAtlas.astro';
 
 const metrics = [
   { label: "Deployment Footprint", value: "One Single DLL", detail: "Managed API, native shim & embedded pre-built kernels in one assembly" },
-  { label: "Precompiled Modules", value: "407 Kernel Binaries", detail: "37 distinct OpenCL C kernels precompiled across 11 Intel GPU hardware targets (37 × 11 = 407)" },
-  { label: "Kernel Wrappers", value: "37 Typed Wrappers", detail: "Typed execution across Swarm (14), SNN (3), LLM (15) & Retrieval (5)" },
+  { label: "Precompiled Modules", value: "418 Kernel Binaries", detail: "38 distinct OpenCL C kernels precompiled across 11 Intel GPU hardware targets (38 × 11 = 418)" },
+  { label: "Kernel Atlas", value: "38 Verified Kernels", detail: "Hardware tiles across Swarm (15), LLM (15), SNN (3) & Ranker / RAG (5)" },
   { label: "Memory Substrate", value: "Unified Shared Memory", detail: "Zero-copy SharedBuffer<T> exposed directly as typed Span<T>" },
   { label: "Target Detection", value: "Auto-Probing + Override", detail: "DeviceCapabilityDetector selects hardware target automatically with runtime pin support" }
 ];
@@ -21,87 +22,11 @@ const hardwareTargets = [
   { target: "lnl-m", arch: "Xe2-LPG", example: "Core Ultra 200V (Lunar Lake)", category: "Ultra-Low Power AI PC" },
   { target: "ptl-h", arch: "Xe3-LPG", example: "Core Ultra 300 (Panther Lake)", category: "Future Native Substrate" }
 ];
-
-const kernelDomains = [
-  {
-    title: "Swarm & Evolutionary Optimization",
-    count: "14 Kernels",
-    color: "#38bdf8",
-    icon: "🐝",
-    desc: "Parallel particle swarm mechanics, multi-objective Pareto sorting, hypervolume calculus, and topological layout algorithms.",
-    kernels: [
-      { name: "fitness_evaluation", desc: "Batch evaluation for multi-dimensional objective functions" },
-      { name: "pso_velocity_position", desc: "Parallel velocity/position update with dynamic inertial clamping" },
-      { name: "differential_evolution", desc: "DE mutation, vector recombination, and boundary reflection" },
-      { name: "cma_es_covariance", desc: "Covariance matrix adaptation and rank-μ update acceleration" },
-      { name: "ant_colony_selection", desc: "Pheromone matrix transition probability and path exploration" },
-      { name: "pareto_dominance_count", desc: "GPU-parallel non-dominated sorting and rank assignment" },
-      { name: "monte_carlo_hypervolume", desc: "High-dimensional hypervolume estimation for Pareto fronts" },
-      { name: "igd_plus_distance", desc: "Inverted Generational Distance (IGD+) directional quality" },
-      { name: "firefly_attraction", desc: "Light intensity attenuation and mutual brightness convergence" },
-      { name: "pairwise_distance", desc: "Dense Euclidean and Manhattan particle distance matrices" },
-      { name: "exchange_topology_weights", desc: "Island-model migration topologies and synchronization" },
-      { name: "tile_placement_cost", desc: "Spatial floorplan constraint cost and wirelength minimization" },
-      { name: "nbody_force_layout", desc: "Pairwise repulsive/attractive graph layout simulation" },
-      { name: "hypergraph_scoring", desc: "Higher-order hyperedge connectivity and modularity scoring" }
-    ]
-  },
-  {
-    title: "Local LLM Inference (Full Decode Path)",
-    count: "15 Kernels",
-    color: "#a855f7",
-    icon: "🧠",
-    desc: "Complete autoregressive token generation decode path with bit-faithful quantization and fused operations.",
-    kernels: [
-      { name: "gemm_gemv_dense", desc: "High-throughput general matrix-matrix and matrix-vector multiplication" },
-      { name: "fused_self_attention", desc: "Fused query-key-value scaled dot-product flash attention" },
-      { name: "rope_embedding", desc: "Rotary positional embeddings with precomputed frequency angles" },
-      { name: "rmsnorm_layer", desc: "Root Mean Square normalization with learnable scale parameters" },
-      { name: "swiglu_activation", desc: "Gated SwiGLU feed-forward network activation and gating" },
-      { name: "embedding_lookup", desc: "Token vocabulary vector extraction and scaling" },
-      { name: "logits_sampling", desc: "GPU-side temperature, top-k, top-p and min-p token selection" },
-      { name: "kv_cache_store", desc: "Continuous rolling key-value cache buffer management" },
-      { name: "residual_add", desc: "In-place element-wise residual connection addition" },
-      { name: "bias_add", desc: "Channel-wise and tensor-wise bias broadcasting" },
-      { name: "buffer_copy_stride", desc: "Non-contiguous tensor strided memory transfers" },
-      { name: "output_sigmoid_gate", desc: "Calibrated logistic gating for output projection layers" },
-      { name: "int8_quantized_matmul", desc: "Int8 weight-only quantized matmul with bit-faithful CPU reference model" },
-      { name: "kv_cache_defrag", desc: "Paged attention KV-cache compaction and defragmentation" },
-      { name: "context_shift_register", desc: "Sliding-window token state window shifting" }
-    ]
-  },
-  {
-    title: "Spiking Neural Networks (SNN)",
-    count: "3 Kernels",
-    color: "#10b981",
-    icon: "⚡",
-    desc: "Biologically plausible temporal neural substrates with continuous membrane dynamics and synaptic plasticity.",
-    kernels: [
-      { name: "spike_correlation", desc: "Pairwise spike-train synchrony and temporal correlation metrics" },
-      { name: "lif_membrane_update", desc: "Leaky integrate-and-fire membrane potential Euler integration" },
-      { name: "stdp_weight_trace", desc: "Spike-timing-dependent plasticity with exponential eligibility traces" }
-    ]
-  },
-  {
-    title: "Recommendation & Knowledge Retrieval",
-    count: "5 Kernels",
-    color: "#f59e0b",
-    icon: "🔍",
-    desc: "GraphRAG dense similarity search, cognitive weaving, and asynchronous streaming pipelines.",
-    kernels: [
-      { name: "suggestion_scoring", desc: "Collaborative and content-based recommendation candidate scoring" },
-      { name: "ranker_preparation", desc: "Feature normalization and dense candidate tensor collation" },
-      { name: "chain_boost_accumulation", desc: "Multi-hop graph edge weight accumulation and boosting" },
-      { name: "graphrag_dense_vector_search", desc: "High-dimensional cosine and dot similarity across resident graph embeddings" },
-      { name: "async_host_gpu_pipeline", desc: "Asynchronous host-to-GPU streaming pipeline for Pixie cognitive weaver & BESS reasoner" }
-    ]
-  }
-];
 ---
 
 <Layout 
-  title="LevelZero.NET & L0 Kernel Catalog • Intel GPU Compute for .NET"
-  description="Intel GPU compute from .NET, one DLL, no driver SDK to install. Managed API, native shim, and 407 pre-compiled kernel modules spanning 11 Intel GPU targets."
+  title="LevelZero.NET & Level Zero Kernel Atlas • Intel GPU Compute for .NET"
+  description="Intel GPU compute from .NET, one DLL, no driver SDK to install. Managed API, native shim, and 418 pre-compiled kernel modules spanning 38 compute kernels across 11 Intel GPU targets."
 >
   <!-- Top Breadcrumb -->
   <div class="product-top-bar">
@@ -127,13 +52,13 @@ const kernelDomains = [
           Production Runtime (.NET 10 &bull; C ABI)
         </span>
         <span class="badge badge-purple">
-          407 Pre-Compiled Kernels (37 &times; 11 Targets)
+          418 Pre-Compiled Kernels (38 &times; 11 Targets)
         </span>
       </div>
 
       <h1 class="hero-title">
         LevelZero.NET &amp; <br />
-        <span class="text-gradient">Kernel Catalog</span>
+        <span class="text-gradient">Kernel Atlas</span>
       </h1>
 
       <p class="hero-tagline">
@@ -141,7 +66,7 @@ const kernelDomains = [
       </p>
 
       <p class="hero-desc">
-        LevelZero.NET is a .NET wrapper for Intel Level Zero GPU compute, carrying a large catalog of pre-built kernels for the workloads that recur across HF Labs' own work: swarm optimization, spiking neural networks, and local LLM inference. Everything ships in a single DLL: managed API, an HFLabs-authored native shim, and 407 pre-compiled kernel modules (37 distinct kernels compiled for each of 11 Intel GPU targets, from 11th-gen Iris Xe through Battlemage and Panther Lake). You still need Intel's own Level Zero driver on the target machine, but nothing else. The vendor loader itself is not redistributed.
+        LevelZero.NET is a high-performance .NET wrapper for Intel Level Zero GPU compute, carrying a verified catalog of 38 pre-built compute kernels for the workloads that recur across HF Labs' own systems: swarm optimization, spiking neural networks, local LLM inference, and GraphRAG knowledge ranking. Everything ships in a single DLL: managed API, an HFLabs-authored native C ABI shim, and 418 pre-compiled kernel modules (38 distinct kernels compiled for each of 11 Intel GPU targets, from 11th-gen Iris Xe through Battlemage and Panther Lake). You still need Intel's own Level Zero driver on the target machine, but nothing else. The vendor loader itself is not redistributed.
       </p>
 
       <!-- Primary Action CTAs -->
@@ -242,46 +167,8 @@ const kernelDomains = [
     </div>
   </section>
 
-  <!-- Over 35 Kernel Wrappers Across 4 Domains -->
-  <section class="domains-section">
-    <div class="container">
-      <div class="section-center-header">
-        <div class="badge badge-purple" style="margin-bottom:12px;">Pre-Built Acceleration Catalog</div>
-        <h2 class="section-heading">37 Kernel Wrappers, Across Four Domains</h2>
-        <p class="section-subtext">
-          Carrying 407 precompiled kernel binaries (37 kernels &times; 11 hardware targets) compiled directly from OpenCL C into optimized SPIR-V and device-native Zebins across all four operational domains.
-        </p>
-      </div>
-
-      <div class="domains-grid">
-        {kernelDomains.map(dom => (
-          <div class="domain-card" style={`--domain-color:${dom.color};`}>
-            <div class="domain-header">
-              <span class="domain-icon">{dom.icon}</span>
-              <div>
-                <h3 class="domain-title">{dom.title}</h3>
-                <span class="domain-count">{dom.count}</span>
-              </div>
-            </div>
-            
-            <p class="domain-desc">{dom.desc}</p>
-
-            <div class="domain-kernels-list">
-              <h4>Included Kernel Implementations</h4>
-              <ul class="kernels-scroll">
-                {dom.kernels.map(k => (
-                  <li class="kernel-item">
-                    <code class="k-name">{k.name}</code>
-                    <span class="k-desc">{k.desc}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
+  <!-- Flagship Level Zero Kernel Atlas (38 Verified Compute Kernels) -->
+  <KernelAtlas />
 
   <!-- Auto Device Detection & Manual Override -->
   <section class="device-detection-section">
@@ -326,7 +213,7 @@ const kernelDomains = [
         <div class="badge badge-green" style="margin-bottom:12px;">Silicon Compatibility</div>
         <h2 class="section-heading">Supported Hardware Matrix</h2>
         <p class="section-subtext">
-          37 distinct kernels compiled into native binaries for each of the 11 Intel GPU architectural targets (37 &times; 11 = 407 kernel modules):
+          38 distinct compute kernels compiled into native binaries for each of the 11 Intel GPU architectural targets (38 &times; 11 = 418 kernel modules):
         </p>
       </div>
 

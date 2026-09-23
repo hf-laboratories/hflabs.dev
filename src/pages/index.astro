@@ -206,17 +206,17 @@ import divisions from '../data/divisions.json';
                   <span class="stage-pill">SwarmDev</span>
                 </div>
 
-                <!-- Metric Stats Grid -->
-                <div class="stage-metrics-trio">
-                  <div class="metric-trio-item">
+                <!-- Metric Stats Grid (Sequential Telemetry Scanner) -->
+                <div class="stage-metrics-trio" id="stageMetricsTrio">
+                  <div class="metric-trio-item" id="stageMetricItem1" data-metric-idx="0">
                     <span id="stageMetricLbl1" class="metric-lbl">2-Hop Traversal</span>
                     <strong id="stageMetricVal1" class="metric-val">0.15–1.95 ms</strong>
                   </div>
-                  <div class="metric-trio-item">
+                  <div class="metric-trio-item" id="stageMetricItem2" data-metric-idx="1">
                     <span id="stageMetricLbl2" class="metric-lbl">SIMD Vectors</span>
                     <strong id="stageMetricVal2" class="metric-val">128-d Default</strong>
                   </div>
-                  <div class="metric-trio-item">
+                  <div class="metric-trio-item" id="stageMetricItem3" data-metric-idx="2">
                     <span id="stageMetricLbl3" class="metric-lbl">MCP Connectivity</span>
                     <strong id="stageMetricVal3" class="metric-val">65+ Tools</strong>
                   </div>
@@ -400,6 +400,9 @@ import divisions from '../data/divisions.json';
                       )}
                       {p.name.includes("LevelZero") && (
                         <a href="/products/levelzero" class="p-link-btn">LevelZero.NET Product Page &rarr;</a>
+                      )}
+                      {p.name.includes("Poplar") && (
+                        <a href="/products/poplar" class="p-link-btn">Poplar.NET Product Page &rarr;</a>
                       )}
                       {p.name.includes("Abigen") && (
                         <a href="/products/abigen" class="p-link-btn">Abigen Product Page &rarr;</a>
@@ -860,9 +863,49 @@ import divisions from '../data/divisions.json';
     font-size: 10px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #e2e8f0;
+    color: #94a3b8;
     padding: 3px 8px;
     border-radius: 4px;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    user-select: none;
+  }
+
+  .stage-pill:hover {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .stage-pill.is-lit {
+    background: rgba(var(--active-color-rgb, 56, 189, 248), 0.22);
+    border-color: var(--active-color, #38bdf8);
+    color: #ffffff;
+    box-shadow: 0 0 14px rgba(var(--active-color-rgb, 56, 189, 248), 0.45);
+    transform: translateY(-1px) scale(1.04);
+    font-weight: 600;
+  }
+
+  .stage-pill.is-lit::before {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--active-color, #38bdf8);
+    box-shadow: 0 0 6px var(--active-color, #38bdf8);
+    animation: pillBeaconPulse 1.2s infinite ease-in-out;
+  }
+
+  @keyframes pillBeaconPulse {
+    0%, 100% { transform: scale(0.9); opacity: 0.8; }
+    50% { transform: scale(1.4); opacity: 1; }
+  }
+
+  .stage-pill.is-dimmed {
+    opacity: 0.42;
   }
 
   .stage-metrics-trio {
@@ -874,23 +917,76 @@ import divisions from '../data/divisions.json';
     border-radius: var(--radius-md);
     padding: 10px;
     margin-bottom: 16px;
+    position: relative;
   }
 
   .metric-trio-item {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
+    padding: 6px 8px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .metric-trio-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: transparent;
+    transition: all 0.35s ease;
+  }
+
+  .metric-trio-item:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .metric-trio-item.is-lit {
+    background: rgba(var(--active-color-rgb, 56, 189, 248), 0.12);
+    border-color: rgba(var(--active-color-rgb, 56, 189, 248), 0.65);
+    box-shadow: 0 0 16px rgba(var(--active-color-rgb, 56, 189, 248), 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .metric-trio-item.is-lit::after {
+    background: var(--active-color, #38bdf8);
+    box-shadow: 0 0 8px var(--active-color, #38bdf8);
+  }
+
+  .metric-trio-item.is-lit .metric-lbl {
+    color: var(--active-color, #38bdf8);
+    font-weight: 600;
+  }
+
+  .metric-trio-item.is-lit .metric-val {
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(var(--active-color-rgb, 56, 189, 248), 0.65);
+  }
+
+  .metric-trio-item.is-dimmed {
+    opacity: 0.45;
   }
 
   .metric-lbl {
     font-size: 9.5px;
     font-family: var(--font-mono);
     color: var(--text-muted);
+    transition: color 0.3s ease;
   }
 
   .metric-val {
     font-size: 12.5px;
     color: #f8fafc;
+    transition: all 0.3s ease;
   }
 
   .stage-action-row {
@@ -992,6 +1088,32 @@ import divisions from '../data/divisions.json';
     display: flex;
     align-items: center;
     gap: 8px;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .diagram-node.is-lit {
+    background: rgba(var(--active-color-rgb, 56, 189, 248), 0.16);
+    border-color: var(--active-color, #38bdf8);
+    box-shadow: 0 0 18px rgba(var(--active-color-rgb, 56, 189, 248), 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transform: scale(1.03);
+  }
+
+  .diagram-node.is-lit .node-title {
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(var(--active-color-rgb, 56, 189, 248), 0.5);
+  }
+
+  .diagram-node.is-lit .node-sub {
+    color: var(--active-color, #38bdf8);
+  }
+
+  .diagram-node.is-lit .node-icon {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 8px var(--active-color, #38bdf8));
+  }
+
+  .diagram-node.is-dimmed {
+    opacity: 0.4;
   }
 
   .node-icon {
@@ -1483,13 +1605,32 @@ import divisions from '../data/divisions.json';
       id: 0,
       badge: 'DIVISION 01',
       badgeColor: '#38bdf8',
+      badgeColorRgb: '56, 189, 248',
       title: 'Cognition & Swarm Intelligence',
       desc: 'In-memory graph retrieval, SIMD vector search, and multi-algorithm swarm optimization. Keeps the entire graph resident in RAM to eliminate disk-bound lookups, powering agent reasoning through FastMCP and desktop visualization HUDs.',
       pills: ['Hypertensor GraphRAG', 'HyperSwarm Suite', 'SwarmDev'],
       metrics: [
-        { lbl: '2-Hop Traversal', val: '0.15–1.95 ms' },
-        { lbl: 'SIMD Vectors', val: '128-d Default' },
-        { lbl: 'MCP Connectivity', val: '65+ Tools' }
+        { 
+          lbl: '2-Hop Traversal', 
+          val: '0.15–1.95 ms',
+          relatedPills: ['Hypertensor GraphRAG'],
+          relatedNodes: ['vnode-1', 'vnode-2'],
+          telemetry: '[Cognition & Swarm] Hypertensor GraphRAG: 2-hop traversal in 0.15 ms | In-Memory RAM resident'
+        },
+        { 
+          lbl: 'SIMD Vectors', 
+          val: '128-d Default',
+          relatedPills: ['Hypertensor GraphRAG'],
+          relatedNodes: ['vnode-2'],
+          telemetry: '[Cognition & Swarm] SIMD TensorPrimitives: 128-d vector cosine similarity evaluated with 0 alloc'
+        },
+        { 
+          lbl: 'MCP Connectivity', 
+          val: '65+ Tools',
+          relatedPills: ['HyperSwarm Suite', 'SwarmDev'],
+          relatedNodes: ['vnode-3', 'vnode-4'],
+          telemetry: '[Cognition & Swarm] FastMCP Server active with 65+ tools connected to HyperSwarm director'
+        }
       ],
       link: '/products/ht-graphrag',
       nodes: [
@@ -1509,13 +1650,32 @@ import divisions from '../data/divisions.json';
       id: 1,
       badge: 'DIVISION 02',
       badgeColor: '#06b6d4',
+      badgeColorRgb: '6, 182, 212',
       title: 'Machine Learning & Acceleration',
       desc: 'Spiking and graph-based ML, heterogeneous accelerator orchestration, and IPU-offloaded SQL. A unified gRPC service coordinates execution envelopes across IPU (Poplar), CUDA, OpenCL, Level Zero, FPGA, and DMA/RDMA backends.',
       pills: ['HFLabs ML Suite', 'Accelerator Layer', 'IPU SQL Accel'],
       metrics: [
-        { lbl: 'ML Substrates', val: 'SNN & KGE' },
-        { lbl: 'Accelerator Fabric', val: 'Unified gRPC' },
-        { lbl: 'Query Engine', val: 'IPU SQL Offload' }
+        { 
+          lbl: 'ML Substrates', 
+          val: 'SNN & KGE',
+          relatedPills: ['HFLabs ML Suite'],
+          relatedNodes: ['vnode-1'],
+          telemetry: '[ML Suite] Spiking Neural Network & Knowledge Graph Embeddings executing on native substrates'
+        },
+        { 
+          lbl: 'Accelerator Fabric', 
+          val: 'Unified gRPC',
+          relatedPills: ['Accelerator Layer'],
+          relatedNodes: ['vnode-2', 'vnode-3'],
+          telemetry: '[Accelerator Layer] Unified gRPC execution envelope routed across IPU, Level Zero, and FPGA'
+        },
+        { 
+          lbl: 'Query Engine', 
+          val: 'IPU SQL Offload',
+          relatedPills: ['IPU SQL Accel'],
+          relatedNodes: ['vnode-4'],
+          telemetry: '[IPU SQL Accel] Relational projection & aggregation offloaded directly to Graphcore Poplar IPU'
+        }
       ],
       link: '/products/ml-suite',
       nodes: [
@@ -1535,13 +1695,32 @@ import divisions from '../data/divisions.json';
       id: 2,
       badge: 'DIVISION 03',
       badgeColor: '#f43f5e',
+      badgeColorRgb: '244, 63, 94',
       title: 'Hardware & Native Substrates',
       desc: 'Intel GPU compute from .NET in one single DLL with no driver SDK to install. Managed API, native shim, and 407 precompiled kernel modules (37 distinct kernels across 11 Intel targets: 37 × 11 = 407) with 37 typed kernel wrappers and auto device detection.',
       pills: ['LevelZero.NET', 'Kernel Catalog', 'Poplar.NET', 'Abigen'],
       metrics: [
-        { lbl: 'Precompiled Binaries', val: '407 Modules' },
-        { lbl: 'Kernel Wrappers', val: '37 Wrappers' },
-        { lbl: 'Intel GPU Targets', val: '11 Hardware Targets' }
+        { 
+          lbl: 'Precompiled Binaries', 
+          val: '407 Modules',
+          relatedPills: ['Kernel Catalog', 'LevelZero.NET'],
+          relatedNodes: ['vnode-2', 'vnode-4'],
+          telemetry: '[Hardware Substrate] 407 precompiled kernel modules (37 distinct kernels × 11 targets) loaded from single DLL'
+        },
+        { 
+          lbl: 'Kernel Wrappers', 
+          val: '37 Wrappers',
+          relatedPills: ['LevelZero.NET', 'Abigen'],
+          relatedNodes: ['vnode-3'],
+          telemetry: '[LevelZero.NET & Abigen] 37 typed kernel wrappers auto-generated with direct Span<T> USM bindings'
+        },
+        { 
+          lbl: 'Intel GPU Targets', 
+          val: '11 Hardware Targets',
+          relatedPills: ['Kernel Catalog'],
+          relatedNodes: ['vnode-4', 'vnode-1'],
+          telemetry: '[Kernel Catalog] Auto target detection across 11 Intel silicon architectures (Iris Xe to Panther Lake)'
+        }
       ],
       link: '/products/levelzero',
       nodes: [
@@ -1591,7 +1770,7 @@ import divisions from '../data/divisions.json';
     });
   }
 
-  function goToPage(pageIdx: number) {
+  function goToPage(pageIdx: number, updateHash = true) {
     if (pageIdx < 0 || pageIdx >= totalPages) return;
     
     isPageTransitioning = true;
@@ -1612,6 +1791,14 @@ import divisions from '../data/divisions.json';
         dot.classList.remove('active');
       }
     });
+
+    if (updateHash) {
+      const hashes = ['#overview', '#core-systems', '#products'];
+      const targetHash = hashes[pageIdx];
+      if (targetHash && window.location.hash !== targetHash) {
+        history.replaceState(null, '', targetHash);
+      }
+    }
 
     // Notify division cycle managers of viewport section changes
     handleSectionInViewChange();
@@ -1750,6 +1937,11 @@ import divisions from '../data/divisions.json';
   const stageDivTitle = document.getElementById('stageDivTitle');
   const stageDivDesc = document.getElementById('stageDivDesc');
   const stageProjectPills = document.getElementById('stageProjectPills');
+  const stageMetricItem1 = document.getElementById('stageMetricItem1');
+  const stageMetricItem2 = document.getElementById('stageMetricItem2');
+  const stageMetricItem3 = document.getElementById('stageMetricItem3');
+  const stageMetricItems = [stageMetricItem1, stageMetricItem2, stageMetricItem3];
+
   const stageMetricLbl1 = document.getElementById('stageMetricLbl1');
   const stageMetricVal1 = document.getElementById('stageMetricVal1');
   const stageMetricLbl2 = document.getElementById('stageMetricLbl2');
@@ -1772,6 +1964,103 @@ import divisions from '../data/divisions.json';
 
   const stageNarrativeAnimGroup = document.getElementById('stageNarrativeAnimGroup');
   const stageVisAnimGroup = document.getElementById('stageVisAnimGroup');
+  const stageMetricsTrio = document.getElementById('stageMetricsTrio');
+
+  // ==========================================
+  // Sequential Metric & Project Lighting Sequencer
+  // ==========================================
+  let stageMetricStep = 0;
+  let metricStepTimer: number | null = null;
+  let isMetricHovered = false;
+  const metricStepDuration = 2700; // 2.7s per metric/project light-up step
+
+  function highlightMetricStep(stepIdx: number) {
+    stageMetricStep = stepIdx % 3;
+    const data = divisionData[stageCurrentDiv];
+    if (!data) return;
+
+    const currentMetric = data.metrics[stageMetricStep];
+    if (!currentMetric) return;
+
+    // Set CSS theme variables on container elements
+    const rgb = data.badgeColorRgb || '56, 189, 248';
+    const hex = data.badgeColor || '#38bdf8';
+    if (stageNarrativeAnimGroup) {
+      stageNarrativeAnimGroup.style.setProperty('--active-color', hex);
+      stageNarrativeAnimGroup.style.setProperty('--active-color-rgb', rgb);
+    }
+    if (stageVisAnimGroup) {
+      stageVisAnimGroup.style.setProperty('--active-color', hex);
+      stageVisAnimGroup.style.setProperty('--active-color-rgb', rgb);
+    }
+
+    // 1. Highlight the active metric item card, dim inactive ones
+    stageMetricItems.forEach((item, idx) => {
+      if (!item) return;
+      if (idx === stageMetricStep) {
+        item.classList.add('is-lit');
+        item.classList.remove('is-dimmed');
+      } else {
+        item.classList.remove('is-lit');
+        item.classList.add('is-dimmed');
+      }
+    });
+
+    // 2. Highlight matching project pills in stageProjectPills
+    if (stageProjectPills) {
+      const pills = stageProjectPills.querySelectorAll<HTMLElement>('.stage-pill');
+      pills.forEach(pill => {
+        const pillName = pill.getAttribute('data-pill-name') || pill.textContent?.trim() || '';
+        const isRelated = currentMetric.relatedPills?.some((rp: string) => pillName.includes(rp) || rp.includes(pillName));
+        if (isRelated) {
+          pill.classList.add('is-lit');
+          pill.classList.remove('is-dimmed');
+        } else {
+          pill.classList.remove('is-lit');
+          pill.classList.add('is-dimmed');
+        }
+      });
+    }
+
+    // 3. Highlight matching diagram nodes in the visualizer mesh
+    const nodeIds = ['vnode-1', 'vnode-2', 'vnode-3', 'vnode-4'];
+    nodeIds.forEach(nodeId => {
+      const nodeEl = document.getElementById(nodeId);
+      if (!nodeEl) return;
+      const isRelatedNode = currentMetric.relatedNodes?.includes(nodeId);
+      if (isRelatedNode) {
+        nodeEl.classList.add('is-lit');
+        nodeEl.classList.remove('is-dimmed');
+      } else {
+        nodeEl.classList.remove('is-lit');
+        nodeEl.classList.add('is-dimmed');
+      }
+    });
+
+    // 4. Update terminal stream to spotlight the active telemetry
+    if (stageTerminalText && currentMetric.telemetry) {
+      stageTerminalText.textContent = currentMetric.telemetry;
+    }
+  }
+
+  function startMetricCycle() {
+    stopMetricCycle();
+    if (isStagePaused) return;
+
+    metricStepTimer = window.setInterval(() => {
+      if (!isMetricHovered && !isStagePaused) {
+        stageMetricStep = (stageMetricStep + 1) % 3;
+        highlightMetricStep(stageMetricStep);
+      }
+    }, metricStepDuration);
+  }
+
+  function stopMetricCycle() {
+    if (metricStepTimer) {
+      clearInterval(metricStepTimer);
+      metricStepTimer = null;
+    }
+  }
 
   function setStageDivision(divIdx: number) {
     stageCurrentDiv = divIdx;
@@ -1811,7 +2100,24 @@ import divisions from '../data/divisions.json';
       if (stageDivDesc) stageDivDesc.textContent = data.desc;
 
       if (stageProjectPills) {
-        stageProjectPills.innerHTML = data.pills.map(p => `<span class="stage-pill">${p}</span>`).join('');
+        stageProjectPills.innerHTML = data.pills.map(p => `<span class="stage-pill" data-pill-name="${p}">${p}</span>`).join('');
+        
+        // Attach interactive hover & click listeners to newly created pills
+        stageProjectPills.querySelectorAll<HTMLElement>('.stage-pill').forEach(pill => {
+          const pName = pill.getAttribute('data-pill-name') || '';
+          pill.addEventListener('mouseenter', () => {
+            isMetricHovered = true;
+            const matchIdx = data.metrics.findIndex((m: any) => m.relatedPills?.some((rp: string) => pName.includes(rp) || rp.includes(pName)));
+            if (matchIdx >= 0) highlightMetricStep(matchIdx);
+          });
+          pill.addEventListener('mouseleave', () => {
+            isMetricHovered = false;
+          });
+          pill.addEventListener('click', () => {
+            const matchIdx = data.metrics.findIndex((m: any) => m.relatedPills?.some((rp: string) => pName.includes(rp) || rp.includes(pName)));
+            if (matchIdx >= 0) highlightMetricStep(matchIdx);
+          });
+        });
       }
 
       if (stageMetricLbl1 && stageMetricVal1) {
@@ -1866,6 +2172,11 @@ import divisions from '../data/divisions.json';
 
       if (stageNarrativeAnimGroup) stageNarrativeAnimGroup.classList.remove('fading');
       if (stageVisAnimGroup) stageVisAnimGroup.classList.remove('fading');
+
+      // Initialize sequential light-up at first metric item
+      stageMetricStep = 0;
+      highlightMetricStep(0);
+      startMetricCycle();
     }, 180);
   }
 
@@ -1885,7 +2196,23 @@ import divisions from '../data/divisions.json';
       clearTimeout(stageCycleTimer);
       stageCycleTimer = null;
     }
+    stopMetricCycle();
   }
+
+  // Bind hover and click events to metric trio item boxes
+  stageMetricItems.forEach((item, idx) => {
+    if (!item) return;
+    item.addEventListener('mouseenter', () => {
+      isMetricHovered = true;
+      highlightMetricStep(idx);
+    });
+    item.addEventListener('mouseleave', () => {
+      isMetricHovered = false;
+    });
+    item.addEventListener('click', () => {
+      highlightMetricStep(idx);
+    });
+  });
 
   // Stage Tab Click
   stageTabs.forEach(tab => {
@@ -1902,11 +2229,13 @@ import divisions from '../data/divisions.json';
       isStagePaused = !isStagePaused;
       if (isStagePaused) {
         stopStageCycle();
+        stopMetricCycle();
         stagePauseBtn.innerHTML = `<span class="pause-icon">&#9654;</span><span class="pause-text">Resume</span>`;
         cycleStatusText.textContent = 'Paused';
         cycleStatusText.style.color = 'var(--text-muted)';
       } else {
         startStageCycle();
+        startMetricCycle();
         stagePauseBtn.innerHTML = `<span class="pause-icon">&#10074;&#10074;</span><span class="pause-text">Pause</span>`;
         cycleStatusText.textContent = 'Active Cycle (15s)';
         cycleStatusText.style.color = 'var(--accent-emerald)';
@@ -2008,6 +2337,21 @@ import divisions from '../data/divisions.json';
         targetPage = 2;
       } else if (href.includes('#overview') || href.includes('#hero') || href.includes('#section-1')) {
         targetPage = 0;
+      }
+
+      // If user clicks the products button while ALREADY on /#products (or on page 2), open /products catalog
+      if (targetPage === 2) {
+        const currentHash = window.location.hash.toLowerCase();
+        const isOnProductsSlide = currentPage === 2 || 
+                                  currentHash.includes('products') || 
+                                  currentHash.includes('divisions') || 
+                                  currentHash.includes('stack') || 
+                                  currentHash.includes('section-3');
+        if (isOnProductsSlide) {
+          e.preventDefault();
+          window.location.href = '/products';
+          return;
+        }
       }
 
       if (targetPage >= 0) {

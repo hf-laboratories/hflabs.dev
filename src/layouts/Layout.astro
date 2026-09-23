@@ -57,6 +57,7 @@ const {
         <a href="/#products" class="nav-link" data-section-target="2">Products</a>
         <a href="/polyglot" class="nav-link">Polyglot Matrix</a>
         <a href="/schemas" class="nav-link">Schemas</a>
+        <a href="/book" class="nav-link" style="color: #fbbf24; font-weight: 700;">FPGA Book (wip)</a>
         <a href="/docs" class="nav-link">Docs</a>
         <a href="/about" class="nav-link">About</a>
         <a href="https://github.com/hf-laboratories" target="_blank" rel="noopener noreferrer" class="btn-secondary main-github-link" style="padding:6px 12px; font-size:12px;" data-main-github="true" title="HF Laboratories GitHub Profile">
@@ -100,6 +101,7 @@ const {
             <li><a href="/products/abigen">Abigen (in dev)</a></li>
             <li><a href="/products/accelerator">Accelerator Product Page</a></li>
             <li><a href="/products/queryaccel">QueryAccel Product Page</a></li>
+            <li><a href="/products/poplar">Poplar.NET (in dev)</a></li>
             <li><a href="/docs/graphrag-operator">In-Memory Hypertensor GraphRAG Manual</a></li>
             <li><a href="/docs/hyperswarm-benchmarks">HyperSwarm &amp; SwarmDev Docs</a></li>
             <li><a href="/docs/levelzero-net">LevelZero.NET &amp; L0 Kernels</a></li>
@@ -110,10 +112,11 @@ const {
         <div class="footer-col">
           <h4>Knowledge</h4>
           <ul>
+            <li><a href="/book">FPGA Book (wip) (PCIe DMA &amp; PTP)</a></li>
             <li><a href="/polyglot">Polyglot Matrix (C/C++/C#/CL/PS1/VL/SVL)</a></li>
             <li><a href="/schemas">Schema &amp; Wire Contract Registry</a></li>
             <li><a href="/products/ml-suite">HFLabs Machine Learning Suite</a></li>
-            <li><a href="/#hardware">Poplar.NET &amp; ABIGen</a></li>
+            <li><a href="/products/poplar">Poplar.NET Driver &amp; PopART</a></li>
           </ul>
         </div>
 
@@ -633,6 +636,32 @@ const {
       initGitHubConstructionInterceptor();
     }
     document.addEventListener('astro:page-load', initGitHubConstructionInterceptor);
+
+    // Products Nav Link Interceptor: Clicking Products while on /#products opens /products
+    function initProductsLinkBehavior() {
+      const productsLinks = document.querySelectorAll('a[href="/#products"], a[href="#products"], [data-section-target="2"]');
+      productsLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          const isHomePage = window.location.pathname === '/' || window.location.pathname === '';
+          const currentHash = window.location.hash.toLowerCase();
+          const isProductsHash = currentHash.includes('products') || 
+                                 currentHash.includes('divisions') || 
+                                 currentHash.includes('stack') || 
+                                 currentHash.includes('section-3');
+          if (isHomePage && isProductsHash) {
+            e.preventDefault();
+            window.location.href = '/products';
+          }
+        });
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initProductsLinkBehavior);
+    } else {
+      initProductsLinkBehavior();
+    }
+    document.addEventListener('astro:page-load', initProductsLinkBehavior);
   </script>
 </body>
 </html>
