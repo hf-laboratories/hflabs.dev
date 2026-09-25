@@ -101,7 +101,7 @@ const capabilities = [
 
 <Layout 
   title="SwarmDev • Deterministic Prompt-to-Plan Pipeline | HF Labs" 
-  description="SwarmDev is the conversational coding and research pipeline inside IPUServices. Prompt classification, planning, graph construction, and execution orchestration with a diagnostic trail at every step.">
+  description="SwarmDev is the conversational coding and research pipeline inside AutoML App. Prompt classification, planning, graph construction, and execution orchestration with a diagnostic trail at every step.">
   
   <!-- Top Breadcrumb Bar -->
   <div class="product-top-bar">
@@ -122,7 +122,7 @@ const capabilities = [
       <div class="hero-badge-row">
         <span class="badge badge-cyan">Conversational Pipeline</span>
         <span class="badge badge-emerald">Deterministic Planning</span>
-        <span class="badge badge-purple">IPUServices Core</span>
+        <span class="badge badge-purple">AutoML App Core</span>
       </div>
 
       <h1 class="hero-title">SwarmDev</h1>
@@ -189,7 +189,7 @@ const capabilities = [
           </div>
           <h2 class="intro-heading">Moving Beyond the Single Opaque Model Call</h2>
           <p class="intro-text">
-            <strong>SwarmDev</strong> is the conversational coding and research pipeline used inside <strong>IPUServices</strong>. It takes a natural-language request and works through it in explicit, repeatable stages rather than a single opaque model call.
+            <strong>SwarmDev</strong> is the conversational coding and research pipeline used inside <strong>AutoML App</strong>. It takes a natural-language request and works through it in explicit, repeatable stages rather than a single opaque model call.
           </p>
           <p class="intro-text">
             Each stage produces artifacts you can read, test and diff, which makes the pipeline significantly easier to debug, audit, and benchmark than a black-box agent.
@@ -296,17 +296,17 @@ const capabilities = [
         <h2 class="status-title">Runtime Status &amp; Integration Target</h2>
         
         <p class="status-statement">
-          <strong>Status:</strong> Internal component of <strong>IPUServices</strong>, exposed as a library. It runs inside <a href="/products/automlapp" style="color:var(--accent-blue); text-decoration:underline;"><strong>AutoMLApp</strong></a> as a node integration.
+          <strong>Status:</strong> Core component of <strong>AutoML App</strong>, exposed as a modular pipeline library. It runs inside <a href="/products/automlapp" style="color:var(--accent-blue); text-decoration:underline;"><strong>AutoML App</strong></a> as a node integration.
         </p>
 
         <div class="status-details-grid">
           <div class="status-box">
             <h4>Host Environment</h4>
-            <p>Runs as a managed library inside <code>IPUServices</code> with zero disk overhead and direct in-memory message framing.</p>
+            <p>Runs as a managed library inside <code>AutoML App</code> with zero disk overhead and direct in-memory message framing.</p>
           </div>
           <div class="status-box">
             <h4>Application Node</h4>
-            <p>Embedded as a core execution and research node inside <a href="/products/automlapp" style="color:var(--accent-blue);"><code>AutoMLApp</code></a> for autonomous machine learning experiments.</p>
+            <p>Embedded as a core execution and research node inside <a href="/products/automlapp" style="color:var(--accent-blue);"><code>AutoML App</code></a> for autonomous machine learning experiments.</p>
           </div>
           <div class="status-box">
             <h4>Opt-in Extensibility</h4>
@@ -320,7 +320,7 @@ const capabilities = [
             <span class="code-title">SwarmDev Service Registration &amp; Configuration</span>
             <span class="code-lang">C# / .NET 9</span>
           </div>
-          <pre class="code-content"><code>// Register SwarmDev deterministic pipeline in IPUServices / AutoMLApp
+          <pre class="code-content"><code>// Register SwarmDev deterministic pipeline in AutoML App
 services.AddSwarmDevPipeline(options => 
 &#123;
     options.EnableDeterministicPlanning = true;

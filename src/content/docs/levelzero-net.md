@@ -127,6 +127,6 @@ LevelZero.NET does that work once, ships it precompiled, and gets out of the way
 
 ## Resources & Calls to Action
 
-- [View on GitHub (IPUServices)](https://github.com/hf-laboratories/IPUServices)
+- [View on GitHub (HFLabs)](https://github.com/hf-laboratories)
 - [Explore Product Page](/products/levelzero)
 - [Contact Systems Engineering](/about#contact)

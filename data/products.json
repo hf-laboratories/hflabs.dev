@@ -3,11 +3,11 @@
   "updatedAt": "2026-03-05",
   "products": [
     {
-      "id": "ipuservices",
-      "name": "IPUServices",
+      "id": "automlapp",
+      "name": "AutoML App",
       "tagline": "Composable accelerator and service orchestration stack.",
       "summary": "A modular platform for orchestration, feature serving, sidecar extensions, and hardware-accelerated workflows.",
-      "details": "IPUServices is a composable platform for integrating accelerator-aware services with practical operational tooling. It combines service orchestration, feature pipelines, and extension points so teams can evolve workloads without rebuilding infrastructure from scratch.\n\nThe project is built to support iterative experimentation and production handoff, with strong emphasis on modular deployment boundaries, contract-driven interfaces, and scalable runtime behavior.",
+      "details": "AutoML App is a composable platform for integrating accelerator-aware services with practical operational tooling. It combines service orchestration, feature pipelines, and extension points so teams can evolve workloads without rebuilding infrastructure from scratch.\n\nThe project is built to support iterative experimentation and production handoff, with strong emphasis on modular deployment boundaries, contract-driven interfaces, and scalable runtime behavior.",
       "status": "Live",
       "category": "Platform",
       "badges": ["C#", ".NET", "gRPC"],
@@ -63,6 +63,26 @@
         {
           "label": "Papers",
           "url": "https://hflabs.dev/papers/"
+        }
+      ]
+    },
+    {
+      "id": "swarmbench",
+      "name": "SwarmBench",
+      "tagline": "Measure how swarms really behave, and watch them work.",
+      "summary": "Benchmarking, characterization, elimination tournaments, and real-time visualization HUD for 34 swarm optimization algorithms across 110 test functions.",
+      "details": "HyperSwarm's benchmarking and visualization tools run 34 optimization algorithms against 110 test functions, record every run, and let you watch or replay each one agent by agent.\n\nIt features the SwarmBenchmarkRunner CLI (single runs, streams, diagnostics, game tournaments, HPO sweeps), HyperCache for reusable tuned configurations, self-validating SwarmCharacterization LaTeX/JSON reports, and SwarmVisualizer.Host desktop HUD with 6 frame layers across 7 lifecycle stages.",
+      "status": "Production",
+      "category": "Tooling",
+      "badges": ["Benchmark", "Visualization", "Telemetry", ".NET"],
+      "links": [
+        {
+          "label": "Product",
+          "url": "/products/swarmbench"
+        },
+        {
+          "label": "Docs",
+          "url": "/docs#swarm-benchmark"
         }
       ]
     },

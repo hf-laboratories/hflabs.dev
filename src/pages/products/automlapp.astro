@@ -49,7 +49,7 @@ const capabilities = [
     icon: "📦",
     title: "Portable pipelines",
     tagline: "Two-Way JSON Interop",
-    desc: "Export and import standardized pipeline JSON schemas fully compatible with the web pipeline manager, IPUServices daemons, and command-line execution runners.",
+    desc: "Export and import standardized pipeline JSON schemas fully compatible with the web pipeline manager, background daemons, and command-line execution runners.",
     color: "#a855f7"
   },
   {
@@ -82,7 +82,7 @@ const domains = [
 
 <Layout 
   title="AutoMLApp (in development) • Visual ML & Hardware Pipeline Editor | HF Labs" 
-  description="AutoMLApp (in development) is the Windows node-graph editor for composing, validating and running machine-learning and accelerator pipelines inside IPUServices.">
+  description="AutoMLApp (in development) is the Windows node-graph editor for composing, validating and running machine-learning and accelerator pipelines across heterogeneous hardware.">
   
   <!-- Top Breadcrumb Bar -->
   <div class="product-top-bar">
@@ -104,7 +104,7 @@ const domains = [
         <span class="badge badge-amber">In Development</span>
         <span class="badge badge-cyan">Visual Node-Graph Editor</span>
         <span class="badge badge-purple">.NET 10 / WinForms</span>
-        <span class="badge badge-emerald">IPUServices Front End</span>
+        <span class="badge badge-emerald">Visual Workbench</span>
       </div>
 
       <h1 class="hero-title">AutoMLApp <span style="font-size:24px; font-weight:500; color:var(--text-muted);">(in development)</span></h1>
@@ -244,7 +244,7 @@ const domains = [
         <div class="window-statusbar">
           <span>Nodes: 5 | Links: 6 | Topo Order: [1, 2] &rarr; [3, 4] &rarr; [5]</span>
           <span>Target Hardware: IPU Bow-Pod16 + Xeon Host</span>
-          <span style="color:var(--accent-emerald);">Engine: Connected (IPUServices Daemon)</span>
+          <span style="color:var(--accent-emerald);">Engine: Connected (Local Daemon)</span>
         </div>
       </div>
     </div>
@@ -259,9 +259,9 @@ const domains = [
           <div class="intro-tag">
             <span class="badge badge-cyan">VISUAL ARCHITECTURE</span>
           </div>
-          <h2 class="intro-heading">The Visual Front End for IPUServices</h2>
+          <h2 class="intro-heading">The Visual Node-Graph Workbench</h2>
           <p class="intro-text">
-            <strong>AutoMLApp</strong> is the visual front end for <strong>IPUServices</strong>. Instead of wiring configuration files by hand or writing fragile glue code, you drag nodes onto a canvas, connect typed ports, and compile the graph into an execution plan.
+            <strong>AutoMLApp</strong> is the visual node-graph workbench for heterogeneous compute and ML pipelines. Instead of wiring configuration files by hand or writing fragile glue code, you drag nodes onto a canvas, connect typed ports, and compile the graph into an execution plan.
           </p>
           <p class="intro-text">
             It unifies data pipelines, model deployment, accelerator configuration, real-time telemetry and hyperparameter search in one comprehensive, high-productivity desktop workspace.
@@ -396,7 +396,7 @@ const domains = [
   "$schema": "https://hflabs.dev/schemas/pipeline_schema.json",
   "pipelineId": "pip_hybrid_accelerator_swarm_01",
   "version": "1.0.0",
-  "targetRuntime": "IPUServices.NET10",
+  "targetRuntime": "HFLabs.NET10",
   "nodes": [
     &#123;
       "id": "node_01",
@@ -433,7 +433,7 @@ const domains = [
   <section class="bottom-cta-section">
     <div class="container">
       <div class="bottom-cta-box">
-        <h2>Explore the IPUServices Visual &amp; Compute Stack</h2>
+        <h2>Explore the HFLabs Visual &amp; Compute Stack</h2>
         <p>
           Discover how AutoMLApp orchestrates Hypertensor GraphRAG, SwarmDev pipelines, and heterogeneous hardware accelerators.
         </p>

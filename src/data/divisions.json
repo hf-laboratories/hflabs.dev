@@ -24,6 +24,12 @@
         "description": "Deterministic prompt-to-workflow pipeline. It does intent classification, planning, knowledge-graph construction, frame routing, policy-gated normalization and diagnostics. Optional kGNN reasoning and wavescan layers are opt-in.",
         "path": "src/HFLabs/Products/SwarmDev",
         "status": "Production"
+      },
+      {
+        "name": "SwarmBench",
+        "description": "Benchmarking, characterization, elimination tournaments and real-time visualization HUD running 34 optimization algorithms against 110 test functions with HyperCache config reuse and self-validating LaTeX/JSON profiles.",
+        "path": "src/HFLabs/Products/SwarmBench",
+        "status": "Production"
       }
     ]
   },
@@ -37,7 +43,7 @@
     "projects": [
       {
         "name": "AutoMLApp (in development)",
-        "description": "Windows node-graph editor (.NET 10/WinForms) for composing, validating and running ML and accelerator pipelines. Visual front end for IPUServices with 185+ node types, F7 validation, and pluggable HyperSwarm backend.",
+        "description": "Windows node-graph editor (.NET 10/WinForms) for composing, validating and running ML and accelerator pipelines. Visual node-graph workbench with 185+ node types, F7 validation, and pluggable HyperSwarm backend.",
         "path": "src/HFLabs/Products/AutoMLApp",
         "status": "In Development"
       },

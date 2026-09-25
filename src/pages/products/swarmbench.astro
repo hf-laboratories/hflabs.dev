@@ -1,0 +1,1382 @@
+---
+// src/pages/products/swarmbench.astro
+import Layout from '../../layouts/Layout.astro';
+import { 
+  BENCHMARK_FUNCTIONS, 
+  BENCHMARK_CATEGORIES, 
+  BENCHMARK_COMMANDS, 
+  VISUALIZER_LAYERS, 
+  LIFECYCLE_STAGES 
+} from '../../data/swarmBenchCatalog';
+
+const metrics = [
+  { value: "34", label: "Optimization Algorithms", detail: "Classic swarms, search methods, 14 hybrids and multi-objective engines" },
+  { value: "110", label: "Registered Test Functions", detail: "9 problem families: unimodal, multimodal, constrained, combinatorial, etc." },
+  { value: "2,500+", label: "Automated Tests", detail: "Full unit test suite validating mathematical correctness and invariants" },
+  { value: "7", label: "Run Lifecycle Stages", detail: "From topology scan to convergence events and HyperCache writeback" },
+  { value: "100%", label: "Deterministic & Seeded", detail: "Exact seed replay, dimension binning, and self-validating characterization" }
+];
+
+const pillars = [
+  {
+    icon: "🌐",
+    title: "Broad by default",
+    desc: "Classic swarms, search methods, 14 hybrids and two multi-objective algorithms meet unimodal, multimodal, constrained, multi-objective, combinatorial, dynamic, niching, noisy and high-dimensional problems.",
+    color: "#38bdf8"
+  },
+  {
+    icon: "🎯",
+    title: "Repeatable",
+    desc: "Every run takes a seed, the larger problem variants use fixed seeds, and tuned settings are cached per function and dimension bin.",
+    color: "#818cf8"
+  },
+  {
+    icon: "👁️",
+    title: "Visible",
+    desc: "A live and replay visualizer shows agents, subswarms, topology regions and feature planes as a run unfolds.",
+    color: "#10b981"
+  },
+  {
+    icon: "🛡️",
+    title: "Checked",
+    desc: "The algorithm library alone carries more than 2,500 automated tests, and characterization profiles validate themselves before they are written.",
+    color: "#f59e0b"
+  }
+];
+---
+
+<Layout 
+  title="SwarmBench • Benchmarking, Characterization & HUD for Swarms | HF Labs"
+  description="Measure how swarms really behave, and watch them work. HyperSwarm's benchmarking and visualization tools run 34 optimization algorithms against 110 test functions, record every run, and let you watch or replay each one agent by agent."
+>
+  <!-- Top Breadcrumb -->
+  <div class="product-top-bar">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Overview</a>
+        <span class="sep">/</span>
+        <a href="/products">Products</a>
+        <span class="sep">/</span>
+        <span class="curr">SwarmBench</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="product-hero">
+    <div class="container">
+      <div class="hero-badge-row">
+        <span class="badge badge-accent">HyperSwarm Ecosystem</span>
+        <span class="badge badge-green">34 Optimizers &bull; 110 Test Functions</span>
+        <span class="badge badge-purple">Real-Time Telemetry &amp; HUD</span>
+      </div>
+
+      <h1 class="hero-title">
+        SwarmBench
+      </h1>
+
+      <p class="hero-tagline">
+        Measure how swarms really behave, and watch them work.
+      </p>
+
+      <p class="hero-desc">
+        HyperSwarm's benchmarking and visualization tools run 34 optimization algorithms against 110 test functions, record every run, and let you watch or replay each one agent by agent. Benchmark any algorithm on any problem with standardized seeds, eliminate underperforming configs in multi-stage tournaments, and inspect live swarm dispersion on desktop HUD canvases.
+      </p>
+
+      <!-- Primary Action CTAs -->
+      <div class="hero-actions">
+        <a href="#functions-catalog" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+            <path d="M3 9h18M9 21V9"></path>
+          </svg>
+          <span>Explore 110 Functions</span>
+        </a>
+        <a href="#command-runner" class="btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="4 17 10 11 4 5"></polyline>
+            <line x1="12" y1="19" x2="20" y2="19"></line>
+          </svg>
+          <span>CLI Commands</span>
+        </a>
+        <a href="#visualizer" class="btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polygon points="10 8 16 12 10 16 10 8"></polygon>
+          </svg>
+          <span>Swarm Visualizer HUD</span>
+        </a>
+        <a href="/products/hyperswarm" class="btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          <span>HyperSwarm Product</span>
+        </a>
+      </div>
+
+      <!-- Live Metrics Strip -->
+      <div class="metrics-strip">
+        {metrics.map(m => (
+          <div class="metric-card">
+            <span class="metric-val">{m.value}</span>
+            <span class="metric-label">{m.label}</span>
+            <span class="metric-detail">{m.detail}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 Core Pillars -->
+  <section class="pillars-section">
+    <div class="container">
+      <div class="pillars-grid">
+        {pillars.map(p => (
+          <div class="pillar-card" style={`--p-color:${p.color};`}>
+            <div class="pillar-icon-wrap" style={`background:${p.color}15; border-color:${p.color}40;`}>
+              <span class="p-icon">{p.icon}</span>
+            </div>
+            <h3 class="pillar-title">{p.title}</h3>
+            <p class="pillar-desc">{p.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Benchmark Any Algorithm on Any Problem (CLI Runner) -->
+  <section id="command-runner" class="command-runner-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="badge badge-accent">CLI &bull; SwarmBenchmarkRunner</div>
+        <h2 class="section-title">Benchmark Any Algorithm on Any Problem</h2>
+        <p class="section-subtitle">
+          One command-line runner, <code>SwarmBenchmarkRunner</code>, covers single runs, streamed telemetry, tournaments, tuning sweeps and cache maintenance. Every run takes the same core options: <code>--algorithm</code>, <code>--function</code>, <code>--dimensions</code> (default 10), <code>--iterations</code> (default 500), <code>--swarm-size</code> (default 50) and a random <code>--seed</code> (default 42).
+        </p>
+      </div>
+
+      <!-- Commands Table -->
+      <div class="commands-table-box">
+        <div class="table-header-row">
+          <span class="th-col col-cmd">Command</span>
+          <span class="th-col col-desc">What it does</span>
+          <span class="th-col col-syntax">Example Syntax</span>
+        </div>
+        <div class="table-body">
+          {BENCHMARK_COMMANDS.map(c => (
+            <div class="table-row">
+              <div class="td-col col-cmd">
+                <code>{c.cmd}</code>
+                <span class="cat-tag">{c.category}</span>
+              </div>
+              <div class="td-col col-desc">{c.desc}</div>
+              <div class="td-col col-syntax">
+                <div class="code-snippet-row">
+                  <pre><code>{c.syntax}</code></pre>
+                  <button class="copy-cmd-btn" data-clipboard={c.syntax} title="Copy command">Copy</button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Workflow Deep Dive Grid -->
+      <div class="workflow-cards-grid">
+        <!-- Card 1: Tournaments -->
+        <div class="workflow-card">
+          <div class="wf-header">
+            <span class="wf-badge" style="color:#f59e0b; background:#f59e0b15; border-color:#f59e0b40;">Tournament Engine</span>
+            <h3 class="wf-title">Tournaments, not just single runs</h3>
+          </div>
+          <p class="wf-desc">
+            The benchmark game puts a pool of agents (50 by default) through stages drawn from the test functions. Each stage elects agents for full trials, keeps a fraction as survivors, and can split the pool into subswarms once it converges together. Filter the stages by category, choose the algorithms in the pool, and set the hardware backend.
+          </p>
+          <div class="wf-code-box">
+            <pre><code>SwarmBenchmarkRunner run-game \
+  --pool 50 \
+  --survivors 0.5 \
+  --split-subswarms \
+  --backend levelzero</code></pre>
+          </div>
+        </div>
+
+        <!-- Card 2: HyperCache -->
+        <div class="workflow-card">
+          <div class="wf-header">
+            <span class="wf-badge" style="color:#10b981; background:#10b98115; border-color:#10b98140;">Tuned Cache</span>
+            <h3 class="wf-title">Tuned settings you can reuse</h3>
+          </div>
+          <p class="wf-desc">
+            The HyperCache stores the best configurations found for each function and dimension bin, and the validate commands check that every cached configuration can still be reached across consecutive seed replays.
+          </p>
+          <div class="wf-code-box">
+            <pre><code>SwarmBenchmarkRunner hypercache-validate \
+  --check-recall \
+  --dimension-bins 10d,30d,100d</code></pre>
+          </div>
+        </div>
+
+        <!-- Card 3: Characterization Profiles -->
+        <div class="workflow-card">
+          <div class="wf-header">
+            <span class="wf-badge" style="color:#ec4899; background:#ec489915; border-color:#ec489940;">Self-Validating Reports</span>
+            <h3 class="wf-title">Characterization profiles</h3>
+          </div>
+          <p class="wf-desc">
+            The <code>SwarmCharacterization</code> tool runs one algorithm on one function and dimension across several seeds (five by default). It self-validates the result before anything is written, then produces a machine-readable <code>profile.json</code>, a readable <code>profile.md</code> and a standalone LaTeX <code>profile.tex</code> per algorithm. Re-running a combination replaces only that entry, so profiles grow one function and dimension at a time.
+          </p>
+          <div class="wf-code-box">
+            <pre><code>SwarmCharacterization \
+  --algorithm cma_es \
+  --function rosenbrock \
+  --seeds 5 \
+  --emit json,md,tex</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Watch the Swarm Run (Visualizer HUD) -->
+  <section id="visualizer" class="visualizer-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="badge badge-purple">HUD &bull; SwarmVisualizer.Host</div>
+        <h2 class="section-title">Watch the Swarm Run</h2>
+        <p class="section-subtitle">
+          The visualizer turns any benchmark run into a scene you can watch live or replay later. It shows every agent, every subswarm and the landscape the swarm is reading.
+        </p>
+      </div>
+
+      <!-- 3 Ways to Watch Strip -->
+      <div class="visualizer-modes-grid">
+        <div class="vmode-card">
+          <div class="vmode-num">01</div>
+          <h4 class="vmode-title">Live Execution</h4>
+          <p class="vmode-desc">Pipe a run straight in, or let the host launch and attach automatically.</p>
+          <pre class="vmode-code"><code>SwarmBenchmarkRunner run-stream ... | SwarmVisualizer.Host stdin
+# Or let the host launch the command:
+SwarmVisualizer.Host capture &lt;command&gt;</code></pre>
+        </div>
+
+        <div class="vmode-card">
+          <div class="vmode-num">02</div>
+          <h4 class="vmode-title">Deterministic Replay</h4>
+          <p class="vmode-desc">Plays back saved per-agent, per-iteration traces with variable playback speed.</p>
+          <pre class="vmode-code"><code>SwarmVisualizer.Host replay trace.jsonl</code></pre>
+        </div>
+
+        <div class="vmode-card">
+          <div class="vmode-num">03</div>
+          <h4 class="vmode-title">Headless JSON Report</h4>
+          <p class="vmode-desc">Turns a trace into an aggregated JSON run summary without rendering a window.</p>
+          <pre class="vmode-code"><code>SwarmVisualizer.Host report trace.jsonl summary.json</code></pre>
+        </div>
+      </div>
+
+      <!-- What is on screen & Frame Layer Breakdown -->
+      <div class="hud-details-grid">
+        <div class="hud-narrative-box">
+          <h3 class="hud-heading">What is on screen</h3>
+          <p class="hud-text">
+            The Windows desktop app draws a live scatter plot of the agents and time-series charts of the run's metrics, with run, source, iteration, progress, best fitness and agent count in view. It auto-attaches to local swarm telemetry, opens replay files, launches captured runs, and reloads saved runs from the persistence catalog. It sits on the same scene stream as the console host, so a run looks the same wherever you open it.
+          </p>
+
+          <h4 class="stages-heading">7 Lifecycle Stages of a Run</h4>
+          <div class="stages-flow">
+            {LIFECYCLE_STAGES.map(s => (
+              <div class="stage-step">
+                <span class="stage-num">{s.stage}</span>
+                <div>
+                  <strong class="stage-title">{s.name}:</strong>
+                  <span class="stage-desc">{s.desc}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Frame Layers Card -->
+        <div class="hud-layers-card">
+          <h3 class="hud-heading">What a Frame Carries</h3>
+          <p class="hud-text">Each frame delivers rich spatial and telemetry layers across the search landscape:</p>
+
+          <div class="layers-list">
+            {VISUALIZER_LAYERS.map(l => (
+              <div class="layer-item" style={`--l-color:${l.color};`}>
+                <div class="layer-title-row">
+                  <span class="l-icon">{l.icon}</span>
+                  <span class="l-name">{l.layer}</span>
+                </div>
+                <p class="l-desc">{l.description}</p>
+              </div>
+            ))}
+          </div>
+
+          <div class="extensibility-box">
+            <div class="ext-title">Built to be Extended</div>
+            <p class="ext-desc">
+              Scenes come from pluggable sources (JSONL file, stdin, launched process, stream, persisted runs) and go to pluggable plugins (console summary, JSON summary, desktop window). Add your own by implementing:
+            </p>
+            <pre class="ext-code"><code>public interface ISwarmSceneSource &#123;
+  IAsyncEnumerable&lt;SwarmSceneFrame&gt; ReadFramesAsync(CancellationToken ct);
+&#125;
+
+public interface ISwarmScenePlugin &#123;
+  Task OnFrameReceivedAsync(SwarmSceneFrame frame, CancellationToken ct);
+&#125;</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Complete 110 Test Function Catalog -->
+  <section id="functions-catalog" class="catalog-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="badge badge-green">COMPLETE CATALOG (110 FUNCTIONS)</div>
+        <h2 class="section-title">The 110 Registered Test Functions</h2>
+        <p class="section-subtitle">
+          The suite ships 110 registered test functions across nine problem families. Each reports recommended dimensions, default bounds and known optimum. Scaled variants share a name and differ by problem size so you can test high-dimensional scaling.
+        </p>
+      </div>
+
+      <!-- Live Search & Filter Bar -->
+      <div class="catalog-toolbar">
+        <div class="catalog-search-box">
+          <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input 
+            type="text" 
+            id="fnSearchInput" 
+            placeholder="Search 110 functions by ID, name, optimum, or notes..." 
+            aria-label="Filter benchmark functions"
+          />
+          <button id="clearFnSearch" class="clear-search-btn" title="Clear search" style="display:none;">&times;</button>
+        </div>
+
+        <div class="catalog-counter" id="catalogCounter">
+          Showing <strong>110</strong> of 110 functions
+        </div>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="catalog-pills-bar">
+        {BENCHMARK_CATEGORIES.map(cat => (
+          <button 
+            class={`cat-pill ${cat.key === 'all' ? 'active' : ''}`}
+            data-cat={cat.key}
+          >
+            <span class="pill-dot" style={`background:${cat.color}; box-shadow:0 0 6px ${cat.color};`}></span>
+            <span class="pill-name">{cat.label}</span>
+            <span class="pill-num">{cat.count}</span>
+          </button>
+        ))}
+      </div>
+
+      <!-- Functions Table -->
+      <div class="fn-table-container">
+        <table class="fn-table" id="functionsTable">
+          <thead>
+            <tr>
+              <th style="width: 130px;">Function ID</th>
+              <th style="width: 220px;">Function Name</th>
+              <th style="width: 140px;">Category</th>
+              <th style="width: 110px; text-align:center;">Dimensions</th>
+              <th style="width: 150px;">Known Optimum</th>
+              <th>Formulation &amp; Characterization Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {BENCHMARK_FUNCTIONS.map(fn => (
+              <tr 
+                class={`fn-row cat-row-${fn.categoryKey}`}
+                data-cat={fn.categoryKey}
+                data-search={`${fn.id} ${fn.name} ${fn.category} ${fn.knownOptimum} ${fn.notes || ''}`.toLowerCase()}
+              >
+                <td class="fn-id-cell"><code>{fn.id}</code></td>
+                <td class="fn-name-cell">
+                  <strong>{fn.name}</strong>
+                  {fn.objectives && <span class="obj-tag">{fn.objectives} Objectives</span>}
+                  {fn.noiseLevel && <span class="noise-tag">&sigma; = {fn.noiseLevel}</span>}
+                </td>
+                <td class="fn-cat-cell">
+                  <span class={`cat-badge badge-${fn.categoryKey}`}>{fn.category}</span>
+                </td>
+                <td class="fn-dim-cell">{fn.dimensions}D</td>
+                <td class="fn-opt-cell"><code>{fn.knownOptimum}</code></td>
+                <td class="fn-notes-cell">{fn.notes || "—"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom CTA & Cross Links -->
+  <section class="bottom-cta-section">
+    <div class="container">
+      <div class="cta-banner">
+        <h2 class="cta-title">Explore the Full Swarm Intelligence Stack</h2>
+        <p class="cta-desc">
+          SwarmBench pairs directly with the 34 optimizers of HyperSwarm, the deterministic prompt-to-plan pipeline of SwarmDev, and the visual node-graph canvas of AutoML App.
+        </p>
+        <div class="cta-links-row">
+          <a href="/products/hyperswarm" class="cta-card-link">
+            <span class="cl-title">HyperSwarm Suite &rarr;</span>
+            <span class="cl-desc">35 optimizers, Director ensembles &amp; Level Zero GPU kernels</span>
+          </a>
+          <a href="/products/swarmdev" class="cta-card-link">
+            <span class="cl-title">SwarmDev Pipeline &rarr;</span>
+            <span class="cl-desc">Deterministic prompt classification and graph reasoning</span>
+          </a>
+          <a href="/products/automlapp" class="cta-card-link">
+            <span class="cl-title">AutoML App &rarr;</span>
+            <span class="cl-desc">Windows node-graph canvas with 185+ pipeline nodes</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('fnSearchInput') as HTMLInputElement | null;
+    const clearBtn = document.getElementById('clearFnSearch') as HTMLButtonElement | null;
+    const catPills = document.querySelectorAll<HTMLButtonElement>('.catalog-pills-bar .cat-pill');
+    const rows = document.querySelectorAll<HTMLTableRowElement>('.fn-row');
+    const counter = document.getElementById('catalogCounter');
+    const copyCmdBtns = document.querySelectorAll<HTMLButtonElement>('.copy-cmd-btn');
+
+    let activeCat = 'all';
+    let searchQuery = '';
+
+    function filterTable() {
+      let visibleCount = 0;
+
+      rows.forEach(row => {
+        const cat = row.getAttribute('data-cat') || '';
+        const search = row.getAttribute('data-search') || '';
+
+        const matchesCat = (activeCat === 'all') || (cat === activeCat);
+        const matchesSearch = (!searchQuery) || (search.includes(searchQuery));
+
+        if (matchesCat && matchesSearch) {
+          row.style.display = '';
+          visibleCount++;
+        } else {
+          row.style.display = 'none';
+        }
+      });
+
+      if (counter) {
+        counter.innerHTML = `Showing <strong>${visibleCount}</strong> of ${rows.length} functions`;
+      }
+    }
+
+    // Category pill filtering
+    catPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        catPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        activeCat = pill.getAttribute('data-cat') || 'all';
+        filterTable();
+      });
+    });
+
+    // Search input filtering
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        searchQuery = (e.target as HTMLInputElement).value.trim().toLowerCase();
+        if (clearBtn) {
+          clearBtn.style.display = searchQuery ? 'block' : 'none';
+        }
+        filterTable();
+      });
+    }
+
+    if (clearBtn && searchInput) {
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        searchQuery = '';
+        clearBtn.style.display = 'none';
+        filterTable();
+        searchInput.focus();
+      });
+    }
+
+    // Copy command buttons
+    copyCmdBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const text = btn.getAttribute('data-clipboard') || '';
+        if (text) {
+          navigator.clipboard.writeText(text);
+          btn.textContent = 'Copied!';
+          setTimeout(() => btn.textContent = 'Copy', 2000);
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  /* Common Layout & Container */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .product-top-bar {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(4, 7, 18, 0.6);
+    backdrop-filter: blur(8px);
+    padding: 12px 0;
+  }
+
+  .breadcrumb {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .breadcrumb a {
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+  .breadcrumb a:hover {
+    color: #38bdf8;
+  }
+  .breadcrumb .sep {
+    color: rgba(255, 255, 255, 0.2);
+  }
+  .breadcrumb .curr {
+    color: #f8fafc;
+  }
+
+  /* Hero Section */
+  .product-hero {
+    padding: 60px 0 40px;
+    background: radial-gradient(circle at 50% 10%, rgba(56, 189, 248, 0.08) 0%, transparent 70%);
+  }
+
+  .hero-badge-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .hero-title {
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: #f8fafc;
+    margin: 0 0 12px 0;
+  }
+
+  .hero-tagline {
+    font-size: 22px;
+    font-weight: 700;
+    color: #38bdf8;
+    margin: 0 0 16px 0;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-desc {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    max-width: 900px;
+    margin: 0 0 32px 0;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+
+  /* Metrics Strip */
+  .metrics-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .metric-card {
+    background: #080d1e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .metric-val {
+    font-size: 30px;
+    font-weight: 900;
+    font-family: var(--font-mono);
+    color: #38bdf8;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .metric-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 4px;
+  }
+
+  .metric-detail {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* 4 Pillars */
+  .pillars-section {
+    padding: 30px 0 50px;
+  }
+
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+  }
+
+  .pillar-card {
+    background: #060914;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 24px;
+    transition: all 0.2s ease;
+  }
+
+  .pillar-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--p-color);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  }
+
+  .pillar-icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .pillar-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin: 0 0 8px 0;
+  }
+
+  .pillar-desc {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Section Header */
+  .section-header {
+    margin-bottom: 32px;
+  }
+
+  .section-title {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: #f8fafc;
+    margin: 8px 0 10px 0;
+  }
+
+  .section-subtitle {
+    font-size: 15px;
+    color: var(--text-secondary);
+    max-width: 840px;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .section-subtitle code {
+    color: #38bdf8;
+  }
+
+  /* Commands Table */
+  .command-runner-section {
+    padding: 50px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .commands-table-box {
+    background: #060914;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+
+  .table-header-row {
+    display: grid;
+    grid-template-columns: 240px 1fr 340px;
+    padding: 12px 18px;
+    background: rgba(15, 23, 42, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .table-row {
+    display: grid;
+    grid-template-columns: 240px 1fr 340px;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    align-items: center;
+    gap: 16px;
+  }
+
+  .table-row:last-child {
+    border-bottom: none;
+  }
+
+  .col-cmd code {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #38bdf8;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .cat-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-muted);
+  }
+
+  .col-desc {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .code-snippet-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #02040a;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 6px 10px;
+  }
+
+  .code-snippet-row pre {
+    margin: 0;
+    flex: 1;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #e2e8f0;
+  }
+
+  .copy-cmd-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 3px 7px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .copy-cmd-btn:hover {
+    color: #f8fafc;
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  @media (max-width: 900px) {
+    .table-header-row {
+      display: none;
+    }
+    .table-row {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+  }
+
+  /* Workflow Deep Dive Grid */
+  .workflow-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .workflow-card {
+    background: #080d1e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .wf-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  .wf-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin: 0 0 10px 0;
+  }
+
+  .wf-desc {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0 0 16px 0;
+    flex: 1;
+  }
+
+  .wf-code-box pre {
+    margin: 0;
+    background: #02040a;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 12px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: #a5b4fc;
+    line-height: 1.5;
+    overflow-x: auto;
+  }
+
+  /* Visualizer Section */
+  .visualizer-section {
+    padding: 60px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: radial-gradient(circle at 80% 50%, rgba(168, 85, 247, 0.05) 0%, transparent 60%);
+  }
+
+  .visualizer-modes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+    margin-bottom: 40px;
+  }
+
+  .vmode-card {
+    background: #060914;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  .vmode-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #c084fc;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .vmode-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin: 0 0 6px 0;
+  }
+
+  .vmode-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0 0 12px 0;
+  }
+
+  .vmode-code {
+    margin: 0;
+    background: #02040a;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 6px;
+    padding: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #bae6fd;
+    overflow-x: auto;
+  }
+
+  .hud-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 28px;
+  }
+
+  @media (max-width: 900px) {
+    .hud-details-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .hud-narrative-box, .hud-layers-card {
+    background: #070b18;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 24px;
+  }
+
+  .hud-heading {
+    font-size: 20px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin: 0 0 8px 0;
+  }
+
+  .hud-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0 0 20px 0;
+  }
+
+  .stages-heading {
+    font-size: 13px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    letter-spacing: 0.05em;
+    color: #38bdf8;
+    text-transform: uppercase;
+    margin: 0 0 12px 0;
+  }
+
+  .stages-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .stage-step {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .stage-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: #818cf8;
+    background: rgba(129, 140, 248, 0.12);
+    padding: 2px 6px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .stage-title {
+    color: #f8fafc;
+  }
+
+  .stage-desc {
+    color: var(--text-muted);
+    margin-left: 4px;
+  }
+
+  .layers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .layer-item {
+    background: rgba(15, 23, 42, 0.6);
+    border-left: 3px solid var(--l-color);
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+  }
+
+  .layer-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .l-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #f8fafc;
+    font-family: var(--font-mono);
+  }
+
+  .l-desc {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .extensibility-box {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 18px;
+  }
+
+  .ext-title {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: #10b981;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .ext-desc {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0 0 10px 0;
+  }
+
+  .ext-code {
+    margin: 0;
+    background: #02040a;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: #34d399;
+    line-height: 1.5;
+    overflow-x: auto;
+  }
+
+  /* Catalog Section (110 Functions) */
+  .catalog-section {
+    padding: 60px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .catalog-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .catalog-search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 280px;
+    max-width: 500px;
+  }
+
+  .catalog-search-box .search-icon {
+    position: absolute;
+    left: 12px;
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  .catalog-search-box input {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    padding: 10px 32px 10px 34px;
+    color: #f8fafc;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    box-sizing: border-box;
+  }
+
+  .catalog-search-box input:focus {
+    outline: none;
+    border-color: #38bdf8;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+  }
+
+  .clear-search-btn {
+    position: absolute;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .catalog-counter {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .catalog-counter strong {
+    color: #f8fafc;
+  }
+
+  .catalog-pills-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .cat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .cat-pill:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #f8fafc;
+  }
+
+  .cat-pill.active {
+    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(30, 41, 59, 1);
+    color: #f8fafc;
+    box-shadow: 0 0 12px rgba(0,0,0,0.5);
+  }
+
+  .pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .pill-num {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 10px;
+  }
+
+  /* Functions Table */
+  .fn-table-container {
+    background: #060914;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    overflow-x: auto;
+    max-height: 700px;
+    overflow-y: auto;
+  }
+
+  .fn-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    text-align: left;
+  }
+
+  .fn-table th {
+    background: rgba(15, 23, 42, 0.95);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 12px 16px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .fn-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    color: var(--text-secondary);
+  }
+
+  .fn-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .fn-id-cell code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: #38bdf8;
+  }
+
+  .fn-name-cell strong {
+    color: #f8fafc;
+    display: inline-block;
+    margin-right: 6px;
+  }
+
+  .obj-tag, .noise-tag {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: rgba(132, 204, 22, 0.15);
+    color: #a3e635;
+    border: 1px solid rgba(132, 204, 22, 0.3);
+  }
+
+  .noise-tag {
+    background: rgba(6, 182, 212, 0.15);
+    color: #06b6d4;
+    border-color: rgba(6, 182, 212, 0.3);
+  }
+
+  .cat-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  .badge-unimodal { background: rgba(0, 229, 255, 0.1); color: #00e5ff; }
+  .badge-multimodal { background: rgba(129, 140, 248, 0.1); color: #818cf8; }
+  .badge-constrained { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+  .badge-multi_objective { background: rgba(132, 204, 22, 0.1); color: #84cc16; }
+  .badge-combinatorial { background: rgba(236, 72, 153, 0.1); color: #ec4899; }
+  .badge-dynamic { background: rgba(244, 63, 94, 0.1); color: #f43f5e; }
+  .badge-niching { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
+  .badge-noisy { background: rgba(6, 182, 212, 0.1); color: #06b6d4; }
+  .badge-high_dimensional { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+
+  .fn-dim-cell {
+    font-family: var(--font-mono);
+    text-align: center;
+    color: #e2e8f0;
+  }
+
+  .fn-opt-cell code {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: #fbbf24;
+  }
+
+  .fn-notes-cell {
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+
+  /* Bottom CTA */
+  .bottom-cta-section {
+    padding: 50px 0 80px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .cta-banner {
+    background: linear-gradient(135deg, rgba(8, 13, 30, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    text-align: center;
+  }
+
+  .cta-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin: 0 0 10px 0;
+  }
+
+  .cta-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    max-width: 760px;
+    margin: 0 auto 30px auto;
+    line-height: 1.6;
+  }
+
+  .cta-links-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    text-align: left;
+  }
+
+  .cta-card-link {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 16px 20px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cta-card-link:hover {
+    border-color: #38bdf8;
+    background: rgba(30, 41, 59, 0.8);
+    transform: translateY(-2px);
+  }
+
+  .cl-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 4px;
+  }
+
+  .cl-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+</style>
