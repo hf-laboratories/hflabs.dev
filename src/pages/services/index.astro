@@ -1,0 +1,73 @@
+---
+// services/index.astro
+import Layout from '../../layouts/Layout.astro';
+import ComingSoon from '../../components/ComingSoon.astro';
+
+const services = [
+  {
+    title: "Custom HT GraphRAG implementations",
+    soon: true,
+    body: "Hypertensor GraphRAG built around your data, schema, retrieval needs and deployment. Hypertensor GraphRAG is not yet released, so we are taking early inquiries only.",
+    links: [{ href: "/products/ht-graphrag", label: "HT GraphRAG product page" }],
+  },
+  {
+    title: "Custom Level Zero compute kernels",
+    body: "Compute kernels for Intel GPU targets over Level Zero, delivered with C# integration, a test and benchmark harness, and helper code your team can maintain.",
+    links: [{ href: "/products/levelzero", label: "LevelZero.NET" }],
+  },
+  {
+    title: "Custom ABI wrappers and C# integrations",
+    body: "Native ABI shims and managed C# bindings for your C or C++ libraries. LevelZero.NET and Poplar.NET show the approach in practice.",
+    links: [
+      { href: "/products/levelzero", label: "LevelZero.NET" },
+      { href: "/products/poplar", label: "Poplar.NET" },
+    ],
+  },
+  {
+    title: "MCP and A2A tooling with ML.Agentic",
+    body: "Custom MCP servers and agent-to-agent tooling built on ML.Agentic, starting from our DevTools MCP server implementation.",
+    links: [{ href: "/products/ml-agentic", label: "ML.Agentic" }],
+  },
+];
+---
+
+<Layout title="Services &bull; HFLabs" description="Custom HT GraphRAG implementations, Level Zero compute kernels with C# integration, ABI wrappers, and MCP and A2A tooling from HF Labs.">
+  <div class="container" style="padding:40px 0 64px; max-width:900px;">
+    <a href="/" style="font-size:12px; font-family:var(--font-mono);">&larr; Back to HFLabs Overview</a>
+    <h1 style="margin:20px 0 12px;">Services</h1>
+    <p style="color:var(--text-secondary); line-height:1.6; max-width:680px;">
+      Custom engineering from the people who build the stack. Every engagement is scoped and priced by agreement.
+      Tell us what you need and we will reply with what is realistic.
+    </p>
+
+    <div class="svc-grid">
+      {services.map((s) => (
+        <article class="svc-card">
+          <h2>{s.title}{s.soon && <ComingSoon />}</h2>
+          <p>{s.body}</p>
+          <div class="svc-links">
+            {s.links.map((l) => (<a href={l.href}>{l.label} &rarr;</a>))}
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="svc-cta">
+      <a class="btn-primary" href="mailto:alix@hflabs.dev?subject=Services%20inquiry" style="padding:12px 24px;">Start an inquiry</a>
+      <span style="font-size:12px; color:var(--text-muted);">alix@hflabs.dev</span>
+    </div>
+    <p style="margin-top:28px; font-size:12px; color:var(--text-muted); line-height:1.6;">
+      Work on third-party hardware and software stays under those vendors' own terms.
+      See <a href="/legal/trademarks" style="text-decoration:underline;">Trademarks &amp; Attributions</a>.
+    </p>
+  </div>
+</Layout>
+
+<style>
+  .svc-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:16px; margin:32px 0; }
+  .svc-card { border:1px solid var(--border-color, rgba(255,255,255,0.12)); border-radius:var(--radius-md); padding:20px; background:rgba(255,255,255,0.03); }
+  .svc-card h2 { font-size:17px; margin:0 0 10px; line-height:1.35; }
+  .svc-card p { font-size:14px; line-height:1.6; color:var(--text-secondary); margin:0 0 14px; }
+  .svc-links { display:flex; flex-wrap:wrap; gap:14px; font-size:12px; font-family:var(--font-mono); }
+  .svc-cta { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+</style>
