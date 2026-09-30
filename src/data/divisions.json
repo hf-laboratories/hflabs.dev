@@ -11,7 +11,7 @@
         "name": "Hypertensor GraphRAG",
         "description": "In-memory typed property-graph store with hybrid dense and BM25 retrieval. Dense search uses SIMD TensorPrimitives, with optional Level Zero GPU offload. It gives agents multi-hop graph context through a 65+ tool FastMCP server and a desktop HUD.",
         "path": "src/HFLabs/Products/HypertensorGraphRAG",
-        "status": "Production"
+        "status": "Coming soon"
       },
       {
         "name": "HyperSwarm Optimization Suite",

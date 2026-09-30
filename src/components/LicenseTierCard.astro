@@ -1,6 +1,7 @@
 ---
 // LicenseTierCard.astro
 import tiers from '../data/licensing.json';
+import ComingSoon from './ComingSoon.astro';
 
 interface Props {
   badge?: string;
@@ -28,6 +29,7 @@ const labelMap: Record<string, string> = {
       <div class="badge" style="background:rgba(251,191,36,0.15); color:var(--accent-amber); border:1px solid rgba(251,191,36,0.3); margin-bottom:12px;">
         {badge}
       </div>
+      <p style="margin:0 0 12px; font-size:0.9em; opacity:0.85;"><ComingSoon /> Hypertensor GraphRAG is not yet released. Tiers and terms may change before launch.</p>
       <h2 class="section-title">{title}</h2>
       <p class="section-desc">
         {subtitle}

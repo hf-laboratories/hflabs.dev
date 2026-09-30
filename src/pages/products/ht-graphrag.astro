@@ -2,6 +2,7 @@
 // src/pages/products/ht-graphrag.astro
 import Layout from '../../layouts/Layout.astro';
 import LicenseTierCard from '../../components/LicenseTierCard.astro';
+import ComingSoon from '../../components/ComingSoon.astro';
 import SubGraphMatrix from '../../components/SubGraphMatrix.astro';
 
 const metrics = [
@@ -71,7 +72,7 @@ const features = [
           Vector &amp; Graph Engine
         </span>
         <span class="badge" style="background:rgba(52,211,153,0.15); color:var(--accent-emerald); border:1px solid rgba(52,211,153,0.3);">
-          Production Ready
+          Coming soon
         </span>
         <span class="badge" style="background:rgba(251,191,36,0.15); color:var(--accent-amber); border:1px solid rgba(251,191,36,0.3);">
           Open-Core + Commercial
@@ -79,6 +80,7 @@ const features = [
       </div>
 
       <h1 class="hero-title">Hypertensor GraphRAG &amp; SIMD Vectors</h1>
+      <p class="hero-desc" style="font-weight:600;"><ComingSoon label="Coming soon" /> Hypertensor GraphRAG is not yet released. Details on this page may change before launch.</p>
       <p class="hero-desc">
         An in-memory typed property-graph and vector store for autonomous developer agents. It keeps the graph in RAM and serves agents over REST and MCP. That removes disk-bound lookups and external database round-trips.
       </p>
