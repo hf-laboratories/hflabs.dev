@@ -1,0 +1,21 @@
+{
+  "groups": [
+    { "owner": "Graphcore Limited", "names": ["Graphcore", "IPU", "Colossus", "Poplar", "PopART"] },
+    { "owner": "Intel Corporation", "names": ["Intel", "oneAPI", "Level Zero", "Arc", "Iris", "Meteor Lake", "Lunar Lake", "Arrow Lake"] },
+    { "owner": "Altera Corporation", "names": ["Altera", "Quartus"] },
+    { "owner": "NVIDIA Corporation", "names": ["NVIDIA", "CUDA"] },
+    { "owner": "Microsoft Corporation", "names": ["Microsoft", "Windows", ".NET", "PowerShell", "SQL Server", "Azure", "NuGet"] },
+    { "owner": "GitHub, Inc.", "names": ["GitHub", "GitHub Copilot", "Copilot"] },
+    { "owner": "OpenAI", "names": ["OpenAI"] },
+    { "owner": "Anthropic, PBC", "names": ["Anthropic", "Claude"] },
+    { "owner": "Hugging Face, Inc.", "names": ["Hugging Face"] },
+    { "owner": "Google LLC", "names": ["Android"] },
+    { "owner": "Apple Inc.", "names": ["macOS"] },
+    { "owner": "Linus Torvalds", "names": ["Linux"] },
+    { "owner": "Canonical Ltd.", "names": ["Ubuntu"] },
+    { "owner": "PostgreSQL Community Association of Canada", "names": ["PostgreSQL"] },
+    { "owner": "The Linux Foundation", "names": ["Kubernetes", "ONNX", "PyTorch"] },
+    { "owner": "Nice Keyboards", "names": ["nice!nano"] }
+  ],
+  "projects": ["ZMK", "FastMCP", "Model Context Protocol (MCP)", "llama.cpp"]
+}

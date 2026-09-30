@@ -1,0 +1,35 @@
+---
+// legal/trademarks.astro
+import Layout from '../../layouts/Layout.astro';
+import tm from '../../data/trademarks.json';
+---
+
+<Layout title="Trademarks &amp; Attributions &bull; HFLabs" description="Third-party product and company names used on this site and in HF Laboratories repositories, and who owns them.">
+  <div class="container" style="padding:40px 0 64px; max-width:820px;">
+    <a href="/" style="font-size:12px; font-family:var(--font-mono);">&larr; Back to HFLabs Overview</a>
+    <h1 style="margin:20px 0 12px;">Trademarks &amp; Attributions</h1>
+    <p style="color:var(--text-secondary); line-height:1.6;">
+      HFLabs builds software that runs on, talks to, or reads the formats of products made by other companies.
+      Those product and company names belong to their owners. We use them only to say what our software works with.
+      HF Laboratories is not affiliated with, endorsed by, or sponsored by any company named here.
+    </p>
+    <ul style="margin:24px 0; line-height:1.7; color:var(--text-secondary);">
+      {tm.groups.map((g) => (
+        <li>
+          {g.names.map((n, i) => (<Fragment>{i > 0 ? ', ' : ''}<strong>{n}</strong></Fragment>))}
+          {' '}{g.names.length > 1 ? 'are trademarks or registered trademarks' : 'is a trademark or registered trademark'} of {g.owner}.
+        </li>
+      ))}
+    </ul>
+    <p style="color:var(--text-secondary); line-height:1.6;">
+      {tm.projects.join(', ')} are names of third-party open-source projects and belong to their respective maintainers.
+    </p>
+    <p style="color:var(--text-secondary); line-height:1.6;">
+      Other names may be trademarks of their respective owners. Listing a name here does not mean we hold a license from its owner.
+      Hardware and software from other vendors stays under those vendors' own terms, including any SDKs, drivers and runtimes you install.
+    </p>
+    <p style="font-size:13px; color:var(--text-muted);">
+      Questions or corrections: <a href="mailto:alix@hflabs.dev">alix@hflabs.dev</a>
+    </p>
+  </div>
+</Layout>
