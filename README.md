@@ -40,3 +40,7 @@ Edit `data/products.json` and add or update objects in `products[]`. The product
 2. The inquiry form validates multiple-choice + short-string fields.
 3. On submit, the user is redirected to a prefilled GitHub issue.
 4. Workflow `.github/workflows/stash-inquiry-submissions.yml` extracts the JSON payload and stores it in `inquiries/inbox/YYYY/MM/DD/`.
+
+## License
+- **Code** is licensed under the MIT License. See `LICENSE`.
+- **Content** (papers, documentation, product data and copy, images, and branding) is not licensed for use. All rights reserved. See `LICENSE-CONTENT.md`.
