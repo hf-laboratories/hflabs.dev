@@ -116,7 +116,7 @@ const downstreamProducts = [
 ---
 
 <Layout 
-  title="Poplar.NET (in development) • Graphcore IPU Driver Bindings & PopART Execution | HF Labs"
+  title="Poplar.NET • Graphcore IPU Driver Bindings & PopART Execution | HF Labs"
   description="C ABI shim and high-performance managed .NET bindings for Graphcore Poplar and PopART computational graph execution."
 >
   <!-- Top Breadcrumb Bar -->
@@ -127,7 +127,7 @@ const downstreamProducts = [
         <span class="sep">/</span>
         <a href="/products">Products</a>
         <span class="sep">/</span>
-        <span class="curr">Poplar.NET (in development)</span>
+        <span class="curr">Poplar.NET</span>
       </div>
     </div>
   </div>
@@ -136,13 +136,13 @@ const downstreamProducts = [
   <section class="product-hero">
     <div class="container">
       <div class="hero-badge-row">
-        <span class="badge badge-amber">In Development</span>
+        <span class="badge badge-emerald" style="background:rgba(16,185,129,0.15); color:#10b981; border:1px solid rgba(16,185,129,0.3);">Released v1.0.0-preview</span>
         <span class="badge badge-cyan">Graphcore IPU</span>
         <span class="badge badge-purple">Poplar &amp; PopART SDK</span>
         <span class="badge badge-rose">Hardware &amp; Native Substrate</span>
       </div>
 
-      <h1 class="hero-title">Poplar.NET <span style="font-size:24px; font-weight:500; color:var(--text-muted);">(in development)</span></h1>
+      <h1 class="hero-title">Poplar.NET</h1>
       
       <p class="hero-lead">
         C ABI shim and managed .NET wrapper for Graphcore Poplar/PopART computational graph compilation and execution.
@@ -154,15 +154,39 @@ const downstreamProducts = [
 
       <!-- Primary Action CTAs -->
       <div class="hero-actions">
-        <a href="https://github.com/hf-laboratories" target="_blank" rel="noopener noreferrer" class="btn-primary" style="padding:12px 24px; font-size:14px;">
-          View on GitHub
+        <a 
+          href="https://github.com/hf-laboratories/Poplar.NET/releases/download/v1.0.0-preview/Poplar.NET-v1.0.0-preview-binaries.zip" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn-primary" 
+          style="padding:12px 24px; font-size:14px;"
+          data-released="true"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block; vertical-align:middle; margin-right:6px;">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          Download Binaries (v1.0.0-preview)
+        </a>
+        <a 
+          href="https://github.com/hf-laboratories/Poplar.NET" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn-secondary" 
+          style="padding:12px 24px; font-size:14px;"
+          data-released="true"
+        >
+          View Source Repository &rarr;
         </a>
         <a href="/docs/query-accel-ipu" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
           IPU SQL &amp; Poplar Docs &rarr;
         </a>
-        <a href="/products/queryaccel" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
-          QueryAccel Integration &rarr;
-        </a>
+      </div>
+
+      <!-- Quick Install Ribbon -->
+      <div style="display:inline-flex; align-items:center; gap:12px; background:#0f172a; border:1px solid #1e293b; padding:8px 16px; border-radius:6px; font-size:13px; margin-top:16px;">
+        <span style="color:#94a3b8; font-weight:500;">NuGet:</span>
+        <code style="color:#38bdf8; font-family:monospace;">dotnet add package HFLabs.Poplar.NET --version 1.0.0</code>
+        <button onclick="navigator.clipboard.writeText('dotnet add package HFLabs.Poplar.NET --version 1.0.0'); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy', 2000)" style="background:#1e293b; color:#e2e8f0; border:1px solid #334155; padding:3px 8px; border-radius:4px; font-size:11px; cursor:pointer;">Copy</button>
       </div>
     </div>
   </section>

@@ -4,6 +4,114 @@ import Layout from '../../layouts/Layout.astro';
 
 const products = [
   {
+    id: "levelzero-net",
+    name: "LevelZero.NET",
+    badge: "Flagship GPU Runtime",
+    badgeColor: "#f43f5e",
+    tagline: "Native Intel GPU acceleration and managed Level Zero runtime with pre-compiled SPIR-V kernels for .NET 10.",
+    status: "Released v2.0.0",
+    href: "/products/levelzero",
+    buttonText: "Explore LevelZero.NET Product Page →",
+    releaseHref: "https://github.com/hf-laboratories/LevelZero.NET/releases/tag/v2.0.0",
+    releaseText: "Release Assets (v2.0.0)",
+    features: [
+      "Single DLL: Managed API, native C shim, and 418 pre-compiled kernel modules across 11 Intel GPU targets",
+      "Unified Shared Memory (USM) zero-copy buffer allocations with typed Span<T>",
+      "Precompiled modules for Iris Xe, Arc A-Series, Lunar Lake, Arrow Lake, Battlemage, and Ponte Vecchio",
+      "Powers local LLM inference, swarm optimizers, and spiking neural network kernels"
+    ]
+  },
+  {
+    id: "l0llm",
+    name: "l0llm",
+    badge: "Flagship LLM Server",
+    badgeColor: "#a855f7",
+    tagline: "Pure C# & Intel Level Zero native LLM runner and OpenAI-compatible REST server. 41.3 tok/s on Iris Xe with zero GC allocations.",
+    status: "Released v2.0.0",
+    href: "/products/l0llm",
+    buttonText: "Explore l0llm Showcase →",
+    releaseHref: "https://github.com/hf-laboratories/l0llm/releases/tag/v2.0.0",
+    releaseText: "Download (v2.0.0)",
+    features: [
+      "Zero Python, zero Conda, zero C++ framework dependencies — 100% managed C#",
+      "Native support for LLaMA 3, Qwen 2.5, DeepSeek, Mistral, and Phi architectures",
+      "Drop-in OpenAI REST API (/v1/chat/completions) with SSE streaming for Open-WebUI & LangChain",
+      "Zero-allocation decode loop achieving 41.3 tokens/sec on mobile 15W Intel Iris Xe"
+    ]
+  },
+  {
+    id: "l0check",
+    name: "l0check",
+    badge: "Diagnostics CLI",
+    badgeColor: "#059669",
+    tagline: "Fast, standalone command-line diagnostic tool for inspecting Intel GPU architectures and validating compute kernels.",
+    status: "Released v2.0.0",
+    href: "/products/l0check",
+    buttonText: "Explore l0check CLI →",
+    releaseHref: "https://github.com/hf-laboratories/l0check/releases/tag/v2.0.0",
+    releaseText: "Download (v2.0.0)",
+    features: [
+      "Query driver versions, API versions, device IDs, PCI bus, and execution unit configurations",
+      "Analyze memory subsystems, sub-device slices, and cache topology hierarchy",
+      "Comprehensive diagnostic smoke tests and compute kernel pipeline verification",
+      "Self-contained single-file executable with zero installation dependencies"
+    ]
+  },
+  {
+    id: "ml-agentic",
+    name: "ML.Agentic",
+    badge: "Agentic AI Engine",
+    badgeColor: "#38bdf8",
+    tagline: "Zero-dependency, in-memory building blocks for enterprise multi-agent systems and protocols on .NET 10.",
+    status: "Released v1.0.0",
+    href: "/products/ml-agentic",
+    buttonText: "Explore ML.Agentic Product Page →",
+    releaseHref: "https://github.com/hf-laboratories/ML.Agentic/releases/tag/v1.0.0",
+    releaseText: "Download NuGet (v1.0.0)",
+    features: [
+      "21 canonical agentic patterns (Blackboard, HumanInTheLoopGate, ResourceBudgetLedger, Guardrails)",
+      "Native protocol engine for Model Context Protocol (MCP), Agent2Agent (A2A), and JSON-RPC 2.0",
+      "Sub-millisecond execution with 0 external package references or heavy graph stores",
+      "Deterministic seeded testing and optional Level Zero GPU kernel offload"
+    ]
+  },
+  {
+    id: "poplar-net",
+    name: "Poplar.NET",
+    badge: "IPU Runtime Engine",
+    badgeColor: "#10b981",
+    tagline: "Enterprise .NET 10 runtime engine & resident graph orchestration SDK for Graphcore Colossus IPUs.",
+    status: "Released v1.0.0-preview",
+    href: "/products/poplar",
+    buttonText: "Explore Poplar.NET Product Page →",
+    releaseHref: "https://github.com/hf-laboratories/Poplar.NET/releases/tag/v1.0.0-preview",
+    releaseText: "Download Binaries (v1.0.0-preview)",
+    features: [
+      "Direct C# bindings and native C ABI shim for Graphcore Poplar & PopART SDK",
+      "Pre-compiled on-chip resident graphs for LLM attention, swarm velocity, and covariance math",
+      "Dynamic hardware telemetry, IPU fan governor, and zero-allocation FIFO streaming",
+      "Paired with Poplar Explorer fork and IPU SQL Query Acceleration"
+    ]
+  },
+  {
+    id: "interactive-pnn",
+    name: "Interactive PNN Decision Matrix",
+    badge: "Interactive Visualization",
+    badgeColor: "#f59e0b",
+    tagline: "Interactive browser diagram of a probabilistic neural network decision matrix in HTML5/CSS/JavaScript.",
+    status: "Live Web App",
+    href: "https://hf-laboratories.github.io/Interactive-Probabilistic-Neural-Network-Decision-Matrix/",
+    buttonText: "Launch Interactive App →",
+    releaseHref: "https://github.com/hf-laboratories/Interactive-Probabilistic-Neural-Network-Decision-Matrix",
+    releaseText: "GitHub Repo",
+    features: [
+      "Live interactive neural decision matrix visualization in pure JavaScript/HTML5",
+      "Dynamic parameter exploration and probabilistic decision boundary simulation",
+      "Zero-install browser app hosted on GitHub Pages",
+      "Full source code available on GitHub"
+    ]
+  },
+  {
     id: "ht-graphrag",
     name: "Hypertensor GraphRAG",
     badge: "Vector & Graph Engine",
@@ -47,40 +155,8 @@ const products = [
     features: [
       "5 HPO engines (Bayesian, Hyperband, BOHB, ASHA-BOHB, TuRBO) with JSON checkpointing",
       "6 KGE models (TransE, RotatE, ComplEx, DistMult, ZPinch, Dual-Conj) & ontology extractors",
-      "From-scratch Level Zero LLM runtime with graph-constrained tri-beam hallucination defense",
-      "22 ML.Agentic dependency-free primitives & 5 ML.Reasoning graph algorithms"
-    ]
-  },
-  {
-    id: "automlapp",
-    name: "AutoMLApp (in development)",
-    badge: "Node-Graph Editor",
-    badgeColor: "#06b6d4",
-    tagline: "Design ML pipelines on a canvas. Run them on your hardware with 185+ node types across 25+ domains.",
-    status: "In Development",
-    href: "/products/automlapp",
-    buttonText: "Explore AutoMLApp Product Page →",
-    features: [
-      "185+ node types across 25+ domains (Data, ONNX, IPU, SNN, Swarm, FPGA)",
-      "Topologically sorted plan compilation with domain-specific step handlers",
-      "F7 instant invariant validation (cycles, orphans, duplicate IDs, types)",
-      "Pluggable HyperSwarm-backed AutoML & telemetry-aware cost scoring"
-    ]
-  },
-  {
-    id: "abigen",
-    name: "Abigen (in development)",
-    badge: "C/C++ Binding Engine",
-    badgeColor: "#f43f5e",
-    tagline: "Point it at a C/C++ header, get reviewed, verified C# bindings — and keep them in sync as the native library moves.",
-    status: "In Development",
-    href: "/products/abigen",
-    buttonText: "Explore Abigen Product Page →",
-    features: [
-      "Narrow, fail-closed generator: binds top-level C functions, scalar fields & opaque handles",
-      "Full manifest tracking with resolved libclang SHA-256 fingerprint & Clang args",
-      "Release tracking for GitHub repos & build feeds with API word count diffs",
-      "Desktop dashboard with 5-stage verification (smoke test, deterministic rerun, schema)"
+      "Level Zero LLM runtime with graph-constrained beam decoding and flash attention",
+      "21 ML.Agentic dependency-free primitives & cognitive orchestration loops"
     ]
   },
   {
@@ -116,73 +192,57 @@ const products = [
     ]
   },
   {
-    id: "levelzero-net",
-    name: "LevelZero.NET & Kernel Catalog",
-    badge: "GPU Substrate",
-    badgeColor: "#f43f5e",
-    tagline: "Intel GPU compute from .NET, one DLL, no driver SDK to install.",
-    status: "Production Ready",
-    href: "/products/levelzero",
-    buttonText: "Explore LevelZero.NET Product Page →",
-    features: [
-      "Single DLL: Managed API, native shim, and 407 pre-compiled kernel modules (37 × 11 targets)",
-      "37 kernel wrappers across Swarm, SNN, LLM Inference & Knowledge Retrieval",
-      "11 Intel GPU targets from 11th-gen Iris Xe to Battlemage & Panther Lake",
-      "Zero boilerplate with ComputeDevice, SharedBuffer<T>, and auto device detection"
-    ]
-  },
-  {
-    id: "poplar-net",
-    name: "Poplar.NET (in development)",
-    badge: "IPU Substrate",
-    badgeColor: "#fbbf24",
-    tagline: "C ABI shim and managed .NET wrapper for Graphcore Poplar/PopART computational graph execution.",
+    id: "automlapp",
+    name: "AutoMLApp (in development)",
+    badge: "Node-Graph Editor",
+    badgeColor: "#06b6d4",
+    tagline: "Design ML pipelines on a canvas. Run them on your hardware with 185+ node types across 25+ domains.",
     status: "In Development",
-    href: "/products/poplar",
-    buttonText: "Explore Poplar.NET Product Page →",
+    href: "/products/automlapp",
+    buttonText: "Explore AutoMLApp Product Page →",
     features: [
-      "Safe native handles (IPUDevice, PoplarGraph, EngineSession, StreamHandle)",
-      "PopART & ONNX computational graph construction and multi-tile execution",
-      "Asynchronous ring-pipe streaming over zero-copy pinned host memory",
-      "Direct integration with QueryAccel, Accelerator Layer, and HFLabs ML Suite"
+      "185+ node types across 25+ domains (Data, ONNX, IPU, SNN, Swarm, FPGA)",
+      "Topologically sorted plan compilation with domain-specific step handlers",
+      "F7 instant invariant validation (cycles, orphans, duplicate IDs, types)",
+      "Pluggable HyperSwarm-backed AutoML & telemetry-aware cost scoring"
     ]
   },
   {
-    id: "accelerator-stack",
-    name: "Accelerator & Heterogeneous Engines",
-    badge: "Compute Orchestration",
-    badgeColor: "#34d399",
-    tagline: "Unified hardware-accelerator layer, IPU SQL query acceleration, Poplar.NET IPU shims, and Abigen C/C++ binding generator.",
-    status: "Production Ready",
-    href: "/products/accelerator",
-    buttonText: "Explore Accelerator Product Page →",
+    id: "abigen",
+    name: "Abigen (in development)",
+    badge: "C/C++ Binding Engine",
+    badgeColor: "#f43f5e",
+    tagline: "Point it at a C/C++ header, get reviewed, verified C# bindings — and keep them in sync as the native library moves.",
+    status: "In Development",
+    href: "/products/abigen",
+    buttonText: "Explore Abigen Product Page →",
     features: [
-      "gRPC plan execution across IPU, CUDA, OpenCL, Level Zero, FPGA, DMA/RDMA",
-      "IPU SQL query acceleration for PostgreSQL & SQL Server CLR (aggregates & distance)",
-      "Poplar.NET managed .NET wrapper for Graphcore Poplar/PopART",
-      "Abigen libclang-driven C ABI shim and C# binding synthesizer"
+      "Narrow, fail-closed generator: binds top-level C functions, scalar fields & opaque handles",
+      "Full manifest tracking with resolved libclang SHA-256 fingerprint & Clang args",
+      "Release tracking for GitHub repos & build feeds with API word count diffs",
+      "Desktop dashboard with 5-stage verification (smoke test, deterministic rerun, schema)"
     ]
   },
   {
-    id: "queryaccel-ipu",
-    name: "QueryAccel IPU Database Layer",
-    badge: "Database Acceleration",
-    badgeColor: "#38bdf8",
-    tagline: "Push SQL's heaviest operations onto IPU hardware, transparently. Native PostgreSQL FDW and SQL Server CLR bridge.",
-    status: "Production Ready",
-    href: "/products/queryaccel",
+    id: "query-accel",
+    name: "QueryAccel (MVP)",
+    badge: "IPU SQL Engine",
+    badgeColor: "#eab308",
+    tagline: "Offload PostgreSQL & SQL Server analytical queries to Graphcore IPUs with gRPC bridge microservice.",
+    status: "MVP",
+    href: "/products/query-accel",
     buttonText: "Explore QueryAccel Product Page →",
     features: [
-      "PostgreSQL native C/C++ Foreign Data Wrapper with cost-based pushdown",
-      "SQL Server CLR assembly executing IPU inference with single T-SQL EXEC",
-      "Hardware offload for COUNT, SUM, AVG, MIN, MAX and dense vector metrics",
-      "100% graceful degradation to CPU path when no IPU hardware is present"
+      "PostgreSQL extension & SQL Server CLR bridge offloading aggregates and vector ops",
+      "Hardware-accelerated COUNT, SUM, AVG, MIN, MAX, Cosine, Dot, L2 distance",
+      "Integrated gRPC microservice connecting database engine to Poplar runtime",
+      "Evaluated on Graphcore Bow-2000 and Bow Pod clusters"
     ]
   }
 ];
 ---
 
-<Layout title="HFLabs Products • High-Assurance Systems & Runtimes" description="Explore HFLabs core product suite: In-Memory Hypertensor GraphRAG, HyperSwarm, LevelZero.NET, and Accelerator.">
+<Layout title="HFLabs Products • High-Assurance Systems & Runtimes" description="Explore HFLabs core product suite: In-Memory Hypertensor GraphRAG, HyperSwarm, LevelZero.NET, Poplar.NET, ML.Agentic, and Accelerator.">
   <div class="container" style="padding:60px 0 80px;">
     <div style="margin-bottom:32px;">
       <a href="/" style="font-size:12px; font-family:var(--font-mono); color:var(--text-muted);">&larr; Back to HFLabs Overview</a>
@@ -222,10 +282,25 @@ const products = [
             </ul>
           </div>
 
-          <div class="card-footer">
+          <div class="card-footer" style="display:flex; flex-direction:column; gap:8px;">
             <a href={p.href} class="btn-primary" style="width:100%; text-align:center; padding:10px 16px; font-size:13px;">
               {p.buttonText || 'View Documentation & Guides →'}
             </a>
+            {p.releaseHref && (
+              <a 
+                href={p.releaseHref} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="btn-secondary" 
+                data-released="true"
+                style="width:100%; text-align:center; padding:8px 14px; font-size:12px; display:inline-flex; justify-content:center; align-items:center; gap:6px;"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+                <span>{p.releaseText || 'GitHub Releases'}</span>
+              </a>
+            )}
           </div>
         </div>
       ))}

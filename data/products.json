@@ -1,189 +1,185 @@
 {
-  "version": "1.1.0",
-  "updatedAt": "2026-03-05",
+  "updatedAt": "2026-09-30",
   "products": [
     {
-      "id": "automlapp",
-      "name": "AutoML App",
-      "tagline": "Composable accelerator and service orchestration stack.",
-      "summary": "A modular platform for orchestration, feature serving, sidecar extensions, and hardware-accelerated workflows.",
-      "details": "AutoML App is a composable platform for integrating accelerator-aware services with practical operational tooling. It combines service orchestration, feature pipelines, and extension points so teams can evolve workloads without rebuilding infrastructure from scratch.\n\nThe project is built to support iterative experimentation and production handoff, with strong emphasis on modular deployment boundaries, contract-driven interfaces, and scalable runtime behavior.",
+      "id": "levelzero-dotnet",
+      "name": "LevelZero.NET",
+      "tagline": "Native Intel GPU Acceleration & Managed Level Zero Runtime for .NET 10",
+      "summary": "High-performance, zero-allocation managed .NET bindings for Intel oneAPI Level Zero runtime with built-in pre-compiled SPIR-V and .zebin kernel catalogs across 11 Intel GPU architectures.",
       "status": "Live",
-      "category": "Platform",
-      "badges": ["C#", ".NET", "gRPC"],
-      "links": [
-        {
-          "label": "Papers",
-          "url": "https://hflabs.dev/papers/"
-        }
-      ]
+      "category": "Flagship Runtime",
+      "version": "v2.0.0",
+      "badges": [
+        ".NET 10",
+        "Intel Level Zero",
+        "SPIR-V",
+        "GPU Compute",
+        "C#"
+      ],
+      "sourceUrl": "https://github.com/hf-laboratories/LevelZero.NET",
+      "releasesUrl": "https://github.com/hf-laboratories/LevelZero.NET/releases/tag/v2.0.0",
+      "downloadUrl": "https://github.com/hf-laboratories/LevelZero.NET/releases/download/v2.0.0/LevelZero.NET.2.0.0.nupkg",
+      "detailsUrl": "/products/levelzero"
     },
     {
-      "id": "automl-canvas",
-      "name": "AutoML Canvas",
-      "tagline": "Visual experiment design and model flow tooling.",
-      "summary": "Canvas-based authoring for experiment configuration, model workflows, and reproducible iterative runs.",
-      "details": "AutoML Canvas provides a visual workspace for building and refining experiment pipelines through an interactive node-and-canvas experience. It is intended to make experimentation more transparent, reproducible, and collaboration-friendly.\n\nThe project focuses on fast iteration loops: users can compare configurations, track flow changes, and move from exploratory setup to repeatable execution with minimal friction.",
-      "status": "Beta",
-      "category": "Applications",
-      "badges": ["WinForms", "Visualization", "UX"],
-      "links": [
-        {
-          "label": "Papers",
-          "url": "https://hflabs.dev/papers/"
-        }
-      ]
+      "id": "l0llm",
+      "name": "l0llm",
+      "tagline": "Pure C# & Intel Level Zero LLM Runner and OpenAI-Compatible REST Server",
+      "summary": "Ultra-fast, zero-allocation native LLM runner for Intel GPUs (Iris Xe, Arc A-Series, Lunar Lake, Arrow Lake, Battlemage). Benchmarked at 41.3 tok/s on Iris Xe with zero GC allocations and zero Python dependencies.",
+      "status": "Live",
+      "category": "Flagship Server",
+      "version": "v2.0.0",
+      "badges": [
+        "C#",
+        "Intel GPU",
+        "OpenAI REST API",
+        "SafeTensors",
+        "Zero GC"
+      ],
+      "sourceUrl": "https://github.com/hf-laboratories/l0llm",
+      "releasesUrl": "https://github.com/hf-laboratories/l0llm/releases/tag/v2.0.0",
+      "downloadUrl": "https://github.com/hf-laboratories/l0llm/releases/download/v2.0.0/l0llm-win-x64-v2.0.0.zip",
+      "detailsUrl": "/products/l0llm"
     },
     {
-      "id": "query-accelerator",
-      "name": "Query Accelerator Service",
-      "tagline": "Low-latency query acceleration pipeline.",
-      "summary": "Runtime service focused on high-throughput query handling and integration with accelerator-oriented execution plans.",
-      "details": "Query Accelerator Service is designed for latency-sensitive query paths where throughput and predictable response times are both critical. It provides runtime components that can route, optimize, and execute requests with accelerator-aware planning.\n\nThe service emphasizes integration flexibility so that data products and upstream clients can adopt performance improvements incrementally while keeping clear operational observability boundaries.",
-      "status": "Research",
-      "category": "Services",
-      "badges": ["API", "Performance", "Distributed"],
-      "links": [
-        {
-          "label": "Papers",
-          "url": "https://hflabs.dev/papers/"
-        }
-      ]
+      "id": "l0check",
+      "name": "l0check",
+      "tagline": "Intel Level Zero Hardware Diagnostics & Validation CLI Tool",
+      "summary": "Fast, standalone command-line diagnostic tool for inspecting Intel GPU architectures, driver capabilities, memory topologies, and validating compute kernel execution via Intel oneAPI Level Zero.",
+      "status": "Live",
+      "category": "Flagship CLI",
+      "version": "v2.0.0",
+      "badges": [
+        "CLI",
+        "Diagnostics",
+        "Intel Level Zero",
+        "Validation",
+        "C#"
+      ],
+      "sourceUrl": "https://github.com/hf-laboratories/l0check",
+      "releasesUrl": "https://github.com/hf-laboratories/l0check/releases/tag/v2.0.0",
+      "downloadUrl": "https://github.com/hf-laboratories/l0check/releases/download/v2.0.0/l0check-win-x64-v2.0.0.zip",
+      "detailsUrl": "/products/l0check"
     },
     {
-      "id": "hyperswarm",
-      "name": "HyperSwarm",
-      "tagline": "Adaptive multi-swarm orchestration for advanced optimization workflows.",
-      "summary": "A research project focused on high-scale swarm coordination, dynamic strategy selection, and accelerator-aware scheduling.",
-      "details": "HyperSwarm explores coordinated multi-swarm optimization for large search spaces where single-strategy methods can stall or overfit local structures. It combines adaptive strategy switching, shared state hints, and staged exploration/exploitation policies.\n\nThe project is aimed at workloads that benefit from distributed search intelligence and hardware-aware scheduling, with practical emphasis on measurable convergence behavior and robust tuning under changing constraints.",
-      "status": "Research",
-      "category": "Algorithms",
-      "badges": ["Swarm", "Optimization", "R&D"],
-      "links": [
-        {
-          "label": "Papers",
-          "url": "https://hflabs.dev/papers/"
-        }
-      ]
+      "id": "ml-agentic",
+      "name": "ML.Agentic",
+      "tagline": "Zero-Dependency Agentic AI Patterns & Protocol Engine for .NET 10",
+      "summary": "Production-grade .NET 10 foundation providing 21 canonical agentic patterns alongside native protocol implementations for Model Context Protocol (MCP), Agent2Agent (A2A), and JSON-RPC 2.0 with 0 external package dependencies.",
+      "status": "Live",
+      "category": "Flagship AI",
+      "version": "v1.0.0",
+      "badges": [
+        ".NET 10",
+        "MCP",
+        "A2A",
+        "21 Patterns",
+        "Zero Dependencies"
+      ],
+      "sourceUrl": "https://github.com/hf-laboratories/ML.Agentic",
+      "releasesUrl": "https://github.com/hf-laboratories/ML.Agentic/releases/tag/v1.0.0",
+      "downloadUrl": "https://github.com/hf-laboratories/ML.Agentic/releases/download/v1.0.0/HFLabs.ML.Agentic.1.0.0.nupkg",
+      "detailsUrl": "/products/ml-agentic"
     },
     {
-      "id": "swarmbench",
-      "name": "SwarmBench",
-      "tagline": "Measure how swarms really behave, and watch them work.",
-      "summary": "Benchmarking, characterization, elimination tournaments, and real-time visualization HUD for 34 swarm optimization algorithms across 110 test functions.",
-      "details": "HyperSwarm's benchmarking and visualization tools run 34 optimization algorithms against 110 test functions, record every run, and let you watch or replay each one agent by agent.\n\nIt features the SwarmBenchmarkRunner CLI (single runs, streams, diagnostics, game tournaments, HPO sweeps), HyperCache for reusable tuned configurations, self-validating SwarmCharacterization LaTeX/JSON reports, and SwarmVisualizer.Host desktop HUD with 6 frame layers across 7 lifecycle stages.",
-      "status": "Production",
-      "category": "Tooling",
-      "badges": ["Benchmark", "Visualization", "Telemetry", ".NET"],
-      "links": [
-        {
-          "label": "Product",
-          "url": "/products/swarmbench"
-        },
-        {
-          "label": "Docs",
-          "url": "/docs#swarm-benchmark"
-        }
-      ]
-    },
-    {
-      "id": "poplar-cpp-api-wrapper",
-      "name": "PoplarCppApiWrapper",
-      "tagline": "C++ integration layer for Poplar-oriented accelerator workflows.",
-      "summary": "A C++ wrapper and interop surface for connecting Poplar-based compute graphs to service-facing orchestration paths.",
-      "details": "PoplarCppApiWrapper provides a focused C++ API layer intended to simplify integration of Poplar-centric workloads into broader service architectures. It supports practical interop and deployment patterns where accelerator kernels, runtime coordination, and host-side orchestration need to work together cleanly.\n\nThe project is designed for teams that want repeatable integration points between C++ accelerator code and higher-level platform services without over-coupling runtime boundaries.",
-      "status": "Research",
-      "category": "Integrations",
-      "badges": ["C++", "Poplar", "Interop"],
-      "links": [
-        {
-          "label": "Papers",
-          "url": "https://hflabs.dev/papers/"
-        }
-      ]
-    },
-    {
-      "id": "sql-ipu-bridge",
-      "name": "SQL-IPU Bridge",
-      "tagline": "Hybrid SQL acceleration bridge with microservice and SQL Server CLR execution paths.",
-      "summary": "A dual-path SQL integration stack offering both microservice-based offload and SQLServerCLR in-database acceleration adapters.",
-      "details": "SQL-IPU Bridge provides two deployment modes for SQL workloads: a microservice architecture for decoupled orchestration and a SQLServerCLR path for in-engine integration where appropriate. This allows teams to select integration boundaries based on governance, latency targets, and operational controls.\n\nThe project focuses on practical SQL acceleration adoption by combining familiar database workflows with IPU-aware execution strategies.",
-      "status": "Research",
-      "category": "Services",
-      "badges": ["SQL", "Microservice", "SQLServerCLR"],
-      "links": [
-        {
-          "label": "Papers",
-          "url": "https://hflabs.dev/papers/"
-        }
-      ]
-    },
-    {
-      "id": "postgresql-ipu-query-accelerator",
-      "name": "PostGresIPUQueryAccelerator",
-      "tagline": "PostgreSQL-oriented query acceleration for high-throughput analytical paths.",
-      "summary": "A PostgreSQL integration project for IPU-assisted query planning and execution on latency-sensitive and throughput-heavy workloads.",
-      "details": "PostGresIPUQueryAccelerator explores PostgreSQL query acceleration through IPU-aware planning and selective execution offload. It is designed to fit into existing PostgreSQL-centered data architectures while incrementally introducing acceleration features.\n\nThe project emphasizes clear observability and staged adoption so teams can evaluate performance gains without disruptive migration requirements.",
-      "status": "Research",
-      "category": "Services",
-      "badges": ["PostgreSQL", "Query", "Acceleration"],
-      "links": [
-        {
-          "label": "Papers",
-          "url": "https://hflabs.dev/papers/"
-        }
-      ]
-    },
-    {
-      "id": "snn-brain-model-simulator",
-      "name": "SNN with Brain Model",
-      "tagline": "Interactive spiking neural simulation with large-scale neuron control on consumer hardware.",
-      "summary": "An SNN and brain-model project supporting user perturbation control over more than 16,000 individual neurons and seizure scenario simulation with propagation modeling.",
-      "details": "SNN with Brain Model is an interactive simulation environment for spiking neural network research and experimentation. It is built to operate on consumer hardware while exposing fine-grained control over more than 16,000 individual neurons, including direct user perturbation workflows for controlled experiments.\n\nThe project also includes seizure scenario simulation capabilities with propagation modeling to support repeatable study of dynamic network behavior under varying perturbation patterns. Intended for research and educational workflows.",
-      "status": "Research",
-      "category": "Applications",
-      "badges": ["SNN", "Brain Model", "Simulation"],
-      "links": [
-        {
-          "label": "Papers",
-          "url": "https://hflabs.dev/papers/"
-        }
-      ]
+      "id": "poplar-dotnet",
+      "name": "Poplar.NET",
+      "tagline": "Enterprise .NET 10 Runtime & Resident Graph Engine for Graphcore IPUs",
+      "summary": "Production-grade, zero-allocation C# / .NET 10 runtime engine and graph orchestration SDK for Graphcore Colossus IPUs (Bow-2000, MK2, IPU-POD). Includes native Poplar graph bindings, resident graphs, PopART ONNX runners, and IPU fan governor.",
+      "status": "Live",
+      "category": "Flagship IPU",
+      "version": "v1.0.0-preview",
+      "badges": [
+        ".NET 10",
+        "Graphcore IPU",
+        "Poplar SDK",
+        "Resident Graphs",
+        "C#"
+      ],
+      "sourceUrl": "https://github.com/hf-laboratories/Poplar.NET",
+      "releasesUrl": "https://github.com/hf-laboratories/Poplar.NET/releases/tag/v1.0.0-preview",
+      "downloadUrl": "https://github.com/hf-laboratories/Poplar.NET/releases/download/v1.0.0-preview/Poplar.NET-v1.0.0-preview-binaries.zip",
+      "detailsUrl": "/products/poplar"
     }
   ],
   "portfolio": [
     {
-      "id": "levelzero-dotnet",
-      "name": "LevelZero.NET",
-      "tagline": "Managed .NET wrapper for Intel Level Zero GPU compute.",
-      "summary": "Open-source GPU compute wrapper with .NET APIs and SPIR-V kernel integration patterns.",
-      "status": "Live",
-      "category": "Open Source",
-      "badges": ["C#", ".NET", "GPU"],
-      "sourceUrl": "https://github.com/hf-laboratories/LevelZero.NET",
-      "downloadUrl": "https://github.com/hf-laboratories/LevelZero.NET/archive/refs/heads/main.zip"
-    },
-    {
       "id": "interactive-pnn-decision-matrix",
       "name": "Interactive Probabilistic Neural Network Decision Matrix",
-      "tagline": "Interactive probabilistic model visualization in HTML/CSS/JavaScript.",
-      "summary": "Free interactive decision matrix demo project suitable for browser-based experimentation.",
+      "tagline": "Interactive visualization and decision matrix diagram in JS/HTML/CSS",
+      "summary": "Live browser-based interactive decision matrix simulation and probabilistic neural network visualization tool.",
       "status": "Live",
-      "category": "Free Software",
-      "badges": ["HTML", "CSS", "JavaScript"],
+      "category": "Web Application",
+      "badges": [
+        "JavaScript",
+        "HTML5",
+        "CSS3",
+        "Neural Networks"
+      ],
       "sourceUrl": "https://github.com/hf-laboratories/Interactive-Probabilistic-Neural-Network-Decision-Matrix",
-      "downloadUrl": "https://github.com/hf-laboratories/Interactive-Probabilistic-Neural-Network-Decision-Matrix/archive/refs/heads/main.zip"
+      "downloadUrl": "https://hf-laboratories.github.io/Interactive-Probabilistic-Neural-Network-Decision-Matrix/"
     },
     {
       "id": "copilot-instructions-workflows",
       "name": "Copilot Instructions Initiated Workflows",
-      "tagline": "Copilot-driven workflow automation examples.",
-      "summary": "Public PowerShell workflow examples for instruction-driven development automation.",
+      "tagline": "Copilot-driven workflow automation and documentation generation",
+      "summary": "Instruction-driven development automation workflows and documentation generation utilities using PowerShell and Copilot Instructions.",
       "status": "Live",
-      "category": "Open Source",
-      "badges": ["PowerShell", "Automation", "CI"],
+      "category": "Automation Tool",
+      "badges": [
+        "PowerShell",
+        "GitHub Copilot",
+        "Workflows"
+      ],
       "sourceUrl": "https://github.com/hf-laboratories/Copilot_Instructions_initiated_workflows",
       "downloadUrl": "https://github.com/hf-laboratories/Copilot_Instructions_initiated_workflows/archive/refs/heads/main.zip"
+    },
+    {
+      "id": "poplar-explorer-fork",
+      "name": "Poplar Explorer (HF Labs Fork)",
+      "tagline": "Rapid prototyping framework for Graphcore Poplar programs",
+      "summary": "Basic framework for interactive prototyping and exploration of compute graphs on Graphcore IPU hardware.",
+      "status": "Live",
+      "category": "Developer Tool",
+      "badges": [
+        "Graphcore",
+        "Poplar",
+        "C++",
+        "Prototyping"
+      ],
+      "sourceUrl": "https://github.com/hf-laboratories/Poplar_Explorer-HF-Labs-Fork",
+      "downloadUrl": "https://github.com/hf-laboratories/Poplar_Explorer-HF-Labs-Fork/archive/refs/heads/main.zip"
+    },
+    {
+      "id": "android-network-cfg",
+      "name": "Android Network Config Bulk Setter",
+      "tagline": "Comprehensive property and environment key repository for Android networking",
+      "summary": "Low-level configuration utility cataloging network properties, socket parameters, and system environment flags on Android.",
+      "status": "Live",
+      "category": "System Utility",
+      "badges": [
+        "Android",
+        "Networking",
+        "Config"
+      ],
+      "sourceUrl": "https://github.com/hf-laboratories/android-network-cfg-bulk-setter",
+      "downloadUrl": "https://github.com/hf-laboratories/android-network-cfg-bulk-setter/archive/refs/heads/main.zip"
+    },
+    {
+      "id": "zmk-corne-keyboard",
+      "name": "Corne Keyboard ZMK Firmware",
+      "tagline": "Wireless split mechanical keyboard firmware for Corne v3 with Nice!Nano v2",
+      "summary": "Custom keymap configurations and BLE wireless profiles for Corne-Cherry v3.0.1 split ergonomic keyboard.",
+      "status": "Live",
+      "category": "Hardware / Firmware",
+      "badges": [
+        "ZMK",
+        "Firmware",
+        "C",
+        "Hardware"
+      ],
+      "sourceUrl": "https://github.com/hf-laboratories/zmk-config",
+      "downloadUrl": "https://github.com/hf-laboratories/zmk-config/archive/refs/heads/main.zip"
     }
   ]
 }

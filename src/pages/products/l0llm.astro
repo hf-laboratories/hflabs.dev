@@ -1,0 +1,408 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout
+  title="l0llm — Pure C# & Intel Level Zero LLM Runner and Server | HF Laboratories"
+  description="Ultra-fast, zero-allocation native LLM runner and OpenAI-compatible REST server designed specifically for Intel® GPUs via Intel oneAPI Level Zero."
+  activeTab="products"
+>
+  <div class="product-page">
+    <div class="hero-section">
+      <div class="badge-row">
+        <span class="status-badge release-badge">RELEASED v2.0.0</span>
+        <span class="status-badge">100% PURE C#</span>
+        <span class="status-badge">INTEL LEVEL ZERO</span>
+        <span class="status-badge">ZERO ALLOCATIONS</span>
+      </div>
+
+      <h1 class="hero-title">
+        l0llm
+        <span class="hero-sub">Pure C# & Intel Level Zero LLM Runner & REST Server</span>
+      </h1>
+
+      <p class="hero-lead">
+        Ultra-fast, zero-allocation native LLM runner and OpenAI-compatible REST server engineered exclusively for Intel® GPUs. Built entirely in managed C# on top of LevelZero.NET with <strong>zero Python runtime, zero Conda environments, and zero heavyweight native frameworks</strong>.
+      </p>
+
+      <div class="hero-cta-group">
+        <a
+          href="https://github.com/hf-laboratories/l0llm/releases/download/v2.0.0/l0llm-win-x64-v2.0.0.zip"
+          class="btn-primary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Download l0llm v2.0.0 (win-x64)
+        </a>
+        <a
+          href="https://github.com/hf-laboratories/l0llm/releases/tag/v2.0.0"
+          class="btn-secondary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitHub Releases
+        </a>
+        <a
+          href="https://github.com/hf-laboratories/l0llm"
+          class="btn-secondary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Source Repository
+        </a>
+      </div>
+    </div>
+
+    <!-- Benchmarks Section -->
+    <section class="benchmark-section">
+      <div class="section-header">
+        <span class="section-tag">Performance Benchmarks</span>
+        <h2>Intel Iris® Xe Mobile Performance (15W TDP)</h2>
+        <p>Measured on Intel® Iris® Xe Graphics (96 EU, 15W TDP mobile) running Qwen 2.5 with direct Level Zero command lists.</p>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-val text-cyan">41.3 <span class="metric-unit">tok/s</span></div>
+          <div class="metric-label">Decode Throughput</div>
+          <p class="metric-sub">Fast sustained generation on lightweight mobile integrated GPUs.</p>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-val text-blue">18.7 <span class="metric-unit">ms</span></div>
+          <div class="metric-label">Prefill Latency</div>
+          <p class="metric-sub">Immediate first-token responsiveness with minimal queue lag.</p>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-val text-green">0 <span class="metric-unit">Bytes</span></div>
+          <div class="metric-label">GC Allocation per Token</div>
+          <p class="metric-sub">Zero Garbage Collection pressure during continuous token generation loops.</p>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-val text-purple">11 <span class="metric-unit">Architectures</span></div>
+          <div class="metric-label">Intel Hardware Targets</div>
+          <p class="metric-sub">Iris Xe, Arc A-Series, Lunar Lake, Arrow Lake, Battlemage, Flex/Max.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Architecture Features -->
+    <section class="features-section">
+      <div class="section-header">
+        <span class="section-tag">Architectural Highlights</span>
+        <h2>Zero-Friction Local & Server-Side LLM Deployment</h2>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-box">
+          <div class="feat-icon">⚡</div>
+          <h3>Pure Managed C# Pipeline</h3>
+          <p>Direct C# bindings directly to Level Zero driver exports. No PyTorch, no ONNX Runtime C++ dependencies, and no bloated runtime installs.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feat-icon">🌐</div>
+          <h3>OpenAI-Compatible REST API</h3>
+          <p>Drop-in local server supporting /v1/chat/completions with Server-Sent Events (SSE) streaming, /v1/models, and built-in CORS for Open-WebUI, Chatbox, and LangChain.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feat-icon">📦</div>
+          <h3>Native SafeTensors Support</h3>
+          <p>Reads standard Hugging Face model.safetensors and sharded indexes (model.safetensors.index.json) with zero-copy memory mapping.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feat-icon">🤖</div>
+          <h3>Wide Model Family Support</h3>
+          <p>Out-of-the-box optimized execution for LLaMA 3/3.1/3.2, Qwen 2.5/3, DeepSeek, Mistral, and Phi-3.5 architectures.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLI & Usage -->
+    <section class="usage-section">
+      <div class="section-header">
+        <span class="section-tag">CLI Commands</span>
+        <h2>Interactive CLI & REST Server</h2>
+      </div>
+
+      <div class="code-container">
+        <div class="code-header">
+          <span>Start OpenAI-Compatible REST Server</span>
+          <span class="code-lang">bash</span>
+        </div>
+        <pre><code># Start high-performance OpenAI server on Intel GPU
+l0llm serve --model ./models/qwen2.5-7b --port 8080 --host 0.0.0.0
+
+# Interactive single-turn or streaming prompt
+l0llm run --model ./models/llama3.2-3b --prompt "Explain quantum computing in three sentences"</code></pre>
+      </div>
+    </section>
+
+    <!-- Distribution Assets -->
+    <section class="assets-section">
+      <div class="section-header">
+        <span class="section-tag">Release Assets</span>
+        <h2>Downloads & Verification</h2>
+      </div>
+
+      <div class="assets-table-wrap">
+        <table class="assets-table">
+          <thead>
+            <tr>
+              <th>Asset</th>
+              <th>Target Platform</th>
+              <th>Version</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>l0llm-win-x64-v2.0.0.zip</strong></td>
+              <td>Windows x64 (Intel GPUs)</td>
+              <td>v2.0.0</td>
+              <td>
+                <a href="https://github.com/hf-laboratories/l0llm/releases/download/v2.0.0/l0llm-win-x64-v2.0.0.zip" class="table-dl-btn" target="_blank" rel="noopener noreferrer">
+                  Download
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .product-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+  .hero-section {
+    text-align: center;
+    padding: 40px 0 60px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .status-badge {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #94a3b8;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .status-badge.release-badge {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(52, 211, 153, 0.3);
+  }
+  .hero-title {
+    font-size: 44px;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+  .hero-sub {
+    display: block;
+    font-size: 20px;
+    font-weight: 500;
+    color: #38bdf8;
+    margin-top: 8px;
+  }
+  .hero-lead {
+    font-size: 17px;
+    line-height: 1.6;
+    color: #cbd5e1;
+    max-width: 780px;
+    margin: 0 auto 32px;
+  }
+  .hero-cta-group {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    background: #0284c7;
+    color: #ffffff;
+    padding: 12px 24px;
+    font-weight: 600;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover {
+    background: #0369a1;
+  }
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #f8fafc;
+    padding: 12px 24px;
+    font-weight: 600;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+  .section-header {
+    margin-bottom: 36px;
+  }
+  .section-tag {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #38bdf8;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .benchmark-section, .features-section, .usage-section, .assets-section {
+    padding: 60px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+  .metric-card {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+  }
+  .metric-val {
+    font-size: 38px;
+    font-weight: 800;
+    margin-bottom: 4px;
+    font-family: monospace;
+  }
+  .metric-unit {
+    font-size: 16px;
+    font-weight: 500;
+    color: #94a3b8;
+  }
+  .text-cyan { color: #06b6d4; }
+  .text-blue { color: #38bdf8; }
+  .text-green { color: #10b981; }
+  .text-purple { color: #a855f7; }
+  .metric-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 8px;
+  }
+  .metric-sub {
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.4;
+  }
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+  }
+  .feature-box {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 24px;
+  }
+  .feat-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+  .feature-box h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #f8fafc;
+  }
+  .feature-box p {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #94a3b8;
+  }
+  .code-container {
+    background: #090d16;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .code-header {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px 16px;
+    font-size: 12px;
+    font-family: monospace;
+    color: #94a3b8;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  pre {
+    margin: 0;
+    padding: 20px;
+    overflow-x: auto;
+  }
+  code {
+    font-family: "JetBrains Mono", Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #38bdf8;
+  }
+  .assets-table-wrap {
+    overflow-x: auto;
+  }
+  .assets-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  .assets-table th, .assets-table td {
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 14px;
+  }
+  .assets-table th {
+    background: rgba(255, 255, 255, 0.03);
+    color: #94a3b8;
+    font-weight: 600;
+  }
+  .table-dl-btn {
+    display: inline-block;
+    background: #0284c7;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .table-dl-btn:hover {
+    background: #0369a1;
+  }
+</style>

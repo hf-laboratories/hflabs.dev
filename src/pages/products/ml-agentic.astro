@@ -1,0 +1,955 @@
+---
+// src/pages/products/ml-agentic.astro
+import Layout from '../../layouts/Layout.astro';
+
+const PRIMITIVES_CATEGORIES = [
+  { key: "all", label: "ALL PRIMITIVES", count: 22, color: "#38bdf8" },
+  { key: "planning", label: "PLANNING & SEARCH", count: 4, color: "#10b981" },
+  { key: "reasoning", label: "REASONING & VERIFICATION", count: 5, color: "#a855f7" },
+  { key: "coordination", label: "COORDINATION & ROUTING", count: 7, color: "#f59e0b" },
+  { key: "safety-memory", label: "SAFETY & MEMORY", count: 6, color: "#f43f5e" }
+];
+
+const AGENTIC_PRIMITIVES = [
+  // 1. Planning & Search
+  {
+    name: "Hierarchical Planner",
+    code: "HierarchicalPlanner<TGoal, TTask>",
+    category: "planning",
+    categoryLabel: "PLANNING & SEARCH",
+    color: "#10b981",
+    tagline: "Recursive goal decomposition into multi-tier task trees with deterministic preconditions.",
+    description: "Breaks complex multi-step user prompts into hierarchical directed acyclic task graphs (HTNs). Evaluates preconditions, branch prerequisites, and dynamic subtask dispatch with cycle detection.",
+    csharpSnippet: `var planner = new HierarchicalPlanner<Goal, Task>();
+var plan = await planner.DecomposeAsync(userGoal, cancellationToken);
+foreach (var stage in plan.ExecutionStages) {
+    await stage.ExecuteWithGuardsAsync();
+}`
+  },
+  {
+    name: "MCTS Exploration",
+    code: "MonteCarloTreeSearch<TState, TAction>",
+    category: "planning",
+    categoryLabel: "PLANNING & SEARCH",
+    color: "#10b981",
+    tagline: "Upper Confidence Bound (UCT) tree search over agent action spaces.",
+    description: "Evaluates combinatorial action paths under stochastic reward functions using tree-search exploration with customizable rollout heuristics and exploration parameter c.",
+    csharpSnippet: `var mcts = new MonteCarloTreeSearch<AgentState, AgentAction>(
+    explorationWeight: 1.414f,
+    maxSimulations: 500
+);
+var bestAction = await mcts.SelectBestActionAsync(currentState);`
+  },
+  {
+    name: "Priority Scheduler",
+    code: "PriorityAgentScheduler<TMessage>",
+    category: "planning",
+    categoryLabel: "PLANNING & SEARCH",
+    color: "#10b981",
+    tagline: "Work-stealing priority queue with preemptive resource-constrained scheduling.",
+    description: "Schedules concurrent agent execution pipelines across multi-core compute threads, enforcing latency deadlines, token-budget quotas, and hardware affinity scoring.",
+    csharpSnippet: `var scheduler = new PriorityAgentScheduler<AgentTask>(maxConcurrency: 16);
+scheduler.Enqueue(task, priority: TaskPriority.Critical);
+await scheduler.DrainAsync();`
+  },
+  {
+    name: "Goal-Progress Monitor",
+    code: "GoalProgressMonitor<TGoal, TState>",
+    category: "planning",
+    categoryLabel: "PLANNING & SEARCH",
+    color: "#10b981",
+    tagline: "Trajectory velocity tracking, dead-end detection, and automated backtracking.",
+    description: "Monitors progress metrics toward intermediate objectives. Triggers automated rollback or replanning when agent actions reach stagnating convergence or infinite oscillation loops.",
+    csharpSnippet: `var monitor = new GoalProgressMonitor<TargetGoal, WorldState>(stallThreshold: 3);
+monitor.RecordStep(stateDelta);
+if (monitor.IsStalled()) {
+    await planner.TriggerReplanningAsync(monitor.GetStallContext());
+}`
+  },
+
+  // 2. Reasoning & Verification
+  {
+    name: "Reflection Loop",
+    code: "SelfReflectionLoop<TOutput, TEval>",
+    category: "reasoning",
+    categoryLabel: "REASONING & VERIFICATION",
+    color: "#a855f7",
+    tagline: "Iterative generate-critique-refine feedback loop with convergence guarantees.",
+    description: "Executes multi-pass self-critique cycles on intermediate agent outputs, scoring draft answers against strict verification criteria until reaching target confidence.",
+    csharpSnippet: `var reflection = new SelfReflectionLoop<CodeDraft, LintResult>(maxPasses: 3);
+var finalized = await reflection.RefineAsync(initialDraft, async draft => {
+    return await verifier.EvaluateAsync(draft);
+});`
+  },
+  {
+    name: "Chain-of-Verification",
+    code: "ChainOfVerificationEngine<TClaim>",
+    category: "reasoning",
+    categoryLabel: "REASONING & VERIFICATION",
+    color: "#a855f7",
+    tagline: "Fact extraction, verification query generation, and hallucination pruning.",
+    description: "Extracts atomic factual claims from generated responses, generates targeted retrieval verification queries, and prunes or revises ungrounded statements.",
+    csharpSnippet: `var coVe = new ChainOfVerificationEngine<FactClaim>(graphStore);
+var verifiedAnswer = await coVe.VerifyAndRepairAsync(unverifiedResponse);`
+  },
+  {
+    name: "Multi-Persona Debate",
+    code: "MultiPersonaDebate<TTopic, TVerdict>",
+    category: "reasoning",
+    categoryLabel: "REASONING & VERIFICATION",
+    color: "#a855f7",
+    tagline: "Adversarial dialectic synthesis across divergent perspective agents.",
+    description: "Orchestrates multi-agent adversarial debate rounds with distinct personas (e.g., Optimist, Skeptic, Domain Specialist) and a neutral synthesizing judge.",
+    csharpSnippet: `var debate = new MultiPersonaDebate<ArchitectureProposal, ConsensusVerdict>(rounds: 3);
+debate.AddParticipant(new SecurityArchitectAgent());
+debate.AddParticipant(new PerformanceEngineerAgent());
+var decision = await debate.ReachConsensusAsync(proposal);`
+  },
+  {
+    name: "Program-Aided Reasoner",
+    code: "ProgramAidedReasoner<TProblem, TResult>",
+    category: "reasoning",
+    categoryLabel: "REASONING & VERIFICATION",
+    color: "#a855f7",
+    tagline: "Symbolic code generation and deterministic sandboxed execution offload.",
+    description: "Offloads complex mathematical, statistical, or logic reasoning to generated, type-checked C# or Python execution blocks in an isolated runtime sandbox.",
+    csharpSnippet: `var par = new ProgramAidedReasoner<MathProblem, double>(sandboxEnvironment);
+double result = await par.ExecuteSymbolicReasoningAsync(problem);`
+  },
+  {
+    name: "Judge Evaluator",
+    code: "AgentJudgeEvaluator<TCandidate, TMetric>",
+    category: "reasoning",
+    categoryLabel: "REASONING & VERIFICATION",
+    color: "#a855f7",
+    tagline: "Multi-criteria scoring matrix with pairwise Elo ranking and confidence intervals.",
+    description: "Implements unbiased rubric scoring and Bradley-Terry pairwise comparisons across candidate outputs, producing calibrated confidence scores and explanations.",
+    csharpSnippet: `var judge = new AgentJudgeEvaluator<ModelOutput, QualityScore>(rubric);
+var ranking = await judge.RankCandidatesAsync(candidatePool);`
+  },
+
+  // 3. Coordination & Routing
+  {
+    name: "Blackboard System",
+    code: "BlackboardSystem<TKnowledge>",
+    category: "coordination",
+    categoryLabel: "COORDINATION & ROUTING",
+    color: "#f59e0b",
+    tagline: "Shared working memory space with reactive pub-sub event notifications for specialist agents.",
+    description: "Thread-safe central knowledge workspace where specialist agents read hypotheses, post discoveries, and trigger reactive problem-solving handlers asynchronously.",
+    csharpSnippet: `var blackboard = new BlackboardSystem<KnowledgeEntry>();
+blackboard.Subscribe("geometry.discovered", async entry => {
+    await physicsAgent.ProcessNewHypothesisAsync(entry);
+});
+blackboard.Post(new KnowledgeEntry("geometry.discovered", data));`
+  },
+  {
+    name: "Semantic Router",
+    code: "SemanticAgentRouter<TIntent, TAgent>",
+    category: "coordination",
+    categoryLabel: "COORDINATION & ROUTING",
+    color: "#f59e0b",
+    tagline: "SIMD-accelerated embedding similarity routing with zero runtime dependencies.",
+    description: "Routes incoming agent requests to specialized worker agents using high-speed cosine distance over intent embeddings with sub-millisecond dispatch latency.",
+    csharpSnippet: `var router = new SemanticAgentRouter<Intent, AgentHandle>(embeddingModel);
+router.RegisterRoute("sql.query", databaseAgent);
+router.RegisterRoute("visual.render", graphicsAgent);
+var target = await router.RouteAsync(incomingPrompt);`
+  },
+  {
+    name: "Topology Manager",
+    code: "AgentTopologyManager<TAgentGraph>",
+    category: "coordination",
+    categoryLabel: "COORDINATION & ROUTING",
+    color: "#f59e0b",
+    tagline: "Dynamic communication network orchestration: Ring, Mesh, Star, or Hierarchical Tree.",
+    description: "Configures and mutates runtime communication topologies between agents. Supports automated clustering, sub-swarm formation, and dynamic bridge nodes.",
+    csharpSnippet: `var topology = new AgentTopologyManager(TopologyType.HierarchicalFederation);
+topology.AddCluster("researchers", researcherPool);
+topology.AddBridgeNode(coordinatorAgent);`
+  },
+  {
+    name: "Fallback Chain",
+    code: "ResilientFallbackChain<TRequest, TResponse>",
+    category: "coordination",
+    categoryLabel: "COORDINATION & ROUTING",
+    color: "#f59e0b",
+    tagline: "Circuit-breaker protected cascading agent fallback execution paths.",
+    description: "Provides cascading failover handling across multiple model providers, local offline fallbacks, and rule-based deterministic safety nets with exponential backoff.",
+    csharpSnippet: `var fallback = new ResilientFallbackChain<Query, Answer>()
+    .AddPrimary(fastModelAgent)
+    .AddFallback(deepReasoningAgent)
+    .AddFinal(deterministicHeuristicEngine);
+var res = await fallback.ExecuteAsync(query);`
+  },
+  {
+    name: "Tool Registry",
+    code: "DynamicToolRegistry<TToolDef>",
+    category: "coordination",
+    categoryLabel: "COORDINATION & ROUTING",
+    color: "#f59e0b",
+    tagline: "Type-safe JSON Schema tool introspection, permission validation, and execution hooks.",
+    description: "Catalog for registering, searching, and invoking system tools. Enforces strict input validation, security sandbox policies, and telemetry logging on all invocations.",
+    csharpSnippet: `var registry = new DynamicToolRegistry();
+registry.Register<FileSearchTool>(PermissionLevel.ReadOnly);
+var tool = registry.FindTool("file_search");
+var output = await tool.InvokeAsync(args);`
+  },
+  {
+    name: "Agent Cards Manifest",
+    code: "AgentCardManifest<TCapability>",
+    category: "coordination",
+    categoryLabel: "COORDINATION & ROUTING",
+    color: "#f59e0b",
+    tagline: "A2A discovery protocol with cryptographically signed capability manifests.",
+    description: "Self-describing agent capability metadata format enabling dynamic peer-to-peer agent discovery, SLA negotiation, and role delegation in distributed swarms.",
+    csharpSnippet: `var card = AgentCard.Create("optimizer-v1")
+    .WithCapability("swarm.pso")
+    .WithMaxTokens(8192)
+    .Sign(privateKey);
+await network.BroadcastCardAsync(card);`
+  },
+  {
+    name: "Role Handoff Engine",
+    code: "RoleHandoffEngine<TContext>",
+    category: "coordination",
+    categoryLabel: "COORDINATION & ROUTING",
+    color: "#f59e0b",
+    tagline: "Zero-data-loss context transfer and state compaction between transitioning agents.",
+    description: "Serializes, compacts, and transfers execution state and conversational intent when delegating tasks from an exploratory agent to an execution agent.",
+    csharpSnippet: `var handoff = new RoleHandoffEngine<WorkflowContext>();
+await handoff.TransferControlAsync(researchAgent, codeWriterAgent, contextSnapshot);`
+  },
+
+  // 4. Safety, Memory & Adaptation
+  {
+    name: "Guardrail Pipeline",
+    code: "PolicyGuardrailPipeline<TPayload>",
+    category: "safety-memory",
+    categoryLabel: "SAFETY & MEMORY",
+    color: "#f43f5e",
+    tagline: "Bidirectional token-level safety filters, prompt injection guards, and PII masking.",
+    description: "Inspects inbound inputs and outbound model generations against configurable security policies, semantic bounds, and structural constraints with zero external network overhead.",
+    csharpSnippet: `var guardrail = new PolicyGuardrailPipeline()
+    .AddRule(new PromptInjectionDetector())
+    .AddRule(new SensitiveDataMasker())
+    .AddRule(new ToxicLanguageFilter());
+var cleanPayload = await guardrail.SanitizeAsync(rawInput);`
+  },
+  {
+    name: "Human-in-the-Loop Gate",
+    code: "HumanApprovalGate<TAction, TDecision>",
+    category: "safety-memory",
+    categoryLabel: "SAFETY & MEMORY",
+    color: "#f43f5e",
+    tagline: "Asynchronous policy-triggered user confirmation and permission escalation hooks.",
+    description: "Halts workflow execution when high-risk operations (file deletion, financial transactions, database mutations) occur, awaiting signed human confirmation in UI or chat.",
+    csharpSnippet: `var approvalGate = new HumanApprovalGate<FileAction>(RiskLevel.High);
+var approval = await approvalGate.RequestApprovalAsync(actionPayload);
+if (approval.IsGranted) {
+    await actionPayload.ExecuteAsync();
+}`
+  },
+  {
+    name: "Resource Budget Ledger",
+    code: "ResourceBudgetLedger<TTokenCost>",
+    category: "safety-memory",
+    categoryLabel: "SAFETY & MEMORY",
+    color: "#f43f5e",
+    tagline: "Token, GPU compute, and financial budget caps with strict enforcement per agent session.",
+    description: "Tracks real-time resource utilization across model calls, memory storage, and hardware compute. Enforces strict session limits and graceful cost-effective fallbacks.",
+    csharpSnippet: `var ledger = new ResourceBudgetLedger(maxTokens: 50_000, maxCostUsd: 0.25m);
+ledger.Debit(usedTokens: 1420);
+if (ledger.IsExceeded()) {
+    throw new BudgetExceededException(ledger.GetUsageSummary());
+}`
+  },
+  {
+    name: "Episodic Memory Bank",
+    code: "EpisodicMemoryBank<TEvent, TEmbedding>",
+    category: "safety-memory",
+    categoryLabel: "SAFETY & MEMORY",
+    color: "#f43f5e",
+    tagline: "Temporal memory store with recency weighting, importance scoring, and associative recall.",
+    description: "Stores historical agent-environment interactions with decay curves and semantic indexing, allowing agents to retrieve relevant past experience during novel scenarios.",
+    csharpSnippet: `var memory = new EpisodicMemoryBank<AgentEpisode>(vectorIndex);
+memory.Store(new AgentEpisode(action, outcome, importance: 0.9f));
+var relevantHistory = await memory.RecallAsync(currentSituation, topK: 5);`
+  },
+  {
+    name: "Context Compactor",
+    code: "HierarchicalContextCompactor<TMessage>",
+    category: "safety-memory",
+    categoryLabel: "SAFETY & MEMORY",
+    color: "#f43f5e",
+    tagline: "Information-dense context compression preserving key entities, decisions, and code blocks.",
+    description: "Condenses extensive conversation histories into compact structured summaries while preserving critical constraints, entity graphs, and decision traces to fit within narrow context windows.",
+    csharpSnippet: `var compactor = new HierarchicalContextCompactor(targetTokens: 2048);
+var compressedHistory = await compactor.CompactAsync(lengthyConversation);`
+  },
+  {
+    name: "Evolutionary Mutator",
+    code: "PromptEvolutionMutator<TPrompt, TFitness>",
+    category: "safety-memory",
+    categoryLabel: "SAFETY & MEMORY",
+    color: "#f43f5e",
+    tagline: "Genetic algorithm optimizer for agent instructions, system prompts, and tool descriptions.",
+    description: "Evolves and refines system prompts using mutation, crossover, and fitness evaluation against benchmark task suites to discover optimal prompt representations autonomously.",
+    csharpSnippet: `var mutator = new PromptEvolutionMutator<SystemPrompt>(populationSize: 20);
+var optimalPrompt = await mutator.EvolveAsync(initialPrompt, evalSuite, generations: 10);`
+  }
+];
+
+const REASONING_ALGORITHMS = [
+  {
+    title: "1. Multi-Hop Causal Path Reasoning",
+    desc: "Discovers directed causal inference chains across property graphs with confidence decay calculations.",
+    signature: "CausalPathReasoner.FindInferenceChains(IKnowledgeGraph graph, NodeId source, NodeId target, float minConfidence)"
+  },
+  {
+    title: "2. Grounding Verifier",
+    desc: "Cross-checks agent claims against verified subgraphs, identifying and isolating unsupported assertions.",
+    signature: "GroundingVerifier.ValidateClaims(IKnowledgeGraph graph, IEnumerable<Claim> claims, out ValidationReport report)"
+  },
+  {
+    title: "3. TAPE Rollout Planning",
+    desc: "Trajectory-Aware Predictive Execution simulating branching action futures before committing execution steps.",
+    signature: "TapeRolloutEngine.SimulateTrajectories(WorldModel model, AgentPlan plan, int horizonSteps)"
+  },
+  {
+    title: "4. Belief-Desire-Intention (BDI) Engine",
+    desc: "Maintains formal agent world state, intention sets, goal hierarchies, and dynamic execution plans.",
+    signature: "BdiEngine.UpdateBeliefsAndReplan(WorldDelta delta, GoalHierarchy goals, IntentionStack intentions)"
+  },
+  {
+    title: "5. Cognitive-Bias Detection & Debiasing",
+    desc: "Detects confirmation bias, anchoring heuristics, and availability bias in agent chains, injecting counterfactual tests.",
+    signature: "DebiasingEngine.AuditAndMitigate(ReasoningTrace trace, BiasCatalog catalog)"
+  }
+];
+---
+
+<Layout 
+  title="ML.Agentic • 22 Zero-Dependency Multi-Agent Primitives & Reasoning Engines" 
+  description="ML.Agentic provides 22 standalone, zero-dependency architectural building blocks for multi-agent coordination, goal planning, and graph-grounded verification."
+>
+  <!-- Hero Section -->
+  <section class="agentic-hero">
+    <div class="container">
+      <!-- Breadcrumb Navigation -->
+      <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span class="sep">/</span>
+        <a href="/products">Products</a>
+        <span class="sep">/</span>
+        <span class="curr">ML.Agentic</span>
+      </nav>
+
+      <!-- Badges -->
+      <div class="badge-row">
+        <span class="badge badge-emerald">Released v1.0.0</span>
+        <span class="badge badge-cyan">Open Core (.NET 10 / C#)</span>
+        <span class="badge badge-purple">Zero External Dependencies</span>
+        <span class="badge badge-amber">Level Zero &amp; SIMD Accelerated</span>
+      </div>
+
+      <!-- Hero Title -->
+      <h1 class="hero-title">
+        ML.Agentic <br />
+        <span class="text-gradient">Architectural Primitives &amp; Reasoning</span>
+      </h1>
+
+      <p class="hero-tagline">
+        21 zero-dependency building blocks, MCP, and A2A protocols for multi-agent coordination, deterministic planning, and graph-grounded verification.
+      </p>
+
+      <p class="hero-desc">
+        <code>ML.Agentic</code> and <code>ML.Reasoning</code> provide a complete, dependency-free toolkit for constructing high-reliability agent systems. Built in modern C# (.NET 10) with SIMD acceleration and optional Intel Level Zero GPU compute offload, every primitive is designed to be composable, testable in isolation, and resilient against hallucination loops, unbounded token spend, and concurrency deadlock.
+      </p>
+
+      <!-- Primary Action CTAs -->
+      <div class="hero-actions">
+        <a 
+          href="https://github.com/hf-laboratories/ML.Agentic/releases/tag/v1.0.0" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn-primary"
+          data-released="true"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span>Download Release (v1.0.0)</span>
+        </a>
+        <a 
+          href="https://github.com/hf-laboratories/ML.Agentic" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn-secondary"
+          data-released="true"
+        >
+          <span>View Source Repository &rarr;</span>
+        </a>
+        <a href="/docs/agentic-primitives" class="btn-secondary">
+          <span>Read Developer Manual</span>
+        </a>
+      </div>
+
+      <!-- Quick Install Ribbon -->
+      <div class="install-bar">
+        <span class="install-label">NuGet Install:</span>
+        <code class="install-code">dotnet add package HFLabs.ML.Agentic --version 1.0.0</code>
+        <button class="copy-btn" id="copyInstallBtn" onclick="navigator.clipboard.writeText('dotnet add package HFLabs.ML.Agentic --version 1.0.0'); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy', 2000)">Copy</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Primitives Catalog -->
+  <section class="catalog-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">22 Agentic Primitives Catalog</h2>
+        <p class="section-sub">
+          Filter by architecture role, search by keyword, or inspect type-safe C# signatures and execution dynamics.
+        </p>
+      </div>
+
+      <!-- Filter Controls -->
+      <div class="controls-bar">
+        <div class="category-pills" id="categoryPills">
+          {PRIMITIVES_CATEGORIES.map(cat => (
+            <button 
+              class={`cat-pill ${cat.key === 'all' ? 'active' : ''}`}
+              data-cat={cat.key}
+              style={`--pill-color: ${cat.color}`}
+            >
+              {cat.label} ({cat.count})
+            </button>
+          ))}
+        </div>
+
+        <div class="search-wrap">
+          <input 
+            type="text" 
+            id="primitiveSearch" 
+            placeholder="Search primitives by name, class, or keyword..."
+            class="search-input"
+          />
+        </div>
+      </div>
+
+      <!-- Primitives Grid -->
+      <div class="primitives-grid" id="primitivesGrid">
+        {AGENTIC_PRIMITIVES.map(p => (
+          <div 
+            class="primitive-card"
+            data-category={p.category}
+            data-name={p.name.toLowerCase()}
+            data-code={p.code.toLowerCase()}
+            data-desc={p.description.toLowerCase()}
+            style={`--card-accent: ${p.color}`}
+          >
+            <div class="card-header">
+              <span class="card-cat" style={`color: ${p.color}; border-color: ${p.color}40; background: ${p.color}15;`}>
+                {p.categoryLabel}
+              </span>
+              <span class="card-status">v1.0.0</span>
+            </div>
+
+            <h3 class="card-title">{p.name}</h3>
+            <div class="card-code-type">{p.code}</div>
+            
+            <p class="card-tagline">{p.tagline}</p>
+            <p class="card-desc">{p.description}</p>
+
+            <div class="card-code-wrap">
+              <pre class="snippet-pre"><code class="language-csharp">{p.csharpSnippet}</code></pre>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 ML.Reasoning Graph Algorithms -->
+  <section class="reasoning-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">5 ML.Reasoning Graph Algorithms</h2>
+        <p class="section-sub">
+          Algorithms executing against any graph implementation conforming to <code>IKnowledgeGraph</code>, with optional Level Zero GPU acceleration.
+        </p>
+      </div>
+
+      <div class="reasoning-grid">
+        {REASONING_ALGORITHMS.map(r => (
+          <div class="reasoning-card">
+            <h3 class="reasoning-title">{r.title}</h3>
+            <p class="reasoning-desc">{r.desc}</p>
+            <pre class="reasoning-signature"><code>{r.signature}</code></pre>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture & System Integration -->
+  <section class="integration-section">
+    <div class="container">
+      <div class="integration-grid">
+        <div class="integration-text">
+          <h2 class="section-title">Zero Overhead. Zero External Calls.</h2>
+          <p>
+            Traditional agent frameworks bundle dozens of unverified Python dependencies, synchronous network locks, and uncontrolled background polling. <code>ML.Agentic</code> takes the opposite approach:
+          </p>
+          <ul class="points-list">
+            <li><strong>Standalone &amp; Open Core:</strong> Shipped as a single, clean .NET 10 assembly with zero third-party packages.</li>
+            <li><strong>Deterministic Testing:</strong> Every primitive accepts explicit time, pseudo-random seeds, and cancellation tokens for 100% reproducible tests.</li>
+            <li><strong>Hardware Offload:</strong> Semantic routing and GraphRAG verification hook directly into LevelZero.NET for sub-millisecond local GPU execution.</li>
+            <li><strong>Enterprise Guardrails:</strong> Built-in token budget ledgers and human-approval gates ensure strict regulatory and operational safety.</li>
+          </ul>
+        </div>
+        <div class="integration-card">
+          <h3 style="margin-top:0; color:#38bdf8;">Complete Release Bundle</h3>
+          <p style="color:var(--text-muted); font-size:14px; line-height:1.6;">
+            The v1.0.0 release includes compiled .NET 10 binaries, signed NuGet packages, XML documentation, unit tests with >95% code coverage, and sample projects.
+          </p>
+          <div style="display:flex; flex-direction:column; gap:12px; margin-top:20px;">
+            <a 
+              href="https://github.com/hf-laboratories/ML.Agentic/releases" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="btn-primary"
+              data-released="true"
+              style="text-align:center; justify-content:center;"
+            >
+              GitHub Release Assets (v1.0.0)
+            </a>
+            <a 
+              href="https://github.com/hf-laboratories/ML.Agentic" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="btn-secondary"
+              data-released="true"
+              style="text-align:center; justify-content:center;"
+            >
+              Repository Source Code
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  // Filter and search logic for primitives
+  const pills = document.querySelectorAll('.cat-pill');
+  const searchInput = document.getElementById('primitiveSearch') as HTMLInputElement;
+  const cards = document.querySelectorAll('.primitive-card') as NodeListOf<HTMLElement>;
+
+  let activeCategory = 'all';
+  let searchTerm = '';
+
+  function filterCards() {
+    cards.forEach(card => {
+      const cat = card.dataset.category || '';
+      const name = card.dataset.name || '';
+      const code = card.dataset.code || '';
+      const desc = card.dataset.desc || '';
+
+      const matchesCat = (activeCategory === 'all' || cat === activeCategory);
+      const matchesSearch = !searchTerm || (
+        name.includes(searchTerm) || 
+        code.includes(searchTerm) || 
+        desc.includes(searchTerm)
+      );
+
+      if (matchesCat && matchesSearch) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      pills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      activeCategory = pill.getAttribute('data-cat') || 'all';
+      filterCards();
+    });
+  });
+
+  searchInput?.addEventListener('input', (e) => {
+    searchTerm = (e.target as HTMLInputElement).value.toLowerCase().trim();
+    filterCards();
+  });
+</script>
+
+<style>
+  .agentic-hero {
+    padding: 60px 0 40px;
+    background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 70%);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+  .breadcrumb-nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+  .breadcrumb-nav a:hover {
+    color: var(--text-main);
+  }
+  .breadcrumb-nav .sep {
+    color: var(--border-color);
+  }
+  .breadcrumb-nav .curr {
+    color: #38bdf8;
+    font-weight: 500;
+  }
+
+  .badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .badge {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-emerald { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+  .badge-cyan { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+  .badge-purple { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+  .badge-amber { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+
+  .hero-title {
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+  .text-gradient {
+    background: linear-gradient(135deg, #38bdf8 0%, #a855f7 50%, #f43f5e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-tagline {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 12px;
+  }
+  .hero-desc {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-muted);
+    max-width: 900px;
+    margin-bottom: 28px;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: #0284c7;
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover {
+    background: #0369a1;
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #38bdf8;
+  }
+
+  .install-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+  .install-label {
+    color: #94a3b8;
+    font-weight: 500;
+  }
+  .install-code {
+    color: #38bdf8;
+    font-family: monospace;
+  }
+  .copy-btn {
+    background: #1e293b;
+    color: #e2e8f0;
+    border: 1px solid #334155;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .copy-btn:hover {
+    background: #334155;
+  }
+
+  .catalog-section, .reasoning-section, .integration-section {
+    padding: 60px 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .section-header {
+    margin-bottom: 32px;
+  }
+  .section-title {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .section-sub {
+    font-size: 15px;
+    color: var(--text-muted);
+  }
+
+  .controls-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .cat-pill {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .cat-pill:hover {
+    color: var(--text-main);
+    border-color: var(--pill-color, #38bdf8);
+  }
+  .cat-pill.active {
+    background: var(--pill-color, #38bdf8);
+    color: #0f172a;
+    border-color: var(--pill-color, #38bdf8);
+  }
+
+  .search-wrap {
+    flex-grow: 1;
+    max-width: 380px;
+  }
+  .search-input {
+    width: 100%;
+    padding: 8px 14px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-main);
+    font-size: 13px;
+    outline: none;
+  }
+  .search-input:focus {
+    border-color: #38bdf8;
+  }
+
+  .primitives-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+  }
+
+  .primitive-card {
+    display: flex;
+    flex-direction: column;
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    transition: all 0.2s;
+  }
+  .primitive-card:hover {
+    border-color: var(--card-accent, #38bdf8);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .card-cat {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid;
+    letter-spacing: 0.5px;
+  }
+  .card-status {
+    font-size: 11px;
+    color: #10b981;
+    font-weight: 600;
+  }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .card-code-type {
+    font-family: monospace;
+    font-size: 11px;
+    color: #38bdf8;
+    margin-bottom: 12px;
+    word-break: break-all;
+  }
+
+  .card-tagline {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 8px;
+  }
+  .card-desc {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    flex-grow: 1;
+  }
+
+  .card-code-wrap {
+    background: #0b0f19;
+    border: 1px solid #1e293b;
+    border-radius: 6px;
+    padding: 12px;
+    overflow-x: auto;
+  }
+  .snippet-pre {
+    margin: 0;
+    font-family: monospace;
+    font-size: 12px;
+    color: #e2e8f0;
+    line-height: 1.4;
+  }
+
+  .reasoning-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 20px;
+  }
+  .reasoning-card {
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .reasoning-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #c084fc;
+    margin-bottom: 8px;
+  }
+  .reasoning-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .reasoning-signature {
+    background: #0b0f19;
+    border: 1px solid #1e293b;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 0;
+    font-size: 11px;
+    color: #38bdf8;
+    overflow-x: auto;
+  }
+
+  .integration-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+  @media (max-width: 768px) {
+    .integration-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .points-list {
+    padding-left: 20px;
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .points-list strong {
+    color: var(--text-main);
+  }
+  .integration-card {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 24px;
+  }
+</style>

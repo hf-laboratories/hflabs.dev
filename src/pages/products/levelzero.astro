@@ -71,11 +71,26 @@ const hardwareTargets = [
 
       <!-- Primary Action CTAs -->
       <div class="hero-actions">
-        <a href="https://github.com/hf-laboratories" target="_blank" rel="noopener noreferrer" class="btn-primary">
+        <a 
+          href="https://github.com/hf-laboratories/LevelZero.NET/releases" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn-primary"
+          data-released="true"
+        >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
           </svg>
-          <span>View on GitHub</span>
+          <span>Download Releases (v2.0.0)</span>
+        </a>
+        <a 
+          href="https://github.com/hf-laboratories/LevelZero.NET" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn-secondary"
+          data-released="true"
+        >
+          <span>View Source Repository &rarr;</span>
         </a>
         <a href="/docs/levelzero-net" class="btn-secondary">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -83,13 +98,6 @@ const hardwareTargets = [
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
           </svg>
           <span>Read the Docs</span>
-        </a>
-        <a href="/about#contact" class="btn-secondary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-            <polyline points="22,6 12,13 2,6"></polyline>
-          </svg>
-          <span>Contact Us</span>
         </a>
       </div>
 
@@ -242,6 +250,143 @@ const hardwareTargets = [
     </div>
   </section>
 
+  <!-- Level Zero Ecosystem Releases & Packages -->
+  <section class="section-container" style="padding:60px 0; border-bottom:1px solid rgba(255,255,255,0.08); background:rgba(15,23,42,0.4);">
+    <div class="container">
+      <div style="margin-bottom:32px;">
+        <div class="badge badge-emerald" style="background:rgba(16,185,129,0.15); color:#10b981; border:1px solid rgba(16,185,129,0.3); margin-bottom:12px;">Releases &amp; Distribution</div>
+        <h2 style="font-size:28px; font-weight:800; margin-bottom:8px;">Level Zero Ecosystem Releases</h2>
+        <p style="color:var(--text-muted); font-size:15px; max-width:800px;">
+          Explore official releases, precompiled standalone binaries, and NuGet packages across the Intel Level Zero compute ecosystem.
+        </p>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
+        <!-- Card 1: LevelZero.NET -->
+        <div style="background:rgba(6,9,19,0.7); border:1px solid rgba(56,189,248,0.3); border-radius:8px; padding:20px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <span style="font-size:11px; font-weight:700; color:#38bdf8; background:rgba(56,189,248,0.15); padding:2px 8px; border-radius:4px; border:1px solid rgba(56,189,248,0.3);">RUNTIME ENGINE</span>
+              <span style="font-size:12px; color:#10b981; font-weight:600;">v2.0.0 &bull; Released</span>
+            </div>
+            <h3 style="font-size:18px; font-weight:700; margin-bottom:6px;">LevelZero.NET</h3>
+            <p style="color:var(--text-muted); font-size:13px; line-height:1.5; margin-bottom:16px;">
+              Core managed API, native C ABI shim, typed Unified Shared Memory (<code style="color:#38bdf8;">SharedBuffer&lt;T&gt;</code>), and embedded catalog of 418 pre-compiled compute kernels across 11 Intel targets.
+            </p>
+          </div>
+          <div>
+            <div style="background:#0b0f19; border:1px solid #1e293b; padding:8px 12px; border-radius:4px; font-family:monospace; font-size:11px; color:#38bdf8; margin-bottom:12px;">
+              dotnet add package LevelZero.NET
+            </div>
+            <a 
+              href="https://github.com/hf-laboratories/LevelZero.NET/releases/tag/v2.0.0" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="btn-primary" 
+              style="width:100%; justify-content:center; padding:8px 14px; font-size:13px;"
+              data-released="true"
+            >
+              Download Assets (v2.0.0)
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 2: l0llm -->
+        <div style="background:rgba(6,9,19,0.7); border:1px solid rgba(168,85,247,0.3); border-radius:8px; padding:20px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <span style="font-size:11px; font-weight:700; color:#c084fc; background:rgba(168,85,247,0.15); padding:2px 8px; border-radius:4px; border:1px solid rgba(168,85,247,0.3);">LLM RUNNER &amp; SERVER</span>
+              <span style="font-size:12px; color:#10b981; font-weight:600;">v2.0.0 &bull; Released</span>
+            </div>
+            <h3 style="font-size:18px; font-weight:700; margin-bottom:6px;">l0llm</h3>
+            <p style="color:var(--text-muted); font-size:13px; line-height:1.5; margin-bottom:16px;">
+              Zero-allocation native LLM runner &amp; OpenAI REST server in pure C#. 41.3 tok/s on Iris Xe with zero GC allocations and zero Python/Conda dependencies.
+            </p>
+          </div>
+          <div>
+            <div style="display:flex; gap:8px;">
+              <a href="/products/l0llm" class="btn-secondary" style="flex:1; justify-content:center; padding:8px 10px; font-size:12px;">
+                Showcase &rarr;
+              </a>
+              <a 
+                href="https://github.com/hf-laboratories/l0llm/releases/tag/v2.0.0" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="btn-primary" 
+                style="flex:1; justify-content:center; padding:8px 10px; font-size:12px; background:#7c3aed;"
+                data-released="true"
+              >
+                Download v2.0.0
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: l0check -->
+        <div style="background:rgba(6,9,19,0.7); border:1px solid rgba(16,185,129,0.3); border-radius:8px; padding:20px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <span style="font-size:11px; font-weight:700; color:#10b981; background:rgba(16,185,129,0.15); padding:2px 8px; border-radius:4px; border:1px solid rgba(16,185,129,0.3);">DIAGNOSTICS CLI</span>
+              <span style="font-size:12px; color:#10b981; font-weight:600;">v2.0.0 &bull; Released</span>
+            </div>
+            <h3 style="font-size:18px; font-weight:700; margin-bottom:6px;">l0check</h3>
+            <p style="color:var(--text-muted); font-size:13px; line-height:1.5; margin-bottom:16px;">
+              Fast, standalone CLI tool for inspecting Intel GPU architectures, topology, driver capabilities, and verifying Level Zero compute kernel execution.
+            </p>
+          </div>
+          <div>
+            <div style="display:flex; gap:8px;">
+              <a href="/products/l0check" class="btn-secondary" style="flex:1; justify-content:center; padding:8px 10px; font-size:12px;">
+                Showcase &rarr;
+              </a>
+              <a 
+                href="https://github.com/hf-laboratories/l0check/releases/tag/v2.0.0" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="btn-primary" 
+                style="flex:1; justify-content:center; padding:8px 10px; font-size:12px; background:#059669;"
+                data-released="true"
+              >
+                Download v2.0.0
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: ML.Agentic -->
+        <div style="background:rgba(6,9,19,0.7); border:1px solid rgba(245,158,11,0.3); border-radius:8px; padding:20px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <span style="font-size:11px; font-weight:700; color:#f59e0b; background:rgba(245,158,11,0.15); padding:2px 8px; border-radius:4px; border:1px solid rgba(245,158,11,0.3);">AGENTIC SUITE</span>
+              <span style="font-size:12px; color:#10b981; font-weight:600;">v1.0.0 &bull; Released</span>
+            </div>
+            <h3 style="font-size:18px; font-weight:700; margin-bottom:6px;">ML.Agentic</h3>
+            <p style="color:var(--text-muted); font-size:13px; line-height:1.5; margin-bottom:16px;">
+              21 zero-dependency multi-agent building blocks, Model Context Protocol (MCP), and Agent2Agent (A2A) protocol engine with optional Level Zero GPU offload.
+            </p>
+          </div>
+          <div>
+            <div style="display:flex; gap:8px;">
+              <a href="/products/ml-agentic" class="btn-secondary" style="flex:1; justify-content:center; padding:8px 10px; font-size:12px;">
+                Showcase &rarr;
+              </a>
+              <a 
+                href="https://github.com/hf-laboratories/ML.Agentic/releases/tag/v1.0.0" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="btn-primary" 
+                style="flex:1; justify-content:center; padding:8px 10px; font-size:12px; background:#d97706;"
+                data-released="true"
+              >
+                Download v1.0.0
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Why This Exists (Architectural Rationale) -->
   <section class="rationale-section">
     <div class="container">
@@ -257,8 +402,14 @@ const hardwareTargets = [
           </p>
 
           <div class="rationale-action-row">
-            <a href="https://github.com/hf-laboratories" target="_blank" rel="noopener noreferrer" class="btn-primary">
-              <span>View on GitHub &rarr;</span>
+            <a 
+              href="https://github.com/hf-laboratories/LevelZero.NET/releases" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="btn-primary"
+              data-released="true"
+            >
+              <span>Download LevelZero.NET Releases &rarr;</span>
             </a>
             <a href="/docs/levelzero-net" class="btn-secondary">
               <span>Read LevelZero.NET Docs &rarr;</span>

@@ -125,8 +125,14 @@ LevelZero.NET does that work once, ships it precompiled, and gets out of the way
 
 ---
 
-## Resources & Calls to Action
+## Official Resources & Ecosystem Releases
 
-- [View on GitHub (HFLabs)](https://github.com/hf-laboratories)
-- [Explore Product Page](/products/levelzero)
-- [Contact Systems Engineering](/about#contact)
+- **[LevelZero.NET Releases (v2.0.0)](https://github.com/hf-laboratories/LevelZero.NET/releases/tag/v2.0.0)** — Core managed runtime and 418 pre-compiled kernels.
+- **[l0llm Releases (v2.0.0)](https://github.com/hf-laboratories/l0llm/releases/tag/v2.0.0)** — Pure C# & Intel Level Zero LLM Runner & OpenAI Server.
+- **[l0check Releases (v2.0.0)](https://github.com/hf-laboratories/l0check/releases/tag/v2.0.0)** — Intel Level Zero Hardware Diagnostics & Validation CLI.
+- **[ML.Agentic Releases (v1.0.0)](https://github.com/hf-laboratories/ML.Agentic/releases/tag/v1.0.0)** — Zero-dependency multi-agent AI building blocks.
+- **[LevelZero.NET Source Repository](https://github.com/hf-laboratories/LevelZero.NET)** — Source code, issues, and build manifests.
+- **[LevelZero.NET Product Page & Kernel Atlas](/products/levelzero)**
+- **[l0llm Dedicated Product Showcase](/products/l0llm)**
+- **[l0check Diagnostics Tool](/products/l0check)**
+- **[Contact Systems Engineering](/about#contact)**

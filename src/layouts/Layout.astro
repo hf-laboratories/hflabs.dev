@@ -94,15 +94,20 @@ const {
           <ul>
             <li><a href="/#divisions">Core Systems Stack</a></li>
             <li><a href="/products/ht-graphrag">HT GraphRAG Product Page</a></li>
+            <li><a href="/products/ml-agentic">ML.Agentic Product Page</a></li>
             <li><a href="/products/ml-suite">ML Suite Product Page</a></li>
             <li><a href="/products/hyperswarm">HyperSwarm Product Page</a></li>
             <li><a href="/products/swarmbench">SwarmBench Product Page</a></li>
             <li><a href="/products/swarmdev">SwarmDev Product Page</a></li>
-            <li><a href="/products/automlapp">AutoMLApp (in dev)</a></li>
-            <li><a href="/products/abigen">Abigen (in dev)</a></li>
+            <li><a href="/products/levelzero">LevelZero.NET Product Page</a></li>
+            <li><a href="/products/l0llm">l0llm LLM Server (v2.0.0)</a></li>
+            <li><a href="/products/l0check">l0check Diagnostics CLI (v2.0.0)</a></li>
+            <li><a href="/products/poplar">Poplar.NET Product Page</a></li>
             <li><a href="/products/accelerator">Accelerator Product Page</a></li>
             <li><a href="/products/queryaccel">QueryAccel Product Page</a></li>
-            <li><a href="/products/poplar">Poplar.NET (in dev)</a></li>
+            <li><a href="/products/automlapp">AutoMLApp (in dev)</a></li>
+            <li><a href="/products/abigen">Abigen (in dev)</a></li>
+            <li><a href="/docs/agentic-primitives">ML.Agentic &amp; Reasoning Manual</a></li>
             <li><a href="/docs/graphrag-operator">In-Memory Hypertensor GraphRAG Manual</a></li>
             <li><a href="/docs/hyperswarm-benchmarks">HyperSwarm &amp; SwarmDev Docs</a></li>
             <li><a href="/docs/levelzero-net">LevelZero.NET &amp; L0 Kernels</a></li>
@@ -555,14 +560,32 @@ const {
       const allGithubLinks = Array.from(document.querySelectorAll('a[href*="github.com"]')) as HTMLAnchorElement[];
 
       allGithubLinks.forEach(link => {
-        // Skip the main account link (e.g., data-main-github="true" or exact match to account page)
+        const href = link.href.trim().toLowerCase();
+        // Skip the main account link and released repositories / release URLs
         const isMainAccount = link.getAttribute('data-main-github') === 'true' || 
                               link.classList.contains('main-github-link') ||
-                              link.href.trim() === 'https://github.com/hf-laboratories' ||
-                              link.href.trim() === 'https://github.com/hf-laboratories/';
+                              href === 'https://github.com/hf-laboratories' ||
+                              href === 'https://github.com/hf-laboratories/';
 
-        if (isMainAccount) {
-          // Allow normal navigation to the user's account page
+        const isExplicitlyReleased = link.getAttribute('data-released') === 'true' ||
+                                     href.includes('/releases') ||
+                                     href.includes('levelzero.net') ||
+                                     href.includes('l0llm') ||
+                                     href.includes('l0check') ||
+                                     href.includes('ml.agentic') ||
+                                     href.includes('poplar.net') ||
+                                     href.includes('poplar_explorer') ||
+                                     href.includes('interactive-probabilistic-neural-network-decision-matrix') ||
+                                     href.includes('copilot_instructions_initiated_workflows') ||
+                                     href.includes('android-network-cfg') ||
+                                     href.includes('zmk-config') ||
+                                     href.includes('zmk-corne') ||
+                                     href.includes('hflabs.dev');
+
+        if (isMainAccount || isExplicitlyReleased) {
+          // Allow normal navigation to the released repository or profile
+          link.classList.remove('repo-under-construction');
+          link.style.cursor = 'pointer';
           return;
         }
 

@@ -30,6 +30,12 @@
         "description": "Benchmarking, characterization, elimination tournaments and real-time visualization HUD running 34 optimization algorithms against 110 test functions with HyperCache config reuse and self-validating LaTeX/JSON profiles.",
         "path": "src/HFLabs/Products/SwarmBench",
         "status": "Production"
+      },
+      {
+        "name": "Interactive PNN Decision Matrix",
+        "description": "Interactive diagram and browser-based visualization tool for probabilistic neural network decision matrices. Live on GitHub Pages.",
+        "path": "https://github.com/hf-laboratories/Interactive-Probabilistic-Neural-Network-Decision-Matrix",
+        "status": "Live Web App"
       }
     ]
   },
@@ -37,31 +43,37 @@
     "id": "acceleration",
     "name": "Machine Learning & Acceleration",
     "icon": "🧠",
-    "badge": "ML & Query Engines",
-    "tagline": "Spiking and graph-based ML, heterogeneous accelerator orchestration, and IPU-offloaded SQL.",
+    "badge": "ML & Inference Engines",
+    "tagline": "Agentic AI building blocks, zero-allocation LLM runners, and IPU-offloaded query engines.",
     "color": "#06b6d4",
     "projects": [
       {
-        "name": "AutoMLApp (in development)",
-        "description": "Windows node-graph editor (.NET 10/WinForms) for composing, validating and running ML and accelerator pipelines. Visual node-graph workbench with 185+ node types, F7 validation, and pluggable HyperSwarm backend.",
-        "path": "src/HFLabs/Products/AutoMLApp",
-        "status": "In Development"
+        "name": "ML.Agentic (v1.0.0)",
+        "description": "21 zero-dependency multi-agent architectural building blocks, MCP (Model Context Protocol), A2A (Agent2Agent), and JSON-RPC 2.0 for .NET 10 with sub-millisecond execution and 0 external dependencies.",
+        "path": "https://github.com/hf-laboratories/ML.Agentic",
+        "status": "Production (v1.0.0)"
+      },
+      {
+        "name": "l0llm (v2.0.0)",
+        "description": "Ultra-fast, zero-allocation native LLM runner and OpenAI-compatible REST server in pure C# for Intel GPUs. Benchmarked at 41.3 tok/s on Iris Xe with zero GC allocations.",
+        "path": "https://github.com/hf-laboratories/l0llm",
+        "status": "Production (v2.0.0)"
       },
       {
         "name": "HFLabs Machine Learning Suite",
-        "description": "Spiking neural networks, contextual and intergraph inference, and knowledge-graph embeddings (KGE). It also has hyperparameter optimization (Bayesian, Hyperband, BOHB, ASHA-BOHB, TuRBO) and a Level Zero LLM inference engine with graph-constrained beam decoding.",
+        "description": "Spiking neural networks, contextual and intergraph inference, and knowledge-graph embeddings (KGE). Hyperparameter optimization (Bayesian, Hyperband, BOHB, ASHA-BOHB, TuRBO) and graph-constrained beam decoding.",
         "path": "src/HFLabs/Libraries/ML",
         "status": "Production"
       },
       {
         "name": "Accelerator",
-        "description": "Unified hardware-accelerator layer. A gRPC service executes plan envelopes across IPU (Poplar), CUDA, OpenCL, Level Zero, FPGA and DMA/RDMA backends. It includes backend discovery and scoring, a compiled-graph cache, and a KV-cache tier.",
+        "description": "Unified hardware-accelerator layer. A gRPC service executes plan envelopes across IPU (Poplar), CUDA, OpenCL, Level Zero, FPGA and DMA/RDMA backends with compiled-graph caching.",
         "path": "src/HFLabs/Hardware/Accelerator",
         "status": "Production"
       },
       {
         "name": "IPU SQL Query Acceleration (MVP)",
-        "description": "A PostgreSQL extension and a SQL Server CLR bridge offload aggregates (COUNT, SUM, AVG, MIN, MAX) and vector distance ops (cosine, dot, L2) to the IPU through a gRPC microservice. Arrow columnar transport and the planner cost model are still planned.",
+        "description": "A PostgreSQL extension and a SQL Server CLR bridge offload aggregates (COUNT, SUM, AVG, MIN, MAX) and vector distance ops (cosine, dot, L2) to the IPU through a gRPC microservice.",
         "path": "src/HFLabs/Products/QueryAccel",
         "status": "MVP"
       }
@@ -72,25 +84,37 @@
     "name": "Hardware & Native Substrates",
     "icon": "⚡",
     "badge": "Bare Metal & Interop",
-    "tagline": "Intel Level Zero interop, precompiled kernels, Graphcore Poplar bindings, and header-to-binding generation.",
+    "tagline": "Intel Level Zero GPU interop, diagnostics, Graphcore Poplar bindings, and header-to-binding generation.",
     "color": "#f43f5e",
     "projects": [
       {
-        "name": "LevelZero.NET & Kernel Catalog",
-        "description": "Single-DLL managed API, native shim, and 407 pre-compiled kernel modules (37 distinct kernels across 11 Intel GPU targets). 37 kernel wrappers across Swarm, SNN, LLM Inference, and Knowledge Retrieval with typed Unified Shared Memory and auto device detection.",
-        "path": "src/HFLabs/Hardware/LevelZero.NET",
+        "name": "LevelZero.NET (v2.0.0)",
+        "description": "High-performance zero-allocation managed .NET 10 bindings for Intel oneAPI Level Zero runtime with pre-compiled SPIR-V and .zebin kernel catalogs across 11 Intel GPU architectures.",
+        "path": "https://github.com/hf-laboratories/LevelZero.NET",
+        "status": "Production (v2.0.0)"
+      },
+      {
+        "name": "l0check (v2.0.0)",
+        "description": "Fast standalone CLI diagnostic tool for inspecting Intel GPU architectures, driver capabilities, memory topologies, and validating compute kernel execution.",
+        "path": "https://github.com/hf-laboratories/l0check",
+        "status": "Production (v2.0.0)"
+      },
+      {
+        "name": "Poplar.NET (v1.0.0-preview)",
+        "description": "World first zero-allocation C# / .NET 10 runtime engine and resident graph orchestration SDK for Graphcore Colossus IPUs (Bow-2000, MK2, IPU-POD).",
+        "path": "https://github.com/hf-laboratories/Poplar.NET",
+        "status": "Production (v1.0.0-preview)"
+      },
+      {
+        "name": "Poplar Explorer Fork",
+        "description": "Basic framework and interactive exploration workbench for rapid prototyping of Poplar programs on Graphcore IPUs.",
+        "path": "https://github.com/hf-laboratories/Poplar_Explorer-HF-Labs-Fork",
         "status": "Production"
       },
       {
-        "name": "Poplar.NET (in development)",
-        "description": "C ABI shim and managed .NET wrapper for Graphcore Poplar/PopART. It covers devices, graph construction, inference and training sessions, optimizers, and safe native handles. It requires the Graphcore Poplar SDK, which isn't included.",
-        "path": "src/HFLabs/Hardware/Poplar.NET",
-        "status": "In Development"
-      },
-      {
         "name": "Abigen (in development)",
-        "description": "libclang-driven generator that reads C/C++ headers, emits reviewed/verified C# bindings, and manages upstream release tracking. Features fail-closed validation, manifest reproducibility, and a Windows desktop dashboard.",
-        "path": "src/HFLabs/DevTools/CodeGen/Abigen.Core, src/HFLabs/Products/Abigen.Desktop",
+        "description": "libclang-driven generator that reads C/C++ headers, emits reviewed/verified C# bindings, and manages upstream release tracking with fail-closed validation.",
+        "path": "src/HFLabs/DevTools/CodeGen/Abigen.Core",
         "status": "In Development"
       }
     ]

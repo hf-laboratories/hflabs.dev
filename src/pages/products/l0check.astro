@@ -1,0 +1,350 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout
+  title="l0check — Intel Level Zero Hardware Diagnostics CLI | HF Laboratories"
+  description="Fast, standalone command-line diagnostic tool for inspecting Intel® GPU architectures, driver capabilities, memory topologies, and validating compute kernel execution."
+  activeTab="products"
+>
+  <div class="product-page">
+    <div class="hero-section">
+      <div class="badge-row">
+        <span class="status-badge release-badge">RELEASED v2.0.0</span>
+        <span class="status-badge">STANDALONE CLI</span>
+        <span class="status-badge">INTEL LEVEL ZERO</span>
+        <span class="status-badge">HARDWARE DIAGNOSTICS</span>
+      </div>
+
+      <h1 class="hero-title">
+        l0check
+        <span class="hero-sub">Intel Level Zero Hardware Diagnostics & Validation CLI</span>
+      </h1>
+
+      <p class="hero-lead">
+        Fast, standalone command-line diagnostic tool for inspecting Intel® GPU architectures, driver capabilities, memory topologies, and validating compute kernel execution via the Intel oneAPI Level Zero runtime.
+      </p>
+
+      <div class="hero-cta-group">
+        <a
+          href="https://github.com/hf-laboratories/l0check/releases/download/v2.0.0/l0check-win-x64-v2.0.0.zip"
+          class="btn-primary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Download l0check v2.0.0 (win-x64)
+        </a>
+        <a
+          href="https://github.com/hf-laboratories/l0check/releases/tag/v2.0.0"
+          class="btn-secondary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitHub Releases
+        </a>
+        <a
+          href="https://github.com/hf-laboratories/l0check"
+          class="btn-secondary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Source Repository
+        </a>
+      </div>
+    </div>
+
+    <!-- Key Diagnostic Features -->
+    <section class="features-section">
+      <div class="section-header">
+        <span class="section-tag">Key Capabilities</span>
+        <h2>Comprehensive GPU & Driver Verification</h2>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-box">
+          <div class="feat-icon">🔍</div>
+          <h3>Driver & Device Enumeration</h3>
+          <p>Query driver versions, Level Zero API versions, device IDs, PCI bus addresses, execution unit configurations, and sub-slice counts.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feat-icon">🧠</div>
+          <h3>Topology & Memory Subsystem</h3>
+          <p>Analyze device local memory, shared system memory bandwidth, Unified Shared Memory (USM) capabilities, and cache hierarchies.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feat-icon">🧪</div>
+          <h3>Compute Kernel Verification</h3>
+          <p>Run comprehensive diagnostic smoke tests and compute kernel pipelines directly against the Level Zero loader (ze_loader.dll).</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feat-icon">⚡</div>
+          <h3>Standalone & Zero Native Dependencies</h3>
+          <p>Self-contained single-file binary built on .NET 10 with zero external installation friction.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quickstart & CLI Usage -->
+    <section class="usage-section">
+      <div class="section-header">
+        <span class="section-tag">CLI Usage</span>
+        <h2>Diagnostic Commands</h2>
+      </div>
+
+      <div class="code-container">
+        <div class="code-header">
+          <span>Run Hardware Diagnostics</span>
+          <span class="code-lang">shell</span>
+        </div>
+        <pre><code># Quick hardware & driver scan
+l0check
+
+# Run full hardware & compute kernel execution test suite
+l0check --test
+
+# Build from source
+git clone https://github.com/hf-laboratories/l0check.git
+cd l0check
+dotnet run --project src/LevelZeroCheck.csproj</code></pre>
+      </div>
+    </section>
+
+    <!-- Distribution Assets -->
+    <section class="assets-section">
+      <div class="section-header">
+        <span class="section-tag">Release Downloads</span>
+        <h2>Official Binaries (v2.0.0)</h2>
+      </div>
+
+      <div class="assets-table-wrap">
+        <table class="assets-table">
+          <thead>
+            <tr>
+              <th>Asset</th>
+              <th>Platform</th>
+              <th>Description</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>l0check-win-x64-v2.0.0.zip</strong></td>
+              <td>Windows x64</td>
+              <td>Self-contained CLI executable (Versioned Release)</td>
+              <td>
+                <a href="https://github.com/hf-laboratories/l0check/releases/download/v2.0.0/l0check-win-x64-v2.0.0.zip" class="table-dl-btn" target="_blank" rel="noopener noreferrer">
+                  Download v2.0.0
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>l0check-win-x64.zip</strong></td>
+              <td>Windows x64</td>
+              <td>Self-contained CLI executable (Latest Package)</td>
+              <td>
+                <a href="https://github.com/hf-laboratories/l0check/releases/download/v2.0.0/l0check-win-x64.zip" class="table-dl-btn" target="_blank" rel="noopener noreferrer">
+                  Download
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .product-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+  .hero-section {
+    text-align: center;
+    padding: 40px 0 60px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .status-badge {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #94a3b8;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .status-badge.release-badge {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(52, 211, 153, 0.3);
+  }
+  .hero-title {
+    font-size: 44px;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+  .hero-sub {
+    display: block;
+    font-size: 20px;
+    font-weight: 500;
+    color: #38bdf8;
+    margin-top: 8px;
+  }
+  .hero-lead {
+    font-size: 17px;
+    line-height: 1.6;
+    color: #cbd5e1;
+    max-width: 780px;
+    margin: 0 auto 32px;
+  }
+  .hero-cta-group {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    background: #0284c7;
+    color: #ffffff;
+    padding: 12px 24px;
+    font-weight: 600;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover {
+    background: #0369a1;
+  }
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #f8fafc;
+    padding: 12px 24px;
+    font-weight: 600;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+  .section-header {
+    margin-bottom: 36px;
+  }
+  .section-tag {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #38bdf8;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .features-section, .usage-section, .assets-section {
+    padding: 60px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+  }
+  .feature-box {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 24px;
+  }
+  .feat-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+  .feature-box h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #f8fafc;
+  }
+  .feature-box p {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #94a3b8;
+  }
+  .code-container {
+    background: #090d16;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .code-header {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px 16px;
+    font-size: 12px;
+    font-family: monospace;
+    color: #94a3b8;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  pre {
+    margin: 0;
+    padding: 20px;
+    overflow-x: auto;
+  }
+  code {
+    font-family: "JetBrains Mono", Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #38bdf8;
+  }
+  .assets-table-wrap {
+    overflow-x: auto;
+  }
+  .assets-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  .assets-table th, .assets-table td {
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 14px;
+  }
+  .assets-table th {
+    background: rgba(255, 255, 255, 0.03);
+    color: #94a3b8;
+    font-weight: 600;
+  }
+  .table-dl-btn {
+    display: inline-block;
+    background: #0284c7;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .table-dl-btn:hover {
+    background: #0369a1;
+  }
+</style>
