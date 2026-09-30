@@ -44,3 +44,7 @@ Edit `data/products.json` and add or update objects in `products[]`. The product
 ## License
 - **Code** is licensed under the MIT License. See `LICENSE`.
 - **Content** (papers, documentation, product data and copy, images, and branding) is not licensed for use. All rights reserved. See `LICENSE-CONTENT.md`.
+
+## Trademarks and non-affiliation
+
+Third-party product and company names used on the site belong to their owners and are used only for identification and compatibility. HF Laboratories is not affiliated with or endorsed by any of them. The full list is in [`src/data/trademarks.json`](src/data/trademarks.json) and is published at [hflabs.dev/legal/trademarks](https://hflabs.dev/legal/trademarks).
