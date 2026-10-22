@@ -1,6 +1,6 @@
 ---
 title: "Chapter 4 — Design Summary & Verification Checklist"
-description: "Implementation status, complexity metrics, and production verification checklist."
+description: "Repository scope, design estimates, and future verification checklist."
 part: "Part I — Production Readiness"
 chapter: "4. Design Summary & Verification Checklist"
 order: 14
@@ -8,21 +8,21 @@ category: "Production Readiness"
 tags: ["Checklist", "Verification", "Metrics", "Sign-off"]
 ---
 
-# Production Readiness — Design Summary & Verification Checklist
+# FPGA Springboard — Design Summary & Verification Checklist
 
 [← Production Roadmap](/book/03-production-roadmap) · [Back to Summary](/book/summary)
 
-This chapter consolidates the implementation status into a practical final-readiness view.
+This chapter describes the repository as a structured starting point for FPGA work. It is not a functional implementation sign-off. The RTL examples, integration notes, and testbench scaffold have not been validated as a functioning FPGA design.
 
 ## Completion snapshot
 
 - **Issue scope**: Deterministic DMA engine in Verilog for Stratix V GS (PCIe, scheduler, FIFOs, NVMe interface)
-- **Status**: ✅ Complete
+- **Status**: Source and documentation milestone recorded; functional FPGA behavior unvalidated
 - **Completion date**: 2026-01-11 (with PCIe Hard IP unlock integration updates documented on 2026-01-14)
 
 ## Deliverables status
 
-### Core implementation
+### Repository artifacts
 
 - ✅ Top-level integration and PCIe boundary (`fpga_top.v`, `pcie_endpoint.v`, `bar_control.v`)
 - ✅ DMA engine module set (`dma_top`, desc fetch, scheduler, addr gen, read/write, completion, fifos)
@@ -37,7 +37,7 @@ This chapter consolidates the implementation status into a practical final-readi
 - ✅ `validate_syntax.sh` (automated syntax validation)
 - ✅ `HARDWARE_INTEGRATION.md` and PCIe unlock docs/tooling (`pcie-3-hip-unlock/*`)
 
-## Design summary (from completion + metrics)
+## Design estimates (from repository documents)
 
 | Category | Snapshot |
 | --- | --- |
@@ -48,20 +48,18 @@ This chapter consolidates the implementation status into a practical final-readi
 | Memory footprint | ~6.5 KB (base) to ~10.8 KB (expanded) on-chip buffering |
 | Queue model | Descriptor/completion rings, parameterized depths (up to 64K planned/configurable paths) |
 
-## Production-readiness checklist
+## Future verification checklist
 
 ### A) Implementation quality
 
-- [x] Core modules implemented per scoped architecture
-- [x] Parameterized interfaces used across major blocks
-- [x] Inline module/interface documentation present
-- [x] Known limitations explicitly tracked
+- [x] RTL examples and module/interface descriptions are present in the repository
+- [x] A testbench scaffold is present
+- [x] Known limitations and future work are documented
 
 ### B) Validation quality
 
-- [x] Syntax validation completed (Icarus Verilog / SystemVerilog 2012)
-- [x] Documented code-review fixes applied
-- [x] Baseline verification scaffolding in repo
+- [ ] Re-run syntax checks against the current source snapshot
+- [ ] Validate testbench scenarios and expected results
 - [ ] Full functional simulation matrix complete
 - [ ] Gate-level simulation complete
 
@@ -90,4 +88,4 @@ This chapter consolidates the implementation status into a practical final-readi
 
 ## Final assessment
 
-The project is **implementation-complete and documentation-strong**, with a clear path to production. Remaining work is primarily in **full hardware integration, timing closure, and exhaustive verification** rather than missing architectural building blocks.
+The project is a **documentation-rich engineering springboard**. The next milestone is to establish repeatable functional simulation results for a clearly scoped subset, then decide whether synthesis and board-level validation are feasible. No production-readiness claim is made.

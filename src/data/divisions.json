@@ -9,9 +9,9 @@
     "projects": [
       {
         "name": "Hypertensor GraphRAG",
-        "description": "In-memory typed property-graph store with hybrid dense and BM25 retrieval. Dense search uses SIMD TensorPrimitives, with optional Level Zero GPU offload. It gives agents multi-hop graph context through a 65+ tool FastMCP server and a desktop HUD.",
+        "description": "In-memory graph retrieval with an LLM-free query path, tested at 1M nodes, 3M edges, and roughly 65k clusters. Advanced-query retrieval quality remains under active refinement.",
         "path": "src/HFLabs/Products/HypertensorGraphRAG",
-        "status": "Coming soon"
+        "status": "Active Development"
       },
       {
         "name": "HyperSwarm Optimization Suite",
@@ -23,7 +23,7 @@
         "name": "SwarmDev",
         "description": "Deterministic prompt-to-workflow pipeline. It does intent classification, planning, knowledge-graph construction, frame routing, policy-gated normalization and diagnostics. Optional kGNN reasoning and wavescan layers are opt-in.",
         "path": "src/HFLabs/Products/SwarmDev",
-        "status": "Production"
+        "status": "Private Development"
       },
       {
         "name": "SwarmBench",

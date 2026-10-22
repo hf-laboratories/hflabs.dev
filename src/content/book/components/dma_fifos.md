@@ -9,151 +9,133 @@ order: 100
 tags: ["DMA Engine Components", "Under Construction", "Verilog", "FPGA", "Hardware", "Stratix V"]
 ---
 
-# DMA FIFOs — `dma_fifos.v`
+> This entry is synchronized from the [IPUServices repository documentation](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/book/component-library/dma_fifos.md). See the [RTL source](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/dma_engine/dma_fifos.v) for the implementation and current source of truth.
 
-**Subsystem:** `DMA Engine Components` &bull; **Source Path:** `dma_engine/dma_fifos.v`
 
-[← Back to Component Library](/book/02-component-library)
+> **Scope:** This page is part of a structured FPGA engineering springboard. The accompanying RTL is an example/reference for study and further development; this project does not claim it is functionally validated, synthesis-ready, timing-closed, or proven on FPGA hardware. The repository testbench is scaffolding, not a passing verification result.
+# DMA FIFOs — dma_fifos.v
 
----
+**Filename:** `dma_engine/dma_fifos.v`
 
-:::under-construction
-### 🚧 Module Under Active Hardening & Verification
+## Description
 
-This module is part of the **DMA Engine Components** subsystem and is currently undergoing active RTL timing optimization, Quartus Platform Designer netlist verification, and testbench coverage expansion.
+Packages descriptor/read-data/write-data synchronous FIFOs used to decouple DMA pipeline stages.
 
-- **Target Architecture**: Altera / Intel Stratix V GS FPGA (Catapult v2 hardware target)
-- **Target Core Frequency**: 250 MHz (Gen3 x8 256-bit datapath)
-- **Verification Status**: In-Progress — Structural RTL syntax validated, comprehensive gate-level simulation pending
-:::
+## Integration Points
 
----
+- Buffering between descriptor fetch and scheduler
+- Buffering between read/write engines and PCIe/NVMe interfaces
 
-## 1. Architectural Role & Overview
-
-Dual-clock decoupled FIFO buffers for descriptor rings, read streaming data, and write streaming data.
-
-### Key Design Principles
-
-1. **Deterministic Handshaking**: Full ready/valid flow control preventing buffer overflows or stall deadlocks.
-2. **Synchronous Reset Protocol**: Active-low reset with internal multi-stage deassertion synchronizers.
-3. **Metastability Isolation**: Multi-stage flip-flop chains for any signals crossing clock domains.
-
----
-
-## 2. Interface Specification (Provisional Baseline)
-
-### Module Parameters & Generics
-
-| Parameter | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `DATA_WIDTH` | Integer | `512` | Primary internal streaming datapath width |
-| `ADDR_WIDTH` | Integer | `64` | Physical memory address bus width |
-| `FIFO_DEPTH` | Integer | `64` | Decoupling stage FIFO buffer depth |
-| `BURST_LIMIT` | Integer | `4096` | Maximum burst byte length per transaction |
-
-### Signal Port Map
-
-| Port Name | Direction | Bit Width | Description |
-| :--- | :--- | :--- | :--- |
-| `clk` | Input | `1` | Subsystem Core Clock (250 MHz) |
-| `rst_n` | Input | `1` | Active-Low Synchronous Reset |
-| `s_axis_tdata` | Input | `DATA_WIDTH` | Ingress stream payload |
-| `s_axis_tvalid` | Input | `1` | Ingress stream valid qualifier |
-| `s_axis_tready` | Output | `1` | Backpressure flow-control ready |
-| `s_axis_tlast` | Input | `1` | Ingress packet boundary delimiter |
-| `m_axis_tdata` | Output | `DATA_WIDTH` | Egress stream payload |
-| `m_axis_tvalid` | Output | `1` | Egress stream valid qualifier |
-| `m_axis_tready` | Input | `1` | Downstream sink backpressure ready |
-| `m_axis_tlast` | Output | `1` | Egress packet boundary delimiter |
-
----
-
-## 3. RTL Implementation Skeleton
+## Verilog Source
 
 ```verilog
-// =============================================================================
-// Module: DMA FIFOs (dma_fifos.v)
-// Subsystem: DMA Engine Components
-// Target: Stratix V GS FPGA / Catapult v2
-// Status: Under Active Hardening
-// =============================================================================
-
-`timescale 1ns / 1ps
-
 module dma_fifos #(
-    parameter DATA_WIDTH  = 512,
-    parameter ADDR_WIDTH  = 64,
-    parameter FIFO_DEPTH  = 64,
-    parameter BURST_LIMIT = 4096
+    parameter DATA_WIDTH = 512,
+    parameter DESC_WIDTH = 128,
+    parameter DATA_DEPTH = 32,
+    parameter DESC_DEPTH = 16
 )(
-    input  wire                  clk,
-    input  wire                  rst_n,
-
-    // Slave Streaming Interface (Ingress)
-    input  wire [DATA_WIDTH-1:0] s_axis_tdata,
-    input  wire                  s_axis_tvalid,
-    output wire                  s_axis_tready,
-    input  wire                  s_axis_tlast,
-
-    // Master Streaming Interface (Egress)
-    output reg  [DATA_WIDTH-1:0] m_axis_tdata,
-    output reg                   m_axis_tvalid,
-    input  wire                  m_axis_tready,
-    output reg                   m_axis_tlast,
-
-    // Status & Error Telemetry
-    output reg  [31:0]           error_count,
-    output wire                  busy_flag
+    input  wire                     clk,
+    input  wire                     rst_n,
+    input  wire [DESC_WIDTH-1:0]    desc_wr_data,
+    input  wire                     desc_wr_en,
+    output wire                     desc_full,
+    output wire [DESC_WIDTH-1:0]    desc_rd_data,
+    input  wire                     desc_rd_en,
+    output wire                     desc_empty
+);
+// DMA FIFOs for buffering data and descriptors
+module dma_fifos #(
+    parameter DATA_WIDTH = 512,    // Data path width (64 bytes)
+    parameter DESC_WIDTH = 128,    // Descriptor width
+    parameter DATA_DEPTH = 32,     // Data FIFO depth
+    parameter DESC_DEPTH = 16      // Descriptor FIFO depth
+)(
+    input  wire                     clk,
+    input  wire                     rst_n,
+    
+    // Descriptor FIFO write (from descriptor fetch)
+    input  wire [DESC_WIDTH-1:0]    desc_wr_data,
+    input  wire                     desc_wr_en,
+    output wire                     desc_full,
+    
+    // Descriptor FIFO read (to scheduler)
+    output wire [DESC_WIDTH-1:0]    desc_rd_data,
+    input  wire                     desc_rd_en,
+    output wire                     desc_empty,
+    
+    // Read data FIFO write (from read engine)
+    input  wire [DATA_WIDTH-1:0]    rdata_wr_data,
+    input  wire                     rdata_wr_en,
+    output wire                     rdata_full,
+    
+    // Read data FIFO read (to PCIe)
+    output wire [DATA_WIDTH-1:0]    rdata_rd_data,
+    input  wire                     rdata_rd_en,
+    output wire                     rdata_empty,
+    
+    // Write data FIFO write (from PCIe)
+    input  wire [DATA_WIDTH-1:0]    wdata_wr_data,
+    input  wire                     wdata_wr_en,
+    output wire                     wdata_full,
+    
+    // Write data FIFO read (to write engine)
+    output wire [DATA_WIDTH-1:0]    wdata_rd_data,
+    input  wire                     wdata_rd_en,
+    output wire                     wdata_empty
 );
 
-    // -------------------------------------------------------------------------
-    // Internal Registers & State Machine
-    // -------------------------------------------------------------------------
-    reg [31:0] cycle_count;
-    reg        active_transfer;
-
-    assign s_axis_tready = (!m_axis_tvalid || m_axis_tready);
-    assign busy_flag     = active_transfer;
-
-    always @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin
-            m_axis_tdata    <= {DATA_WIDTH{1'b0}};
-            m_axis_tvalid   <= 1'b0;
-            m_axis_tlast    <= 1'b0;
-            error_count     <= 32'd0;
-            cycle_count     <= 32'd0;
-            active_transfer <= 1'b0;
-        end else begin
-            cycle_count <= cycle_count + 1'b1;
-
-            if (m_axis_tvalid && m_axis_tready) begin
-                m_axis_tvalid <= 1'b0;
-                m_axis_tlast  <= 1'b0;
-            end
-
-            if (s_axis_tvalid && s_axis_tready) begin
-                m_axis_tdata    <= s_axis_tdata;
-                m_axis_tvalid   <= 1'b1;
-                m_axis_tlast    <= s_axis_tlast;
-                active_transfer <= !s_axis_tlast;
-            end
-        end
-    end
+    // Descriptor FIFO
+    fifo_sync #(
+        .DATA_WIDTH(DESC_WIDTH),
+        .DEPTH(DESC_DEPTH)
+    ) desc_fifo (
+        .clk(clk),
+        .rst_n(rst_n),
+        .wr_data(desc_wr_data),
+        .wr_en(desc_wr_en),
+        .full(desc_full),
+        .wr_count(),
+        .rd_data(desc_rd_data),
+        .rd_en(desc_rd_en),
+        .empty(desc_empty),
+        .rd_count()
+    );
+    
+    // Read data FIFO
+    fifo_sync #(
+        .DATA_WIDTH(DATA_WIDTH),
+        .DEPTH(DATA_DEPTH)
+    ) rdata_fifo (
+        .clk(clk),
+        .rst_n(rst_n),
+        .wr_data(rdata_wr_data),
+        .wr_en(rdata_wr_en),
+        .full(rdata_full),
+        .wr_count(),
+        .rd_data(rdata_rd_data),
+        .rd_en(rdata_rd_en),
+        .empty(rdata_empty),
+        .rd_count()
+    );
+    
+    // Write data FIFO
+    fifo_sync #(
+        .DATA_WIDTH(DATA_WIDTH),
+        .DEPTH(DATA_DEPTH)
+    ) wdata_fifo (
+        .clk(clk),
+        .rst_n(rst_n),
+        .wr_data(wdata_wr_data),
+        .wr_en(wdata_wr_en),
+        .full(wdata_full),
+        .wr_count(),
+        .rd_data(wdata_rd_data),
+        .rd_en(wdata_rd_en),
+        .empty(wdata_empty),
+        .rd_count()
+    );
 
 endmodule
+endmodule
 ```
-
----
-
-## 4. Hardware Verification & Integration Checklist
-
-- [x] Baseline Verilog 2001 / SystemVerilog 2012 syntax compilation clean
-- [ ] Multi-channel backpressure assertion testbench completed
-- [ ] Corner-case burst alignment (unaligned offsets & 4KB boundary crossings)
-- [ ] Quartus Prime TimeQuest timing constraints and false-path assertions
-- [ ] In-system SignalTap logic analyzer capture on Catapult v2 hardware target
-
----
-
-[← Back to Component Library](/book/02-component-library) · [Next Chapter: Production Roadmap →](/book/03-production-roadmap)

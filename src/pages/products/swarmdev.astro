@@ -101,7 +101,7 @@ const capabilities = [
 
 <Layout 
   title="SwarmDev • Deterministic Prompt-to-Plan Pipeline | HF Labs" 
-  description="SwarmDev is the conversational coding and research pipeline inside AutoML App. Prompt classification, planning, graph construction, and execution orchestration with a diagnostic trail at every step.">
+  description="SwarmDev is a privately licensed deterministic coding and research pipeline in active development, with production QA underway.">
   
   <!-- Top Breadcrumb Bar -->
   <div class="product-top-bar">
@@ -122,7 +122,8 @@ const capabilities = [
       <div class="hero-badge-row">
         <span class="badge badge-cyan">Conversational Pipeline</span>
         <span class="badge badge-emerald">Deterministic Planning</span>
-        <span class="badge badge-purple">AutoML App Core</span>
+        <span class="badge badge-purple">IPUServices Core</span>
+        <span class="badge badge-amber">Private · In Development</span>
       </div>
 
       <h1 class="hero-title">SwarmDev</h1>
@@ -189,7 +190,7 @@ const capabilities = [
           </div>
           <h2 class="intro-heading">Moving Beyond the Single Opaque Model Call</h2>
           <p class="intro-text">
-            <strong>SwarmDev</strong> is the conversational coding and research pipeline used inside <strong>AutoML App</strong>. It takes a natural-language request and works through it in explicit, repeatable stages rather than a single opaque model call.
+            <strong>SwarmDev</strong> is the deterministic conversational coding and research pipeline within <strong>IPUServices</strong>. It takes a natural-language request and works through it in explicit, repeatable stages rather than a single opaque model call.
           </p>
           <p class="intro-text">
             Each stage produces artifacts you can read, test and diff, which makes the pipeline significantly easier to debug, audit, and benchmark than a black-box agent.
@@ -287,30 +288,30 @@ const capabilities = [
     <div class="container">
       <div class="status-card">
         <div class="status-badge-row">
-          <span class="badge badge-emerald">DEPLOYMENT STATUS</span>
+          <span class="badge badge-amber">DEVELOPMENT STATUS</span>
           <span class="status-indicator-pill">
-            <span class="pulse-dot"></span> Active Internal Library
+            <span class="pulse-dot"></span> Private Licensed Product · In Development
           </span>
         </div>
 
         <h2 class="status-title">Runtime Status &amp; Integration Target</h2>
         
         <p class="status-statement">
-          <strong>Status:</strong> Core component of <strong>AutoML App</strong>, exposed as a modular pipeline library. It runs inside <a href="/products/automlapp" style="color:var(--accent-blue); text-decoration:underline;"><strong>AutoML App</strong></a> as a node integration.
+          <strong>Status:</strong> SwarmDev is a privately licensed product in active development. Its Pro and High-Assurance feature bundles are offered through Hypertensor GraphRAG; SwarmDev is not a separate public release.
         </p>
 
         <div class="status-details-grid">
           <div class="status-box">
             <h4>Host Environment</h4>
-            <p>Runs as a managed library inside <code>AutoML App</code> with zero disk overhead and direct in-memory message framing.</p>
+            <p>Developed as a managed library in <code>IPUServices</code>; Host and Director provide A2A and MCP sidecar endpoints for authorized deployments.</p>
           </div>
           <div class="status-box">
             <h4>Application Node</h4>
-            <p>Embedded as a core execution and research node inside <a href="/products/automlapp" style="color:var(--accent-blue);"><code>AutoML App</code></a> for autonomous machine learning experiments.</p>
+            <p>Integrated with the broader IPUServices runtime. Host defaults to <code>http://localhost:5090</code>; Director defaults to <code>http://localhost:5091</code>.</p>
           </div>
           <div class="status-box">
             <h4>Opt-in Extensibility</h4>
-            <p>The kGNN graph reasoning engine and HyperSwarm coherent wavescan bridge are activated via standard dependency injection / service registration.</p>
+            <p>Graph reasoning, discourse semantics, coherent wavescan, and model escalation are separately registered composition layers.</p>
           </div>
         </div>
 
@@ -318,27 +319,17 @@ const capabilities = [
         <div class="code-preview-block">
           <div class="code-header">
             <span class="code-title">SwarmDev Service Registration &amp; Configuration</span>
-            <span class="code-lang">C# / .NET 9</span>
+            <span class="code-lang">C# / .NET</span>
           </div>
-          <pre class="code-content"><code>// Register SwarmDev deterministic pipeline in AutoML App
-services.AddSwarmDevPipeline(options => 
-&#123;
-    options.EnableDeterministicPlanning = true;
-    options.EnableDiagnosticsSidecar = true;
-    
-    // Opt-in Graph Reasoning (kGNN with adjacency indexing & weighted message passing)
-    options.UseGraphReasoningLayer(kGnn => 
-    &#123;
-        kGnn.MaxHops = 3;
-        kGnn.CutoutResolution = CutoutResolutionMode.EmbeddingRanked;
-    &#125;);
-    
-    // Opt-in Swarm-Guided Node Selection via HyperSwarm Coherent Wavescan
-    options.UseHyperSwarmWaveScanBridge();
-    
-    // Register hard safety & policy gates
-    options.AddPolicyGate&lt;ArchitecturalInvariantGate&gt;();
-&#125;);</code></pre>
+          <pre class="code-content"><code>// Register the current SwarmDev composition layers
+services.AddSwarmDevPatternServices();
+services.AddSwarmDevGraphingServices();
+services.AddSwarmDevKGnnReasoningServices();
+services.AddSwarmDevDiscourseSemanticsServices();
+services.AddSwarmDevCoherentWavescanServices();
+
+// Register the runtime with a repository root
+services.AddSwarmDevRuntimeServices(repositoryRoot);</code></pre>
         </div>
       </div>
     </div>

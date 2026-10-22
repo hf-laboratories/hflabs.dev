@@ -9,151 +9,245 @@ order: 100
 tags: ["DMA Engine Components", "Under Construction", "Verilog", "FPGA", "Hardware", "Stratix V"]
 ---
 
-# DMA Read Engine — `dma_read_engine.v`
+> This entry is synchronized from the [IPUServices repository documentation](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/book/component-library/dma_read_engine.md). See the [RTL source](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/dma_engine/dma_read_engine.v) for the implementation and current source of truth.
 
-**Subsystem:** `DMA Engine Components` &bull; **Source Path:** `dma_engine/dma_read_engine.v`
 
-[← Back to Component Library](/book/02-component-library)
+> **Scope:** This page is part of a structured FPGA engineering springboard. The accompanying RTL is an example/reference for study and further development; this project does not claim it is functionally validated, synthesis-ready, timing-closed, or proven on FPGA hardware. The repository testbench is scaffolding, not a passing verification result.
+# DMA Read Engine — dma_read_engine.v
 
----
+**Filename:** `dma_engine/dma_read_engine.v`
 
-:::under-construction
-### 🚧 Module Under Active Hardening & Verification
+## Description
 
-This module is part of the **DMA Engine Components** subsystem and is currently undergoing active RTL timing optimization, Quartus Platform Designer netlist verification, and testbench coverage expansion.
+Executes DMA read workflows by reading from NVMe/storage and writing payloads to host memory over PCIe.
 
-- **Target Architecture**: Altera / Intel Stratix V GS FPGA (Catapult v2 hardware target)
-- **Target Core Frequency**: 250 MHz (Gen3 x8 256-bit datapath)
-- **Verification Status**: In-Progress — Structural RTL syntax validated, comprehensive gate-level simulation pending
-:::
+## Integration Points
 
----
+- Command consumer for scheduler-issued read ops
+- NVMe read requester + PCIe write producer
+- Emits completion and telemetry signals
 
-## 1. Architectural Role & Overview
-
-Orchestrates memory reads from storage and constructs PCIe Memory Write TLPs to host memory.
-
-### Key Design Principles
-
-1. **Deterministic Handshaking**: Full ready/valid flow control preventing buffer overflows or stall deadlocks.
-2. **Synchronous Reset Protocol**: Active-low reset with internal multi-stage deassertion synchronizers.
-3. **Metastability Isolation**: Multi-stage flip-flop chains for any signals crossing clock domains.
-
----
-
-## 2. Interface Specification (Provisional Baseline)
-
-### Module Parameters & Generics
-
-| Parameter | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `DATA_WIDTH` | Integer | `512` | Primary internal streaming datapath width |
-| `ADDR_WIDTH` | Integer | `64` | Physical memory address bus width |
-| `FIFO_DEPTH` | Integer | `64` | Decoupling stage FIFO buffer depth |
-| `BURST_LIMIT` | Integer | `4096` | Maximum burst byte length per transaction |
-
-### Signal Port Map
-
-| Port Name | Direction | Bit Width | Description |
-| :--- | :--- | :--- | :--- |
-| `clk` | Input | `1` | Subsystem Core Clock (250 MHz) |
-| `rst_n` | Input | `1` | Active-Low Synchronous Reset |
-| `s_axis_tdata` | Input | `DATA_WIDTH` | Ingress stream payload |
-| `s_axis_tvalid` | Input | `1` | Ingress stream valid qualifier |
-| `s_axis_tready` | Output | `1` | Backpressure flow-control ready |
-| `s_axis_tlast` | Input | `1` | Ingress packet boundary delimiter |
-| `m_axis_tdata` | Output | `DATA_WIDTH` | Egress stream payload |
-| `m_axis_tvalid` | Output | `1` | Egress stream valid qualifier |
-| `m_axis_tready` | Input | `1` | Downstream sink backpressure ready |
-| `m_axis_tlast` | Output | `1` | Egress packet boundary delimiter |
-
----
-
-## 3. RTL Implementation Skeleton
+## Verilog Source
 
 ```verilog
-// =============================================================================
-// Module: DMA Read Engine (dma_read_engine.v)
-// Subsystem: DMA Engine Components
-// Target: Stratix V GS FPGA / Catapult v2
-// Status: Under Active Hardening
-// =============================================================================
-
-`timescale 1ns / 1ps
-
 module dma_read_engine #(
-    parameter DATA_WIDTH  = 512,
-    parameter ADDR_WIDTH  = 64,
-    parameter FIFO_DEPTH  = 64,
-    parameter BURST_LIMIT = 4096
+    parameter DATA_WIDTH = 512,
+    parameter ADDR_WIDTH = 64
 )(
-    input  wire                  clk,
-    input  wire                  rst_n,
-
-    // Slave Streaming Interface (Ingress)
-    input  wire [DATA_WIDTH-1:0] s_axis_tdata,
-    input  wire                  s_axis_tvalid,
-    output wire                  s_axis_tready,
-    input  wire                  s_axis_tlast,
-
-    // Master Streaming Interface (Egress)
-    output reg  [DATA_WIDTH-1:0] m_axis_tdata,
-    output reg                   m_axis_tvalid,
-    input  wire                  m_axis_tready,
-    output reg                   m_axis_tlast,
-
-    // Status & Error Telemetry
-    output reg  [31:0]           error_count,
-    output wire                  busy_flag
+    input  wire                     clk,
+    input  wire                     rst_n,
+    input  wire [ADDR_WIDTH-1:0]    cmd_src_addr,
+    input  wire [ADDR_WIDTH-1:0]    cmd_dst_addr,
+    input  wire [31:0]              cmd_length,
+    input  wire                     cmd_valid,
+    output reg                      cmd_ready,
+    output reg  [ADDR_WIDTH-1:0]    nvme_rd_addr,
+    output reg                      nvme_rd_req,
+    output reg  [ADDR_WIDTH-1:0]    pcie_wr_addr,
+    output reg                      pcie_wr_valid
+);
+// DMA Read Engine
+// Reads data from NVMe/storage and writes to host memory via PCIe
+module dma_read_engine #(
+    parameter DATA_WIDTH = 512,
+    parameter ADDR_WIDTH = 64
+)(
+    input  wire                     clk,
+    input  wire                     rst_n,
+    
+    // Command interface from scheduler
+    input  wire [ADDR_WIDTH-1:0]    cmd_src_addr,
+    input  wire [ADDR_WIDTH-1:0]    cmd_dst_addr,
+    input  wire [31:0]              cmd_length,
+    input  wire [7:0]               cmd_flags,
+    input  wire                     cmd_valid,
+    output reg                      cmd_ready,
+    
+    // NVMe read interface
+    output reg  [ADDR_WIDTH-1:0]    nvme_rd_addr,
+    output reg  [15:0]              nvme_rd_len,
+    output reg                      nvme_rd_req,
+    input  wire                     nvme_rd_ack,
+    
+    // NVMe read data interface
+    input  wire [DATA_WIDTH-1:0]    nvme_rd_data,
+    input  wire                     nvme_rd_valid,
+    output wire                     nvme_rd_ready,
+    
+    // PCIe write interface (for read data)
+    output reg  [ADDR_WIDTH-1:0]    pcie_wr_addr,
+    output reg  [DATA_WIDTH-1:0]    pcie_wr_data,
+    output reg  [15:0]              pcie_wr_len,
+    output reg                      pcie_wr_valid,
+    input  wire                     pcie_wr_ready,
+    
+    // Completion notification
+    output reg                      completion_valid,
+    output reg  [31:0]              completion_tag,
+    input  wire                     completion_ready,
+    
+    // Status
+    output reg                      busy,
+    
+    // Telemetry outputs
+    output wire                     telemetry_transfer_start,
+    output wire                     telemetry_transfer_complete,
+    output wire                     telemetry_transfer_error,
+    output wire [31:0]              telemetry_bytes_transferred,
+    output wire [31:0]              telemetry_cycles
 );
 
-    // -------------------------------------------------------------------------
-    // Internal Registers & State Machine
-    // -------------------------------------------------------------------------
-    reg [31:0] cycle_count;
-    reg        active_transfer;
-
-    assign s_axis_tready = (!m_axis_tvalid || m_axis_tready);
-    assign busy_flag     = active_transfer;
-
+    localparam IDLE        = 4'd0;
+    localparam PARSE_CMD   = 4'd1;
+    localparam REQ_NVME    = 4'd2;
+    localparam WAIT_NVME   = 4'd3;
+    localparam RCV_DATA    = 4'd4;
+    localparam WR_PCIE     = 4'd5;
+    localparam WAIT_WR     = 4'd6;
+    localparam COMPLETE    = 4'd7;
+    
+    reg [3:0] state;
+    reg [ADDR_WIDTH-1:0] src_addr;
+    reg [ADDR_WIDTH-1:0] dst_addr;
+    reg [31:0] bytes_remaining;
+    reg [31:0] current_tag;
+    reg [DATA_WIDTH-1:0] data_buffer;
+    
+    // Telemetry tracking
+    reg [31:0] total_bytes_transferred;
+    reg [31:0] cycle_counter;
+    reg transfer_started;
+    reg transfer_completed;
+    reg transfer_error;
+    
+    // Burst size calculation (max 4KB)
+    wire [15:0] burst_bytes = (bytes_remaining > 4096) ? 4096 : bytes_remaining[15:0];
+    wire [15:0] burst_beats = (burst_bytes + (DATA_WIDTH/8) - 1) / (DATA_WIDTH/8);
+    
+    // Telemetry outputs
+    assign telemetry_transfer_start = transfer_started;
+    assign telemetry_transfer_complete = transfer_completed;
+    assign telemetry_transfer_error = transfer_error;
+    assign telemetry_bytes_transferred = total_bytes_transferred;
+    assign telemetry_cycles = cycle_counter;
+    
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            m_axis_tdata    <= {DATA_WIDTH{1'b0}};
-            m_axis_tvalid   <= 1'b0;
-            m_axis_tlast    <= 1'b0;
-            error_count     <= 32'd0;
-            cycle_count     <= 32'd0;
-            active_transfer <= 1'b0;
+            state <= IDLE;
+            cmd_ready <= 1'b1;
+            busy <= 1'b0;
+            nvme_rd_req <= 1'b0;
+            pcie_wr_valid <= 1'b0;
+            completion_valid <= 1'b0;
+            src_addr <= {ADDR_WIDTH{1'b0}};
+            dst_addr <= {ADDR_WIDTH{1'b0}};
+            bytes_remaining <= 32'd0;
+            current_tag <= 32'd0;
+            data_buffer <= {DATA_WIDTH{1'b0}};
+            // Telemetry reset
+            total_bytes_transferred <= 32'd0;
+            cycle_counter <= 32'd0;
+            transfer_started <= 1'b0;
+            transfer_completed <= 1'b0;
+            transfer_error <= 1'b0;
         end else begin
-            cycle_count <= cycle_count + 1'b1;
-
-            if (m_axis_tvalid && m_axis_tready) begin
-                m_axis_tvalid <= 1'b0;
-                m_axis_tlast  <= 1'b0;
-            end
-
-            if (s_axis_tvalid && s_axis_tready) begin
-                m_axis_tdata    <= s_axis_tdata;
-                m_axis_tvalid   <= 1'b1;
-                m_axis_tlast    <= s_axis_tlast;
-                active_transfer <= !s_axis_tlast;
-            end
+            // Clear one-cycle telemetry signals
+            transfer_started <= 1'b0;
+            transfer_completed <= 1'b0;
+            transfer_error <= 1'b0;
+            
+            // Increment cycle counter when busy
+            if (busy)
+                cycle_counter <= cycle_counter + 1'b1;
+            
+            case (state)
+                IDLE: begin
+                    cmd_ready <= 1'b1;
+                    busy <= 1'b0;
+                    cycle_counter <= 32'd0;
+                    total_bytes_transferred <= 32'd0;
+                    
+                    if (cmd_valid && cmd_ready) begin
+                        state <= PARSE_CMD;
+                        cmd_ready <= 1'b0;
+                    end
+                end
+                
+                PARSE_CMD: begin
+                    src_addr <= cmd_src_addr;
+                    dst_addr <= cmd_dst_addr;
+                    bytes_remaining <= cmd_length;
+                    current_tag <= current_tag + 1'b1;
+                    busy <= 1'b1;
+                    transfer_started <= 1'b1;  // Signal transfer start
+                    state <= REQ_NVME;
+                end
+                
+                REQ_NVME: begin
+                    nvme_rd_addr <= src_addr;
+                    nvme_rd_len <= burst_beats;
+                    nvme_rd_req <= 1'b1;
+                    state <= WAIT_NVME;
+                end
+                
+                WAIT_NVME: begin
+                    if (nvme_rd_ack) begin
+                        nvme_rd_req <= 1'b0;
+                        state <= RCV_DATA;
+                    end
+                end
+                
+                RCV_DATA: begin
+                    if (nvme_rd_valid && nvme_rd_ready) begin
+                        data_buffer <= nvme_rd_data;
+                        state <= WR_PCIE;
+                    end
+                end
+                
+                WR_PCIE: begin
+                    pcie_wr_addr <= dst_addr;
+                    pcie_wr_data <= data_buffer;
+                    pcie_wr_len <= burst_beats;
+                    pcie_wr_valid <= 1'b1;
+                    state <= WAIT_WR;
+                end
+                
+                WAIT_WR: begin
+                    if (pcie_wr_ready) begin
+                        pcie_wr_valid <= 1'b0;
+                        
+                        // Update addresses and counters
+                        src_addr <= src_addr + burst_bytes;
+                        dst_addr <= dst_addr + burst_bytes;
+                        bytes_remaining <= bytes_remaining - burst_bytes;
+                        total_bytes_transferred <= total_bytes_transferred + burst_bytes;
+                        
+                        if (bytes_remaining <= burst_bytes) begin
+                            state <= COMPLETE;
+                        end else begin
+                            state <= REQ_NVME;
+                        end
+                    end
+                end
+                
+                COMPLETE: begin
+                    completion_valid <= 1'b1;
+                    completion_tag <= current_tag;
+                    transfer_completed <= 1'b1;  // Signal transfer completion
+                    
+                    if (completion_ready) begin
+                        completion_valid <= 1'b0;
+                        state <= IDLE;
+                    end
+                end
+                
+                default: state <= IDLE;
+            endcase
         end
     end
+    
+    assign nvme_rd_ready = (state == RCV_DATA);
 
 endmodule
+endmodule
 ```
-
----
-
-## 4. Hardware Verification & Integration Checklist
-
-- [x] Baseline Verilog 2001 / SystemVerilog 2012 syntax compilation clean
-- [ ] Multi-channel backpressure assertion testbench completed
-- [ ] Corner-case burst alignment (unaligned offsets & 4KB boundary crossings)
-- [ ] Quartus Prime TimeQuest timing constraints and false-path assertions
-- [ ] In-system SignalTap logic analyzer capture on Catapult v2 hardware target
-
----
-
-[← Back to Component Library](/book/02-component-library) · [Next Chapter: Production Roadmap →](/book/03-production-roadmap)

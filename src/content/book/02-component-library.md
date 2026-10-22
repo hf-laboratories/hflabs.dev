@@ -12,11 +12,11 @@ tags: ["Component Library", "Modules", "Verilog", "SystemVerilog", "Architecture
 
 [← Enhancements Implemented](/book/01-enhancements-implemented) · [Next → Production Roadmap](/book/03-production-roadmap)
 
-This section is an auto-generated index of all reusable FPGA modules and components in this project. Each entry links to a dedicated page with complete Verilog/SystemVerilog source code, architectural descriptions, interface specifications, and integration notes.
+This section indexes RTL examples, testbench material, and design notes in the project. Entries link to repository documentation and the corresponding source path where available. They are a structured springboard for future FPGA development, not claims that modules are functionally verified or ready to synthesize and load onto hardware.
 
 ## Component Index
 
-80+ components and counting, across utility modules, BMC components, DDR3 controller components, DMA engine components, host interface components, interrupt controller components, IOMMU components, Graphcore IPU interface components, NVMe controller components, P2P communication components, PCIe endpoint and HIP unlock components, power management components, testbench components, and timing/PTPv2/synchronization components.
+The catalog includes 80+ entries across utility, BMC, DDR3, DMA, host interface, interrupt, IOMMU, IPU, NVMe, P2P, PCIe, power, testbench, and timing/PTPv2 areas. Some entries are conceptual or incomplete; see the validation chapter and each source file for its actual scope.
 
 ### Utility Modules
 

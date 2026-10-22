@@ -1,7 +1,6 @@
 ---
 // src/pages/index.astro
 import Layout from '../layouts/Layout.astro';
-import ComingSoon from '../components/ComingSoon.astro';
 import DivisionBackgroundOverlay from '../components/DivisionBackgroundOverlay.astro';
 import divisions from '../data/divisions.json';
 ---
@@ -379,7 +378,7 @@ import divisions from '../data/divisions.json';
                       </div>
                       <p class="p-desc">{p.description}</p>
                       {p.name.includes("GraphRAG") && (
-                        <a href="/products/ht-graphrag" class="p-link-btn">HT GraphRAG Product Page <ComingSoon /> &rarr;</a>
+                        <a href="/products/ht-graphrag" class="p-link-btn">HT GraphRAG Product Page &rarr;</a>
                       )}
                       {p.name.includes("HyperSwarm") && (
                         <a href="/products/hyperswarm" class="p-link-btn">HyperSwarm Product Page &rarr;</a>
@@ -1515,6 +1514,16 @@ import divisions from '../data/divisions.json';
   }
 
   .status-in-development {
+    color: var(--accent-purple);
+    background: rgba(168, 85, 247, 0.12);
+  }
+
+  .status-private-development {
+    color: var(--accent-purple);
+    background: rgba(168, 85, 247, 0.12);
+  }
+
+  .status-active-development {
     color: var(--accent-purple);
     background: rgba(168, 85, 247, 0.12);
   }

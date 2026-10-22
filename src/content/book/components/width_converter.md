@@ -9,151 +9,164 @@ order: 100
 tags: ["Utility Modules", "Under Construction", "Verilog", "FPGA", "Hardware", "Stratix V"]
 ---
 
-# Width Converter — `width_converter.v`
+> This entry is synchronized from the [IPUServices repository documentation](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/book/component-library/width_converter.md). See the [RTL source](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/util/width_converter.v) for the implementation and current source of truth.
 
-**Subsystem:** `Utility Modules` &bull; **Source Path:** `util/width_converter.v`
 
-[← Back to Component Library](/book/02-component-library)
+> **Scope:** This page is part of a structured FPGA engineering springboard. The accompanying RTL is an example/reference for study and further development; this project does not claim it is functionally validated, synthesis-ready, timing-closed, or proven on FPGA hardware. The repository testbench is scaffolding, not a passing verification result.
+# Width Converter — width_converter.v
 
----
+**Filename:** `util/width_converter.v`
 
-:::under-construction
-### 🚧 Module Under Active Hardening & Verification
+## Description
 
-This module is part of the **Utility Modules** subsystem and is currently undergoing active RTL timing optimization, Quartus Platform Designer netlist verification, and testbench coverage expansion.
+Converts between different data path widths with proper buffering. Supports both upsizing (narrow to wide) and downsizing (wide to narrow). Used for safe, parameterized width translation at PCIe↔DMA boundaries.
 
-- **Target Architecture**: Altera / Intel Stratix V GS FPGA (Catapult v2 hardware target)
-- **Target Core Frequency**: 250 MHz (Gen3 x8 256-bit datapath)
-- **Verification Status**: In-Progress — Structural RTL syntax validated, comprehensive gate-level simulation pending
-:::
+- Bidirectional conversion (upsizing/downsizing)
+- Buffering and flow-control
+- `last` signal propagation
+- Parameterized power-of-two width ratios
+- Back-pressure via ready/valid handshakes
 
----
+## Integration Points
 
-## 1. Architectural Role & Overview
+- PCIe↔DMA boundaries in top-level modules
+- Used by `pcie_dma_width_adapter` and `dma_pcie_width_adapter`
+- Testbench coverage in `tb_dma_engine.v`
 
-Bidirectional streaming data width converter with internal buffering and backpressure flow control.
-
-### Key Design Principles
-
-1. **Deterministic Handshaking**: Full ready/valid flow control preventing buffer overflows or stall deadlocks.
-2. **Synchronous Reset Protocol**: Active-low reset with internal multi-stage deassertion synchronizers.
-3. **Metastability Isolation**: Multi-stage flip-flop chains for any signals crossing clock domains.
-
----
-
-## 2. Interface Specification (Provisional Baseline)
-
-### Module Parameters & Generics
-
-| Parameter | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `DATA_WIDTH` | Integer | `512` | Primary internal streaming datapath width |
-| `ADDR_WIDTH` | Integer | `64` | Physical memory address bus width |
-| `FIFO_DEPTH` | Integer | `64` | Decoupling stage FIFO buffer depth |
-| `BURST_LIMIT` | Integer | `4096` | Maximum burst byte length per transaction |
-
-### Signal Port Map
-
-| Port Name | Direction | Bit Width | Description |
-| :--- | :--- | :--- | :--- |
-| `clk` | Input | `1` | Subsystem Core Clock (250 MHz) |
-| `rst_n` | Input | `1` | Active-Low Synchronous Reset |
-| `s_axis_tdata` | Input | `DATA_WIDTH` | Ingress stream payload |
-| `s_axis_tvalid` | Input | `1` | Ingress stream valid qualifier |
-| `s_axis_tready` | Output | `1` | Backpressure flow-control ready |
-| `s_axis_tlast` | Input | `1` | Ingress packet boundary delimiter |
-| `m_axis_tdata` | Output | `DATA_WIDTH` | Egress stream payload |
-| `m_axis_tvalid` | Output | `1` | Egress stream valid qualifier |
-| `m_axis_tready` | Input | `1` | Downstream sink backpressure ready |
-| `m_axis_tlast` | Output | `1` | Egress packet boundary delimiter |
-
----
-
-## 3. RTL Implementation Skeleton
+## Verilog Source
 
 ```verilog
-// =============================================================================
-// Module: Width Converter (width_converter.v)
-// Subsystem: Utility Modules
-// Target: Stratix V GS FPGA / Catapult v2
-// Status: Under Active Hardening
-// =============================================================================
-
-`timescale 1ns / 1ps
+// Width Converter Module
+// Converts between different data path widths with proper buffering
+// Supports both upsizing (narrow to wide) and downsizing (wide to narrow)
 
 module width_converter #(
-    parameter DATA_WIDTH  = 512,
-    parameter ADDR_WIDTH  = 64,
-    parameter FIFO_DEPTH  = 64,
-    parameter BURST_LIMIT = 4096
+    parameter INPUT_WIDTH = 256,
+    parameter OUTPUT_WIDTH = 512,
+    parameter RATIO = OUTPUT_WIDTH / INPUT_WIDTH  // Must be power of 2
 )(
-    input  wire                  clk,
-    input  wire                  rst_n,
-
-    // Slave Streaming Interface (Ingress)
-    input  wire [DATA_WIDTH-1:0] s_axis_tdata,
-    input  wire                  s_axis_tvalid,
-    output wire                  s_axis_tready,
-    input  wire                  s_axis_tlast,
-
-    // Master Streaming Interface (Egress)
-    output reg  [DATA_WIDTH-1:0] m_axis_tdata,
-    output reg                   m_axis_tvalid,
-    input  wire                  m_axis_tready,
-    output reg                   m_axis_tlast,
-
-    // Status & Error Telemetry
-    output reg  [31:0]           error_count,
-    output wire                  busy_flag
+    input  wire                         clk,
+    input  wire                         rst_n,
+    // Input interface (narrow)
+    input  wire [INPUT_WIDTH-1:0]       s_data,
+    input  wire                         s_valid,
+    input  wire                         s_last,
+    output reg                          s_ready,
+    // Output interface (wide)
+    output reg  [OUTPUT_WIDTH-1:0]      m_data,
+    output reg                          m_valid,
+    output reg                          m_last,
+    input  wire                         m_ready
 );
-
-    // -------------------------------------------------------------------------
-    // Internal Registers & State Machine
-    // -------------------------------------------------------------------------
-    reg [31:0] cycle_count;
-    reg        active_transfer;
-
-    assign s_axis_tready = (!m_axis_tvalid || m_axis_tready);
-    assign busy_flag     = active_transfer;
-
-    always @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin
-            m_axis_tdata    <= {DATA_WIDTH{1'b0}};
-            m_axis_tvalid   <= 1'b0;
-            m_axis_tlast    <= 1'b0;
-            error_count     <= 32'd0;
-            cycle_count     <= 32'd0;
-            active_transfer <= 1'b0;
-        end else begin
-            cycle_count <= cycle_count + 1'b1;
-
-            if (m_axis_tvalid && m_axis_tready) begin
-                m_axis_tvalid <= 1'b0;
-                m_axis_tlast  <= 1'b0;
+    // For upsizing: accumulate narrow beats into wide beat
+    generate
+        if (OUTPUT_WIDTH > INPUT_WIDTH) begin : gen_upsize
+            reg [OUTPUT_WIDTH-1:0] data_buffer;
+            reg [$clog2(RATIO)-1:0] beat_count;
+            reg last_seen;
+            always @(posedge clk or negedge rst_n) begin
+                if (!rst_n) begin
+                    data_buffer <= {OUTPUT_WIDTH{1'b0}};
+                    beat_count <= 0;
+                    last_seen <= 1'b0;
+                    m_valid <= 1'b0;
+                    m_last <= 1'b0;
+                    s_ready <= 1'b1;
+                end else begin
+                    // Default ready unless outputting
+                    s_ready <= !m_valid || m_ready;
+                    if (m_valid && m_ready) begin
+                        // Output consumed
+                        m_valid <= 1'b0;
+                        m_last <= 1'b0;
+                        s_ready <= 1'b1;
+                    end
+                    if (s_valid && s_ready) begin
+                        // Accumulate input data
+                        data_buffer[beat_count*INPUT_WIDTH +: INPUT_WIDTH] <= s_data;
+                        if (s_last) begin
+                            last_seen <= 1'b1;
+                        end
+                        if (beat_count == RATIO - 1 || s_last) begin
+                            // Buffer full or last beat, output it
+                            m_data <= data_buffer | (s_data << (beat_count * INPUT_WIDTH));
+                            m_valid <= 1'b1;
+                            m_last <= s_last;
+                            beat_count <= 0;
+                            last_seen <= 1'b0;
+                            s_ready <= 1'b0;
+                        end else begin
+                            beat_count <= beat_count + 1'b1;
+                        end
+                    end
+                end
             end
-
-            if (s_axis_tvalid && s_axis_tready) begin
-                m_axis_tdata    <= s_axis_tdata;
-                m_axis_tvalid   <= 1'b1;
-                m_axis_tlast    <= s_axis_tlast;
-                active_transfer <= !s_axis_tlast;
+        end else if (OUTPUT_WIDTH < INPUT_WIDTH) begin : gen_downsize
+            // For downsizing: split wide beat into narrow beats
+            reg [INPUT_WIDTH-1:0] data_buffer;
+            reg [$clog2(RATIO)-1:0] beat_count;
+            reg last_buffer;
+            reg valid_buffer;
+            localparam DOWN_RATIO = INPUT_WIDTH / OUTPUT_WIDTH;
+            always @(posedge clk or negedge rst_n) begin
+                if (!rst_n) begin
+                    data_buffer <= {INPUT_WIDTH{1'b0}};
+                    beat_count <= 0;
+                    last_buffer <= 1'b0;
+                    valid_buffer <= 1'b0;
+                    m_valid <= 1'b0;
+                    m_last <= 1'b0;
+                    s_ready <= 1'b1;
+                end else begin
+                    // Ready when not buffering or last beat being output
+                    s_ready <= !valid_buffer || (beat_count == DOWN_RATIO - 1 && m_ready);
+                    if (m_valid && m_ready) begin
+                        if (beat_count == DOWN_RATIO - 1) begin
+                            // Last segment output
+                            m_valid <= 1'b0;
+                            m_last <= 1'b0;
+                            valid_buffer <= 1'b0;
+                        end else begin
+                            // Output next segment
+                            beat_count <= beat_count + 1'b1;
+                            m_data <= data_buffer[((beat_count + 1) * OUTPUT_WIDTH) +: OUTPUT_WIDTH];
+                            m_last <= (beat_count == DOWN_RATIO - 2) && last_buffer;
+                        end
+                    end
+                    if (s_valid && s_ready && !valid_buffer) begin
+                        // Latch input data
+                        data_buffer <= s_data;
+                        last_buffer <= s_last;
+                        valid_buffer <= 1'b1;
+                        beat_count <= 0;
+                        // Output first segment
+                        m_data <= s_data[OUTPUT_WIDTH-1:0];
+                        m_valid <= 1'b1;
+                        m_last <= (DOWN_RATIO == 1) && s_last;
+                    end
+                end
+            end
+        end else begin : gen_passthrough
+            // Same width, just pass through with registered path
+            always @(posedge clk or negedge rst_n) begin
+                if (!rst_n) begin
+                    m_data <= {OUTPUT_WIDTH{1'b0}};
+                    m_valid <= 1'b0;
+                    m_last <= 1'b0;
+                    s_ready <= 1'b1;
+                end else begin
+                    s_ready <= !m_valid || m_ready;
+                    if (s_valid && s_ready) begin
+                        m_data <= s_data;
+                        m_valid <= 1'b1;
+                        m_last <= s_last;
+                    end else if (m_ready) begin
+                        m_valid <= 1'b0;
+                        m_last <= 1'b0;
+                    end
+                end
             end
         end
-    end
-
+    endgenerate
 endmodule
 ```
-
----
-
-## 4. Hardware Verification & Integration Checklist
-
-- [x] Baseline Verilog 2001 / SystemVerilog 2012 syntax compilation clean
-- [ ] Multi-channel backpressure assertion testbench completed
-- [ ] Corner-case burst alignment (unaligned offsets & 4KB boundary crossings)
-- [ ] Quartus Prime TimeQuest timing constraints and false-path assertions
-- [ ] In-system SignalTap logic analyzer capture on Catapult v2 hardware target
-
----
-
-[← Back to Component Library](/book/02-component-library) · [Next Chapter: Production Roadmap →](/book/03-production-roadmap)

@@ -20,7 +20,7 @@ tags: ["Table of Contents", "Summary", "Index"]
 
 ## Part II — Component Library Deep-Dives
 
-Browse the categorized [Component Library](/book/02-component-library) containing over 80 production HDL modules across:
+Browse the categorized [Component Library](/book/02-component-library) containing over 80 documented RTL modules and design entries across:
 
 - **Utility & Safety Primitives**: Width Converter, CDC Modules, Skid Buffers, Sync/Async FIFOs, Arbiters, Error Recovery
 - **DMA Engine Core**: Top Integration, Descriptor Fetch, Deterministic Schedulers, Work-Stealing, Read/Write Engines, Completion Queues, Scatter-Gather
@@ -30,6 +30,12 @@ Browse the categorized [Component Library](/book/02-component-library) containin
 - **Timing & IEEE 1588 PTPv2**: Catapult Grandmaster, PHC, OCXO Discipline Loop, Ethernet Timestamp Unit, LEA-M8T GPS Interface
 - **BMC & Management**: Mailbox, I2C Master, GPIO, Thermal Monitoring, IPMI Bridge, NC-SI
 - **Memory & DDR3 Controller**: UniPHY Wrappers, AFI Mux, Datapaths, Phase Timing & IO Pads
+
+## Part III — Integration Notes
+
+6. [Hardware Integration Notes](/book/05-hardware-integration)
+7. [PTP Register Map](/book/06-ptp-register-map)
+8. [Validation Status and Evidence](/book/07-validation-status)
 
 ## Part III — Appendix
 

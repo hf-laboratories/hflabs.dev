@@ -2,15 +2,14 @@
 // src/pages/products/ht-graphrag.astro
 import Layout from '../../layouts/Layout.astro';
 import LicenseTierCard from '../../components/LicenseTierCard.astro';
-import ComingSoon from '../../components/ComingSoon.astro';
 import SubGraphMatrix from '../../components/SubGraphMatrix.astro';
 
 const metrics = [
-  { label: "2-hop traversal", value: "0.15–1.95 ms", detail: "1k nodes up to 25k nodes / 100k edges, measured" },
+  { label: "Tested graph scale", value: "1M nodes", detail: "3M edges across roughly 65k clusters" },
   { label: "SIMD vectors", value: "128-d default", detail: "per-store dimension is configurable; .NET SIMD, AVX2/AVX-512" },
   { label: "residency", value: "In-Memory", detail: "RAM-resident graph with bidirectional adjacency indices and a BM25 index" },
   { label: "MCP connectivity", value: "FastMCP", detail: "stdio, SSE and Streamable HTTP; 65+ tools" },
-  { label: "grounding", value: "TAPE + Grounding Verifier", detail: "action-perception planning plus claim-to-graph verification" }
+  { label: "query mode", value: "LLM-free", detail: "graph retrieval can run without a generative LLM call" }
 ];
 
 const features = [
@@ -42,7 +41,7 @@ const features = [
   {
     icon: "🔄",
     title: "Sharded, hardware-aware memory",
-    desc: "The BESS partitioner shards graphs. A hardware-topology model covers NUMA nodes, fabric links and pinned host memory. The largest benchmarked configuration is 1,000,000 nodes / 5,000,000 edges."
+    desc: "A tested in-memory configuration contains 1,000,000 nodes, 3,000,000 edges and roughly 65,000 clusters. Advanced-query retrieval quality is still being refined."
   }
 ];
 ---
@@ -71,18 +70,21 @@ const features = [
         <span class="badge" style="background:rgba(56,189,248,0.15); color:var(--accent-blue); border:1px solid rgba(56,189,248,0.3);">
           Vector &amp; Graph Engine
         </span>
-        <span class="badge" style="background:rgba(52,211,153,0.15); color:var(--accent-emerald); border:1px solid rgba(52,211,153,0.3);">
-          Coming soon
+        <span class="badge" style="background:rgba(251,191,36,0.15); color:var(--accent-amber); border:1px solid rgba(251,191,36,0.3);">
+          Active Development · Production QA
         </span>
         <span class="badge" style="background:rgba(251,191,36,0.15); color:var(--accent-amber); border:1px solid rgba(251,191,36,0.3);">
-          Open-Core + Commercial
+          Open-Core Planned · Pro/HA Private
         </span>
       </div>
 
       <h1 class="hero-title">Hypertensor GraphRAG &amp; SIMD Vectors</h1>
-      <p class="hero-desc" style="font-weight:600;"><ComingSoon label="Coming soon" /> Hypertensor GraphRAG is not yet released. Details on this page may change before launch.</p>
+      <p class="hero-desc" style="font-weight:600;">Active development: production QA and rollout-gate validation are in progress. Open-core is planned; Pro and High-Assurance feature bundles remain private and are not yet generally available.</p>
       <p class="hero-desc">
         An in-memory typed property-graph and vector store for autonomous developer agents. It keeps the graph in RAM and serves agents over REST and MCP. That removes disk-bound lookups and external database round-trips.
+      </p>
+      <p class="hero-desc">
+        The graph retrieval path can answer queries without a generative LLM call. Current evaluation reports prose rated perfect in about 90% of cases and a 100% grounding score after a previously identified failure was corrected; advanced-query retrieval quality remains under active refinement.
       </p>
 
       <div class="hero-actions">
@@ -145,7 +147,7 @@ const features = [
   <LicenseTierCard 
     badge="HT GraphRAG Commercial &amp; Open-Core Licensing"
     title="Licensing Tiers"
-    subtitle="Choose the tier that fits your workload: free single-developer use, per-seat Pro, or team-level High-Assurance."
+    subtitle="Open-core is planned. Pro and High-Assurance feature bundles are private, licensed offerings and are not yet generally available."
   />
 
   <!-- Procurement & Inquiry Section -->
@@ -156,9 +158,9 @@ const features = [
           <div class="badge" style="background:rgba(56,189,248,0.15); color:var(--accent-blue); border:1px solid rgba(56,189,248,0.3); margin-bottom:12px;">
             Licensing Procurement
           </div>
-          <h2 style="font-size:24px; font-weight:800; margin-bottom:12px;">Ready to Deploy Hypertensor GraphRAG?</h2>
+          <h2 style="font-size:24px; font-weight:800; margin-bottom:12px;">Licensing &amp; Availability</h2>
           <p style="color:var(--text-secondary); font-size:14px; line-height:1.6; max-width:600px;">
-            Developer Pro trial keys are provisioned within 24 hours. High-Assurance Enterprise contracts include cryptographic license generator tooling, custom NUMA build optimization, and air-gapped installation bundles.
+            GraphRAG is in active development. Pro and High-Assurance feature bundles are private, licensed offerings; availability and terms will be shared when those bundles are ready.
           </p>
           <div class="contact-details">
             <div class="contact-chip">

@@ -9,151 +9,288 @@ order: 100
 tags: ["Timing & PTPv2 Components", "Under Construction", "Verilog", "FPGA", "Hardware", "Stratix V"]
 ---
 
-# Ethernet Timestamp Unit — `ethernet_timestamp_unit.sv`
+> This entry is synchronized from the [IPUServices repository documentation](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/book/component-library/ethernet_timestamp_unit.md). See the [RTL source](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/timing/ethernet_timestamp_unit.sv) for the implementation and current source of truth.
 
-**Subsystem:** `Timing & PTPv2 Components` &bull; **Source Path:** `timing/ethernet_timestamp_unit.sv`
 
-[← Back to Component Library](/book/02-component-library)
+> **Scope:** This page is part of a structured FPGA engineering springboard. The accompanying RTL is an example/reference for study and further development; this project does not claim it is functionally validated, synthesis-ready, timing-closed, or proven on FPGA hardware. The repository testbench is scaffolding, not a passing verification result.
+# Ethernet Timestamp Unit — ethernet_timestamp_unit.sv
 
----
+**Filename:** `timing/ethernet_timestamp_unit.sv`
 
-:::under-construction
-### 🚧 Module Under Active Hardening & Verification
+## Description
 
-This module is part of the **Timing & PTPv2 Components** subsystem and is currently undergoing active RTL timing optimization, Quartus Platform Designer netlist verification, and testbench coverage expansion.
+Captures hardware TX/RX timestamps for PTP traffic, detects PTP EtherType frames, and applies configurable TX/RX path delay compensation with CDC-safe handshakes.
 
-- **Target Architecture**: Altera / Intel Stratix V GS FPGA (Catapult v2 hardware target)
-- **Target Core Frequency**: 250 MHz (Gen3 x8 256-bit datapath)
-- **Verification Status**: In-Progress — Structural RTL syntax validated, comprehensive gate-level simulation pending
-:::
+## Integration Points
 
----
+- Interfaces between PHC time domain and Ethernet MAC TX/RX domains
+- Uses CDC synchronizers/pulse synchronizers to safely transfer capture events
+- Supplies compensated timestamps for protocol-level PTP processing and diagnostics
 
-## 1. Architectural Role & Overview
-
-Hardware MAC layer packet parser capturing ingress and egress timestamps with latency correction.
-
-### Key Design Principles
-
-1. **Deterministic Handshaking**: Full ready/valid flow control preventing buffer overflows or stall deadlocks.
-2. **Synchronous Reset Protocol**: Active-low reset with internal multi-stage deassertion synchronizers.
-3. **Metastability Isolation**: Multi-stage flip-flop chains for any signals crossing clock domains.
-
----
-
-## 2. Interface Specification (Provisional Baseline)
-
-### Module Parameters & Generics
-
-| Parameter | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `DATA_WIDTH` | Integer | `512` | Primary internal streaming datapath width |
-| `ADDR_WIDTH` | Integer | `64` | Physical memory address bus width |
-| `FIFO_DEPTH` | Integer | `64` | Decoupling stage FIFO buffer depth |
-| `BURST_LIMIT` | Integer | `4096` | Maximum burst byte length per transaction |
-
-### Signal Port Map
-
-| Port Name | Direction | Bit Width | Description |
-| :--- | :--- | :--- | :--- |
-| `clk` | Input | `1` | Subsystem Core Clock (250 MHz) |
-| `rst_n` | Input | `1` | Active-Low Synchronous Reset |
-| `s_axis_tdata` | Input | `DATA_WIDTH` | Ingress stream payload |
-| `s_axis_tvalid` | Input | `1` | Ingress stream valid qualifier |
-| `s_axis_tready` | Output | `1` | Backpressure flow-control ready |
-| `s_axis_tlast` | Input | `1` | Ingress packet boundary delimiter |
-| `m_axis_tdata` | Output | `DATA_WIDTH` | Egress stream payload |
-| `m_axis_tvalid` | Output | `1` | Egress stream valid qualifier |
-| `m_axis_tready` | Input | `1` | Downstream sink backpressure ready |
-| `m_axis_tlast` | Output | `1` | Egress packet boundary delimiter |
-
----
-
-## 3. RTL Implementation Skeleton
+## Verilog Source
 
 ```verilog
-// =============================================================================
-// Module: Ethernet Timestamp Unit (ethernet_timestamp_unit.sv)
-// Subsystem: Timing & PTPv2 Components
-// Target: Stratix V GS FPGA / Catapult v2
-// Status: Under Active Hardening
-// =============================================================================
-
-`timescale 1ns / 1ps
+module ethernet_timestamp_unit #(
+    parameter PHC_WIDTH = 80,
+    parameter DATA_WIDTH = 512,
+    parameter TX_PATH_DELAY_NS = 80,
+    parameter RX_PATH_DELAY_NS = 80
+)(
+    input  wire clk_phc,
+    input  wire rst_n,
+    input  wire [PHC_WIDTH-1:0] phc_timestamp,
+    input  wire clk_eth_tx,
+    input  wire eth_tx_sop,
+    input  wire [DATA_WIDTH-1:0] eth_tx_data,
+    output reg  [PHC_WIDTH-1:0] tx_timestamp,
+    output reg  [PHC_WIDTH-1:0] rx_timestamp
+);
+// Ethernet Timestamp Unit
+// Captures hardware timestamps at TX/RX packet boundaries for PTP messages
+// Detects PTP packets and applies path delay compensation
 
 module ethernet_timestamp_unit #(
-    parameter DATA_WIDTH  = 512,
-    parameter ADDR_WIDTH  = 64,
-    parameter FIFO_DEPTH  = 64,
-    parameter BURST_LIMIT = 4096
+    parameter PHC_WIDTH = 80,
+    parameter DATA_WIDTH = 512,
+    parameter TX_PATH_DELAY_NS = 80,   // MAC/PHY TX pipeline delay
+    parameter RX_PATH_DELAY_NS = 80    // MAC/PHY RX pipeline delay
 )(
-    input  wire                  clk,
-    input  wire                  rst_n,
-
-    // Slave Streaming Interface (Ingress)
-    input  wire [DATA_WIDTH-1:0] s_axis_tdata,
-    input  wire                  s_axis_tvalid,
-    output wire                  s_axis_tready,
-    input  wire                  s_axis_tlast,
-
-    // Master Streaming Interface (Egress)
-    output reg  [DATA_WIDTH-1:0] m_axis_tdata,
-    output reg                   m_axis_tvalid,
-    input  wire                  m_axis_tready,
-    output reg                   m_axis_tlast,
-
-    // Status & Error Telemetry
-    output reg  [31:0]           error_count,
-    output wire                  busy_flag
+    input  wire                     clk_phc,
+    input  wire                     rst_n,
+    
+    // PHC timestamp input
+    input  wire [PHC_WIDTH-1:0]     phc_timestamp,
+    
+    // TX Ethernet interface (156.25MHz or 250MHz clock domain)
+    input  wire                     clk_eth_tx,
+    input  wire                     eth_tx_sop,
+    input  wire                     eth_tx_eop,
+    input  wire                     eth_tx_valid,
+    input  wire [DATA_WIDTH-1:0]    eth_tx_data,
+    
+    // TX timestamp output
+    output reg  [PHC_WIDTH-1:0]     tx_timestamp,
+    output reg                      tx_timestamp_valid,
+    output reg                      ptp_tx_detected,
+    
+    // RX Ethernet interface
+    input  wire                     clk_eth_rx,
+    input  wire                     eth_rx_sop,
+    input  wire                     eth_rx_eop,
+    input  wire                     eth_rx_valid,
+    input  wire [DATA_WIDTH-1:0]    eth_rx_data,
+    
+    // RX timestamp output
+    output reg  [PHC_WIDTH-1:0]     rx_timestamp,
+    output reg                      rx_timestamp_valid,
+    output reg                      ptp_rx_detected
 );
 
-    // -------------------------------------------------------------------------
-    // Internal Registers & State Machine
-    // -------------------------------------------------------------------------
-    reg [31:0] cycle_count;
-    reg        active_transfer;
-
-    assign s_axis_tready = (!m_axis_tvalid || m_axis_tready);
-    assign busy_flag     = active_transfer;
-
-    always @(posedge clk or negedge rst_n) begin
+    // PTP EtherType = 0x88F7
+    localparam [15:0] PTP_ETHERTYPE = 16'h88F7;
+    
+    //=========================================================================
+    // TX Path
+    //=========================================================================
+    
+    // Detect PTP packets on TX path (in TX clock domain)
+    reg tx_ptp_detected;
+    reg tx_capture_timestamp;
+    reg [PHC_WIDTH-1:0] tx_timestamp_captured;
+    
+    always @(posedge clk_eth_tx or negedge rst_n) begin
         if (!rst_n) begin
-            m_axis_tdata    <= {DATA_WIDTH{1'b0}};
-            m_axis_tvalid   <= 1'b0;
-            m_axis_tlast    <= 1'b0;
-            error_count     <= 32'd0;
-            cycle_count     <= 32'd0;
-            active_transfer <= 1'b0;
+            tx_ptp_detected <= 1'b0;
+            tx_capture_timestamp <= 1'b0;
+            ptp_tx_detected <= 1'b0;
         end else begin
-            cycle_count <= cycle_count + 1'b1;
-
-            if (m_axis_tvalid && m_axis_tready) begin
-                m_axis_tvalid <= 1'b0;
-                m_axis_tlast  <= 1'b0;
+            tx_capture_timestamp <= 1'b0;
+            ptp_tx_detected <= 1'b0;
+            
+            if (eth_tx_sop && eth_tx_valid) begin
+                // Check EtherType at byte offset 12-13 in first 64 bytes
+                // For 512-bit (64-byte) data width, EtherType is in bits [111:96]
+                // (byte 12-13 from start of packet)
+                if (eth_tx_data[111:96] == PTP_ETHERTYPE) begin
+                    tx_ptp_detected <= 1'b1;
+                    tx_capture_timestamp <= 1'b1;
+                    ptp_tx_detected <= 1'b1;
+                end
             end
-
-            if (s_axis_tvalid && s_axis_tready) begin
-                m_axis_tdata    <= s_axis_tdata;
-                m_axis_tvalid   <= 1'b1;
-                m_axis_tlast    <= s_axis_tlast;
-                active_transfer <= !s_axis_tlast;
+        end
+    end
+    
+    // Capture PHC timestamp and cross to TX clock domain
+    reg [PHC_WIDTH-1:0] phc_snapshot_tx;
+    reg phc_snapshot_valid_tx;
+    
+    // Use handshake CDC for timestamp transfer
+    wire tx_req_phc;
+    wire tx_ack_phc;
+    
+    // Request pulse in TX domain
+    cdc_pulse_sync u_tx_req_cdc (
+        .src_clk(clk_eth_tx),
+        .src_rst_n(rst_n),
+        .src_pulse(tx_capture_timestamp),
+        .dst_clk(clk_phc),
+        .dst_rst_n(rst_n),
+        .dst_pulse(tx_req_phc)
+    );
+    
+    // Capture timestamp in PHC domain
+    reg [PHC_WIDTH-1:0] phc_tx_latched;
+    reg phc_tx_ack;
+    
+    always @(posedge clk_phc or negedge rst_n) begin
+        if (!rst_n) begin
+            phc_tx_latched <= {PHC_WIDTH{1'b0}};
+            phc_tx_ack <= 1'b0;
+        end else begin
+            if (tx_req_phc) begin
+                // Add TX path delay compensation
+                phc_tx_latched <= phc_timestamp + TX_PATH_DELAY_NS;
+                phc_tx_ack <= 1'b1;
+            end else begin
+                phc_tx_ack <= 1'b0;
+            end
+        end
+    end
+    
+    // Acknowledge back to TX domain
+    cdc_pulse_sync u_tx_ack_cdc (
+        .src_clk(clk_phc),
+        .src_rst_n(rst_n),
+        .src_pulse(phc_tx_ack),
+        .dst_clk(clk_eth_tx),
+        .dst_rst_n(rst_n),
+        .dst_pulse(tx_ack_phc)
+    );
+    
+    // Transfer timestamp data using synchronizer
+    cdc_sync #(
+        .WIDTH(PHC_WIDTH),
+        .STAGES(3)
+    ) u_tx_timestamp_cdc (
+        .dst_clk(clk_eth_tx),
+        .dst_rst_n(rst_n),
+        .src_data(phc_tx_latched),
+        .dst_data(tx_timestamp_captured)
+    );
+    
+    // Output TX timestamp
+    always @(posedge clk_eth_tx or negedge rst_n) begin
+        if (!rst_n) begin
+            tx_timestamp <= {PHC_WIDTH{1'b0}};
+            tx_timestamp_valid <= 1'b0;
+        end else begin
+            tx_timestamp_valid <= 1'b0;
+            
+            if (tx_ack_phc) begin
+                tx_timestamp <= tx_timestamp_captured;
+                tx_timestamp_valid <= 1'b1;
+            end
+        end
+    end
+    
+    //=========================================================================
+    // RX Path
+    //=========================================================================
+    
+    // Detect PTP packets on RX path (in RX clock domain)
+    reg rx_ptp_detected;
+    reg rx_capture_timestamp;
+    reg [PHC_WIDTH-1:0] rx_timestamp_captured;
+    
+    always @(posedge clk_eth_rx or negedge rst_n) begin
+        if (!rst_n) begin
+            rx_ptp_detected <= 1'b0;
+            rx_capture_timestamp <= 1'b0;
+            ptp_rx_detected <= 1'b0;
+        end else begin
+            rx_capture_timestamp <= 1'b0;
+            ptp_rx_detected <= 1'b0;
+            
+            if (eth_rx_sop && eth_rx_valid) begin
+                // Check EtherType at byte offset 12-13
+                if (eth_rx_data[111:96] == PTP_ETHERTYPE) begin
+                    rx_ptp_detected <= 1'b1;
+                    rx_capture_timestamp <= 1'b1;
+                    ptp_rx_detected <= 1'b1;
+                end
+            end
+        end
+    end
+    
+    // Capture PHC timestamp and cross to RX clock domain
+    wire rx_req_phc;
+    wire rx_ack_phc;
+    
+    // Request pulse in RX domain
+    cdc_pulse_sync u_rx_req_cdc (
+        .src_clk(clk_eth_rx),
+        .src_rst_n(rst_n),
+        .src_pulse(rx_capture_timestamp),
+        .dst_clk(clk_phc),
+        .dst_rst_n(rst_n),
+        .dst_pulse(rx_req_phc)
+    );
+    
+    // Capture timestamp in PHC domain
+    reg [PHC_WIDTH-1:0] phc_rx_latched;
+    reg phc_rx_ack;
+    
+    always @(posedge clk_phc or negedge rst_n) begin
+        if (!rst_n) begin
+            phc_rx_latched <= {PHC_WIDTH{1'b0}};
+            phc_rx_ack <= 1'b0;
+        end else begin
+            if (rx_req_phc) begin
+                // Subtract RX path delay compensation
+                phc_rx_latched <= phc_timestamp - RX_PATH_DELAY_NS;
+                phc_rx_ack <= 1'b1;
+            end else begin
+                phc_rx_ack <= 1'b0;
+            end
+        end
+    end
+    
+    // Acknowledge back to RX domain
+    cdc_pulse_sync u_rx_ack_cdc (
+        .src_clk(clk_phc),
+        .src_rst_n(rst_n),
+        .src_pulse(phc_rx_ack),
+        .dst_clk(clk_eth_rx),
+        .dst_rst_n(rst_n),
+        .dst_pulse(rx_ack_phc)
+    );
+    
+    // Transfer timestamp data using synchronizer
+    cdc_sync #(
+        .WIDTH(PHC_WIDTH),
+        .STAGES(3)
+    ) u_rx_timestamp_cdc (
+        .dst_clk(clk_eth_rx),
+        .dst_rst_n(rst_n),
+        .src_data(phc_rx_latched),
+        .dst_data(rx_timestamp_captured)
+    );
+    
+    // Output RX timestamp
+    always @(posedge clk_eth_rx or negedge rst_n) begin
+        if (!rst_n) begin
+            rx_timestamp <= {PHC_WIDTH{1'b0}};
+            rx_timestamp_valid <= 1'b0;
+        end else begin
+            rx_timestamp_valid <= 1'b0;
+            
+            if (rx_ack_phc) begin
+                rx_timestamp <= rx_timestamp_captured;
+                rx_timestamp_valid <= 1'b1;
             end
         end
     end
 
 endmodule
+endmodule
 ```
-
----
-
-## 4. Hardware Verification & Integration Checklist
-
-- [x] Baseline Verilog 2001 / SystemVerilog 2012 syntax compilation clean
-- [ ] Multi-channel backpressure assertion testbench completed
-- [ ] Corner-case burst alignment (unaligned offsets & 4KB boundary crossings)
-- [ ] Quartus Prime TimeQuest timing constraints and false-path assertions
-- [ ] In-system SignalTap logic analyzer capture on Catapult v2 hardware target
-
----
-
-[← Back to Component Library](/book/02-component-library) · [Next Chapter: Production Roadmap →](/book/03-production-roadmap)

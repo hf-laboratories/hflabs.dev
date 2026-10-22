@@ -9,151 +9,101 @@ order: 100
 tags: ["Utility Modules", "Under Construction", "Verilog", "FPGA", "Hardware", "Stratix V"]
 ---
 
-# Round-Robin Arbiter — `arbiter_rr.v`
+> This entry is synchronized from the [IPUServices repository documentation](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/book/component-library/arbiter_rr.md). See the [RTL source](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/util/arbiter_rr.v) for the implementation and current source of truth.
 
-**Subsystem:** `Utility Modules` &bull; **Source Path:** `util/arbiter_rr.v`
 
-[← Back to Component Library](/book/02-component-library)
+> **Scope:** This page is part of a structured FPGA engineering springboard. The accompanying RTL is an example/reference for study and further development; this project does not claim it is functionally validated, synthesis-ready, timing-closed, or proven on FPGA hardware. The repository testbench is scaffolding, not a passing verification result.
+# Round-Robin Arbiter — arbiter_rr.v
 
----
+**Filename:** `util/arbiter_rr.v`
 
-:::under-construction
-### 🚧 Module Under Active Hardening & Verification
+## Description
 
-This module is part of the **Utility Modules** subsystem and is currently undergoing active RTL timing optimization, Quartus Platform Designer netlist verification, and testbench coverage expansion.
+Implements a round-robin arbitration scheme for multiple requestors. Ensures fair access by rotating priority after each grant.
 
-- **Target Architecture**: Altera / Intel Stratix V GS FPGA (Catapult v2 hardware target)
-- **Target Core Frequency**: 250 MHz (Gen3 x8 256-bit datapath)
-- **Verification Status**: In-Progress — Structural RTL syntax validated, comprehensive gate-level simulation pending
-:::
+- Parameterized number of ports
+- Masked/unmasked priority encoding
+- Fairness through rotating mask
 
----
+## Integration Points
 
-## 1. Architectural Role & Overview
+- Shared-resource arbitration (DMA channels, queues, engines)
+- Bus/stream request scheduling across multiple requestors
 
-Implements a round-robin arbitration scheme for multiple requestors with priority masking.
-
-### Key Design Principles
-
-1. **Deterministic Handshaking**: Full ready/valid flow control preventing buffer overflows or stall deadlocks.
-2. **Synchronous Reset Protocol**: Active-low reset with internal multi-stage deassertion synchronizers.
-3. **Metastability Isolation**: Multi-stage flip-flop chains for any signals crossing clock domains.
-
----
-
-## 2. Interface Specification (Provisional Baseline)
-
-### Module Parameters & Generics
-
-| Parameter | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `DATA_WIDTH` | Integer | `512` | Primary internal streaming datapath width |
-| `ADDR_WIDTH` | Integer | `64` | Physical memory address bus width |
-| `FIFO_DEPTH` | Integer | `64` | Decoupling stage FIFO buffer depth |
-| `BURST_LIMIT` | Integer | `4096` | Maximum burst byte length per transaction |
-
-### Signal Port Map
-
-| Port Name | Direction | Bit Width | Description |
-| :--- | :--- | :--- | :--- |
-| `clk` | Input | `1` | Subsystem Core Clock (250 MHz) |
-| `rst_n` | Input | `1` | Active-Low Synchronous Reset |
-| `s_axis_tdata` | Input | `DATA_WIDTH` | Ingress stream payload |
-| `s_axis_tvalid` | Input | `1` | Ingress stream valid qualifier |
-| `s_axis_tready` | Output | `1` | Backpressure flow-control ready |
-| `s_axis_tlast` | Input | `1` | Ingress packet boundary delimiter |
-| `m_axis_tdata` | Output | `DATA_WIDTH` | Egress stream payload |
-| `m_axis_tvalid` | Output | `1` | Egress stream valid qualifier |
-| `m_axis_tready` | Input | `1` | Downstream sink backpressure ready |
-| `m_axis_tlast` | Output | `1` | Egress packet boundary delimiter |
-
----
-
-## 3. RTL Implementation Skeleton
+## Verilog Source
 
 ```verilog
-// =============================================================================
-// Module: Round-Robin Arbiter (arbiter_rr.v)
-// Subsystem: Utility Modules
-// Target: Stratix V GS FPGA / Catapult v2
-// Status: Under Active Hardening
-// =============================================================================
-
-`timescale 1ns / 1ps
-
+// Round-robin arbiter for multiple requestors
 module arbiter_rr #(
-    parameter DATA_WIDTH  = 512,
-    parameter ADDR_WIDTH  = 64,
-    parameter FIFO_DEPTH  = 64,
-    parameter BURST_LIMIT = 4096
+    parameter NUM_PORTS = 4
 )(
-    input  wire                  clk,
-    input  wire                  rst_n,
-
-    // Slave Streaming Interface (Ingress)
-    input  wire [DATA_WIDTH-1:0] s_axis_tdata,
-    input  wire                  s_axis_tvalid,
-    output wire                  s_axis_tready,
-    input  wire                  s_axis_tlast,
-
-    // Master Streaming Interface (Egress)
-    output reg  [DATA_WIDTH-1:0] m_axis_tdata,
-    output reg                   m_axis_tvalid,
-    input  wire                  m_axis_tready,
-    output reg                   m_axis_tlast,
-
-    // Status & Error Telemetry
-    output reg  [31:0]           error_count,
-    output wire                  busy_flag
+    input  wire                     clk,
+    input  wire                     rst_n,
+    // Request and grant signals
+    input  wire [NUM_PORTS-1:0]     request,
+    output reg  [NUM_PORTS-1:0]     grant
 );
-
-    // -------------------------------------------------------------------------
-    // Internal Registers & State Machine
-    // -------------------------------------------------------------------------
-    reg [31:0] cycle_count;
-    reg        active_transfer;
-
-    assign s_axis_tready = (!m_axis_tvalid || m_axis_tready);
-    assign busy_flag     = active_transfer;
-
-    always @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin
-            m_axis_tdata    <= {DATA_WIDTH{1'b0}};
-            m_axis_tvalid   <= 1'b0;
-            m_axis_tlast    <= 1'b0;
-            error_count     <= 32'd0;
-            cycle_count     <= 32'd0;
-            active_transfer <= 1'b0;
-        end else begin
-            cycle_count <= cycle_count + 1'b1;
-
-            if (m_axis_tvalid && m_axis_tready) begin
-                m_axis_tvalid <= 1'b0;
-                m_axis_tlast  <= 1'b0;
-            end
-
-            if (s_axis_tvalid && s_axis_tready) begin
-                m_axis_tdata    <= s_axis_tdata;
-                m_axis_tvalid   <= 1'b1;
-                m_axis_tlast    <= s_axis_tlast;
-                active_transfer <= !s_axis_tlast;
+    reg [NUM_PORTS-1:0] priority_mask;
+    wire [NUM_PORTS-1:0] masked_request;
+    wire [NUM_PORTS-1:0] unmasked_request;
+    wire [NUM_PORTS-1:0] masked_grant;
+    wire [NUM_PORTS-1:0] unmasked_grant;
+    // Apply priority mask
+    assign masked_request = request & priority_mask;
+    assign unmasked_request = request;
+    // Priority encoder for masked requests
+    generate
+        genvar i;
+        for (i = 0; i < NUM_PORTS; i = i + 1) begin : gen_masked_grant
+            if (i == 0) begin
+                assign masked_grant[i] = masked_request[i];
+            end else begin
+                assign masked_grant[i] = masked_request[i] && ~(|masked_request[i-1:0]);
             end
         end
+    endgenerate
+    // Priority encoder for unmasked requests
+    generate
+        for (i = 0; i < NUM_PORTS; i = i + 1) begin : gen_unmasked_grant
+            if (i == 0) begin
+                assign unmasked_grant[i] = unmasked_request[i];
+            end else begin
+                assign unmasked_grant[i] = unmasked_request[i] && ~(|unmasked_request[i-1:0]);
+            end
+        end
+    endgenerate
+    // Select grant (use masked if any masked request exists)
+    wire any_masked = |masked_request;
+    always @(*) begin
+        if (any_masked)
+            grant = masked_grant;
+        else
+            grant = unmasked_grant;
     end
-
+    // Update priority mask after grant
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            priority_mask <= {NUM_PORTS{1'b1}};
+        end else if (|grant) begin
+            reg [NUM_PORTS-1:0] new_mask;
+            new_mask = {NUM_PORTS{1'b1}} << (grant_to_index(grant) + 1'b1);
+            if (new_mask == {NUM_PORTS{1'b0}})
+                priority_mask <= {NUM_PORTS{1'b1}};
+            else
+                priority_mask <= new_mask;
+        end
+    end
+    // Convert one-hot grant to binary index
+    function integer grant_to_index;
+        input [NUM_PORTS-1:0] grant_signal;
+        integer i;
+        begin
+            grant_to_index = 0;
+            for (i = 0; i < NUM_PORTS; i = i + 1) begin
+                if (grant_signal[i])
+                    grant_to_index = i;
+            end
+        end
+    endfunction
 endmodule
 ```
-
----
-
-## 4. Hardware Verification & Integration Checklist
-
-- [x] Baseline Verilog 2001 / SystemVerilog 2012 syntax compilation clean
-- [ ] Multi-channel backpressure assertion testbench completed
-- [ ] Corner-case burst alignment (unaligned offsets & 4KB boundary crossings)
-- [ ] Quartus Prime TimeQuest timing constraints and false-path assertions
-- [ ] In-system SignalTap logic analyzer capture on Catapult v2 hardware target
-
----
-
-[← Back to Component Library](/book/02-component-library) · [Next Chapter: Production Roadmap →](/book/03-production-roadmap)

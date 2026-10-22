@@ -10,6 +10,8 @@ tags: ["Width Converter", "CDC", "Width Adapters", "Testbench", "Production Read
 
 # Reaching Production Readiness as priority #1 — Enhancements to the FPGA DMA Engine Design Process Implemented
 
+> **Scope clarification:** “Implemented” here refers to source examples and project scaffolding being present in the repository. This book is a structured springboard with RTL examples, integration notes, and a testbench scaffold. The testbench is not evidence of passing functional verification, and the FPGA design has not been validated for functional behavior, synthesis, timing closure, or board operation.
+
 [← Overview](/book/00-overview) · [Next → Component Library](/book/02-component-library)
 
 ## Why safety and convenience matter here
@@ -24,7 +26,7 @@ Convenience is **not** a separate concern—it is a force multiplier for safety.
 
 **Primary file**: `fpga/util/width_converter.v` ([View Module Details](/book/components/width_converter))
 
-Implemented proper width conversion between PCIe (256-bit) and DMA (512-bit) data paths.
+The repository contains an example width-conversion design for the documented PCIe (256-bit) and DMA (512-bit) boundary. Its functional behavior has not been validated.
 
 ### Key capabilities
 
@@ -191,7 +193,7 @@ dma_pcie_width_adapter #(
 
 **Primary file**: `fpga/testbench/tb_dma_engine.v` ([View Module Details](/book/components/tb_dma_engine))
 
-Introduced baseline functional verification scaffolding.
+Added a baseline testbench scaffold intended to support future functional verification.
 
 Current coverage:
 

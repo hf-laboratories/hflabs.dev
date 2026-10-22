@@ -9,151 +9,259 @@ order: 100
 tags: ["DMA Engine Components", "Under Construction", "Verilog", "FPGA", "Hardware", "Stratix V"]
 ---
 
-# Agent Message Router — `agent_message_router.v`
+> This entry is synchronized from the [IPUServices repository documentation](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/book/component-library/agent_message_router.md). See the [RTL source](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/dma_engine/agent_message_router.v) for the implementation and current source of truth.
 
-**Subsystem:** `DMA Engine Components` &bull; **Source Path:** `dma_engine/agent_message_router.v`
 
-[← Back to Component Library](/book/02-component-library)
+> **Scope:** This page is part of a structured FPGA engineering springboard. The accompanying RTL is an example/reference for study and further development; this project does not claim it is functionally validated, synthesis-ready, timing-closed, or proven on FPGA hardware. The repository testbench is scaffolding, not a passing verification result.
+# Agent Message Router — agent_message_router.v
 
----
+**Filename:** `dma_engine/agent_message_router.v`
 
-:::under-construction
-### 🚧 Module Under Active Hardening & Verification
+## Description
 
-This module is part of the **DMA Engine Components** subsystem and is currently undergoing active RTL timing optimization, Quartus Platform Designer netlist verification, and testbench coverage expansion.
+Routes inter-agent messages with FIFO buffering, priority support, and zero-copy transfer coordination via DMA-safe buffer metadata.
 
-- **Target Architecture**: Altera / Intel Stratix V GS FPGA (Catapult v2 hardware target)
-- **Target Core Frequency**: 250 MHz (Gen3 x8 256-bit datapath)
-- **Verification Status**: In-Progress — Structural RTL syntax validated, comprehensive gate-level simulation pending
-:::
+## Integration Points
 
----
+- Agent-to-agent control/data messaging fabric
+- Zero-copy handoff interface to DMA transfer engine
+- Produces routing and transfer telemetry counters
 
-## 1. Architectural Role & Overview
-
-Routes inter-agent messages with FIFO buffering, priority support, and zero-copy transfer coordination.
-
-### Key Design Principles
-
-1. **Deterministic Handshaking**: Full ready/valid flow control preventing buffer overflows or stall deadlocks.
-2. **Synchronous Reset Protocol**: Active-low reset with internal multi-stage deassertion synchronizers.
-3. **Metastability Isolation**: Multi-stage flip-flop chains for any signals crossing clock domains.
-
----
-
-## 2. Interface Specification (Provisional Baseline)
-
-### Module Parameters & Generics
-
-| Parameter | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `DATA_WIDTH` | Integer | `512` | Primary internal streaming datapath width |
-| `ADDR_WIDTH` | Integer | `64` | Physical memory address bus width |
-| `FIFO_DEPTH` | Integer | `64` | Decoupling stage FIFO buffer depth |
-| `BURST_LIMIT` | Integer | `4096` | Maximum burst byte length per transaction |
-
-### Signal Port Map
-
-| Port Name | Direction | Bit Width | Description |
-| :--- | :--- | :--- | :--- |
-| `clk` | Input | `1` | Subsystem Core Clock (250 MHz) |
-| `rst_n` | Input | `1` | Active-Low Synchronous Reset |
-| `s_axis_tdata` | Input | `DATA_WIDTH` | Ingress stream payload |
-| `s_axis_tvalid` | Input | `1` | Ingress stream valid qualifier |
-| `s_axis_tready` | Output | `1` | Backpressure flow-control ready |
-| `s_axis_tlast` | Input | `1` | Ingress packet boundary delimiter |
-| `m_axis_tdata` | Output | `DATA_WIDTH` | Egress stream payload |
-| `m_axis_tvalid` | Output | `1` | Egress stream valid qualifier |
-| `m_axis_tready` | Input | `1` | Downstream sink backpressure ready |
-| `m_axis_tlast` | Output | `1` | Egress packet boundary delimiter |
-
----
-
-## 3. RTL Implementation Skeleton
+## Verilog Source
 
 ```verilog
-// =============================================================================
-// Module: Agent Message Router (agent_message_router.v)
-// Subsystem: DMA Engine Components
-// Target: Stratix V GS FPGA / Catapult v2
-// Status: Under Active Hardening
-// =============================================================================
-
-`timescale 1ns / 1ps
-
 module agent_message_router #(
-    parameter DATA_WIDTH  = 512,
-    parameter ADDR_WIDTH  = 64,
-    parameter FIFO_DEPTH  = 64,
-    parameter BURST_LIMIT = 4096
+    parameter NUM_AGENTS = 16,
+    parameter MSG_WIDTH = 256,
+    parameter FIFO_DEPTH = 8,
+    parameter ADDR_WIDTH = 4
 )(
-    input  wire                  clk,
-    input  wire                  rst_n,
-
-    // Slave Streaming Interface (Ingress)
-    input  wire [DATA_WIDTH-1:0] s_axis_tdata,
-    input  wire                  s_axis_tvalid,
-    output wire                  s_axis_tready,
-    input  wire                  s_axis_tlast,
-
-    // Master Streaming Interface (Egress)
-    output reg  [DATA_WIDTH-1:0] m_axis_tdata,
-    output reg                   m_axis_tvalid,
-    input  wire                  m_axis_tready,
-    output reg                   m_axis_tlast,
-
-    // Status & Error Telemetry
-    output reg  [31:0]           error_count,
-    output wire                  busy_flag
+    input  wire                     clk,
+    input  wire                     rst_n,
+    input  wire [NUM_AGENTS-1:0]    msg_in_valid,
+    input  wire [MSG_WIDTH-1:0]     msg_in_data [0:NUM_AGENTS-1],
+    input  wire [ADDR_WIDTH-1:0]    msg_in_dest [0:NUM_AGENTS-1],
+    input  wire [2:0]               msg_in_priority [0:NUM_AGENTS-1],
+    output reg  [NUM_AGENTS-1:0]    msg_in_ready,
+    output reg                      zcopy_transfer_valid,
+    output reg  [63:0]              zcopy_buffer_iova,
+    output reg  [31:0]              zcopy_buffer_size
+);
+// Agent Message Router with Zero-Copy DMA Support
+// Routes messages between agents in the multi-agent system
+// Supports priority-based routing, message queuing, and zero-copy buffer transfers
+// 
+// Message format for zero-copy transfers:
+//   [255:248] = Message type (0 = data, 1 = buffer_transfer, 2 = buffer_ack)
+//   [247:184] = Buffer IOVA address (64-bit DMA-safe address)
+//   [183:152] = Buffer size (32-bit)
+//   [151:120] = Transfer tag (32-bit for tracking)
+//   [119:0]   = Payload data or additional metadata
+//
+module agent_message_router #(
+    parameter NUM_AGENTS = 16,
+    parameter MSG_WIDTH = 256,
+    parameter FIFO_DEPTH = 8,
+    parameter ADDR_WIDTH = 4  // log2(NUM_AGENTS)
+)(
+    input  wire                     clk,
+    input  wire                     rst_n,
+    
+    // Input messages from agents
+    input  wire [NUM_AGENTS-1:0]    msg_in_valid,
+    input  wire [MSG_WIDTH-1:0]     msg_in_data [0:NUM_AGENTS-1],
+    input  wire [ADDR_WIDTH-1:0]    msg_in_dest [0:NUM_AGENTS-1],
+    input  wire [2:0]               msg_in_priority [0:NUM_AGENTS-1],
+    output reg  [NUM_AGENTS-1:0]    msg_in_ready,
+    
+    // Output messages to agents
+    output reg  [NUM_AGENTS-1:0]    msg_out_valid,
+    output reg  [MSG_WIDTH-1:0]     msg_out_data [0:NUM_AGENTS-1],
+    output reg  [ADDR_WIDTH-1:0]    msg_out_src [0:NUM_AGENTS-1],
+    output reg  [2:0]               msg_out_priority [0:NUM_AGENTS-1],
+    input  wire [NUM_AGENTS-1:0]    msg_out_ready,
+    
+    // Zero-copy buffer transfer interface (connects to DMA engine)
+    output reg                      zcopy_transfer_valid,
+    output reg  [ADDR_WIDTH-1:0]    zcopy_src_agent,
+    output reg  [ADDR_WIDTH-1:0]    zcopy_dst_agent,
+    output reg  [63:0]              zcopy_buffer_iova,
+    output reg  [31:0]              zcopy_buffer_size,
+    output reg  [31:0]              zcopy_transfer_tag,
+    input  wire                     zcopy_transfer_ready,
+    input  wire                     zcopy_transfer_done,
+    input  wire [31:0]              zcopy_transfer_status,
+    
+    // Router statistics
+    output reg  [31:0]              total_messages_routed,
+    output reg  [31:0]              messages_dropped,
+    output reg  [31:0]              zcopy_transfers_initiated,
+    output reg  [31:0]              zcopy_transfers_completed,
+    output reg  [NUM_AGENTS-1:0]    agent_busy
 );
 
-    // -------------------------------------------------------------------------
-    // Internal Registers & State Machine
-    // -------------------------------------------------------------------------
-    reg [31:0] cycle_count;
-    reg        active_transfer;
+    // Message type definitions
+    localparam MSG_TYPE_DATA           = 8'h00;
+    localparam MSG_TYPE_BUFFER_XFER    = 8'h01;
+    localparam MSG_TYPE_BUFFER_ACK     = 8'h02;
+    localparam MSG_TYPE_BUFFER_RELEASE = 8'h03;
 
-    assign s_axis_tready = (!m_axis_tvalid || m_axis_tready);
-    assign busy_flag     = active_transfer;
-
+    // Message FIFO for each agent
+    reg [MSG_WIDTH-1:0] fifo_data [0:NUM_AGENTS-1][0:FIFO_DEPTH-1];
+    reg [ADDR_WIDTH-1:0] fifo_src [0:NUM_AGENTS-1][0:FIFO_DEPTH-1];
+    reg [2:0] fifo_priority [0:NUM_AGENTS-1][0:FIFO_DEPTH-1];
+    reg [3:0] fifo_wr_ptr [0:NUM_AGENTS-1];
+    reg [3:0] fifo_rd_ptr [0:NUM_AGENTS-1];
+    reg [3:0] fifo_count [0:NUM_AGENTS-1];
+    
+    // Zero-copy transfer tracking
+    reg [31:0] pending_zcopy_tag;
+    reg [ADDR_WIDTH-1:0] pending_zcopy_src;
+    reg [ADDR_WIDTH-1:0] pending_zcopy_dst;
+    reg pending_zcopy_active;
+    
+    // FIFO full/empty flags
+    wire [NUM_AGENTS-1:0] fifo_full;
+    wire [NUM_AGENTS-1:0] fifo_empty;
+    
+    genvar i;
+    generate
+        for (i = 0; i < NUM_AGENTS; i = i + 1) begin : gen_fifo_flags
+            assign fifo_full[i] = (fifo_count[i] == FIFO_DEPTH);
+            assign fifo_empty[i] = (fifo_count[i] == 0);
+        end
+    endgenerate
+    
+    // Routing logic
+    integer j, k;
+    
+    // Helper wires for message parsing
+    wire [7:0] msg_type_extract [0:NUM_AGENTS-1];
+    wire [63:0] buffer_iova_extract [0:NUM_AGENTS-1];
+    wire [31:0] buffer_size_extract [0:NUM_AGENTS-1];
+    wire [31:0] transfer_tag_extract [0:NUM_AGENTS-1];
+    
+    generate
+        for (i = 0; i < NUM_AGENTS; i = i + 1) begin : gen_msg_extract
+            assign msg_type_extract[i] = msg_in_data[i][255:248];
+            assign buffer_iova_extract[i] = msg_in_data[i][247:184];
+            assign buffer_size_extract[i] = msg_in_data[i][183:152];
+            assign transfer_tag_extract[i] = msg_in_data[i][151:120];
+        end
+    endgenerate
+    
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            m_axis_tdata    <= {DATA_WIDTH{1'b0}};
-            m_axis_tvalid   <= 1'b0;
-            m_axis_tlast    <= 1'b0;
-            error_count     <= 32'd0;
-            cycle_count     <= 32'd0;
-            active_transfer <= 1'b0;
-        end else begin
-            cycle_count <= cycle_count + 1'b1;
-
-            if (m_axis_tvalid && m_axis_tready) begin
-                m_axis_tvalid <= 1'b0;
-                m_axis_tlast  <= 1'b0;
+            // Reset all FIFOs
+            for (j = 0; j < NUM_AGENTS; j = j + 1) begin
+                fifo_wr_ptr[j] <= 4'd0;
+                fifo_rd_ptr[j] <= 4'd0;
+                fifo_count[j] <= 4'd0;
+                msg_out_valid[j] <= 1'b0;
+                msg_out_data[j] <= {MSG_WIDTH{1'b0}};
+                msg_out_src[j] <= {ADDR_WIDTH{1'b0}};
+                msg_out_priority[j] <= 3'd0;
             end
-
-            if (s_axis_tvalid && s_axis_tready) begin
-                m_axis_tdata    <= s_axis_tdata;
-                m_axis_tvalid   <= 1'b1;
-                m_axis_tlast    <= s_axis_tlast;
-                active_transfer <= !s_axis_tlast;
+            msg_in_ready <= {NUM_AGENTS{1'b0}};
+            total_messages_routed <= 32'd0;
+            messages_dropped <= 32'd0;
+            zcopy_transfers_initiated <= 32'd0;
+            zcopy_transfers_completed <= 32'd0;
+            agent_busy <= {NUM_AGENTS{1'b0}};
+            
+            // Zero-copy interface reset
+            zcopy_transfer_valid <= 1'b0;
+            zcopy_src_agent <= {ADDR_WIDTH{1'b0}};
+            zcopy_dst_agent <= {ADDR_WIDTH{1'b0}};
+            zcopy_buffer_iova <= 64'd0;
+            zcopy_buffer_size <= 32'd0;
+            zcopy_transfer_tag <= 32'd0;
+            pending_zcopy_active <= 1'b0;
+            pending_zcopy_tag <= 32'd0;
+            pending_zcopy_src <= {ADDR_WIDTH{1'b0}};
+            pending_zcopy_dst <= {ADDR_WIDTH{1'b0}};
+        end else begin
+            // Handle zero-copy transfer completion
+            if (zcopy_transfer_done && pending_zcopy_active) begin
+                // Generate acknowledgment message to source agent
+                if (!fifo_full[pending_zcopy_src]) begin
+                    fifo_data[pending_zcopy_src][fifo_wr_ptr[pending_zcopy_src]][255:248] <= MSG_TYPE_BUFFER_ACK;
+                    fifo_data[pending_zcopy_src][fifo_wr_ptr[pending_zcopy_src]][151:120] <= pending_zcopy_tag;
+                    fifo_data[pending_zcopy_src][fifo_wr_ptr[pending_zcopy_src]][119:88] <= zcopy_transfer_status;
+                    fifo_src[pending_zcopy_src][fifo_wr_ptr[pending_zcopy_src]] <= pending_zcopy_dst;
+                    fifo_priority[pending_zcopy_src][fifo_wr_ptr[pending_zcopy_src]] <= 3'd7; // High priority for ACKs
+                    fifo_wr_ptr[pending_zcopy_src] <= (fifo_wr_ptr[pending_zcopy_src] + 1) & (FIFO_DEPTH - 1);
+                    fifo_count[pending_zcopy_src] <= fifo_count[pending_zcopy_src] + 1;
+                end
+                zcopy_transfers_completed <= zcopy_transfers_completed + 1;
+                pending_zcopy_active <= 1'b0;
+                zcopy_transfer_valid <= 1'b0;
+            end
+            
+            // Input side: Route incoming messages to destination FIFOs
+            for (j = 0; j < NUM_AGENTS; j = j + 1) begin
+                msg_in_ready[j] <= 1'b0;
+                
+                if (msg_in_valid[j]) begin
+                    if (msg_in_dest[j] < NUM_AGENTS) begin
+                        // Check if this is a zero-copy buffer transfer request
+                        if (msg_type_extract[j] == MSG_TYPE_BUFFER_XFER && !pending_zcopy_active && zcopy_transfer_ready) begin
+                            // Initiate zero-copy DMA transfer
+                            zcopy_transfer_valid <= 1'b1;
+                            zcopy_src_agent <= j;
+                            zcopy_dst_agent <= msg_in_dest[j];
+                            zcopy_buffer_iova <= buffer_iova_extract[j];
+                            zcopy_buffer_size <= buffer_size_extract[j];
+                            zcopy_transfer_tag <= transfer_tag_extract[j];
+                            
+                            pending_zcopy_active <= 1'b1;
+                            pending_zcopy_tag <= transfer_tag_extract[j];
+                            pending_zcopy_src <= j;
+                            pending_zcopy_dst <= msg_in_dest[j];
+                            
+                            zcopy_transfers_initiated <= zcopy_transfers_initiated + 1;
+                            msg_in_ready[j] <= 1'b1;
+                            total_messages_routed <= total_messages_routed + 1;
+                        end else if (!fifo_full[msg_in_dest[j]]) begin
+                            // Standard message routing - FIFO has space, enqueue message
+                            fifo_data[msg_in_dest[j]][fifo_wr_ptr[msg_in_dest[j]]] <= msg_in_data[j];
+                            fifo_src[msg_in_dest[j]][fifo_wr_ptr[msg_in_dest[j]]] <= j;
+                            fifo_priority[msg_in_dest[j]][fifo_wr_ptr[msg_in_dest[j]]] <= msg_in_priority[j];
+                            fifo_wr_ptr[msg_in_dest[j]] <= (fifo_wr_ptr[msg_in_dest[j]] + 1) & (FIFO_DEPTH - 1);
+                            fifo_count[msg_in_dest[j]] <= fifo_count[msg_in_dest[j]] + 1;
+                            msg_in_ready[j] <= 1'b1;
+                            total_messages_routed <= total_messages_routed + 1;
+                        end else begin
+                            // FIFO full, drop message
+                            messages_dropped <= messages_dropped + 1;
+                        end
+                    end else begin
+                        // Invalid destination, drop message
+                        messages_dropped <= messages_dropped + 1;
+                    end
+                end
+            end
+            
+            // Output side: Dequeue messages from FIFOs
+            for (k = 0; k < NUM_AGENTS; k = k + 1) begin
+                if (!fifo_empty[k] && (!msg_out_valid[k] || msg_out_ready[k])) begin
+                    // Dequeue message
+                    msg_out_data[k] <= fifo_data[k][fifo_rd_ptr[k]];
+                    msg_out_src[k] <= fifo_src[k][fifo_rd_ptr[k]];
+                    msg_out_priority[k] <= fifo_priority[k][fifo_rd_ptr[k]];
+                    msg_out_valid[k] <= 1'b1;
+                    fifo_rd_ptr[k] <= (fifo_rd_ptr[k] + 1) & (FIFO_DEPTH - 1);
+                    fifo_count[k] <= fifo_count[k] - 1;
+                    agent_busy[k] <= 1'b1;
+                end else if (msg_out_ready[k]) begin
+                    // Clear valid when message is accepted
+                    msg_out_valid[k] <= 1'b0;
+                    agent_busy[k] <= 1'b0;
+                end
             end
         end
     end
 
 endmodule
+endmodule
 ```
-
----
-
-## 4. Hardware Verification & Integration Checklist
-
-- [x] Baseline Verilog 2001 / SystemVerilog 2012 syntax compilation clean
-- [ ] Multi-channel backpressure assertion testbench completed
-- [ ] Corner-case burst alignment (unaligned offsets & 4KB boundary crossings)
-- [ ] Quartus Prime TimeQuest timing constraints and false-path assertions
-- [ ] In-system SignalTap logic analyzer capture on Catapult v2 hardware target
-
----
-
-[← Back to Component Library](/book/02-component-library) · [Next Chapter: Production Roadmap →](/book/03-production-roadmap)

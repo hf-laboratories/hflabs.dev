@@ -14,25 +14,25 @@ tags: ["Appendix", "References", "Links", "Documentation"]
 
 ## Core catapult_ptp documentation
 
-- Main README (`README.md`)
-- Production Readiness (`PRODUCTION_READINESS.md`)
-- Design Metrics (`DESIGN_METRICS.md`)
-- Hardware Integration (`HARDWARE_INTEGRATION.md`)
-- External References (`EXTERNAL_REFERENCES.md`)
-- Completion Summary (`COMPLETION_SUMMARY.md`)
-- Updates Log (`UPDATES.md`)
+- [Main README](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/README.md)
+- [Production Readiness](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/PRODUCTION_READINESS.md)
+- [Design Metrics](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/DESIGN_METRICS.md)
+- [Hardware Integration](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/HARDWARE_INTEGRATION.md)
+- [External References](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/EXTERNAL_REFERENCES.md)
+- [Completion Summary](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/COMPLETION_SUMMARY.md)
+- [Updates Log](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/UPDATES.md)
 
 ## Timing and host interface
 
-- PTP Register Map (`timing/REGISTER_MAP.md`)
-- Well-Behaved Host Interface (`host_interface/README.md`)
+- [PTP Register Map](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/timing/REGISTER_MAP.md)
+- [Well-Behaved Host Interface](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/host_interface/README.md)
 
 ## PCIe Hard IP unlock docs
 
-- PCIe Unlock Overview (`pcie-3-hip-unlock/README.md`)
-- Quick Start (`pcie-3-hip-unlock/QUICK_START.md`)
-- Linux Setup (`pcie-3-hip-unlock/linux/README.md`)
-- Windows Setup (`pcie-3-hip-unlock/windows/README.md`)
+- [PCIe Unlock Overview](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/pcie-3-hip-unlock/README.md)
+- [Quick Start](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/pcie-3-hip-unlock/QUICK_START.md)
+- [Linux Setup](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/pcie-3-hip-unlock/linux/README.md)
+- [Windows Setup](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/pcie-3-hip-unlock/windows/README.md)
 
 ## External project references
 

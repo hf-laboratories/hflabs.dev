@@ -9,151 +9,101 @@ order: 100
 tags: ["Utility Modules", "Under Construction", "Verilog", "FPGA", "Hardware", "Stratix V"]
 ---
 
-# Width Adapters — `width_adapters.v`
+> This entry is synchronized from the [IPUServices repository documentation](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/book/component-library/width_adapters.md). See the [RTL source](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/util/width_adapters.v) for the implementation and current source of truth.
 
-**Subsystem:** `Utility Modules` &bull; **Source Path:** `util/width_adapters.v`
 
-[← Back to Component Library](/book/02-component-library)
+> **Scope:** This page is part of a structured FPGA engineering springboard. The accompanying RTL is an example/reference for study and further development; this project does not claim it is functionally validated, synthesis-ready, timing-closed, or proven on FPGA hardware. The repository testbench is scaffolding, not a passing verification result.
+# Width Adapters — width_adapters.v
 
----
+**Filename:** `util/width_adapters.v`
 
-:::under-construction
-### 🚧 Module Under Active Hardening & Verification
+## Description
 
-This module is part of the **Utility Modules** subsystem and is currently undergoing active RTL timing optimization, Quartus Platform Designer netlist verification, and testbench coverage expansion.
+Convenience wrappers for common PCIe↔DMA width conversions. These modules instantiate the `width_converter` with fixed parameters for typical integration scenarios, reducing wiring errors and making integration safer and faster.
 
-- **Target Architecture**: Altera / Intel Stratix V GS FPGA (Catapult v2 hardware target)
-- **Target Core Frequency**: 250 MHz (Gen3 x8 256-bit datapath)
-- **Verification Status**: In-Progress — Structural RTL syntax validated, comprehensive gate-level simulation pending
-:::
+- `pcie_dma_width_adapter`: 256-bit PCIe → 512-bit DMA
+- `dma_pcie_width_adapter`: 512-bit DMA → 256-bit PCIe
 
----
+## Integration Points
 
-## 1. Architectural Role & Overview
+- Used at PCIe↔DMA boundaries in top-level modules
+- Default interface layer for subsystem integration
+- Testbench coverage in `tb_dma_engine.v`
 
-Convenience wrappers for PCIe (256-bit) to DMA (512-bit) bidirectional width conversion.
-
-### Key Design Principles
-
-1. **Deterministic Handshaking**: Full ready/valid flow control preventing buffer overflows or stall deadlocks.
-2. **Synchronous Reset Protocol**: Active-low reset with internal multi-stage deassertion synchronizers.
-3. **Metastability Isolation**: Multi-stage flip-flop chains for any signals crossing clock domains.
-
----
-
-## 2. Interface Specification (Provisional Baseline)
-
-### Module Parameters & Generics
-
-| Parameter | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `DATA_WIDTH` | Integer | `512` | Primary internal streaming datapath width |
-| `ADDR_WIDTH` | Integer | `64` | Physical memory address bus width |
-| `FIFO_DEPTH` | Integer | `64` | Decoupling stage FIFO buffer depth |
-| `BURST_LIMIT` | Integer | `4096` | Maximum burst byte length per transaction |
-
-### Signal Port Map
-
-| Port Name | Direction | Bit Width | Description |
-| :--- | :--- | :--- | :--- |
-| `clk` | Input | `1` | Subsystem Core Clock (250 MHz) |
-| `rst_n` | Input | `1` | Active-Low Synchronous Reset |
-| `s_axis_tdata` | Input | `DATA_WIDTH` | Ingress stream payload |
-| `s_axis_tvalid` | Input | `1` | Ingress stream valid qualifier |
-| `s_axis_tready` | Output | `1` | Backpressure flow-control ready |
-| `s_axis_tlast` | Input | `1` | Ingress packet boundary delimiter |
-| `m_axis_tdata` | Output | `DATA_WIDTH` | Egress stream payload |
-| `m_axis_tvalid` | Output | `1` | Egress stream valid qualifier |
-| `m_axis_tready` | Input | `1` | Downstream sink backpressure ready |
-| `m_axis_tlast` | Output | `1` | Egress packet boundary delimiter |
-
----
-
-## 3. RTL Implementation Skeleton
+## Verilog Source
 
 ```verilog
-// =============================================================================
-// Module: Width Adapters (width_adapters.v)
-// Subsystem: Utility Modules
-// Target: Stratix V GS FPGA / Catapult v2
-// Status: Under Active Hardening
-// =============================================================================
+// PCIe to DMA Width Converter Wrapper
+// Integrates width converter with flow control for PCIe-DMA interface
 
-`timescale 1ns / 1ps
-
-module width_adapters #(
-    parameter DATA_WIDTH  = 512,
-    parameter ADDR_WIDTH  = 64,
-    parameter FIFO_DEPTH  = 64,
-    parameter BURST_LIMIT = 4096
+module pcie_dma_width_adapter #(
+    parameter PCIE_WIDTH = 256,
+    parameter DMA_WIDTH = 512
 )(
-    input  wire                  clk,
-    input  wire                  rst_n,
-
-    // Slave Streaming Interface (Ingress)
-    input  wire [DATA_WIDTH-1:0] s_axis_tdata,
-    input  wire                  s_axis_tvalid,
-    output wire                  s_axis_tready,
-    input  wire                  s_axis_tlast,
-
-    // Master Streaming Interface (Egress)
-    output reg  [DATA_WIDTH-1:0] m_axis_tdata,
-    output reg                   m_axis_tvalid,
-    input  wire                  m_axis_tready,
-    output reg                   m_axis_tlast,
-
-    // Status & Error Telemetry
-    output reg  [31:0]           error_count,
-    output wire                  busy_flag
+    input  wire                     clk,
+    input  wire                     rst_n,
+    // PCIe side (256-bit)
+    input  wire [PCIE_WIDTH-1:0]    pcie_data,
+    input  wire                     pcie_valid,
+    input  wire                     pcie_last,
+    output wire                     pcie_ready,
+    // DMA side (512-bit)
+    output wire [DMA_WIDTH-1:0]     dma_data,
+    output wire                     dma_valid,
+    output wire                     dma_last,
+    input  wire                     dma_ready
 );
+    // Instantiate width converter
+    width_converter #(
+        .INPUT_WIDTH(PCIE_WIDTH),
+        .OUTPUT_WIDTH(DMA_WIDTH)
+    ) width_conv_inst (
+        .clk(clk),
+        .rst_n(rst_n),
+        .s_data(pcie_data),
+        .s_valid(pcie_valid),
+        .s_last(pcie_last),
+        .s_ready(pcie_ready),
+        .m_data(dma_data),
+        .m_valid(dma_valid),
+        .m_last(dma_last),
+        .m_ready(dma_ready)
+    );
+endmodule
 
-    // -------------------------------------------------------------------------
-    // Internal Registers & State Machine
-    // -------------------------------------------------------------------------
-    reg [31:0] cycle_count;
-    reg        active_transfer;
-
-    assign s_axis_tready = (!m_axis_tvalid || m_axis_tready);
-    assign busy_flag     = active_transfer;
-
-    always @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin
-            m_axis_tdata    <= {DATA_WIDTH{1'b0}};
-            m_axis_tvalid   <= 1'b0;
-            m_axis_tlast    <= 1'b0;
-            error_count     <= 32'd0;
-            cycle_count     <= 32'd0;
-            active_transfer <= 1'b0;
-        end else begin
-            cycle_count <= cycle_count + 1'b1;
-
-            if (m_axis_tvalid && m_axis_tready) begin
-                m_axis_tvalid <= 1'b0;
-                m_axis_tlast  <= 1'b0;
-            end
-
-            if (s_axis_tvalid && s_axis_tready) begin
-                m_axis_tdata    <= s_axis_tdata;
-                m_axis_tvalid   <= 1'b1;
-                m_axis_tlast    <= s_axis_tlast;
-                active_transfer <= !s_axis_tlast;
-            end
-        end
-    end
-
+// DMA to PCIe Width Converter Wrapper
+module dma_pcie_width_adapter #(
+    parameter DMA_WIDTH = 512,
+    parameter PCIE_WIDTH = 256
+)(
+    input  wire                     clk,
+    input  wire                     rst_n,
+    // DMA side (512-bit)
+    input  wire [DMA_WIDTH-1:0]     dma_data,
+    input  wire                     dma_valid,
+    input  wire                     dma_last,
+    output wire                     dma_ready,
+    // PCIe side (256-bit)
+    output wire [PCIE_WIDTH-1:0]    pcie_data,
+    output wire                     pcie_valid,
+    output wire                     pcie_last,
+    input  wire                     pcie_ready
+);
+    // Instantiate width converter
+    width_converter #(
+        .INPUT_WIDTH(DMA_WIDTH),
+        .OUTPUT_WIDTH(PCIE_WIDTH)
+    ) width_conv_inst (
+        .clk(clk),
+        .rst_n(rst_n),
+        .s_data(dma_data),
+        .s_valid(dma_valid),
+        .s_last(dma_last),
+        .s_ready(dma_ready),
+        .m_data(pcie_data),
+        .m_valid(pcie_valid),
+        .m_last(pcie_last),
+        .m_ready(pcie_ready)
+    );
 endmodule
 ```
-
----
-
-## 4. Hardware Verification & Integration Checklist
-
-- [x] Baseline Verilog 2001 / SystemVerilog 2012 syntax compilation clean
-- [ ] Multi-channel backpressure assertion testbench completed
-- [ ] Corner-case burst alignment (unaligned offsets & 4KB boundary crossings)
-- [ ] Quartus Prime TimeQuest timing constraints and false-path assertions
-- [ ] In-system SignalTap logic analyzer capture on Catapult v2 hardware target
-
----
-
-[← Back to Component Library](/book/02-component-library) · [Next Chapter: Production Roadmap →](/book/03-production-roadmap)

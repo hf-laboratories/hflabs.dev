@@ -9,151 +9,125 @@ order: 100
 tags: ["DMA Engine Components", "Under Construction", "Verilog", "FPGA", "Hardware", "Stratix V"]
 ---
 
-# DMA Address Generator — `dma_addr_gen.v`
+> This entry is synchronized from the [IPUServices repository documentation](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/book/component-library/dma_addr_gen.md). See the [RTL source](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/dma_engine/dma_addr_gen.v) for the implementation and current source of truth.
 
-**Subsystem:** `DMA Engine Components` &bull; **Source Path:** `dma_engine/dma_addr_gen.v`
 
-[← Back to Component Library](/book/02-component-library)
+> **Scope:** This page is part of a structured FPGA engineering springboard. The accompanying RTL is an example/reference for study and further development; this project does not claim it is functionally validated, synthesis-ready, timing-closed, or proven on FPGA hardware. The repository testbench is scaffolding, not a passing verification result.
+# DMA Address Generator — dma_addr_gen.v
 
----
+**Filename:** `dma_engine/dma_addr_gen.v`
 
-:::under-construction
-### 🚧 Module Under Active Hardening & Verification
+## Description
 
-This module is part of the **DMA Engine Components** subsystem and is currently undergoing active RTL timing optimization, Quartus Platform Designer netlist verification, and testbench coverage expansion.
+Generates sequential beat addresses for DMA transfers from base address, transfer length, and burst size.
 
-- **Target Architecture**: Altera / Intel Stratix V GS FPGA (Catapult v2 hardware target)
-- **Target Core Frequency**: 250 MHz (Gen3 x8 256-bit datapath)
-- **Verification Status**: In-Progress — Structural RTL syntax validated, comprehensive gate-level simulation pending
-:::
+## Integration Points
 
----
+- Used by read/write DMA engines to walk transfer windows
+- Provides beat countdown/status to transfer FSMs
 
-## 1. Architectural Role & Overview
-
-Calculates sequential beat addresses, 4KB page crossing boundaries, and burst lengths.
-
-### Key Design Principles
-
-1. **Deterministic Handshaking**: Full ready/valid flow control preventing buffer overflows or stall deadlocks.
-2. **Synchronous Reset Protocol**: Active-low reset with internal multi-stage deassertion synchronizers.
-3. **Metastability Isolation**: Multi-stage flip-flop chains for any signals crossing clock domains.
-
----
-
-## 2. Interface Specification (Provisional Baseline)
-
-### Module Parameters & Generics
-
-| Parameter | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `DATA_WIDTH` | Integer | `512` | Primary internal streaming datapath width |
-| `ADDR_WIDTH` | Integer | `64` | Physical memory address bus width |
-| `FIFO_DEPTH` | Integer | `64` | Decoupling stage FIFO buffer depth |
-| `BURST_LIMIT` | Integer | `4096` | Maximum burst byte length per transaction |
-
-### Signal Port Map
-
-| Port Name | Direction | Bit Width | Description |
-| :--- | :--- | :--- | :--- |
-| `clk` | Input | `1` | Subsystem Core Clock (250 MHz) |
-| `rst_n` | Input | `1` | Active-Low Synchronous Reset |
-| `s_axis_tdata` | Input | `DATA_WIDTH` | Ingress stream payload |
-| `s_axis_tvalid` | Input | `1` | Ingress stream valid qualifier |
-| `s_axis_tready` | Output | `1` | Backpressure flow-control ready |
-| `s_axis_tlast` | Input | `1` | Ingress packet boundary delimiter |
-| `m_axis_tdata` | Output | `DATA_WIDTH` | Egress stream payload |
-| `m_axis_tvalid` | Output | `1` | Egress stream valid qualifier |
-| `m_axis_tready` | Input | `1` | Downstream sink backpressure ready |
-| `m_axis_tlast` | Output | `1` | Egress packet boundary delimiter |
-
----
-
-## 3. RTL Implementation Skeleton
+## Verilog Source
 
 ```verilog
-// =============================================================================
-// Module: DMA Address Generator (dma_addr_gen.v)
-// Subsystem: DMA Engine Components
-// Target: Stratix V GS FPGA / Catapult v2
-// Status: Under Active Hardening
-// =============================================================================
-
-`timescale 1ns / 1ps
-
 module dma_addr_gen #(
-    parameter DATA_WIDTH  = 512,
-    parameter ADDR_WIDTH  = 64,
-    parameter FIFO_DEPTH  = 64,
-    parameter BURST_LIMIT = 4096
+    parameter ADDR_WIDTH = 64,
+    parameter LEN_WIDTH = 32
 )(
-    input  wire                  clk,
-    input  wire                  rst_n,
-
-    // Slave Streaming Interface (Ingress)
-    input  wire [DATA_WIDTH-1:0] s_axis_tdata,
-    input  wire                  s_axis_tvalid,
-    output wire                  s_axis_tready,
-    input  wire                  s_axis_tlast,
-
-    // Master Streaming Interface (Egress)
-    output reg  [DATA_WIDTH-1:0] m_axis_tdata,
-    output reg                   m_axis_tvalid,
-    input  wire                  m_axis_tready,
-    output reg                   m_axis_tlast,
-
-    // Status & Error Telemetry
-    output reg  [31:0]           error_count,
-    output wire                  busy_flag
+    input  wire                     clk,
+    input  wire                     rst_n,
+    input  wire [ADDR_WIDTH-1:0]    base_addr,
+    input  wire [LEN_WIDTH-1:0]     transfer_len,
+    input  wire [3:0]               burst_size,
+    input  wire                     start,
+    output reg                      done,
+    output reg  [ADDR_WIDTH-1:0]    addr,
+    output reg                      addr_valid
+);
+// DMA Address Generator
+// Generates sequential addresses for DMA transfers
+module dma_addr_gen #(
+    parameter ADDR_WIDTH = 64,
+    parameter LEN_WIDTH = 32
+)(
+    input  wire                     clk,
+    input  wire                     rst_n,
+    
+    // Control interface
+    input  wire [ADDR_WIDTH-1:0]    base_addr,
+    input  wire [LEN_WIDTH-1:0]     transfer_len,      // In bytes
+    input  wire [3:0]               burst_size,        // Log2(bytes per beat)
+    input  wire                     start,
+    output reg                      done,
+    
+    // Address output interface
+    output reg  [ADDR_WIDTH-1:0]    addr,
+    output reg                      addr_valid,
+    input  wire                     addr_ready,
+    
+    // Beat counter output
+    output reg  [LEN_WIDTH-1:0]     beats_remaining
 );
 
-    // -------------------------------------------------------------------------
-    // Internal Registers & State Machine
-    // -------------------------------------------------------------------------
-    reg [31:0] cycle_count;
-    reg        active_transfer;
-
-    assign s_axis_tready = (!m_axis_tvalid || m_axis_tready);
-    assign busy_flag     = active_transfer;
-
+    localparam IDLE = 2'd0;
+    localparam GEN_ADDR = 2'd1;
+    localparam DONE = 2'd2;
+    
+    reg [1:0] state;
+    reg [LEN_WIDTH-1:0] bytes_transferred;
+    wire [LEN_WIDTH-1:0] bytes_per_beat = 1 << burst_size;
+    wire [LEN_WIDTH-1:0] total_beats = (transfer_len + bytes_per_beat - 1) >> burst_size;
+    
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            m_axis_tdata    <= {DATA_WIDTH{1'b0}};
-            m_axis_tvalid   <= 1'b0;
-            m_axis_tlast    <= 1'b0;
-            error_count     <= 32'd0;
-            cycle_count     <= 32'd0;
-            active_transfer <= 1'b0;
+            state <= IDLE;
+            addr <= {ADDR_WIDTH{1'b0}};
+            addr_valid <= 1'b0;
+            done <= 1'b0;
+            bytes_transferred <= {LEN_WIDTH{1'b0}};
+            beats_remaining <= {LEN_WIDTH{1'b0}};
         end else begin
-            cycle_count <= cycle_count + 1'b1;
-
-            if (m_axis_tvalid && m_axis_tready) begin
-                m_axis_tvalid <= 1'b0;
-                m_axis_tlast  <= 1'b0;
-            end
-
-            if (s_axis_tvalid && s_axis_tready) begin
-                m_axis_tdata    <= s_axis_tdata;
-                m_axis_tvalid   <= 1'b1;
-                m_axis_tlast    <= s_axis_tlast;
-                active_transfer <= !s_axis_tlast;
-            end
+            case (state)
+                IDLE: begin
+                    done <= 1'b0;
+                    if (start) begin
+                        addr <= base_addr;
+                        bytes_transferred <= {LEN_WIDTH{1'b0}};
+                        beats_remaining <= total_beats;
+                        state <= GEN_ADDR;
+                    end
+                end
+                
+                GEN_ADDR: begin
+                    if (beats_remaining > 0) begin
+                        addr_valid <= 1'b1;
+                        
+                        if (addr_valid && addr_ready) begin
+                            // Address accepted, generate next
+                            addr <= addr + bytes_per_beat;
+                            bytes_transferred <= bytes_transferred + bytes_per_beat;
+                            beats_remaining <= beats_remaining - 1'b1;
+                            
+                            if (beats_remaining == 1) begin
+                                addr_valid <= 1'b0;
+                                state <= DONE;
+                            end
+                        end
+                    end else begin
+                        state <= DONE;
+                    end
+                end
+                
+                DONE: begin
+                    addr_valid <= 1'b0;
+                    done <= 1'b1;
+                    state <= IDLE;
+                end
+                
+                default: state <= IDLE;
+            endcase
         end
     end
 
 endmodule
+endmodule
 ```
-
----
-
-## 4. Hardware Verification & Integration Checklist
-
-- [x] Baseline Verilog 2001 / SystemVerilog 2012 syntax compilation clean
-- [ ] Multi-channel backpressure assertion testbench completed
-- [ ] Corner-case burst alignment (unaligned offsets & 4KB boundary crossings)
-- [ ] Quartus Prime TimeQuest timing constraints and false-path assertions
-- [ ] In-system SignalTap logic analyzer capture on Catapult v2 hardware target
-
----
-
-[← Back to Component Library](/book/02-component-library) · [Next Chapter: Production Roadmap →](/book/03-production-roadmap)

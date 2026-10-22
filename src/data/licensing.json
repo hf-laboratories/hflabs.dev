@@ -1,75 +1,32 @@
 [
   {
-    "tier": "Free",
-    "slug": "free",
+    "tier": "Open-Core (Planned)",
+    "slug": "open-core",
     "color": "#10b981",
-    "badge": "Individual / Workstation",
-    "target": "Free single-developer workstation use",
-    "price": "$0 / mo",
-    "limits": {
-      "validatedBound": "25,000 nodes / 100,000 edges",
-      "vectorDimensions": "128-d SIMD vectors, CPU only",
-      "traversalLatency": "2-hop traversal ≈ 1.95 ms",
-      "workers": "16 workers"
-    },
-    "features": [
-      "Codebase Topology",
-      "Continuous Tasks DAG queue",
-      "GitHub Provenance",
-      "Agent Memory (local single-developer store)",
-      "Developer Workspace scanning",
-      "Graph Consistency linting",
-      "Directive/Playbook symlink sync"
-    ]
+    "badge": "Planned Public Core",
+    "target": "Hypertensor GraphRAG core release",
+    "price": "Not yet available",
+    "availability": "Open-core is planned. Public scope, limits, and terms are still being defined.",
+    "privateBundle": false
   },
   {
     "tier": "Pro",
     "slug": "pro",
     "color": "#38bdf8",
-    "badge": "Per-Seat Pro",
-    "target": "Commercial developers & scaling engineering teams",
-    "price": "$20 / mo per user seat",
-    "limits": {
-      "validatedBound": "100,000 nodes / 500,000 edges",
-      "traversalLatency": "2-hop traversal ≈ 1.47 ms",
-      "workers": "64 workers (parallel acceleration enabled)"
-    },
-    "features": [
-      "Everything in Free tier",
-      "Roslyn AST blast-radius analysis (CodeSemantics)",
-      "Skill and Agent Blender",
-      "Hierarchical Louvain/Leiden clustering",
-      "Repository Restructuring",
-      "Pattern Composition",
-      "Test Verification",
-      "Feature Interaction Matrix"
-    ]
+    "badge": "Private · Licensed",
+    "target": "Hypertensor GraphRAG Pro feature bundle",
+    "price": "Private offering",
+    "availability": "Pro features are held in a private, licensed bundle and are not publicly available.",
+    "privateBundle": true
   },
   {
     "tier": "High-Assurance",
     "slug": "high-assurance",
     "color": "#f59e0b",
-    "badge": "Team High-Assurance",
-    "target": "Mission-critical, defense, regulated enterprise, and sovereign teams",
-    "price": "$1,250 / mo per team",
-    "limits": {
-      "validatedBound": "1,000,000 nodes / 5,000,000 edges",
-      "traversalLatency": "2-hop traversal < 12 ms at that scale",
-      "workers": "Worker ceiling of 75,000 (auto-scaled to hardware)"
-    },
-    "features": [
-      "Everything in Pro tier",
-      "Level Zero GPU vector-search acceleration",
-      "Pixie Swarm mesh reasoning",
-      "BESS sharding and reasoning",
-      "Hardware Topology",
-      "Formal Invariants (proof contracts)",
-      "World Model",
-      "TAPE Planning & Grounding Verifier",
-      "Sovereign Air-Gap with MLS enforcement",
-      "Capability Sandbox",
-      "Regulatory Compliance (ISO 26262, DO-178C, EU AI Act, HIPAA)",
-      "Multi-Agent Governance and Decision Ledger"
-    ]
+    "badge": "Private · Licensed",
+    "target": "Hypertensor GraphRAG High-Assurance feature bundle",
+    "price": "Private offering",
+    "availability": "High-Assurance features are held in a private, licensed bundle and are not publicly available.",
+    "privateBundle": true
   }
 ]

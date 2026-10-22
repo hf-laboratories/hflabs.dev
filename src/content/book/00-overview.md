@@ -59,7 +59,9 @@ If you run any of these systems on actual hardware **YOU DO SO AT YOUR OWN RISK*
 
 Think of this as engineering notes turned into a practical field guide: candid, implementation-heavy, and iteratively improved. If you’re exploring FPGA development from software-first instincts, you’re in the right place.
 
-## Features that can be implemented through this book
+## Design areas explored in this springboard
+
+The feature lists below describe the architecture this repository explores and the RTL/example modules it organizes. They are not claims of functional FPGA implementation. The contribution is a structured starting point: a project layout, documented interfaces and design patterns, source examples, integration notes, and a testbench scaffold for future verification. Functional behavior, synthesis, timing closure, and board operation have not been validated by this project.
 
 ### Core Functionality
 
@@ -141,7 +143,7 @@ catapult_ptp/
 └── book/                      # This documentation set
 ```
 
-and a fully implemented project will look like this:
+and a more fully developed project could grow toward a structure like this:
 
 ```text
 fpga/
@@ -201,7 +203,7 @@ fpga/
     └── arbiter_rr.v        # Round-robin arbiter
 ```
 
-Everybody loves block diagrams, so here’s one showing the major components and data/control flow in the fully implemented design:
+The following block diagram is an architectural sketch showing intended components and data/control flow:
 
 ```ascii
 ┌─────────────────────────────────────────────────────────────────┐

@@ -9,151 +9,171 @@ order: 100
 tags: ["DMA Engine Components", "Under Construction", "Verilog", "FPGA", "Hardware", "Stratix V"]
 ---
 
-# DMA Scheduler — `dma_scheduler.v`
+> This entry is synchronized from the [IPUServices repository documentation](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/book/component-library/dma_scheduler.md). See the [RTL source](https://github.com/hf-laboratories/IPUServices/blob/main/src/HFLabs/Hardware/Fpga.Catapult/catapult_ptp/dma_engine/dma_scheduler.v) for the implementation and current source of truth.
 
-**Subsystem:** `DMA Engine Components` &bull; **Source Path:** `dma_engine/dma_scheduler.v`
 
-[← Back to Component Library](/book/02-component-library)
+> **Scope:** This page is part of a structured FPGA engineering springboard. The accompanying RTL is an example/reference for study and further development; this project does not claim it is functionally validated, synthesis-ready, timing-closed, or proven on FPGA hardware. The repository testbench is scaffolding, not a passing verification result.
+# DMA Scheduler — dma_scheduler.v
 
----
+**Filename:** `dma_engine/dma_scheduler.v`
 
-:::under-construction
-### 🚧 Module Under Active Hardening & Verification
+## Description
 
-This module is part of the **DMA Engine Components** subsystem and is currently undergoing active RTL timing optimization, Quartus Platform Designer netlist verification, and testbench coverage expansion.
+Schedules descriptors onto available DMA channels and emits normalized command tuples for read/write engines.
 
-- **Target Architecture**: Altera / Intel Stratix V GS FPGA (Catapult v2 hardware target)
-- **Target Core Frequency**: 250 MHz (Gen3 x8 256-bit datapath)
-- **Verification Status**: In-Progress — Structural RTL syntax validated, comprehensive gate-level simulation pending
-:::
+## Integration Points
 
----
+- Core dispatch stage between descriptor FIFO and channel engines
+- Maintains pending/scheduled counters for control-plane visibility
 
-## 1. Architectural Role & Overview
-
-Deterministic multi-channel priority scheduler coordinating command execution across 16 channels.
-
-### Key Design Principles
-
-1. **Deterministic Handshaking**: Full ready/valid flow control preventing buffer overflows or stall deadlocks.
-2. **Synchronous Reset Protocol**: Active-low reset with internal multi-stage deassertion synchronizers.
-3. **Metastability Isolation**: Multi-stage flip-flop chains for any signals crossing clock domains.
-
----
-
-## 2. Interface Specification (Provisional Baseline)
-
-### Module Parameters & Generics
-
-| Parameter | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `DATA_WIDTH` | Integer | `512` | Primary internal streaming datapath width |
-| `ADDR_WIDTH` | Integer | `64` | Physical memory address bus width |
-| `FIFO_DEPTH` | Integer | `64` | Decoupling stage FIFO buffer depth |
-| `BURST_LIMIT` | Integer | `4096` | Maximum burst byte length per transaction |
-
-### Signal Port Map
-
-| Port Name | Direction | Bit Width | Description |
-| :--- | :--- | :--- | :--- |
-| `clk` | Input | `1` | Subsystem Core Clock (250 MHz) |
-| `rst_n` | Input | `1` | Active-Low Synchronous Reset |
-| `s_axis_tdata` | Input | `DATA_WIDTH` | Ingress stream payload |
-| `s_axis_tvalid` | Input | `1` | Ingress stream valid qualifier |
-| `s_axis_tready` | Output | `1` | Backpressure flow-control ready |
-| `s_axis_tlast` | Input | `1` | Ingress packet boundary delimiter |
-| `m_axis_tdata` | Output | `DATA_WIDTH` | Egress stream payload |
-| `m_axis_tvalid` | Output | `1` | Egress stream valid qualifier |
-| `m_axis_tready` | Input | `1` | Downstream sink backpressure ready |
-| `m_axis_tlast` | Output | `1` | Egress packet boundary delimiter |
-
----
-
-## 3. RTL Implementation Skeleton
+## Verilog Source
 
 ```verilog
-// =============================================================================
-// Module: DMA Scheduler (dma_scheduler.v)
-// Subsystem: DMA Engine Components
-// Target: Stratix V GS FPGA / Catapult v2
-// Status: Under Active Hardening
-// =============================================================================
-
-`timescale 1ns / 1ps
-
 module dma_scheduler #(
-    parameter DATA_WIDTH  = 512,
-    parameter ADDR_WIDTH  = 64,
-    parameter FIFO_DEPTH  = 64,
-    parameter BURST_LIMIT = 4096
+    parameter DESC_WIDTH = 128,
+    parameter ADDR_WIDTH = 64,
+    parameter NUM_CHANNELS = 16
 )(
-    input  wire                  clk,
-    input  wire                  rst_n,
-
-    // Slave Streaming Interface (Ingress)
-    input  wire [DATA_WIDTH-1:0] s_axis_tdata,
-    input  wire                  s_axis_tvalid,
-    output wire                  s_axis_tready,
-    input  wire                  s_axis_tlast,
-
-    // Master Streaming Interface (Egress)
-    output reg  [DATA_WIDTH-1:0] m_axis_tdata,
-    output reg                   m_axis_tvalid,
-    input  wire                  m_axis_tready,
-    output reg                   m_axis_tlast,
-
-    // Status & Error Telemetry
-    output reg  [31:0]           error_count,
-    output wire                  busy_flag
+    input  wire                     clk,
+    input  wire                     rst_n,
+    input  wire [DESC_WIDTH-1:0]    desc_data,
+    input  wire                     desc_valid,
+    output reg                      desc_ready,
+    input  wire [NUM_CHANNELS-1:0]  channel_idle,
+    output reg  [NUM_CHANNELS-1:0]  cmd_valid,
+    input  wire [NUM_CHANNELS-1:0]  cmd_ready
+);
+// DMA Scheduler
+// Schedules DMA operations based on descriptors
+// Supports deterministic scheduling with priority and deadline
+module dma_scheduler #(
+    parameter DESC_WIDTH = 128,
+    parameter ADDR_WIDTH = 64,
+    parameter NUM_CHANNELS = 16
+)(
+    input  wire                     clk,
+    input  wire                     rst_n,
+    
+    // Descriptor input from FIFO
+    input  wire [DESC_WIDTH-1:0]    desc_data,
+    input  wire                     desc_valid,
+    output reg                      desc_ready,
+    
+    // Channel status inputs
+    input  wire [NUM_CHANNELS-1:0]  channel_idle,
+    
+    // Scheduled command outputs (per channel)
+    output reg  [ADDR_WIDTH-1:0]    cmd_src_addr [0:NUM_CHANNELS-1],
+    output reg  [ADDR_WIDTH-1:0]    cmd_dst_addr [0:NUM_CHANNELS-1],
+    output reg  [31:0]              cmd_length [0:NUM_CHANNELS-1],
+    output reg  [7:0]               cmd_flags [0:NUM_CHANNELS-1],
+    output reg  [NUM_CHANNELS-1:0]  cmd_valid,
+    input  wire [NUM_CHANNELS-1:0]  cmd_ready,
+    
+    // Statistics
+    output reg  [31:0]              scheduled_count,
+    output reg  [31:0]              pending_count
 );
 
-    // -------------------------------------------------------------------------
-    // Internal Registers & State Machine
-    // -------------------------------------------------------------------------
-    reg [31:0] cycle_count;
-    reg        active_transfer;
-
-    assign s_axis_tready = (!m_axis_tvalid || m_axis_tready);
-    assign busy_flag     = active_transfer;
-
+    // Descriptor format (128 bits):
+    // [0]      - Valid
+    // [1]      - Read(0) / Write(1)
+    // [2]      - Interrupt on completion
+    // [7:3]    - Priority (0-31)
+    // [15:8]   - Channel hint
+    // [47:16]  - Length (32 bits)
+    // [111:48] - Source address (64 bits)
+    // [175:112]- Destination address (64 bits) - NOTE: Extended beyond 128b for full addressing
+    // Actual 128-bit descriptor uses simplified addressing
+    
+    wire        desc_valid_flag = desc_data[0];
+    wire        desc_is_write   = desc_data[1];
+    wire        desc_intr       = desc_data[2];
+    wire [4:0]  desc_priority   = desc_data[7:3];
+    wire [31:0] desc_length     = desc_data[47:16];  // Length from bits [47:16]
+    wire [ADDR_WIDTH-1:0] desc_src_addr = {{16{1'b0}}, desc_data[63:16]};  // Simplified: upper 48 bits
+    wire [ADDR_WIDTH-1:0] desc_dst_addr = {{16{1'b0}}, desc_data[111:64]}; // Simplified: next 48 bits
+    
+    // State machine
+    localparam IDLE = 2'd0;
+    localparam SCHEDULE = 2'd1;
+    localparam WAIT_ACK = 2'd2;
+    
+    reg [1:0] state;
+    reg [DESC_WIDTH-1:0] current_desc;
+    reg [2:0] selected_channel;
+    
+    // Channel selection (round-robin among idle channels)
+    wire [NUM_CHANNELS-1:0] idle_channels = channel_idle & ~cmd_valid;
+    
+    integer i;
+    always @(*) begin
+        selected_channel = 0;
+        for (i = 0; i < NUM_CHANNELS; i = i + 1) begin
+            if (idle_channels[i]) begin
+                selected_channel = i;
+            end
+        end
+    end
+    
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            m_axis_tdata    <= {DATA_WIDTH{1'b0}};
-            m_axis_tvalid   <= 1'b0;
-            m_axis_tlast    <= 1'b0;
-            error_count     <= 32'd0;
-            cycle_count     <= 32'd0;
-            active_transfer <= 1'b0;
+            state <= IDLE;
+            desc_ready <= 1'b0;
+            cmd_valid <= {NUM_CHANNELS{1'b0}};
+            scheduled_count <= 32'd0;
+            pending_count <= 32'd0;
+            current_desc <= {DESC_WIDTH{1'b0}};
+            
+            for (i = 0; i < NUM_CHANNELS; i = i + 1) begin
+                cmd_src_addr[i] <= {ADDR_WIDTH{1'b0}};
+                cmd_dst_addr[i] <= {ADDR_WIDTH{1'b0}};
+                cmd_length[i] <= 32'd0;
+                cmd_flags[i] <= 8'd0;
+            end
         end else begin
-            cycle_count <= cycle_count + 1'b1;
-
-            if (m_axis_tvalid && m_axis_tready) begin
-                m_axis_tvalid <= 1'b0;
-                m_axis_tlast  <= 1'b0;
-            end
-
-            if (s_axis_tvalid && s_axis_tready) begin
-                m_axis_tdata    <= s_axis_tdata;
-                m_axis_tvalid   <= 1'b1;
-                m_axis_tlast    <= s_axis_tlast;
-                active_transfer <= !s_axis_tlast;
-            end
+            case (state)
+                IDLE: begin
+                    desc_ready <= 1'b1;
+                    
+                    if (desc_valid && desc_ready && desc_valid_flag) begin
+                        current_desc <= desc_data;
+                        desc_ready <= 1'b0;
+                        pending_count <= pending_count + 1'b1;
+                        
+                        if (|idle_channels) begin
+                            state <= SCHEDULE;
+                        end
+                    end
+                end
+                
+                SCHEDULE: begin
+                    if (|idle_channels) begin
+                        // Schedule to selected channel
+                        cmd_src_addr[selected_channel] <= desc_src_addr;
+                        cmd_dst_addr[selected_channel] <= desc_dst_addr;
+                        cmd_length[selected_channel] <= desc_length;
+                        cmd_flags[selected_channel] <= {desc_intr, 2'd0, desc_priority};
+                        cmd_valid[selected_channel] <= 1'b1;
+                        
+                        state <= WAIT_ACK;
+                    end
+                end
+                
+                WAIT_ACK: begin
+                    if (cmd_ready[selected_channel]) begin
+                        cmd_valid[selected_channel] <= 1'b0;
+                        scheduled_count <= scheduled_count + 1'b1;
+                        pending_count <= pending_count - 1'b1;
+                        state <= IDLE;
+                    end
+                end
+                
+                default: state <= IDLE;
+            endcase
         end
     end
 
 endmodule
+endmodule
 ```
-
----
-
-## 4. Hardware Verification & Integration Checklist
-
-- [x] Baseline Verilog 2001 / SystemVerilog 2012 syntax compilation clean
-- [ ] Multi-channel backpressure assertion testbench completed
-- [ ] Corner-case burst alignment (unaligned offsets & 4KB boundary crossings)
-- [ ] Quartus Prime TimeQuest timing constraints and false-path assertions
-- [ ] In-system SignalTap logic analyzer capture on Catapult v2 hardware target
-
----
-
-[← Back to Component Library](/book/02-component-library) · [Next Chapter: Production Roadmap →](/book/03-production-roadmap)

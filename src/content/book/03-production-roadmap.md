@@ -10,6 +10,8 @@ tags: ["Roadmap", "Gates", "Stratix V", "Hard IP", "NVMe"]
 
 # Production Readiness — Roadmap
 
+> This is a roadmap, not a production-readiness claim. The repository is a structured springboard with a testbench scaffold; functional FPGA behavior and hardware integration remain unvalidated.
+
 [← Component Library](/book/02-component-library) · [Next → Design Summary & Verification Checklist](/book/04-design-summary-and-checklist)
 
 This chapter bridges planning and execution: it combines the roadmap with the practical hardware integration path captured in `HARDWARE_INTEGRATION.md`.
