@@ -5,7 +5,7 @@ import DivisionBackgroundOverlay from '../components/DivisionBackgroundOverlay.a
 import divisions from '../data/divisions.json';
 ---
 
-<Layout 
+<Layout
   title="HFLabs — Systems Research, Swarm Metaheuristics & In-Memory GraphRAG"
   description="High-performance vector cognition, Intel Level Zero hardware acceleration, and autonomous swarm systems."
   isFullPage={true}
@@ -13,7 +13,7 @@ import divisions from '../data/divisions.json';
 >
   <!-- Fullpage 3-Slide Presentation Container -->
   <div id="hflabs-fullpage-container" class="fullpage-slider">
-    
+
     <!-- Floating Side Pagination Navigation -->
     <nav class="fullpage-nav" aria-label="Section Navigation">
       <button class="nav-dot active" data-target-page="0" title="01 Architecture Overview">
@@ -51,14 +51,14 @@ import divisions from '../data/divisions.json';
          ========================================================================= -->
     <section class="page-slide slide-hero active-slide" id="page-0" data-page-index="0">
       <DivisionBackgroundOverlay id="hero-bg-overlay" initialDivision={0} opacity={1.0} />
-      
+
       <div class="container slide-content">
         <div class="hero-top-badges">
           <span class="badge" style="background:rgba(56,189,248,0.15); color:var(--accent-blue); border:1px solid rgba(56,189,248,0.35);">
             HFLabs Systems Architecture
           </span>
           <span class="badge" style="background:rgba(16,185,129,0.12); color:var(--accent-emerald); border:1px solid rgba(16,185,129,0.3);">
-            Production Runtimes (.NET 10 &bull; C ABI &bull; Level Zero)
+            Research &amp; Development (.NET &bull; Native Interop &bull; Level Zero)
           </span>
         </div>
 
@@ -78,8 +78,8 @@ import divisions from '../data/divisions.json';
               <span class="hud-dot" style="background:#38bdf8;"></span>
               <span class="hud-code">HYPERTENSOR GRAPHRAG</span>
             </div>
-            <div class="hud-metric">0.15–1.95 ms</div>
-            <div class="hud-sub">2-Hop in-memory graph traversal with 128-d SIMD TensorPrimitives.</div>
+            <div class="hud-metric">Graph + Vector</div>
+            <div class="hud-sub">In-memory graph traversal and SIMD vector search under active development.</div>
           </div>
 
           <div class="hud-card" style="--card-border: #06b6d4;">
@@ -87,8 +87,8 @@ import divisions from '../data/divisions.json';
               <span class="hud-dot" style="background:#06b6d4;"></span>
               <span class="hud-code">FASTMCP PROTOCOL</span>
             </div>
-            <div class="hud-metric">65+ Agent Tools</div>
-            <div class="hud-sub">High-throughput agent integration via typed STDIO and HTTP transport.</div>
+            <div class="hud-metric">MCP Integration</div>
+            <div class="hud-sub">An agent bridge connects supported clients to GraphRAG services.</div>
           </div>
 
           <div class="hud-card" style="--card-border: #a855f7;">
@@ -96,17 +96,17 @@ import divisions from '../data/divisions.json';
               <span class="hud-dot" style="background:#a855f7;"></span>
               <span class="hud-code">LEVEL ZERO &amp; POPLAR</span>
             </div>
-            <div class="hud-metric">407 Kernel Modules</div>
-            <div class="hud-sub">37 distinct kernels precompiled across 11 Intel GPU targets.</div>
+            <div class="hud-metric">GPU Interop</div>
+            <div class="hud-sub">Managed bindings and kernel catalogs for Intel GPU workloads.</div>
           </div>
 
           <div class="hud-card" style="--card-border: #f43f5e;">
             <div class="hud-header">
               <span class="hud-dot" style="background:#f43f5e;"></span>
-              <span class="hud-code">ZERO-ALLOC ABI</span>
+              <span class="hud-code">NATIVE INTEROP</span>
             </div>
-            <div class="hud-metric">Span&lt;T&gt; &amp; AVX-512</div>
-            <div class="hud-sub">Source-generated P/Invoke and direct C-linkage driver shims.</div>
+            <div class="hud-metric">C# &amp; C ABI</div>
+            <div class="hud-sub">Managed APIs connect to native runtimes and hardware drivers.</div>
           </div>
         </div>
 
@@ -196,7 +196,7 @@ import divisions from '../data/divisions.json';
               <div class="stage-card-anim-target" id="stageNarrativeAnimGroup">
                 <h3 id="stageDivTitle" class="stage-narrative-heading">Cognition &amp; Swarm Intelligence</h3>
                 <p id="stageDivDesc" class="stage-narrative-body">
-                  In-memory graph retrieval, SIMD vector search, and multi-algorithm swarm optimization. Keeps the entire graph resident in RAM to eliminate disk-bound lookups, powering agent reasoning through FastMCP and desktop visualization HUDs.
+                  In-memory graph retrieval, SIMD vector search, swarm optimization, and agent tooling are developed together across the HFLabs codebase.
                 </p>
 
                 <!-- Dynamic Project Badges -->
@@ -209,16 +209,16 @@ import divisions from '../data/divisions.json';
                 <!-- Metric Stats Grid (Sequential Telemetry Scanner) -->
                 <div class="stage-metrics-trio" id="stageMetricsTrio">
                   <div class="metric-trio-item" id="stageMetricItem1" data-metric-idx="0">
-                    <span id="stageMetricLbl1" class="metric-lbl">2-Hop Traversal</span>
-                    <strong id="stageMetricVal1" class="metric-val">0.15–1.95 ms</strong>
+                    <span id="stageMetricLbl1" class="metric-lbl">Graph Retrieval</span>
+                    <strong id="stageMetricVal1" class="metric-val">Graph + Vector</strong>
                   </div>
                   <div class="metric-trio-item" id="stageMetricItem2" data-metric-idx="1">
                     <span id="stageMetricLbl2" class="metric-lbl">SIMD Vectors</span>
-                    <strong id="stageMetricVal2" class="metric-val">128-d Default</strong>
+                    <strong id="stageMetricVal2" class="metric-val">SIMD Search</strong>
                   </div>
                   <div class="metric-trio-item" id="stageMetricItem3" data-metric-idx="2">
                     <span id="stageMetricLbl3" class="metric-lbl">MCP Connectivity</span>
-                    <strong id="stageMetricVal3" class="metric-val">65+ Tools</strong>
+                    <strong id="stageMetricVal3" class="metric-val">MCP Bridge</strong>
                   </div>
                 </div>
               </div>
@@ -264,7 +264,7 @@ import divisions from '../data/divisions.json';
                       <span class="node-icon">⚡</span>
                       <div class="node-text">
                         <span class="node-title">SIMD TensorPrimitives</span>
-                        <span class="node-sub">128-d Vector Cosine</span>
+                        <span class="node-sub">Vector Similarity</span>
                       </div>
                     </div>
                     <div class="diagram-node node-secondary" id="vnode-3">
@@ -281,7 +281,7 @@ import divisions from '../data/divisions.json';
                       <span class="node-icon">🔌</span>
                       <div class="node-text">
                         <span class="node-title">FastMCP Server</span>
-                        <span class="node-sub">65+ Agent Tools</span>
+                        <span class="node-sub">MCP Integration</span>
                       </div>
                     </div>
                   </div>
@@ -293,10 +293,10 @@ import divisions from '../data/divisions.json';
                     <span class="term-dot red"></span>
                     <span class="term-dot yellow"></span>
                     <span class="term-dot green"></span>
-                    <span class="term-title">HFLABS TELEMETRY KERNEL</span>
+                    <span class="term-title">ARCHITECTURE EXAMPLE · NOT LIVE</span>
                   </div>
                   <code id="stageTerminalText" class="term-output">
-                    [Cognition &amp; Swarm] Hypertensor GraphRAG: 2-hop traversal in 0.15 ms | SIMD 128d | FastMCP 65+ tools active
+                    [Illustration] Graph retrieval, vector search and agent tools
                   </code>
                 </div>
 
@@ -312,7 +312,7 @@ import divisions from '../data/divisions.json';
                   </div>
                   <div class="vis-footer-stat">
                     <span id="visStatLbl3" class="vf-lbl">Agent Protocol</span>
-                    <strong id="visStatVal3" class="vf-val">FastMCP (65+ Tools)</strong>
+                    <strong id="visStatVal3" class="vf-val">FastMCP Bridge</strong>
                   </div>
                 </div>
               </div>
@@ -345,7 +345,7 @@ import divisions from '../data/divisions.json';
         <!-- 3-Division Bento Cards Grid -->
         <div class="divisions-grid-trio">
           {divisions.map((div, idx) => (
-            <div 
+            <div
               id={`div-card-${idx}`}
               class={`division-card-interactive ${idx === 0 ? 'focused' : ''}`}
               data-division-index={idx}
@@ -1632,43 +1632,43 @@ import divisions from '../data/divisions.json';
       badgeColor: '#38bdf8',
       badgeColorRgb: '56, 189, 248',
       title: 'Cognition & Swarm Intelligence',
-      desc: 'In-memory graph retrieval, SIMD vector search, and multi-algorithm swarm optimization. Keeps the entire graph resident in RAM to eliminate disk-bound lookups, powering agent reasoning through FastMCP and desktop visualization HUDs.',
+      desc: 'In-memory graph retrieval, SIMD vector search, swarm optimization, and agent tooling are developed together across the HFLabs codebase.',
       pills: ['Hypertensor GraphRAG', 'HyperSwarm Suite', 'SwarmDev'],
       metrics: [
-        { 
-          lbl: '2-Hop Traversal', 
-          val: '0.15–1.95 ms',
+        {
+          lbl: 'Graph Retrieval',
+          val: 'Graph + Vector',
           relatedPills: ['Hypertensor GraphRAG'],
           relatedNodes: ['vnode-1', 'vnode-2'],
-          telemetry: '[Cognition & Swarm] Hypertensor GraphRAG: 2-hop traversal in 0.15 ms | In-Memory RAM resident'
+          telemetry: '[Illustration] GraphRAG supports in-memory graph retrieval'
         },
-        { 
-          lbl: 'SIMD Vectors', 
-          val: '128-d Default',
+        {
+          lbl: 'SIMD Vectors',
+          val: 'SIMD Search',
           relatedPills: ['Hypertensor GraphRAG'],
           relatedNodes: ['vnode-2'],
-          telemetry: '[Cognition & Swarm] SIMD TensorPrimitives: 128-d vector cosine similarity evaluated with 0 alloc'
+          telemetry: '[Illustration] SIMD vector search is part of the retrieval stack'
         },
-        { 
-          lbl: 'MCP Connectivity', 
-          val: '65+ Tools',
+        {
+          lbl: 'MCP Connectivity',
+          val: 'MCP Bridge',
           relatedPills: ['HyperSwarm Suite', 'SwarmDev'],
           relatedNodes: ['vnode-3', 'vnode-4'],
-          telemetry: '[Cognition & Swarm] FastMCP Server active with 65+ tools connected to HyperSwarm director'
+          telemetry: '[Illustration] MCP connects agent clients to supported tools'
         }
       ],
       link: '/products/ht-graphrag',
       nodes: [
         { icon: '🧠', title: 'Hypertensor GraphRAG', sub: 'In-Memory Typed Store' },
-        { icon: '⚡', title: 'SIMD TensorPrimitives', sub: '128-d Vector Cosine' },
+        { icon: '⚡', title: 'SIMD TensorPrimitives', sub: 'Vector Similarity' },
         { icon: '🐝', title: 'HyperSwarm Suite', sub: 'Director Authority' },
-        { icon: '🔌', title: 'FastMCP Server', sub: '65+ Agent Tools' }
+        { icon: '🔌', title: 'FastMCP Server', sub: 'MCP Integration' }
       ],
-      terminal: '[Cognition & Swarm] Hypertensor GraphRAG: 2-hop traversal in 0.15 ms | SIMD 128d | FastMCP 65+ tools active',
+      terminal: '[Illustration] Graph retrieval, vector search and agent tools',
       stats: [
         { lbl: 'Graph Residency', val: 'In-Memory RAM' },
         { lbl: 'Vector Engine', val: 'SIMD TensorPrimitives' },
-        { lbl: 'Agent Protocol', val: 'FastMCP (65+ Tools)' }
+        { lbl: 'Agent Protocol', val: 'FastMCP Bridge' }
       ]
     },
     {
@@ -1677,29 +1677,29 @@ import divisions from '../data/divisions.json';
       badgeColor: '#06b6d4',
       badgeColorRgb: '6, 182, 212',
       title: 'Machine Learning & Acceleration',
-      desc: 'Spiking and graph-based ML, heterogeneous accelerator orchestration, and IPU-offloaded SQL. A unified gRPC service coordinates execution envelopes across IPU (Poplar), CUDA, OpenCL, Level Zero, FPGA, and DMA/RDMA backends.',
+      desc: 'Spiking and graph-based ML, heterogeneous accelerator orchestration, and IPU-offloaded SQL. Accelerator interfaces target multiple backends, with availability varying by implementation and hardware.',
       pills: ['HFLabs ML Suite', 'Accelerator Layer', 'IPU SQL Accel'],
       metrics: [
-        { 
-          lbl: 'ML Substrates', 
+        {
+          lbl: 'ML Substrates',
           val: 'SNN & KGE',
           relatedPills: ['HFLabs ML Suite'],
           relatedNodes: ['vnode-1'],
-          telemetry: '[ML Suite] Spiking Neural Network & Knowledge Graph Embeddings executing on native substrates'
+          telemetry: '[Illustration] ML libraries include spiking networks and graph embeddings'
         },
-        { 
-          lbl: 'Accelerator Fabric', 
+        {
+          lbl: 'Accelerator Fabric',
           val: 'Unified gRPC',
           relatedPills: ['Accelerator Layer'],
           relatedNodes: ['vnode-2', 'vnode-3'],
-          telemetry: '[Accelerator Layer] Unified gRPC execution envelope routed across IPU, Level Zero, and FPGA'
+          telemetry: '[Illustration] Accelerator interfaces target multiple backends'
         },
-        { 
-          lbl: 'Query Engine', 
+        {
+          lbl: 'Query Engine',
           val: 'IPU SQL Offload',
           relatedPills: ['IPU SQL Accel'],
           relatedNodes: ['vnode-4'],
-          telemetry: '[IPU SQL Accel] Relational projection & aggregation offloaded directly to Graphcore Poplar IPU'
+          telemetry: '[Illustration] QueryAccel explores IPU-backed SQL operations'
         }
       ],
       link: '/products/ml-suite',
@@ -1709,7 +1709,7 @@ import divisions from '../data/divisions.json';
         { icon: '🎛️', title: 'Heterogeneous Backends', sub: 'IPU / L0 / CUDA / FPGA' },
         { icon: '🗄️', title: 'IPU SQL Acceleration', sub: 'Postgres & CLR Offload' }
       ],
-      terminal: '[ML & Acceleration] gRPC plan envelope dispatched across IPU (Poplar) & Level Zero | SQL aggregate offloaded',
+      terminal: '[Illustration] ML libraries, accelerator interfaces and query acceleration',
       stats: [
         { lbl: 'ML Architecture', val: 'Spiking & Graph ML' },
         { lbl: 'Acceleration Fabric', val: 'Unified gRPC Plan' },
@@ -1722,43 +1722,43 @@ import divisions from '../data/divisions.json';
       badgeColor: '#f43f5e',
       badgeColorRgb: '244, 63, 94',
       title: 'Hardware & Native Substrates',
-      desc: 'Intel GPU compute from .NET in one single DLL with no driver SDK to install. Managed API, native shim, and 407 precompiled kernel modules (37 distinct kernels across 11 Intel targets: 37 × 11 = 407) with 37 typed kernel wrappers and auto device detection.',
+      desc: 'Managed GPU interop, native bindings, kernel catalogs and C/C++ binding generation support hardware-oriented .NET development.',
       pills: ['LevelZero.NET', 'Kernel Catalog', 'Poplar.NET', 'Abigen'],
       metrics: [
-        { 
-          lbl: 'Precompiled Binaries', 
-          val: '407 Modules',
+        {
+          lbl: 'GPU Compute',
+          val: 'Kernel Catalog',
           relatedPills: ['Kernel Catalog', 'LevelZero.NET'],
           relatedNodes: ['vnode-2', 'vnode-4'],
-          telemetry: '[Hardware Substrate] 407 precompiled kernel modules (37 distinct kernels × 11 targets) loaded from single DLL'
+          telemetry: '[Illustration] LevelZero.NET includes a GPU kernel catalog'
         },
-        { 
-          lbl: 'Kernel Wrappers', 
-          val: '37 Wrappers',
+        {
+          lbl: 'Kernel Interfaces',
+          val: 'Typed APIs',
           relatedPills: ['LevelZero.NET', 'Abigen'],
           relatedNodes: ['vnode-3'],
-          telemetry: '[LevelZero.NET & Abigen] 37 typed kernel wrappers auto-generated with direct Span<T> USM bindings'
+          telemetry: '[Illustration] Managed APIs and binding tools connect .NET to native code'
         },
-        { 
-          lbl: 'Intel GPU Targets', 
-          val: '11 Hardware Targets',
+        {
+          lbl: 'Intel GPU Targets',
+          val: 'Intel GPUs',
           relatedPills: ['Kernel Catalog'],
           relatedNodes: ['vnode-4', 'vnode-1'],
-          telemetry: '[Kernel Catalog] Auto target detection across 11 Intel silicon architectures (Iris Xe to Panther Lake)'
+          telemetry: '[Illustration] Kernel selection depends on the target device'
         }
       ],
       link: '/products/levelzero',
       nodes: [
         { icon: '⚙️', title: 'ComputeDevice USM', sub: 'Typed Span<T> Access' },
-        { icon: '📦', title: 'Single DLL Runtime', sub: 'API + Shim + 407 Kernels' },
-        { icon: '🖥️', title: 'LevelZero.NET', sub: '37 Kernel Wrappers' },
+        { icon: '📦', title: 'Single DLL Runtime', sub: 'Managed API + Native Shim' },
+        { icon: '🖥️', title: 'LevelZero.NET', sub: 'Typed Kernel APIs' },
         { icon: '⚡', title: 'Kernel Catalog', sub: 'Auto Target Detection' }
       ],
-      terminal: '[Hardware Substrate] LevelZero.NET initialized | 407 kernel modules embedded across 11 Intel targets (Iris Xe to Panther Lake)',
+      terminal: '[Illustration] GPU interop, kernels and native binding tools',
       stats: [
-        { lbl: 'Deployment Model', val: 'One Single DLL' },
-        { lbl: 'GPU Kernels', val: '407 Pre-Compiled (37×11)' },
-        { lbl: 'Hardware Targets', val: '11 Intel Silicon' }
+        { lbl: 'Deployment Model', val: 'Managed + Native' },
+        { lbl: 'GPU Kernels', val: 'Kernel Catalog' },
+        { lbl: 'Hardware Targets', val: 'Intel GPU' }
       ]
     }
   ];
@@ -1797,7 +1797,7 @@ import divisions from '../data/divisions.json';
 
   function goToPage(pageIdx: number, updateHash = true) {
     if (pageIdx < 0 || pageIdx >= totalPages) return;
-    
+
     isPageTransitioning = true;
     currentPage = pageIdx;
 
@@ -2126,7 +2126,7 @@ import divisions from '../data/divisions.json';
 
       if (stageProjectPills) {
         stageProjectPills.innerHTML = data.pills.map(p => `<span class="stage-pill" data-pill-name="${p}">${p}</span>`).join('');
-        
+
         // Attach interactive hover & click listeners to newly created pills
         stageProjectPills.querySelectorAll<HTMLElement>('.stage-pill').forEach(pill => {
           const pName = pill.getAttribute('data-pill-name') || '';
@@ -2352,7 +2352,7 @@ import divisions from '../data/divisions.json';
     link.addEventListener('click', (e) => {
       const href = link.getAttribute('href') || '';
       const explicitTarget = link.getAttribute('data-section-target');
-      
+
       let targetPage = -1;
       if (explicitTarget !== null && explicitTarget !== '') {
         targetPage = parseInt(explicitTarget, 10);
@@ -2367,10 +2367,10 @@ import divisions from '../data/divisions.json';
       // If user clicks the products button while ALREADY on /#products (or on page 2), open /products catalog
       if (targetPage === 2) {
         const currentHash = window.location.hash.toLowerCase();
-        const isOnProductsSlide = currentPage === 2 || 
-                                  currentHash.includes('products') || 
-                                  currentHash.includes('divisions') || 
-                                  currentHash.includes('stack') || 
+        const isOnProductsSlide = currentPage === 2 ||
+                                  currentHash.includes('products') ||
+                                  currentHash.includes('divisions') ||
+                                  currentHash.includes('stack') ||
                                   currentHash.includes('section-3');
         if (isOnProductsSlide) {
           e.preventDefault();

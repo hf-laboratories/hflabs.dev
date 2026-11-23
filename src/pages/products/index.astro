@@ -15,7 +15,7 @@ const products = [
     releaseHref: "https://github.com/hf-laboratories/LevelZero.NET/releases/tag/v2.0.0",
     releaseText: "Release Assets (v2.0.0)",
     features: [
-      "Single DLL: Managed API, native C shim, and 418 pre-compiled kernel modules across 11 Intel GPU targets",
+      "Single DLL: Managed API, native C shim, and a catalog of pre-compiled GPU kernel modules",
       "Unified Shared Memory (USM) zero-copy buffer allocations with typed Span<T>",
       "Precompiled modules for Iris Xe, Arc A-Series, Lunar Lake, Arrow Lake, Battlemage, and Ponte Vecchio",
       "Powers local LLM inference, swarm optimizers, and spiking neural network kernels"
@@ -116,15 +116,15 @@ const products = [
     name: "Hypertensor GraphRAG",
     badge: "Vector & Graph Engine",
     badgeColor: "#38bdf8",
-    tagline: "In-memory typed property-graph store with hybrid dense and BM25 retrieval, SIMD TensorPrimitives, and FastMCP agent context.",
-    status: "Coming soon",
+    tagline: "In-memory graph and vector retrieval, SIMD search, and agent integration under active development.",
+    status: "Active Development",
     href: "/products/ht-graphrag",
     buttonText: "View Product & Licensing Tiers →",
     features: [
-      "In-memory typed property-graph store with dense & BM25 retrieval",
-      "SIMD TensorPrimitives with optional Level Zero GPU offload",
-      "65+ tool FastMCP server & desktop HUD for agent context",
-      "Tiered Open-Core and Commercial licensing"
+      "Typed property graph with dense and lexical retrieval components",
+      "SIMD vector search and hardware acceleration interfaces",
+      "FastMCP agent bridge and desktop interface",
+      "Planned open-core and commercial licensing"
     ]
   },
   {
@@ -133,7 +133,7 @@ const products = [
     badge: "Deterministic Pipeline",
     badgeColor: "#f59e0b",
     tagline: "A deterministic pipeline that turns a natural-language request into an inspectable plan with a diagnostic trail at every step.",
-    status: "Production Library",
+    status: "Private Development",
     href: "/products/swarmdev",
     buttonText: "Explore SwarmDev Product Page →",
     features: [
@@ -149,7 +149,7 @@ const products = [
     badge: "Local ML & Agentic AI",
     badgeColor: "#10b981",
     tagline: "Optimization, inference and agent reasoning in one .NET library set, with no cloud service in the loop.",
-    status: "Production Libraries",
+    status: "Active Development",
     href: "/products/ml-suite",
     buttonText: "Explore ML Suite Product Page →",
     features: [
@@ -181,7 +181,7 @@ const products = [
     badge: "Benchmarking & HUD",
     badgeColor: "#00e5ff",
     tagline: "Measure how swarms really behave, and watch them work. 34 optimization algorithms tested against 110 benchmark functions with real-time HUD visualizer.",
-    status: "Production Tooling",
+    status: "Active Development",
     href: "/products/swarmbench",
     buttonText: "Explore SwarmBench Product Page →",
     features: [
@@ -196,15 +196,15 @@ const products = [
     name: "AutoMLApp (in development)",
     badge: "Node-Graph Editor",
     badgeColor: "#06b6d4",
-    tagline: "Design ML pipelines on a canvas. Run them on your hardware with 185+ node types across 25+ domains.",
+    tagline: "Design and run tabular ML workflows on a canvas, with additional domains under development.",
     status: "In Development",
     href: "/products/automlapp",
     buttonText: "Explore AutoMLApp Product Page →",
     features: [
-      "185+ node types across 25+ domains (Data, ONNX, IPU, SNN, Swarm, FPGA)",
-      "Topologically sorted plan compilation with domain-specific step handlers",
+      "A bundle host and tabular workflow with a broader node catalog in development",
+      "Pipeline editing, validation, execution and run history for tabular workflows",
       "F7 instant invariant validation (cycles, orphans, duplicate IDs, types)",
-      "Pluggable HyperSwarm-backed AutoML & telemetry-aware cost scoring"
+      "Additional accelerator and AutoML integrations at varying stages of development"
     ]
   },
   {
@@ -236,7 +236,7 @@ const products = [
       "PostgreSQL extension & SQL Server CLR bridge offloading aggregates and vector ops",
       "Hardware-accelerated COUNT, SUM, AVG, MIN, MAX, Cosine, Dot, L2 distance",
       "Integrated gRPC microservice connecting database engine to Poplar runtime",
-      "Evaluated on Graphcore Bow-2000 and Bow Pod clusters"
+      "MVP integrating database bridges with a gRPC service"
     ]
   }
 ];

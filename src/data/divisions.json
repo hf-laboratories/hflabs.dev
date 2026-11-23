@@ -9,7 +9,7 @@
     "projects": [
       {
         "name": "Hypertensor GraphRAG",
-        "description": "In-memory graph retrieval with an LLM-free query path, tested at 1M nodes, 3M edges, and roughly 65k clusters. Advanced-query retrieval quality remains under active refinement.",
+        "description": "In-memory graph and vector retrieval, SIMD search, and agent integration. Retrieval quality and end-to-end production readiness remain under active evaluation.",
         "path": "src/HFLabs/Products/HypertensorGraphRAG",
         "status": "Active Development"
       },
@@ -17,7 +17,7 @@
         "name": "HyperSwarm Optimization Suite",
         "description": "Swarm optimization framework covering core, hybrid, advanced and multi-objective algorithms. It has Director-managed subswarm ensembles, convergence and diversity monitoring, Pareto-sorting threshold tuning, and a desktop visualizer.",
         "path": "src/HFLabs/Products/HyperSwarmOptimizationSuite",
-        "status": "Production"
+        "status": "Active Development"
       },
       {
         "name": "SwarmDev",
@@ -29,7 +29,7 @@
         "name": "SwarmBench",
         "description": "Benchmarking, characterization, elimination tournaments and real-time visualization HUD running 34 optimization algorithms against 110 test functions with HyperCache config reuse and self-validating LaTeX/JSON profiles.",
         "path": "src/HFLabs/Products/SwarmBench",
-        "status": "Production"
+        "status": "Active Development"
       },
       {
         "name": "Interactive PNN Decision Matrix",
@@ -63,13 +63,13 @@
         "name": "HFLabs Machine Learning Suite",
         "description": "Spiking neural networks, contextual and intergraph inference, and knowledge-graph embeddings (KGE). Hyperparameter optimization (Bayesian, Hyperband, BOHB, ASHA-BOHB, TuRBO) and graph-constrained beam decoding.",
         "path": "src/HFLabs/Libraries/ML",
-        "status": "Production"
+        "status": "Active Development"
       },
       {
         "name": "Accelerator",
-        "description": "Unified hardware-accelerator layer. A gRPC service executes plan envelopes across IPU (Poplar), CUDA, OpenCL, Level Zero, FPGA and DMA/RDMA backends with compiled-graph caching.",
+        "description": "Hardware accelerator interfaces and a gRPC execution service targeting multiple backends; backend availability and maturity vary.",
         "path": "src/HFLabs/Hardware/Accelerator",
-        "status": "Production"
+        "status": "Active Development"
       },
       {
         "name": "IPU SQL Query Acceleration (MVP)",
@@ -101,9 +101,9 @@
       },
       {
         "name": "Poplar.NET (v1.0.0-preview)",
-        "description": "World first zero-allocation C# / .NET 10 runtime engine and resident graph orchestration SDK for Graphcore Colossus IPUs (Bow-2000, MK2, IPU-POD).",
+        "description": "Preview .NET bindings and runtime components for Graphcore Poplar and IPU workloads.",
         "path": "https://github.com/hf-laboratories/Poplar.NET",
-        "status": "Production (v1.0.0-preview)"
+        "status": "Preview"
       },
       {
         "name": "Poplar Explorer Fork",

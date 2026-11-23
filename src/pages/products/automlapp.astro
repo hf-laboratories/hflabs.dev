@@ -3,86 +3,26 @@
 import Layout from '../../layouts/Layout.astro';
 
 const capabilities = [
-  {
-    icon: "🎨",
-    title: "Node-graph editor",
-    tagline: "185+ Node Types • 25+ Domains",
-    desc: "Drag and drop across 25+ domains including data pipelines, ONNX, IPU, spiking networks, swarm, FPGA, RDMA, feature store, and sidecar. Typed connectors reject incompatible links in real time as you draw them.",
-    color: "#38bdf8"
-  },
-  {
-    icon: "⚡",
-    title: "Execution engine",
-    tagline: "Topological Sorting & Domain Handlers",
-    desc: "Canvas graphs compile automatically into topologically sorted execution plans with domain-specific step handlers dispatched directly to host accelerators or remote clusters.",
-    color: "#06b6d4"
-  },
-  {
-    icon: "✅",
-    title: "Instant validation (F7)",
-    tagline: "Comprehensive Invariant Checking",
-    desc: "A single keypress (F7) runs static analysis checking for cycles, missing dependencies, duplicate IDs, orphaned nodes, and port type mismatches, immediately flagging defects on canvas.",
-    color: "#10b981"
-  },
-  {
-    icon: "🌉",
-    title: "Integration bridges",
-    tagline: "28 Native Subsystem Connectors",
-    desc: "Around 28 specialized bridges connect canvas nodes directly to HyperSwarm, ONNX runtime, spiking neural networks, SwarmDev deterministic pipelines, the telemetry sidecar, and hardware engines.",
-    color: "#818cf8"
-  },
-  {
-    icon: "🌊",
-    title: "HyperSwarm-backed AutoML",
-    tagline: "Cost & Score-Aware Architecture Search",
-    desc: "Hyperparameter search executes on HyperSwarm through a pluggable backend where candidates define model family, depth, learning rate, batch size, and dataset. A telemetry-aware engine balances accuracy against compute cost signals.",
-    color: "#f59e0b"
-  },
-  {
-    icon: "🎛️",
-    title: "Workspaces & panels",
-    tagline: "40+ Subcanvases & Specialized Tooling",
-    desc: "Experiment, admin, and data-catalog zones with 40+ subcanvas types and dedicated side panels for hyperparameters, IPU tile connections, cluster setups, deployments, observability, model registries, and test runners.",
-    color: "#ec4899"
-  },
-  {
-    icon: "📦",
-    title: "Portable pipelines",
-    tagline: "Two-Way JSON Interop",
-    desc: "Export and import standardized pipeline JSON schemas fully compatible with the web pipeline manager, background daemons, and command-line execution runners.",
-    color: "#a855f7"
-  },
-  {
-    icon: "🛠️",
-    title: "Editing fundamentals",
-    tagline: "Productive Desktop Ergonomics",
-    desc: "Full undo/redo stack, automatic force-directed graph layout, project state persistence, execution run histories, and diffable step checkpoints.",
-    color: "#64748b"
-  },
-  {
-    icon: "🛡️",
-    title: "Tiered entitlements",
-    tagline: "Granular Feature Access",
-    desc: "Node availability, accelerator targets, and advanced swarm algorithms can be dynamically filtered and partitioned by organization license tier.",
-    color: "#14b8a6"
-  }
+  { icon: "🎨", title: "Canvas editor", tagline: "Composable Windows workspace", desc: "A bundle-based canvas host provides visual editing, typed connections, property inspection, and saved canvas documents.", color: "#38bdf8" },
+  { icon: "📊", title: "Tabular ML workflow", tagline: "Data source to trained model", desc: "The Tabular bundle plans and runs CSV or TSV workflows with source, transform, model, evaluation, and output steps. It can train and search ML.NET models and save run history and artifacts.", color: "#06b6d4" },
+  { icon: "✅", title: "Pipeline validation", tagline: "Check the selected workflow", desc: "Tabular validation checks required settings, upstream inputs, malformed configuration, and graph cycles before a run.", color: "#10b981" },
+  { icon: "▶️", title: "Run and inspect", tagline: "Zone-scoped execution", desc: "Run a selected pipeline zone with F5 and stop with Shift+F5. The Runs tray and run-state overlay show recorded results and step status.", color: "#818cf8" },
+  { icon: "🧩", title: "Extensible bundles", tagline: "Capabilities registered by the host", desc: "The host composes canvas bundles for different workflows. Available actions and execution support depend on the installed bundle and its configuration.", color: "#f59e0b" },
+  { icon: "📁", title: "Canvas documents", tagline: "Human-readable persistence", desc: "Canvas documents use a Markdown-based format; the Tabular bundle includes quickstart and search templates.", color: "#a855f7" }
 ];
 
 const domains = [
-  { name: "Data Pipelines", count: "24 Nodes", icon: "📊" },
-  { name: "ONNX & Tensor", count: "18 Nodes", icon: "🧠" },
-  { name: "IPU & Poplar", count: "16 Nodes", icon: "⚡" },
-  { name: "Spiking Networks", count: "12 Nodes", icon: "⚡" },
-  { name: "HyperSwarm Search", count: "15 Nodes", icon: "🌊" },
-  { name: "FPGA & RDMA", count: "10 Nodes", icon: "🔌" },
-  { name: "Feature Store", count: "8 Nodes", icon: "🗄️" },
-  { name: "Sidecar & Telemetry", count: "14 Nodes", icon: "📡" }
+  { name: "Data Source", count: "Tabular step", icon: "📊" },
+  { name: "Transform", count: "Tabular step", icon: "🔀" },
+  { name: "Model", count: "Tabular step", icon: "🧠" },
+  { name: "Evaluator", count: "Tabular step", icon: "✅" },
+  { name: "Output", count: "Tabular step", icon: "📦" }
 ];
 ---
 
 <Layout 
   title="AutoMLApp (in development) • Visual ML & Hardware Pipeline Editor | HF Labs" 
-  description="AutoMLApp (in development) is the Windows node-graph editor for composing, validating and running machine-learning and accelerator pipelines across heterogeneous hardware.">
+  description="AutoMLApp is a Windows canvas workbench in development, with a bundle-based editor and a tabular machine-learning workflow.">
   
   <!-- Top Breadcrumb Bar -->
   <div class="product-top-bar">
@@ -109,18 +49,18 @@ const domains = [
 
       <h1 class="hero-title">AutoMLApp <span style="font-size:24px; font-weight:500; color:var(--text-muted);">(in development)</span></h1>
       <p class="hero-lead">
-        Design ML pipelines on a canvas. Run them on your hardware.
+        Design and run tabular ML workflows on a canvas.
       </p>
       <p class="hero-subhead">
-        A Windows node-graph editor for composing, validating and running machine-learning and accelerator pipelines.
+        A Windows workbench with an extensible canvas and a local ML.NET training workflow. Other bundles and integrations are at different stages of development.
       </p>
 
       <div class="hero-actions">
         <a href="#capabilities" class="btn-primary" style="padding:12px 24px; font-size:14px;">
-          Explore Capabilities (9 Features) &darr;
+          Explore Capabilities &darr;
         </a>
         <a href="#canvas-mockup" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
-          Interactive Canvas Architecture &darr;
+          Illustrative Canvas &darr;
         </a>
         <a href="#status" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
           Runtime Status &amp; Roadmap &rarr;
@@ -134,6 +74,7 @@ const domains = [
 
   <!-- Interactive Node Graph Canvas Visual Preview -->
   <section id="canvas-mockup" class="canvas-preview-section">
+    <p class="container" style="color:var(--text-secondary); margin-bottom:16px;">Illustrative concept, not a live application view or a statement of supported hardware.</p>
     <div class="container">
       <div class="canvas-window">
         <!-- Title Bar -->
@@ -142,10 +83,10 @@ const domains = [
             <span class="win-circle close"></span>
             <span class="win-circle min"></span>
             <span class="win-circle max"></span>
-            <span class="win-title">AutoMLApp v10.0 • Graph: <code>exp_hybrid_ipu_swarm_v4.aml</code></span>
+            <span class="win-title">Illustrative concept • Graph: <code>tabular-workflow.canvas.md</code></span>
           </div>
           <div class="window-right">
-            <span class="f7-pill"><kbd>F7</kbd> Validation: PASSED (0 cycles, 0 orphaned)</span>
+            <span class="f7-pill">Illustrative pipeline</span>
             <span class="win-tag">Runtime: .NET 10 x64</span>
           </div>
         </div>
@@ -154,22 +95,22 @@ const domains = [
         <div class="canvas-workspace">
           <!-- Left Palette -->
           <div class="canvas-palette">
-            <div class="palette-header">Node Library (185)</div>
+            <div class="palette-header">Example Node Library</div>
             <div class="palette-group">
               <span class="group-title">Data Ingestion</span>
-              <div class="palette-item"><span>📥</span> ParquetReader</div>
-              <div class="palette-item"><span>🗄️</span> FeatureStoreRef</div>
+              <div class="palette-item"><span>📥</span> Data Source</div>
+              <div class="palette-item"><span>🗄️</span> Transform</div>
             </div>
             <div class="palette-group">
               <span class="group-title">Cognition &amp; Model</span>
-              <div class="palette-item"><span>🧠</span> ONNXSessionNode</div>
-              <div class="palette-item"><span>🐝</span> SwarmDevRouter</div>
-              <div class="palette-item"><span>⚡</span> SpikingLifLayer</div>
+              <div class="palette-item"><span>🧠</span> Model</div>
+              <div class="palette-item"><span>🐝</span> Evaluator</div>
+              <div class="palette-item"><span>⚡</span> Output</div>
             </div>
             <div class="palette-group">
               <span class="group-title">Compute &amp; Backend</span>
-              <div class="palette-item"><span>⚡</span> IPUTileClusterNode</div>
-              <div class="palette-item"><span>🌊</span> HyperSwarmSearch</div>
+              <div class="palette-item"><span>⚡</span> Pipeline Zone</div>
+              <div class="palette-item"><span>🌊</span> Run History</div>
             </div>
           </div>
 
@@ -179,61 +120,61 @@ const domains = [
               <!-- Node 1: Ingestion -->
               <div class="canvas-node n-blue" style="top: 30px; left: 30px;">
                 <div class="node-head">
-                  <span>📥 FeatureStoreStream</span>
+                  <span>📥 Data Source</span>
                   <span class="node-status-dot ready"></span>
                 </div>
                 <div class="node-ports">
-                  <div class="port-in"><span class="p-dot"></span> cfg:URI</div>
-                  <div class="port-out">out:TensorBatch <span class="p-dot"></span></div>
+                  <div class="port-in"><span class="p-dot"></span> source:CSV</div>
+                  <div class="port-out">out:dataset <span class="p-dot"></span></div>
                 </div>
               </div>
 
               <!-- Node 2: SwarmDev Router -->
               <div class="canvas-node n-amber" style="top: 170px; left: 30px;">
                 <div class="node-head">
-                  <span>🐝 SwarmDev Router</span>
+                  <span>🔀 Transform</span>
                   <span class="node-status-dot active"></span>
                 </div>
                 <div class="node-ports">
-                  <div class="port-in"><span class="p-dot"></span> prompt:Text</div>
-                  <div class="port-out">plan:SubGraph <span class="p-dot"></span></div>
+                  <div class="port-in"><span class="p-dot"></span> in:dataset</div>
+                  <div class="port-out">out:dataset <span class="p-dot"></span></div>
                 </div>
               </div>
 
               <!-- Node 3: HyperSwarm AutoML Optimizer -->
               <div class="canvas-node n-purple" style="top: 40px; left: 290px;">
                 <div class="node-head">
-                  <span>🌊 HyperSwarmAutoML</span>
+                  <span>🌊 Model</span>
                   <span class="node-status-dot active"></span>
                 </div>
                 <div class="node-ports">
-                  <div class="port-in"><span class="p-dot"></span> data:TensorBatch</div>
-                  <div class="port-in"><span class="p-dot"></span> search:Space</div>
-                  <div class="port-out">best:Candidate <span class="p-dot"></span></div>
+                  <div class="port-in"><span class="p-dot"></span> data:dataset</div>
+                  <div class="port-in"><span class="p-dot"></span> trainer:config</div>
+                  <div class="port-out">out:model <span class="p-dot"></span></div>
                 </div>
               </div>
 
               <!-- Node 4: IPU Hardware Cluster -->
               <div class="canvas-node n-cyan" style="top: 200px; left: 290px;">
                 <div class="node-head">
-                  <span>⚡ IPUTileCluster (Bow)</span>
+                  <span>✅ Evaluator</span>
                   <span class="node-status-dot ready"></span>
                 </div>
                 <div class="node-ports">
-                  <div class="port-in"><span class="p-dot"></span> graph:Poplar</div>
-                  <div class="port-out">exec:Telemetry <span class="p-dot"></span></div>
+                  <div class="port-in"><span class="p-dot"></span> in:model</div>
+                  <div class="port-out">out:metrics <span class="p-dot"></span></div>
                 </div>
               </div>
 
               <!-- Node 5: Output & Telemetry Sidecar -->
               <div class="canvas-node n-emerald" style="top: 100px; left: 560px;">
                 <div class="node-head">
-                  <span>📡 TelemetrySidecar</span>
+                  <span>📡 Output</span>
                   <span class="node-status-dot ready"></span>
                 </div>
                 <div class="node-ports">
-                  <div class="port-in"><span class="p-dot"></span> metrics:MetricsFrame</div>
-                  <div class="port-out">emit:AuditStream <span class="p-dot"></span></div>
+                  <div class="port-in"><span class="p-dot"></span> in:model</div>
+                  <div class="port-out">save:artifact <span class="p-dot"></span></div>
                 </div>
               </div>
             </div>
@@ -242,9 +183,9 @@ const domains = [
 
         <!-- Status Bar -->
         <div class="window-statusbar">
-          <span>Nodes: 5 | Links: 6 | Topo Order: [1, 2] &rarr; [3, 4] &rarr; [5]</span>
-          <span>Target Hardware: IPU Bow-Pod16 + Xeon Host</span>
-          <span style="color:var(--accent-emerald);">Engine: Connected (Local Daemon)</span>
+          <span>Example: source, transform, model, evaluator, output</span>
+          <span>Local Tabular workflow</span>
+          <span style="color:var(--accent-emerald);">Concept illustration</span>
         </div>
       </div>
     </div>
@@ -261,31 +202,31 @@ const domains = [
           </div>
           <h2 class="intro-heading">The Visual Node-Graph Workbench</h2>
           <p class="intro-text">
-            <strong>AutoMLApp</strong> is the visual node-graph workbench for heterogeneous compute and ML pipelines. Instead of wiring configuration files by hand or writing fragile glue code, you drag nodes onto a canvas, connect typed ports, and compile the graph into an execution plan.
+            <strong>AutoMLApp</strong> is a visual canvas workbench for building workflows. Its Tabular bundle connects data and model steps, validates the graph, and plans execution for a selected pipeline zone.
           </p>
           <p class="intro-text">
-            It unifies data pipelines, model deployment, accelerator configuration, real-time telemetry and hyperparameter search in one comprehensive, high-productivity desktop workspace.
+            The application hosts independently registered capability bundles. Their interfaces and runtime coverage vary, and broader accelerator and integration surfaces are still being developed.
           </p>
           <div class="intro-callout-grid">
             <div class="callout-pill">
               <span class="callout-icon">🖱️</span>
               <div>
                 <strong>Typed Connectors</strong>
-                <p>Real-time visual link rejection prevents invalid data bindings as you draw connections.</p>
+                <p>Tabular dataset and model ports describe the connections between steps.</p>
               </div>
             </div>
             <div class="callout-pill">
               <span class="callout-icon">⚡</span>
               <div>
                 <strong>Topological Compilation</strong>
-                <p>Compiles graph geometry into optimal step execution orders with domain handlers.</p>
+                <p>Plans the selected Tabular pipeline in connection order.</p>
               </div>
             </div>
             <div class="callout-pill">
               <span class="callout-icon">📊</span>
               <div>
-                <strong>Telemetry-Aware Search</strong>
-                <p>HyperSwarm balances raw model accuracy directly against hardware compute costs.</p>
+                <strong>Tabular Model Search</strong>
+                <p>The Tabular workflow can search trainers and hyperparameters and record results.</p>
               </div>
             </div>
           </div>
@@ -299,7 +240,7 @@ const domains = [
     <div class="container">
       <div class="domains-header">
         <span class="badge badge-purple">EXTENSIVE LIBRARY</span>
-        <h3 class="domains-title">185 Node Types Across 25+ Specialized Domains</h3>
+        <h3 class="domains-title">Tabular Workflow Steps</h3>
       </div>
       <div class="domains-grid">
         {domains.map(d => (
@@ -319,10 +260,10 @@ const domains = [
   <section id="capabilities" class="capabilities-section">
     <div class="container">
       <div class="section-header">
-        <span class="badge badge-emerald">COMPLETE CAPABILITIES</span>
-        <h2 class="section-title">End-to-End Visual Engineering Features</h2>
+        <span class="badge badge-emerald">WORKBENCH CAPABILITIES</span>
+        <h2 class="section-title">Canvas and Tabular Features</h2>
         <p class="section-subtitle">
-          Engineered for high-assurance ML workflows, hardware accelerators, and deterministic agent orchestration.
+          The current workbench combines a reusable canvas host with workflow-specific bundles.
         </p>
       </div>
 
@@ -359,7 +300,7 @@ const domains = [
         <h2 class="status-title">Runtime Status &amp; Subsystem Maturity</h2>
         
         <p class="status-statement">
-          <strong>Status:</strong> Windows desktop app (<strong>.NET 10, WinForms</strong>). The pipeline editor, validation (<kbd>F7</kbd>), and HyperSwarm backend are working. Stage-by-stage run progression and tile telemetry are currently simulated, and the telemetry-first AutoML engine is a proof of concept.
+          <strong>Status:</strong> The Windows desktop application (<strong>.NET 10, WinForms</strong>) hosts a Tabular bundle that can train ML.NET models from CSV or TSV inputs, record runs, and save artifacts. Release acceptance and broader integration work remain in progress. Some other stage-progression and hardware-tile telemetry surfaces are simulated; the telemetry-first AutoML engine is a proof of concept.
         </p>
 
         <div class="status-details-grid">
@@ -368,62 +309,27 @@ const domains = [
               <span class="status-tag working">WORKING</span>
               <h4>Pipeline Canvas &amp; Graph Editor</h4>
             </div>
-            <p>185 node types, port connection type checking, drag-and-drop wiring, and serialization into standard JSON pipelines.</p>
+            <p>Visual editing, typed connections, property inspection, and Markdown-based canvas persistence.</p>
           </div>
           <div class="status-box">
             <div class="status-header-line">
               <span class="status-tag working">WORKING</span>
-              <h4>Validation Engine (F7) &amp; HyperSwarm</h4>
+              <h4>Tabular Validation &amp; Execution</h4>
             </div>
-            <p>Cycle detection, orphaned node tagging, and pluggable HyperSwarm backend candidate execution (family, depth, learning rate, batch size, dataset).</p>
+            <p>Tabular pipeline validation, local model training and search, run history, and saved model artifacts.</p>
           </div>
           <div class="status-box">
             <div class="status-header-line">
               <span class="status-tag poc">SIMULATED / PROOF OF CONCEPT</span>
               <h4>Telemetry &amp; Stage Progression</h4>
             </div>
-            <p>Stage-by-stage run progression and hardware tile telemetry are simulated. The cost-weighted telemetry-first AutoML engine operates as an active PoC.</p>
+            <p>Some broader stage-progression and hardware-tile telemetry views are simulated. The telemetry-first AutoML engine is a proof of concept; Tabular runs have their own recorded status and results.</p>
           </div>
         </div>
 
-        <!-- Code Preview: Standard Pipeline JSON Structure -->
         <div class="code-preview-block">
-          <div class="code-header">
-            <span class="code-title">AutoMLApp Portable Pipeline Schema Example</span>
-            <span class="code-lang">JSON / PipelineContract v1</span>
-          </div>
-          <pre class="code-content"><code>&#123;
-  "$schema": "https://hflabs.dev/schemas/pipeline_schema.json",
-  "pipelineId": "pip_hybrid_accelerator_swarm_01",
-  "version": "1.0.0",
-  "targetRuntime": "HFLabs.NET10",
-  "nodes": [
-    &#123;
-      "id": "node_01",
-      "type": "Ingestion.FeatureStoreRef",
-      "domain": "DataPipelines",
-      "config": &#123; "dataset": "kge_triples_v2", "batchSize": 256 &#125;,
-      "outputs": [&#123; "port": "out", "type": "TensorBatch" &#125;]
-    &#125;,
-    &#123;
-      "id": "node_02",
-      "type": "SwarmDev.IntentRouterNode",
-      "domain": "Cognition",
-      "config": &#123; "schemaVersion": "v1.2", "policyGating": "Strict" &#125;,
-      "outputs": [&#123; "port": "plan", "type": "SubGraph" &#125;]
-    &#125;,
-    &#123;
-      "id": "node_03",
-      "type": "AutoML.HyperSwarmSearchNode",
-      "domain": "SwarmOptimization",
-      "config": &#123; "evaluator": "CostAwarePareto", "subSwarms": 4 &#125;,
-      "inputs": [
-        &#123; "port": "data", "sourceNode": "node_01", "sourcePort": "out" &#125;,
-        &#123; "port": "plan", "sourceNode": "node_02", "sourcePort": "plan" &#125;
-      ]
-    &#125;
-  ]
-&#125;</code></pre>
+          <div class="code-header"><span class="code-title">Launch AutoMLApp from the repository</span><span class="code-lang">PowerShell</span></div>
+          <pre class="code-content"><code>dotnet run --project src/HFLabs/Products/AutoMLApp/AutoMLApp.csproj -c Release</code></pre>
         </div>
       </div>
     </div>
@@ -435,7 +341,7 @@ const domains = [
       <div class="bottom-cta-box">
         <h2>Explore the HFLabs Visual &amp; Compute Stack</h2>
         <p>
-          Discover how AutoMLApp orchestrates Hypertensor GraphRAG, SwarmDev pipelines, and heterogeneous hardware accelerators.
+          Explore the surrounding projects and the workbench integrations under development.
         </p>
         <div class="cta-btns">
           <a href="/products/swarmdev" class="btn-primary" style="padding:12px 24px;">

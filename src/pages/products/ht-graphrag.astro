@@ -1,47 +1,44 @@
 ---
 // src/pages/products/ht-graphrag.astro
 import Layout from '../../layouts/Layout.astro';
-import LicenseTierCard from '../../components/LicenseTierCard.astro';
-import SubGraphMatrix from '../../components/SubGraphMatrix.astro';
 
 const metrics = [
-  { label: "Tested graph scale", value: "1M nodes", detail: "3M edges across roughly 65k clusters" },
-  { label: "SIMD vectors", value: "128-d default", detail: "per-store dimension is configurable; .NET SIMD, AVX2/AVX-512" },
-  { label: "residency", value: "In-Memory", detail: "RAM-resident graph with bidirectional adjacency indices and a BM25 index" },
-  { label: "MCP connectivity", value: "FastMCP", detail: "stdio, SSE and Streamable HTTP; 65+ tools" },
-  { label: "query mode", value: "LLM-free", detail: "graph retrieval can run without a generative LLM call" }
+  { label: "Product surfaces", value: "3", detail: "Windows desktop, headless CLI and HTTP server" },
+  { label: "Graph stores", value: "In-memory", detail: "Named graph stores and a read-oriented compact ZIP corpus path" },
+  { label: "Vector operations", value: "SIMD", detail: ".NET CPU vector search; acceleration depends on configuration" },
+  { label: "Agent integration", value: "MCP", detail: "Python bridge to the GraphRAG HTTP server" }
 ];
 
 const features = [
   {
-    icon: "⚡",
-    title: "Low-latency in-memory traversal",
-    desc: "The graph store is RAM-resident. Measured 2-hop traversal is about 0.15 ms at ~1,000 nodes and 0.16 ms at ~10,000 nodes. It rises to about 1.95 ms at 25,000 nodes / 100,000 edges. A thread-safe worker pool serves concurrent queries."
+    icon: "🕸️",
+    title: "Graph stores and retrieval",
+    desc: "Work with named in-memory graph stores, graph traversal and retrieval. A separate compact path indexes a selected ZIP corpus and can reuse a fingerprinted layer cache."
   },
   {
     icon: "📐",
-    title: "SIMD vector search",
-    desc: "Dense cosine similarity runs on .NET TensorPrimitives with hardware SIMD. Vectors are 128-dimensional by default and configurable per store. It is combined with BM25 for hybrid retrieval. Level Zero GPU offload is available in the High-Assurance tier."
+    title: "Vector and text components",
+    desc: "The codebase includes CPU SIMD vector search and BM25 text retrieval components. Their presence does not mean every query route combines both; behavior depends on the selected path and configuration."
   },
   {
     icon: "🔌",
-    title: "FastMCP protocol server",
-    desc: "A Python FastMCP layer bridges MCP clients to the .NET server. It supports stdio, SSE and Streamable HTTP. Agents can query codebase topology, dependency graphs and symbol call-graphs."
+    title: "Desktop, CLI and HTTP",
+    desc: "A Windows desktop HUD and headless CLI operate alongside an ASP.NET Core server. The CLI supervises or calls the server through its API."
   },
   {
-    icon: "🛡️",
-    title: "Offline signed licensing and MLS",
-    desc: "Licenses are verified offline against an issuer public key (RSA), so air-gapped deployments work. High-Assurance adds Bell-LaPadula multi-level security (MLS) clearance enforcement and FIPS-approved HMAC-SHA256 clearance tokens."
+    icon: "🤝",
+    title: "MCP agent bridge",
+    desc: "A Python FastMCP bridge connects MCP clients to the HTTP server, with stdio, SSE and Streamable HTTP transports and optional scoped bundles."
   },
   {
-    icon: "🧬",
-    title: "Graph-grounded verification",
-    desc: "The Grounding Verifier checks claims against graph memory, validates citations and flags hallucinated edges. TAPE (Task-Adaptive Prediction & Explanation) plans exploration and reasoning as action-perception DAGs."
+    icon: "🧭",
+    title: "Graph workflows",
+    desc: "The server includes graph onboarding, querying and codebase topology workflows, including a separate KGE-based project deduplication operation."
   },
   {
-    icon: "🔄",
-    title: "Sharded, hardware-aware memory",
-    desc: "A tested in-memory configuration contains 1,000,000 nodes, 3,000,000 edges and roughly 65,000 clusters. Advanced-query retrieval quality is still being refined."
+    icon: "🧪",
+    title: "Validation in progress",
+    desc: "Product QA covers the compact store, live HTTP host and topology workflows. Provider-dependent agent capabilities and deployment configurations require their own validation."
   }
 ];
 ---
@@ -71,7 +68,7 @@ const features = [
           Vector &amp; Graph Engine
         </span>
         <span class="badge" style="background:rgba(251,191,36,0.15); color:var(--accent-amber); border:1px solid rgba(251,191,36,0.3);">
-          Active Development · Production QA
+          Active Development · QA in Progress
         </span>
         <span class="badge" style="background:rgba(251,191,36,0.15); color:var(--accent-amber); border:1px solid rgba(251,191,36,0.3);">
           Open-Core Planned · Pro/HA Private
@@ -81,15 +78,15 @@ const features = [
       <h1 class="hero-title">Hypertensor GraphRAG &amp; SIMD Vectors</h1>
       <p class="hero-desc" style="font-weight:600;">Active development: production QA and rollout-gate validation are in progress. Open-core is planned; Pro and High-Assurance feature bundles remain private and are not yet generally available.</p>
       <p class="hero-desc">
-        An in-memory typed property-graph and vector store for autonomous developer agents. It keeps the graph in RAM and serves agents over REST and MCP. That removes disk-bound lookups and external database round-trips.
+        A graph and retrieval toolkit for building, inspecting and querying knowledge. The product combines in-memory graph stores, a compact corpus retrieval path and operator interfaces for desktop, CLI, HTTP and MCP clients.
       </p>
       <p class="hero-desc">
-        The graph retrieval path can answer queries without a generative LLM call. Current evaluation reports prose rated perfect in about 90% of cases and a 100% grounding score after a previously identified failure was corrected; advanced-query retrieval quality remains under active refinement.
+        Graph queries can run without a generative model. Some agent workflows require configured providers, and end-to-end retrieval quality and production deployment readiness are still being evaluated.
       </p>
 
       <div class="hero-actions">
-        <a href="#subgraphs" class="btn-primary" style="padding:12px 24px; font-size:14px;">
-          51 Feature Sub-Graphs &darr;
+        <a href="#architecture" class="btn-primary" style="padding:12px 24px; font-size:14px;">
+          Explore the Architecture &darr;
         </a>
         <a href="#licensing" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
           View Licensing Tiers &darr;
@@ -97,7 +94,7 @@ const features = [
         <a href="#quickstart" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
           Operator Quickstart &rarr;
         </a>
-        <a href="/docs#graphrag-operator" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
+        <a href="/docs/graphrag-operator" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
           Documentation
         </a>
       </div>
@@ -116,7 +113,7 @@ const features = [
   </section>
 
   <!-- Technical Architecture & Capabilities -->
-  <section class="features-section">
+  <section id="architecture" class="features-section">
     <div class="container">
       <div class="section-header" style="text-align:center; max-width:760px; margin:0 auto 48px;">
         <div class="badge" style="background:rgba(129,140,248,0.15); color:var(--accent-purple); border:1px solid rgba(129,140,248,0.3); margin-bottom:12px;">
@@ -124,7 +121,7 @@ const features = [
         </div>
         <h2 style="font-size:28px; font-weight:800; margin-bottom:12px;">Engine Architecture &amp; Substrates</h2>
         <p style="color:var(--text-secondary); font-size:14px; line-height:1.6;">
-          Built for low-latency agent workloads where a disk-bound or networked vector database adds too much per-query overhead.
+          The repository contains several connected components with different storage contracts and stages of integration.
         </p>
       </div>
 
@@ -140,18 +137,8 @@ const features = [
     </div>
   </section>
 
-  <!-- 51 Feature Sub-Graphs Spatial Map -->
-  <SubGraphMatrix />
-
-  <!-- Dedicated License Items Section -->
-  <LicenseTierCard 
-    badge="HT GraphRAG Commercial &amp; Open-Core Licensing"
-    title="Licensing Tiers"
-    subtitle="Open-core is planned. Pro and High-Assurance feature bundles are private, licensed offerings and are not yet generally available."
-  />
-
   <!-- Procurement & Inquiry Section -->
-  <section class="inquiry-section">
+  <section id="licensing" class="inquiry-section">
     <div class="container">
       <div class="inquiry-card">
         <div class="inquiry-content">
@@ -173,7 +160,7 @@ const features = [
           <a href="mailto:alix@hflabs.dev?subject=HT%20GraphRAG%20Licensing%20Inquiry" class="btn-primary" style="padding:14px 28px; font-size:14px; text-align:center;">
             Contact alix@hflabs.dev &rarr;
           </a>
-          <a href="/docs#graphrag-operator" class="btn-secondary" style="padding:14px 28px; font-size:14px; text-align:center;">
+          <a href="/docs/graphrag-operator" class="btn-secondary" style="padding:14px 28px; font-size:14px; text-align:center;">
             Read Operator Manual
           </a>
         </div>
@@ -190,27 +177,27 @@ const features = [
         </div>
         <h2 style="font-size:26px; font-weight:800; margin-bottom:12px;">Runtime Launch Commands</h2>
         <p style="color:var(--text-secondary); font-size:14px;">
-          Run Hypertensor GraphRAG as an embedded .NET daemon, CLI query engine, or Python FastMCP bridge.
+          From the IPUServices repository root, run the HTTP host and use the Windows headless client or Python MCP bridge. Configure authentication for your environment before connecting clients.
         </p>
       </div>
 
       <div class="commands-grid">
         <div class="command-card">
           <div class="command-header">
-            <span class="cmd-title">1. Dedicated Server Daemon</span>
-            <span class="cmd-badge">gRPC / In-Memory</span>
+            <span class="cmd-title">1. HTTP Server</span>
+            <span class="cmd-badge">ASP.NET Core</span>
           </div>
-          <pre class="cmd-code"><code>dotnet run --project src/HFLabs/Products/HypertensorGraphRAG/Server/Server.csproj -c Release</code></pre>
-          <p class="cmd-desc">Spins up the in-memory graph store and binds zero-copy IPC socket interfaces.</p>
+          <pre class="cmd-code"><code>dotnet run --project src/HFLabs/Products/HypertensorGraphRAG/Server/HFLabs.GraphRAG.Server.csproj -c Release</code></pre>
+          <p class="cmd-desc">Starts the server host. Its default configured URL is http://localhost:5000.</p>
         </div>
 
         <div class="command-card">
           <div class="command-header">
-            <span class="cmd-title">2. Headless Topological Query CLI</span>
+            <span class="cmd-title">2. Headless Query CLI</span>
             <span class="cmd-badge">CLI / SIMD</span>
           </div>
-          <pre class="cmd-code"><code>dotnet run --project src/HFLabs/Products/HypertensorGraphRAG/App/App.csproj -c Release -- --headless --query "Director"</code></pre>
-          <p class="cmd-desc">Executes 2-hop graph reasoning with SIMD cosine scoring and outputs JSON results.</p>
+          <pre class="cmd-code"><code>dotnet run --project src/HFLabs/Products/HypertensorGraphRAG/App/HFLabs.GraphRAG.App.csproj -c Release -- --headless query "Director"</code></pre>
+          <p class="cmd-desc">Calls the running server. Use --help to inspect commands and options.</p>
         </div>
 
         <div class="command-card">
@@ -218,8 +205,9 @@ const features = [
             <span class="cmd-title">3. FastMCP SSE Agent Bridge</span>
             <span class="cmd-badge">Python / MCP</span>
           </div>
-          <pre class="cmd-code"><code>python -m mcp_graphrag.server --transport sse --port 8000</code></pre>
-          <p class="cmd-desc">Exposes HT GraphRAG traversal primitives as Model Context Protocol tools for AI agents.</p>
+          <pre class="cmd-code"><code>pip install -e src/HFLabs/Products/HypertensorGraphRAG/MCPHost
+python -m mcp_graphrag.server --transport sse --port 8000</code></pre>
+          <p class="cmd-desc">Install the bridge, then start it against a configured GraphRAG server.</p>
         </div>
       </div>
     </div>
