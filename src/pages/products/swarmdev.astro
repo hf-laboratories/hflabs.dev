@@ -1,365 +1,95 @@
 ---
-// src/pages/products/swarmdev.astro
 import Layout from '../../layouts/Layout.astro';
 
-const pipelineStages = [
-  {
-    step: "01",
-    name: "Classify",
-    tagline: "Intent & Workflow Identification",
-    desc: "Identify the intent and workflow family of the incoming natural-language request, selecting the appropriate plan schema.",
-    icon: "🏷️",
-    color: "#38bdf8",
-    artifact: "IntentDescriptor & WorkflowFamily"
-  },
-  {
-    step: "02",
-    name: "Analyze",
-    tagline: "Syntactic & Semantic Signal Extraction",
-    desc: "Split the request into discrete syntactic tokens and semantic signals, isolating entities, constraints, and dependencies.",
-    icon: "🔬",
-    color: "#818cf8",
-    artifact: "SignalFrameCollection"
-  },
-  {
-    step: "03",
-    name: "Graph",
-    tagline: "Knowledge & Planning Subgraph Construction",
-    desc: "Build an explicit knowledge graph and an executable planning subgraph from the extracted signal frames.",
-    icon: "🕸️",
-    color: "#34d399",
-    artifact: "PlanningSubGraph & TypedAdjacency"
-  },
-  {
-    step: "04",
-    name: "Route",
-    tagline: "Triple-Frame Dispatch & Conflict Resolution",
-    desc: "Send triple frames to specialized execution handlers and resolve structural conflicts or edge ambiguities between them.",
-    icon: "🔀",
-    color: "#f59e0b",
-    artifact: "ResolvedTripleRouteMap"
-  },
-  {
-    step: "05",
-    name: "Normalize",
-    tagline: "Token Standardization & Policy Gating",
-    desc: "Standardize tokens and enforce hard policy gates, validation checks, and safety invariants before execution.",
-    icon: "🛡️",
-    color: "#ec4899",
-    artifact: "GatedNormalizedPlan"
-  },
-  {
-    step: "06",
-    name: "Emit",
-    tagline: "Artifact Generation & Natural-Language Rendering",
-    desc: "Produce execution, validation and telemetry artifacts, and render a plain-English response from the final response graph.",
-    icon: "🚀",
-    color: "#10b981",
-    artifact: "ExecutionPlan + Telemetry + Response"
-  }
+const flow = [
+  { name: 'Classify', color: '#38bdf8', desc: 'Classify the request and select a workflow family using the configured routing services.' },
+  { name: 'Build context', color: '#818cf8', desc: 'Build a knowledge graph for the turn and identify candidate work items and relevant tools.' },
+  { name: 'Plan actions', color: '#34d399', desc: 'Apply the action policy to the request; a blocked plan can stop before worklist execution.' },
+  { name: 'Run work items', color: '#f59e0b', desc: 'Execute through the configured adapter and record outcomes. A deterministic fallback can return simulated success.' },
+  { name: 'Return results', color: '#ec4899', desc: 'Construct a response graph and return the routing decision, action plan, work items, execution result, and final state.' }
 ];
 
-const capabilities = [
-  {
-    icon: "🎯",
-    title: "Deterministic core",
-    desc: "Same input produces the exact same plan, allowing complete end-to-end regression testing and deterministic CI validation without model stochasticity.",
-    color: "#38bdf8"
-  },
-  {
-    icon: "🧠",
-    title: "Graph reasoning",
-    desc: "An optional kGNN layer with adjacency indexing, weighted message passing, and embedding-ranked cutout resolution for deep topological inference.",
-    color: "#818cf8"
-  },
-  {
-    icon: "🌊",
-    title: "Swarm-guided node selection",
-    desc: "An optional bridge to HyperSwarm's coherent wavescan for choosing optimal graph nodes. Both this and the kGNN layer are opt-in via service registration.",
-    color: "#34d399"
-  },
-  {
-    icon: "⚖️",
-    title: "Policy gates and escalation",
-    desc: "Requests can be held, checkpointed, or escalated to supervisor review instead of silently executing risky or ambiguous operations.",
-    color: "#f59e0b"
-  },
-  {
-    icon: "📡",
-    title: "Diagnostics and sidecar",
-    desc: "Built-in structured telemetry stream and a dedicated sidecar interface for real-time observation, profiling, and debugging from external developer tools.",
-    color: "#ec4899"
-  },
-  {
-    icon: "📐",
-    title: "Contracts-first design",
-    desc: "Schemas and behavioral contracts are strictly decoupled from implementation details, ensuring all stage components and handlers are modular and swappable.",
-    color: "#10b981"
-  }
+const components = [
+  { icon: '🧭', title: 'Turn engine', color: '#38bdf8', desc: 'Classifies requests, selects workflow families, builds graph context, applies an action policy, executes a worklist, and assembles a response. Deterministic components do not make external tools or models deterministic.' },
+  { icon: '🔌', title: 'Host & protocol surfaces', color: '#818cf8', desc: 'The Host exposes discovery, health, MCP, A2A, and inquiry routes. Client-facing MCP tools include scoped changes, documentation grounding, and configured repository analysis.' },
+  { icon: '🗂️', title: 'Director & routing', color: '#34d399', desc: 'The Director decomposes goals into dependency-aware work, routes tasks to configured targets, and records run events. Its default A2A route currently has a Host compatibility gap described below.' },
+  { icon: '🔎', title: 'Repository analysis', color: '#f59e0b', desc: 'Roslyn-backed analysis, repository evidence, code-fix utilities, and documentation-grounding workflows support inspection and review of a selected codebase.' },
+  { icon: '📝', title: 'Scoped changes', color: '#ec4899', desc: 'Sessions collect focused files, rules, snapshots, and proposals. Export prepares a reviewable result; complete can apply a proposal through changeset checks and configured validation.' },
+  { icon: '🧪', title: 'Scientific inquiry', color: '#10b981', desc: 'Inquiry components plan claims and hypotheses, acquire configured evidence, run bounded experiments, reconcile observations, and report decisions. Quality depends on the sources, execution, and evaluation used.' },
+  { icon: '🕸️', title: 'Optional graph layers', color: '#a78bfa', desc: 'Opt-in kGNN message passing and coherent wavescan add candidate nodes to a cutout. They are separately registered and do not replace the default resolver or establish retrieval quality.' },
+  { icon: '🤝', title: 'Model & GraphRAG integration', color: '#06b6d4', desc: 'Optional model escalation and GraphRAG evidence integrations depend on providers, configuration, and reachable services. Unavailable evidence is not a completed verification.' },
+  { icon: '📋', title: 'Events & diagnostics', color: '#f472b6', desc: 'Typed outcomes, execution traces, and Director events help inspect work. The available record and persistence depend on the component and deployment configuration.' }
 ];
 ---
 
-<Layout 
-  title="SwarmDev • Deterministic Prompt-to-Plan Pipeline | HF Labs" 
-  description="SwarmDev is a privately licensed deterministic coding and research pipeline in active development, with production QA underway.">
-  
-  <!-- Top Breadcrumb Bar -->
+<Layout title="SwarmDev • Coding and Research Orchestration | HF Labs" description="Explore SwarmDev's turn engine, Host, Director, scoped-change workflows and inquiry components in active development.">
   <div class="product-top-bar">
-    <div class="container">
-      <div class="breadcrumb">
-        <a href="/">Overview</a>
-        <span class="sep">/</span>
-        <a href="/products">Products</a>
-        <span class="sep">/</span>
-        <span class="curr">SwarmDev</span>
-      </div>
-    </div>
+    <div class="container"><div class="breadcrumb"><a href="/">Overview</a><span class="sep">/</span><a href="/products">Products</a><span class="sep">/</span><span class="curr">SwarmDev</span></div></div>
   </div>
 
-  <!-- Hero Section -->
   <section class="product-hero">
     <div class="container">
-      <div class="hero-badge-row">
-        <span class="badge badge-cyan">Conversational Pipeline</span>
-        <span class="badge badge-emerald">Deterministic Planning</span>
-        <span class="badge badge-purple">IPUServices Core</span>
-        <span class="badge badge-amber">Private · In Development</span>
-      </div>
-
+      <div class="hero-badge-row"><span class="badge badge-cyan">Coding &amp; Research</span><span class="badge badge-emerald">Inspectable Workflows</span><span class="badge badge-purple">IPUServices</span><span class="badge badge-amber">Private · In Development</span></div>
       <h1 class="hero-title">SwarmDev</h1>
-      <p class="hero-lead">
-        A deterministic pipeline that turns a request into an inspectable plan.
-      </p>
-      <p class="hero-subhead">
-        Prompt classification, planning, graph construction and execution orchestration, with a diagnostic trail at every step.
-      </p>
-
+      <p class="hero-lead">A control plane for inspectable coding and research workflows.</p>
+      <p class="hero-subhead">SwarmDev brings together a turn engine, protocol host, goal director, repository analysis, scoped changes, and scientific inquiry. Its components are under active development and have different levels of integration and validation.</p>
       <div class="hero-actions">
-        <a href="#how-it-works" class="btn-primary" style="padding:12px 24px; font-size:14px;">
-          How It Works (6 Stages) &darr;
-        </a>
-        <a href="#capabilities" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
-          Capabilities &amp; Features &darr;
-        </a>
-        <a href="#status" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
-          Status &amp; Integration &rarr;
-        </a>
-        <a href="/docs#swarm-benchmark" class="btn-secondary" style="padding:12px 24px; font-size:14px;">
-          View Docs
-        </a>
+        <a href="#how-it-works" class="btn-primary" style="padding:12px 24px; font-size:14px;">Explore the workflow</a>
+        <a href="#capabilities" class="btn-secondary" style="padding:12px 24px; font-size:14px;">Major components</a>
+        <a href="#status" class="btn-secondary" style="padding:12px 24px; font-size:14px;">Status and boundaries</a>
+        <a href="/docs/swarmdev-pipeline" class="btn-secondary" style="padding:12px 24px; font-size:14px;">Read the guide</a>
       </div>
     </div>
   </section>
 
-  <!-- Interactive Pipeline Flow Visual -->
-  <section class="pipeline-flow-banner">
-    <div class="container">
-      <div class="flow-container">
-        <div class="flow-header">
-          <span class="flow-eyebrow">DETERMINISTIC STAGE PIPELINE</span>
-          <span class="flow-status">6 Traceable Artifact Stages</span>
-        </div>
-        <div class="flow-track">
-          {pipelineStages.map((stage, idx) => (
-            <div class="flow-node-wrapper">
-              <div class="flow-node" style={`--node-col: ${stage.color};`}>
-                <span class="node-idx">{stage.step}</span>
-                <span class="node-icon">{stage.icon}</span>
-                <span class="node-title">{stage.name}</span>
-              </div>
-              {idx < pipelineStages.length - 1 && (
-                <div class="flow-connector">
-                  <span class="flow-arrow">&rarr;</span>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+  <section class="pipeline-flow-banner" id="how-it-works">
+    <div class="container"><div class="flow-container">
+      <div class="flow-header"><span class="flow-eyebrow">A TYPICAL TURN</span><span class="flow-status">Conceptual overview · configuration dependent</span></div>
+      <div class="flow-track">{flow.map((stage) => <div class="flow-node" style={`--node-col: ${stage.color};`}><span class="node-title">{stage.name}</span></div>)}</div>
+    </div></div>
   </section>
 
-  <!-- Intro Narrative Section -->
   <section class="intro-section">
+    <div class="container"><div class="intro-card"><div class="intro-glow"></div><div class="intro-content">
+      <div class="intro-tag"><span class="badge badge-amber">FROM REQUEST TO RESULT</span></div>
+      <h2 class="intro-heading">A structured path through a task</h2>
+      <p class="intro-text">The turn orchestrator carries the request through classification, graph context, action planning, worklist execution, and response construction. It returns a structured result so an operator can distinguish the plan from the execution outcome.</p>
+      <p class="intro-text">Real activity depends on the configured tool adapter. The Host's default deterministic fallback can return a simulated success for unsupported work items; a successful fallback result is not proof that a build, test, or edit ran.</p>
+    </div></div></div>
+  </section>
+
+  <section class="stages-section">
     <div class="container">
-      <div class="intro-card">
-        <div class="intro-glow"></div>
-        <div class="intro-content">
-          <div class="intro-tag">
-            <span class="badge badge-amber">ARCHITECTURE &amp; MOTIVATION</span>
-          </div>
-          <h2 class="intro-heading">Moving Beyond the Single Opaque Model Call</h2>
-          <p class="intro-text">
-            <strong>SwarmDev</strong> is the deterministic conversational coding and research pipeline within <strong>IPUServices</strong>. It takes a natural-language request and works through it in explicit, repeatable stages rather than a single opaque model call.
-          </p>
-          <p class="intro-text">
-            Each stage produces artifacts you can read, test and diff, which makes the pipeline significantly easier to debug, audit, and benchmark than a black-box agent.
-          </p>
-          <div class="intro-callout-grid">
-            <div class="callout-pill">
-              <span class="callout-icon">🔍</span>
-              <div>
-                <strong>Inspectable Artifacts</strong>
-                <p>Every stage outputs structured JSON/typed frames ready for diffs.</p>
-              </div>
-            </div>
-            <div class="callout-pill">
-              <span class="callout-icon">🔁</span>
-              <div>
-                <strong>Regression Testable</strong>
-                <p>Consistent inputs yield deterministic execution graphs.</p>
-              </div>
-            </div>
-            <div class="callout-pill">
-              <span class="callout-icon">🛡️</span>
-              <div>
-                <strong>Hard Policy Interception</strong>
-                <p>Explicit pause, hold, and human escalation checkpoints.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="section-header"><span class="badge badge-cyan">TURN ORCHESTRATION</span><h2 class="section-title">How a turn is assembled</h2><p class="section-subtitle">This illustrates the main turn path. Other entry points, including scoped changes and inquiry, use their own workflows.</p></div>
+      <div class="stages-grid">{flow.map((stage) => <article class="stage-card" style={`--stage-accent: ${stage.color};`}><h3 class="stage-name">{stage.name}</h3><p class="stage-desc">{stage.desc}</p></article>)}</div>
     </div>
   </section>
 
-  <!-- How It Works Section -->
-  <section id="how-it-works" class="stages-section">
-    <div class="container">
-      <div class="section-header">
-        <span class="badge badge-cyan">PIPELINE EXECUTION</span>
-        <h2 class="section-title">How It Works</h2>
-        <p class="section-subtitle">
-          Six explicit, sequential stages decompose ambiguous user intent into verified execution plans and plain-English summaries.
-        </p>
-      </div>
-
-      <div class="stages-grid">
-        {pipelineStages.map((stage) => (
-          <div class="stage-card" style={`--stage-accent: ${stage.color};`}>
-            <div class="stage-top">
-              <div class="stage-num-badge" style={`color: ${stage.color}; background: ${stage.color}18; border: 1px solid ${stage.color}40;`}>
-                STAGE {stage.step}
-              </div>
-              <span class="stage-icon">{stage.icon}</span>
-            </div>
-            <h3 class="stage-name">{stage.name}</h3>
-            <span class="stage-tagline">{stage.tagline}</span>
-            <p class="stage-desc">{stage.desc}</p>
-            <div class="stage-footer">
-              <span class="artifact-label">Output Artifact:</span>
-              <code class="artifact-code">{stage.artifact}</code>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Capabilities Section -->
   <section id="capabilities" class="capabilities-section">
     <div class="container">
-      <div class="section-header">
-        <span class="badge badge-purple">DEEP CAPABILITIES</span>
-        <h2 class="section-title">Core Capabilities &amp; Substrates</h2>
-        <p class="section-subtitle">
-          Engineered for high-assurance environments requiring reproducible planning and modular reasoning layers.
-        </p>
-      </div>
-
-      <div class="capabilities-grid">
-        {capabilities.map((cap) => (
-          <div class="cap-card" style={`--cap-accent: ${cap.color};`}>
-            <div class="cap-header">
-              <div class="cap-icon-box" style={`background: ${cap.color}15; border-color: ${cap.color}40;`}>
-                <span class="cap-icon">{cap.icon}</span>
-              </div>
-              <h3 class="cap-title">{cap.title}</h3>
-            </div>
-            <p class="cap-desc">{cap.desc}</p>
-          </div>
-        ))}
-      </div>
+      <div class="section-header"><span class="badge badge-purple">SYSTEM ARCHITECTURE</span><h2 class="section-title">Major components</h2><p class="section-subtitle">The product combines several services and libraries; registration or source presence alone does not establish end-to-end readiness.</p></div>
+      <div class="capabilities-grid">{components.map((cap) => <article class="cap-card" style={`--cap-accent: ${cap.color};`}><div class="cap-header"><div class="cap-icon-box" style={`background: ${cap.color}15; border-color: ${cap.color}40;`}><span class="cap-icon">{cap.icon}</span></div><h3 class="cap-title">{cap.title}</h3></div><p class="cap-desc">{cap.desc}</p></article>)}</div>
     </div>
   </section>
 
-  <!-- Status & Integration Section -->
   <section id="status" class="status-section">
-    <div class="container">
-      <div class="status-card">
-        <div class="status-badge-row">
-          <span class="badge badge-amber">DEVELOPMENT STATUS</span>
-          <span class="status-indicator-pill">
-            <span class="pulse-dot"></span> Private Licensed Product · In Development
-          </span>
-        </div>
-
-        <h2 class="status-title">Runtime Status &amp; Integration Target</h2>
-        
-        <p class="status-statement">
-          <strong>Status:</strong> SwarmDev is a privately licensed product in active development. Its Pro and High-Assurance feature bundles are offered through Hypertensor GraphRAG; SwarmDev is not a separate public release.
-        </p>
-
-        <div class="status-details-grid">
-          <div class="status-box">
-            <h4>Host Environment</h4>
-            <p>Developed as a managed library in <code>IPUServices</code>; Host and Director provide A2A and MCP sidecar endpoints for authorized deployments.</p>
-          </div>
-          <div class="status-box">
-            <h4>Application Node</h4>
-            <p>Integrated with the broader IPUServices runtime. Host defaults to <code>http://localhost:5090</code>; Director defaults to <code>http://localhost:5091</code>.</p>
-          </div>
-          <div class="status-box">
-            <h4>Opt-in Extensibility</h4>
-            <p>Graph reasoning, discourse semantics, coherent wavescan, and model escalation are separately registered composition layers.</p>
-          </div>
-        </div>
-
-        <!-- Code Snippet of Service Registration -->
-        <div class="code-preview-block">
-          <div class="code-header">
-            <span class="code-title">SwarmDev Service Registration &amp; Configuration</span>
-            <span class="code-lang">C# / .NET</span>
-          </div>
-          <pre class="code-content"><code>// Register the current SwarmDev composition layers
-services.AddSwarmDevPatternServices();
-services.AddSwarmDevGraphingServices();
-services.AddSwarmDevKGnnReasoningServices();
-services.AddSwarmDevDiscourseSemanticsServices();
-services.AddSwarmDevCoherentWavescanServices();
-
-// Register the runtime with a repository root
-services.AddSwarmDevRuntimeServices(repositoryRoot);</code></pre>
-        </div>
+    <div class="container"><div class="status-card">
+      <div class="status-badge-row"><span class="badge badge-amber">DEVELOPMENT STATUS</span><span class="status-indicator-pill">Private · In Development</span></div>
+      <h2 class="status-title">Integration and operating boundaries</h2>
+      <p class="status-statement">SwarmDev is under active development. Production QA and deployment validation remain open; individual tests, available routes, and source components are not a release acceptance.</p>
+      <div class="status-details-grid">
+        <div class="status-box"><h4>Host and Director compatibility</h4><p>The default Director target sends A2A <code>message/send</code>, while the current Host A2A dispatcher accepts <code>tasks/get</code> only. The default route therefore needs integration work and verification.</p></div>
+        <div class="status-box"><h4>Scoped changes and review</h4><p>Export leaves target files unchanged; completion can apply changes through the configured gate. Checks and rollback are workflow mechanisms, not a general operating-system sandbox or a guarantee of human approval.</p></div>
+        <div class="status-box"><h4>Deployment configuration</h4><p>Providers, authentication, tool adapters, validation, and isolation must be configured and tested for the intended environment. The Director's unattended policy is disabled by default; other goal requests follow a separate path.</p></div>
       </div>
-    </div>
+      <p class="status-statement">The inquiry and GraphRAG integrations require their own evidence of retrieval quality and successful end-to-end operation. Source-level capabilities and synthetic tests do not establish real-world answer quality.</p>
+    </div></div>
   </section>
 
-  <!-- CTA Section -->
-  <section class="bottom-cta-section">
-    <div class="container">
-      <div class="bottom-cta-box">
-        <h2>Explore SwarmDev in the HFLabs Ecosystem</h2>
-        <p>
-          Review the full operator manuals, explore Hypertensor GraphRAG, or inspect the polyglot matrix.
-        </p>
-        <div class="cta-btns">
-          <a href="/products/automlapp" class="btn-primary" style="padding:12px 24px;">
-            AutoMLApp Visual Editor &rarr;
-          </a>
-          <a href="/docs#swarm-benchmark" class="btn-secondary" style="padding:12px 24px;">
-            View Operator Docs
-          </a>
-          <a href="/products/ht-graphrag" class="btn-secondary" style="padding:12px 24px;">
-            Hypertensor GraphRAG
-          </a>
-          <a href="/about" class="btn-secondary" style="padding:12px 24px;">
-            About HF Labs
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+  <section class="bottom-cta-section"><div class="container"><div class="bottom-cta-box">
+    <h2>Explore the surrounding ecosystem</h2><p>Read the component guide or explore the related GraphRAG and AutoMLApp projects.</p>
+    <div class="cta-btns"><a href="/docs/swarmdev-pipeline" class="btn-primary" style="padding:12px 24px;">SwarmDev guide</a><a href="/products/ht-graphrag" class="btn-secondary" style="padding:12px 24px;">Hypertensor GraphRAG</a><a href="/products/automlapp" class="btn-secondary" style="padding:12px 24px;">AutoMLApp</a></div>
+  </div></div></section>
 </Layout>
 
 <style>
@@ -752,7 +482,7 @@ services.AddSwarmDevRuntimeServices(repositoryRoot);</code></pre>
   }
 
   .stage-desc {
-    font-size: 13.5px;
+    font-size: 16px;
     color: var(--text-secondary);
     line-height: 1.6;
     flex-grow: 1;
@@ -849,7 +579,7 @@ services.AddSwarmDevRuntimeServices(repositoryRoot);</code></pre>
   }
 
   .cap-desc {
-    font-size: 13.5px;
+    font-size: 16px;
     color: var(--text-secondary);
     line-height: 1.6;
   }
@@ -948,7 +678,7 @@ services.AddSwarmDevRuntimeServices(repositoryRoot);</code></pre>
   }
 
   .status-box p {
-    font-size: 12.5px;
+    font-size: 16px;
     color: var(--text-secondary);
     line-height: 1.55;
   }

@@ -21,7 +21,7 @@
       },
       {
         "name": "SwarmDev",
-        "description": "Deterministic prompt-to-workflow pipeline. It does intent classification, planning, knowledge-graph construction, frame routing, policy-gated normalization and diagnostics. Optional kGNN reasoning and wavescan layers are opt-in.",
+        "description": "Coding and research orchestration combining a turn engine, Host, Director, repository analysis, scoped changes, and inquiry components. Integration and production QA remain in progress.",
         "path": "src/HFLabs/Products/SwarmDev",
         "status": "Private Development"
       },
