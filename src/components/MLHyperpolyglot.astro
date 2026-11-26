@@ -1,180 +1,145 @@
 ---
-// Curated from docs/quickreference/ML_HyperPolyglot.md in IPUServices.
-// These are ecosystem examples, not claims of repository or hardware support.
-const languages = [
-  { name: 'C', variable: 'int x = 5;', function: 'int add(int a, int b)', memory: 'Explicit allocation and release' },
-  { name: 'C#', variable: 'int x = 5;', function: 'int Add(int a, int b)', memory: 'Garbage collection' },
-  { name: 'C++', variable: 'int x = 5;', function: 'int add(int a, int b)', memory: 'RAII and explicit ownership' },
-  { name: 'Python', variable: 'x = 5', function: 'def add(a, b):', memory: 'Managed objects' },
-  { name: 'PowerShell', variable: '$x = 5', function: 'function Add { param($a, $b) }', memory: '.NET managed objects' },
-  { name: 'JavaScript', variable: 'let x = 5;', function: 'function add(a, b) {}', memory: 'Garbage collection' },
-  { name: 'TypeScript', variable: 'let x: number = 5;', function: 'function add(a: number, b: number): number', memory: 'JavaScript runtime' },
-  { name: 'Rust', variable: 'let x: i32 = 5;', function: 'fn add(a: i32, b: i32) -> i32', memory: 'Ownership and borrowing' },
-  { name: 'Go', variable: 'x := 5', function: 'func add(a, b int) int', memory: 'Garbage collection' },
-  { name: 'Java', variable: 'int x = 5;', function: 'int add(int a, int b)', memory: 'Garbage collection' },
-];
+import sections from '../data/ml-hyperpolyglot.json';
 
-const ecosystem = [
-  { name: 'PyTorch', kind: 'Framework', role: 'Build and train models with tensors and automatic differentiation.', example: 'Python, C++' },
-  { name: 'TensorFlow / Keras', kind: 'Framework', role: 'Model development and training, including high-level neural-network APIs.', example: 'Python, C++' },
-  { name: 'JAX / Flax', kind: 'Framework + library', role: 'Array computation, automatic differentiation and compilation; Flax adds neural-network building blocks.', example: 'Python' },
-  { name: 'ML.NET', kind: 'Framework', role: 'Estimator and transformer pipelines for machine-learning workflows.', example: 'C# / .NET' },
-  { name: 'ONNX Runtime', kind: 'Runtime', role: 'Runs compatible ONNX models using an available execution provider.', example: 'C#, C++, Python and others' },
-  { name: 'PopART / PopXL', kind: 'Graph tooling', role: 'Graph construction and execution tooling for Graphcore IPUs.', example: 'C++, Python' },
-  { name: 'OpenVINO', kind: 'Toolkit', role: 'Model conversion and inference optimization for supported devices.', example: 'C++, Python' },
-  { name: 'TensorRT', kind: 'Inference runtime', role: 'Optimize and execute supported models on NVIDIA GPUs.', example: 'C++, Python' },
-  { name: 'Core ML', kind: 'Framework', role: 'On-device model integration in the Apple ecosystem.', example: 'Swift, Objective-C' },
-  { name: 'TVM / MLIR / XLA', kind: 'Compiler tooling', role: 'Represent, transform or compile computations for target execution.', example: 'Varies by project' },
-  { name: 'Triton', kind: 'Kernel language', role: 'Express accelerator kernels; distinct from Triton Inference Server.', example: 'Python' },
-  { name: 'Triton Inference Server', kind: 'Serving', role: 'Serve models through configured inference backends.', example: 'Server APIs' },
-  { name: 'Hugging Face Transformers', kind: 'Model library', role: 'Model architectures, pretrained weights and tooling for transformer workflows.', example: 'Python' },
-  { name: 'llama.cpp / vLLM', kind: 'Inference / serving', role: 'Tools for running or serving language models with their supported backends.', example: 'C++, Python' },
-];
+// Preserve inline code from the source while letting Astro escape all text.
+const inlineParts = (value: string) => value.split(/(`[^`]+`)/g).filter(Boolean).map(part => ({
+  code: part.startsWith('`') && part.endsWith('`'),
+  text: (part.startsWith('`') && part.endsWith('`') ? part.slice(1, -1) : part.replace(/\*\*/g, '')).replace(/\\\|/g, '|')
+}));
 
-const patterns = [
-  { concept: 'Linear layer', pytorch: 'nn.Linear(in_features, out_features)', tensorflow: 'tf.keras.layers.Dense(units)', onnx: 'MatMul + Add' },
-  { concept: '2D convolution', pytorch: 'nn.Conv2d(...)', tensorflow: 'tf.keras.layers.Conv2D(...)', onnx: 'Conv' },
-  { concept: 'Activation', pytorch: 'nn.ReLU()', tensorflow: 'tf.nn.relu', onnx: 'Relu' },
-  { concept: 'Embedding', pytorch: 'nn.Embedding(...)', tensorflow: 'tf.keras.layers.Embedding(...)', onnx: 'Gather pattern' },
-  { concept: 'Loss', pytorch: 'nn.CrossEntropyLoss()', tensorflow: 'tf.keras.losses.SparseCategoricalCrossentropy()', onnx: 'Represented by graph operations' },
-  { concept: 'Optimizer', pytorch: 'torch.optim.Adam(...)', tensorflow: 'tf.keras.optimizers.Adam(...)', onnx: 'Training workflow dependent' },
-  { concept: 'Compilation', pytorch: 'torch.compile()', tensorflow: 'tf.function()', onnx: 'Runtime/provider dependent' },
-];
-
-const types = [
-  { name: 'Signed integer', size: '8 / 16 / 32 / 64 bits', csharp: 'sbyte / short / int / long', example: 'Counts, indices, quantized values' },
-  { name: 'Unsigned integer', size: '8 bits and wider', csharp: 'byte / ushort / uint / ulong', example: 'Non-negative integer values' },
-  { name: 'FP16', size: '16 bits', csharp: 'Half', example: 'Lower-precision floating point' },
-  { name: 'BF16', size: '16 bits', csharp: 'Framework-dependent', example: 'Wider exponent range than FP16, fewer fraction bits' },
-  { name: 'FP32', size: '32 bits', csharp: 'float', example: 'Common floating-point model data' },
-  { name: 'FP64', size: '64 bits', csharp: 'double', example: 'Higher-precision floating point' },
-  { name: 'Boolean / string', size: 'Representation varies', csharp: 'bool / string', example: 'Logical and text data' },
-];
-
-const accelerators = [
-  { name: 'CPU', model: 'Threads and SIMD', stack: 'Native code, vector intrinsics, ONNX Runtime' },
-  { name: 'NVIDIA GPU', model: 'Parallel GPU kernels and tensor operations', stack: 'CUDA, TensorRT' },
-  { name: 'AMD GPU', model: 'Parallel GPU compute', stack: 'ROCm, OpenCL' },
-  { name: 'Intel GPU', model: 'Parallel GPU compute', stack: 'Level Zero, SYCL, OpenVINO' },
-  { name: 'Apple silicon', model: 'CPU, GPU and neural-engine paths', stack: 'Core ML, Metal, MLX' },
-  { name: 'Google TPU', model: 'Tensor and matrix acceleration', stack: 'JAX, TensorFlow, XLA' },
-  { name: 'Graphcore IPU', model: 'Many-core graph execution', stack: 'PopART, PopXL, Poplar' },
-  { name: 'Mobile DSP / NPU', model: 'Specialized on-device inference', stack: 'Vendor SDKs and runtimes' },
-  { name: 'FPGA', model: 'Configurable logic and data paths', stack: 'RTL, vendor toolchains' },
-];
-
-const formats = [
-  { name: 'ONNX', extension: '.onnx', role: 'Interchange graph and model representation' },
-  { name: 'TensorFlow SavedModel', extension: 'Directory', role: 'TensorFlow model and associated assets' },
-  { name: 'TensorFlow Lite', extension: '.tflite', role: 'Model representation for TensorFlow Lite runtimes' },
-  { name: 'PyTorch checkpoint', extension: '.pt / .pth', role: 'Saved PyTorch state; contents depend on how it was saved' },
-  { name: 'Core ML', extension: '.mlmodel', role: 'Model representation for Apple platforms' },
-  { name: 'TensorRT engine', extension: '.plan', role: 'Serialized inference engine for its target environment' },
-  { name: 'OpenVINO IR', extension: '.xml + .bin', role: 'Model structure and weights for OpenVINO' },
-  { name: 'POPEF', extension: '.popef', role: 'Graphcore executable format' },
-  { name: 'GGUF', extension: '.gguf', role: 'Model format used by llama.cpp and related tools' },
-  { name: 'Safetensors', extension: '.safetensors', role: 'Tensor serialization; model configuration may be separate' },
-];
+const sectionLabels: Record<string, string> = {
+  'ml-languages': 'Languages', 'ml-frameworks': 'Frameworks', 'ml-patterns': 'ML patterns',
+  'ml-precision': 'Precision', 'ml-hardware': 'Hardware', 'ml-formats': 'Formats'
+};
+const clarifications: Record<string, string> = {
+  'ml-languages': 'These are brief syntax illustrations. The PowerShell interface entry is not a native PowerShell interface declaration; performance and safety rankings are broad generalizations.',
+  'ml-patterns': 'Examples are illustrative and some require adaptation. Setting model.trainable to false freezes weights; it does not itself select inference behavior. jax.jit compiles a function rather than selecting inference mode. TransformerBlock is not a standard tf.keras.layers API. Some PowerShell commands shown are placeholders, not built-in cmdlets.',
+  'ml-precision': 'Storage for a Boolean is implementation-dependent, not universally one bit. C# System.Numerics.Complex uses double-precision components; the Complex Single row should not be read as a C# single-precision type.',
+  'ml-hardware': 'Power figures, device and provider support vary by product, version and configuration; the source figures are illustrative rather than verified specifications.',
+  'ml-formats': 'Format, conversion and hardware compatibility depend on the specific model and runtime; qualitative ratings are not guarantees.'
+};
 ---
 
 <section class="ml-reference" id="ml-reference" aria-labelledby="ml-reference-title">
   <div class="container">
     <div class="reference-intro">
-      <p class="eyebrow">ML HYPERPOLYGLOT · QUICK REFERENCE</p>
-      <h2 id="ml-reference-title">From languages to model deployment</h2>
-      <p>Compare programming syntax, ML building blocks, runtimes, numeric types, accelerators and model formats in one place. These tables are adapted from the ML HyperPolyglot reference.</p>
+      <p class="eyebrow">A SIDE-BY-SIDE QUICK REFERENCE</p>
+      <h2 id="ml-reference-title">ML Hyperpolyglot tables</h2>
+      <p>Compare concepts across languages, frameworks, data types, hardware and model formats. These tables retain the rows and columns of the ML HyperPolyglot document.</p>
       <div class="scope-note">
-        <strong>How to read this reference</strong>
-        <p>These are general ecosystem examples, not a list of features implemented or validated by HFLabs. APIs, operators and hardware availability depend on versions and configuration. ONNX export or an operator-compatibility check alone does not establish execution on an IPU.</p>
+        <strong>Reading the tables</strong>
+        <p>This is an ecosystem reference, not an inventory of HFLabs implementations or verified device support. Entries reflect the source document and can be incomplete, illustrative or out of date. Check current documentation and your configuration before relying on an API, compatibility claim or performance figure. ONNX export or an operator-compatibility check alone does not establish execution on an IPU.</p>
       </div>
-      <nav class="reference-nav" aria-label="ML reference sections">
-        <a href="#ml-languages">Languages</a><a href="#ml-frameworks">Frameworks</a><a href="#ml-patterns">Patterns</a><a href="#ml-precision">Precision</a><a href="#ml-hardware">Hardware</a><a href="#ml-formats">Formats</a>
+      <nav class="reference-nav" aria-label="ML Hyperpolyglot tables">
+        {sections.map(section => <a href={`#${section.id}`}>{sectionLabels[section.id] || section.title}</a>)}
       </nav>
     </div>
 
-    <div class="reference-block" id="ml-languages">
-      <div class="section-heading"><p class="eyebrow">LANGUAGES</p><h3>One idea, different syntax</h3><p>Declarations and signatures are short comparisons, not complete programs.</p></div>
-      <div class="reference-scroll" tabindex="0" role="region" aria-label="Programming language comparison; scroll horizontally for more columns">
-        <table><thead><tr><th scope="col">Language</th><th scope="col">Variable</th><th scope="col">Function signature</th><th scope="col">Memory model</th></tr></thead><tbody>
-          {languages.map(row => <tr><th scope="row">{row.name}</th><td><code>{row.variable}</code></td><td><code>{row.function}</code></td><td>{row.memory}</td></tr>)}
-        </tbody></table>
-      </div>
-    </div>
-
-    <div class="reference-block" id="ml-frameworks">
-      <div class="section-heading"><p class="eyebrow">FRAMEWORKS &amp; RUNTIMES</p><h3>Different layers of the ML stack</h3><p>A framework, compiler, model format and serving system solve different parts of the workflow.</p></div>
-      <div class="reference-scroll" tabindex="0" role="region" aria-label="Framework and runtime comparison; scroll horizontally for more columns">
-        <table><thead><tr><th scope="col">Project</th><th scope="col">Layer</th><th scope="col">Role</th><th scope="col">Example language</th></tr></thead><tbody>
-          {ecosystem.map(row => <tr><th scope="row">{row.name}</th><td><span class="kind">{row.kind}</span></td><td>{row.role}</td><td>{row.example}</td></tr>)}
-        </tbody></table>
-      </div>
-    </div>
-
-    <div class="reference-block" id="ml-patterns">
-      <div class="section-heading"><p class="eyebrow">ML PATTERNS</p><h3>Compare the building blocks</h3><p>Names and graph representations are illustrative; arguments, operator versions and execution semantics vary.</p></div>
-      <div class="reference-scroll" tabindex="0" role="region" aria-label="Machine learning pattern comparison; scroll horizontally for more columns">
-        <table><thead><tr><th scope="col">Concept</th><th scope="col">PyTorch</th><th scope="col">TensorFlow / Keras</th><th scope="col">ONNX graph</th></tr></thead><tbody>
-          {patterns.map(row => <tr><th scope="row">{row.concept}</th><td><code>{row.pytorch}</code></td><td><code>{row.tensorflow}</code></td><td>{row.onnx}</td></tr>)}
-        </tbody></table>
-      </div>
-      <p class="reference-footnote">In ML.NET, an estimator is fitted to produce an <code>ITransformer</code>, which can transform an <code>IDataView</code>. That tabular pipeline is a different abstraction from a general tensor API.</p>
-    </div>
-
-    <div class="reference-block" id="ml-precision">
-      <div class="section-heading"><p class="eyebrow">DATA TYPES &amp; PRECISION</p><h3>Choose the representation deliberately</h3><p>Precision and range influence memory use and numerical behavior; support depends on the operation, framework and device.</p></div>
-      <div class="reference-scroll" tabindex="0" role="region" aria-label="Data types and precision comparison; scroll horizontally for more columns">
-        <table><thead><tr><th scope="col">Type</th><th scope="col">Size</th><th scope="col">C# spelling</th><th scope="col">Context</th></tr></thead><tbody>
-          {types.map(row => <tr><th scope="row">{row.name}</th><td>{row.size}</td><td><code>{row.csharp}</code></td><td>{row.example}</td></tr>)}
-        </tbody></table>
-      </div>
-    </div>
-
-    <div class="reference-block" id="ml-hardware">
-      <div class="section-heading"><p class="eyebrow">HARDWARE</p><h3>Different execution models</h3><p>Representative stacks are starting points, not a device compatibility matrix or performance ranking.</p></div>
-      <div class="reference-scroll" tabindex="0" role="region" aria-label="Accelerator comparison; scroll horizontally for more columns">
-        <table><thead><tr><th scope="col">Hardware</th><th scope="col">Execution model</th><th scope="col">Example software</th></tr></thead><tbody>
-          {accelerators.map(row => <tr><th scope="row">{row.name}</th><td>{row.model}</td><td>{row.stack}</td></tr>)}
-        </tbody></table>
-      </div>
-    </div>
-
-    <div class="reference-block" id="ml-formats">
-      <div class="section-heading"><p class="eyebrow">MODEL FORMATS</p><h3>From saved weights to executable graphs</h3><p>A file extension does not guarantee portability. Conversion and execution depend on model operators, versions and the target runtime.</p></div>
-      <div class="reference-scroll" tabindex="0" role="region" aria-label="Model format comparison; scroll horizontally for more columns">
-        <table><thead><tr><th scope="col">Format</th><th scope="col">Common extension</th><th scope="col">Role</th></tr></thead><tbody>
-          {formats.map(row => <tr><th scope="row">{row.name}</th><td><code>{row.extension}</code></td><td>{row.role}</td></tr>)}
-        </tbody></table>
-      </div>
-    </div>
+    {sections.map(section => (
+      <section class="reference-block" id={section.id} aria-labelledby={`${section.id}-title`}>
+        <div class="section-heading">
+          <h3 id={`${section.id}-title`}>{section.title}</h3>
+          <p class="section-scope">{inlineParts(section.scope).map(part => part.code ? <code>{part.text}</code> : part.text)}</p>
+          {clarifications[section.id] && <p class="clarification"><strong>Reading note:</strong> {clarifications[section.id]}</p>}
+        </div>
+        {section.tables.map(table => (
+          <div class="table-block" data-reference-table>
+            {section.tables.length > 1 && <h4>{table.title}</h4>}
+            <div class="table-tools">
+              <label class="table-search">Search rows <input type="search" data-table-search aria-label={`Search rows in ${table.title}`} placeholder="Filter this table" /></label>
+              <details class="column-menu">
+                <summary>Choose columns</summary>
+                <div class="column-options">
+                  {table.headers.slice(1).map((header, index) => (
+                    <label><input type="checkbox" data-column-toggle={index + 1} aria-label={inlineParts(header).map(part => part.text).join('')} checked /> <span>{inlineParts(header).map(part => part.code ? <code>{part.text}</code> : part.text)}</span></label>
+                  ))}
+                </div>
+              </details>
+              <span class="scroll-hint">Scroll horizontally to compare columns</span>
+            </div>
+            <div class="reference-scroll" tabindex="0" role="region" aria-label={`${table.title}: scroll horizontally to compare columns`}>
+              <table>
+                <thead><tr>{table.headers.map((header, index) => <th scope="col" data-column={index}>{inlineParts(header).map(part => part.code ? <code>{part.text}</code> : part.text)}</th>)}</tr></thead>
+                <tbody>
+                  {table.rows.map(row => <tr>{row.map((cell, index) => index === 0
+                    ? <th scope="row" data-column={index}>{inlineParts(cell).map(part => part.code ? <code>{part.text}</code> : part.text)}</th>
+                    : <td data-column={index}>{inlineParts(cell).map(part => part.code ? <code>{part.text}</code> : part.text)}</td>)}</tr>)}
+                </tbody>
+              </table>
+            </div>
+            <p class="no-table-results" data-no-table-results hidden>No matching rows. Try a different search.</p>
+          </div>
+        ))}
+      </section>
+    ))}
   </div>
 </section>
 
+<script>
+  document.querySelectorAll<HTMLElement>('[data-reference-table]').forEach(block => {
+    const search = block.querySelector<HTMLInputElement>('[data-table-search]');
+    const rows = Array.from(block.querySelectorAll<HTMLTableRowElement>('tbody tr'));
+    const noResults = block.querySelector<HTMLElement>('[data-no-table-results]');
+    search?.addEventListener('input', () => {
+      const query = search.value.trim().toLocaleLowerCase();
+      let visible = 0;
+      rows.forEach(row => {
+        const matches = (row.textContent || '').toLocaleLowerCase().includes(query);
+        row.hidden = !matches;
+        if (matches) visible++;
+      });
+      if (noResults) noResults.hidden = visible !== 0;
+    });
+    block.querySelectorAll<HTMLInputElement>('[data-column-toggle]').forEach(toggle => {
+      toggle.addEventListener('change', () => {
+        const index = toggle.dataset.columnToggle;
+        block.querySelectorAll<HTMLElement>(`[data-column="${index}"]`).forEach(cell => { cell.hidden = !toggle.checked; });
+      });
+    });
+  });
+</script>
+
 <style>
-  .ml-reference { padding: 5rem 0; background: #080d19; border-top: 1px solid rgba(148, 163, 184, .18); }
-  .reference-intro { max-width: 68rem; }
+  .ml-reference { padding: 4.5rem 0; background: #080d19; border-top: 1px solid rgba(148, 163, 184, .18); }
+  .reference-intro { max-width: 74rem; }
   .eyebrow { margin: 0 0 .7rem; color: #67e8f9; font: 700 .8rem/1.4 var(--font-mono); letter-spacing: .1em; }
   .reference-intro h2 { color: #f8fafc; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.12; letter-spacing: -.03em; margin: 0 0 1rem; }
-  .reference-intro > p:not(.eyebrow), .section-heading > p:not(.eyebrow) { color: #b9c8d8; font-size: 1rem; line-height: 1.65; max-width: 65rem; }
-  .scope-note { margin: 1.8rem 0; padding: 1.2rem 1.4rem; background: rgba(56, 189, 248, .07); border: 1px solid rgba(56, 189, 248, .23); border-left: 3px solid #38bdf8; border-radius: .5rem; }
+  .reference-intro > p:not(.eyebrow), .section-scope { color: #c2cfdd; font-size: 1rem; line-height: 1.65; }
+  .scope-note { margin: 1.7rem 0; padding: 1.2rem 1.4rem; background: rgba(56, 189, 248, .07); border: 1px solid rgba(56, 189, 248, .23); border-left: 3px solid #38bdf8; border-radius: .5rem; }
   .scope-note strong { color: #e0f2fe; }
   .scope-note p { color: #c3d3e3; margin: .4rem 0 0; line-height: 1.6; }
   .reference-nav { display: flex; flex-wrap: wrap; gap: .6rem; }
   .reference-nav a { color: #bceeff; text-decoration: none; border: 1px solid rgba(56, 189, 248, .25); border-radius: 99px; padding: .5rem .9rem; font-size: .9rem; }
   .reference-nav a:hover, .reference-nav a:focus-visible { background: rgba(56, 189, 248, .14); color: white; }
   .reference-block { padding-top: 4rem; scroll-margin-top: 6rem; }
-  .section-heading h3 { color: #f8fafc; font-size: clamp(1.5rem, 2.7vw, 2rem); line-height: 1.2; margin: 0 0 .5rem; }
-  .section-heading > p:not(.eyebrow) { margin: 0 0 1.25rem; }
-  .reference-scroll { border: 1px solid rgba(148, 163, 184, .2); border-radius: .65rem; overflow-x: auto; background: #0b1220; }
-  .reference-scroll:focus-visible { outline: 2px solid #67e8f9; outline-offset: 3px; }
-  table { width: 100%; min-width: 48rem; border-collapse: collapse; text-align: left; font-size: .93rem; line-height: 1.55; }
-  th, td { padding: .9rem 1rem; border-bottom: 1px solid rgba(148, 163, 184, .12); vertical-align: top; }
-  thead th { color: #91a8bf; background: #0e192a; font: 700 .75rem/1.4 var(--font-mono); letter-spacing: .04em; text-transform: uppercase; }
-  tbody th { color: #f1f5f9; font-weight: 700; min-width: 10rem; }
-  tbody td { color: #c1cedd; }
-  tbody tr:last-child th, tbody tr:last-child td { border-bottom: 0; }
-  tbody tr:hover { background: rgba(56, 189, 248, .035); }
-  code { color: #a5e4fa; font: .875em/1.5 var(--font-mono); overflow-wrap: anywhere; }
-  .kind { color: #c4b5fd; }
-  .reference-footnote { margin: 1rem 0 0; color: #aebed0; line-height: 1.6; }
-  @media (max-width: 640px) { .ml-reference { padding: 3.5rem 0; } .reference-block { padding-top: 3rem; } .reference-scroll::after { content: 'Scroll horizontally to see all columns'; display: block; position: sticky; left: 0; padding: .55rem 1rem; color: #aabed0; font-size: .8rem; } }
+  .section-heading { max-width: 75rem; }
+  .section-heading h3 { color: #f8fafc; font-size: clamp(1.5rem, 2.7vw, 2rem); line-height: 1.2; margin: 0 0 .75rem; }
+  .section-scope { margin: 0 0 .8rem; }
+  .clarification { margin: 0 0 1rem; color: #c3d3e3; line-height: 1.6; border-left: 3px solid #fbbf24; padding: .65rem 1rem; background: rgba(251, 191, 36, .06); }
+  .clarification strong { color: #fcd34d; }
+  .table-block { margin-top: 1.6rem; }
+  .table-block h4 { color: #f1f5f9; font-size: 1.2rem; margin: 2rem 0 .9rem; }
+  .table-tools { display: flex; flex-wrap: wrap; align-items: end; gap: .8rem 1rem; margin-bottom: .8rem; }
+  .table-search { display: grid; gap: .3rem; color: #c4d2e1; font-size: .875rem; font-weight: 600; }
+  .table-search input { width: min(19rem, 75vw); border: 1px solid #45576d; border-radius: .4rem; background: #0e192a; color: #f8fafc; padding: .6rem .75rem; font: inherit; }
+  .column-menu { position: relative; }
+  .column-menu summary { cursor: pointer; color: #c5eaff; border: 1px solid #45576d; border-radius: .4rem; padding: .6rem .8rem; font-size: .875rem; }
+  .column-options { position: absolute; z-index: 5; top: calc(100% + .3rem); left: 0; min-width: 15rem; max-height: 20rem; overflow: auto; padding: .5rem; background: #111e30; border: 1px solid #45576d; border-radius: .4rem; box-shadow: 0 12px 30px #0008; }
+  .column-options label { display: flex; gap: .5rem; align-items: baseline; padding: .4rem; color: #e2e8f0; font-size: .9rem; }
+  .column-options input { accent-color: #38bdf8; }
+  .scroll-hint { color: #a9bdcf; font-size: .875rem; padding: .6rem 0; }
+  .reference-scroll { border: 1px solid rgba(148, 163, 184, .24); border-radius: .5rem; overflow-x: auto; background: #0b1220; }
+  .reference-scroll:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid #67e8f9; outline-offset: 2px; }
+  table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; font-size: .9rem; line-height: 1.5; }
+  th, td { min-width: 12rem; max-width: 22rem; padding: .8rem .9rem; border-bottom: 1px solid rgba(148, 163, 184, .15); border-right: 1px solid rgba(148, 163, 184, .1); vertical-align: top; overflow-wrap: anywhere; }
+  thead th { color: #e0f2fe; background: #132137; font-weight: 700; }
+  tbody th { color: #f1f5f9; background: #111d2e; font-weight: 700; }
+  tbody td { color: #cbd5e1; }
+  tr > :first-child { position: sticky; left: 0; z-index: 1; min-width: 11rem; box-shadow: 4px 0 8px #0003; }
+  thead tr > :first-child { z-index: 2; }
+  tbody tr:hover td { background: rgba(56, 189, 248, .05); }
+  th[hidden], td[hidden], tr[hidden], .no-table-results[hidden] { display: none; }
+  code { color: #a5e4fa; font: .9em/1.5 var(--font-mono); overflow-wrap: anywhere; }
+  .no-table-results { color: #cbd5e1; margin: .8rem 0 0; }
+  @media (max-width: 640px) { .ml-reference { padding: 3.5rem 0; } .reference-block { padding-top: 3rem; } th, td { min-width: 10rem; } tr > :first-child { min-width: 8.5rem; } }
 </style>

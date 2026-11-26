@@ -1,0 +1,1862 @@
+[
+  {
+    "id": "ml-languages",
+    "title": "🧠 Table 1: Hyper-Polyglot Table for Programming Languages",
+    "scope": "**Repository scope:** This is a general syntax and language-feature reference, not an inventory of languages implemented, built, or tested by this repository. The .NET/ML.NET projects and their tests provide concrete C# implementation evidence; they do not validate the examples or capability summaries for the other listed languages. Treat the broad feature, performance, and use-case comparisons as reference material rather than repository or production-QA claims.",
+    "tables": [
+      {
+        "id": "ml-languages-table",
+        "title": "🧠 Table 1: Hyper-Polyglot Table for Programming Languages",
+        "headers": [
+          "**Concept**",
+          "**C**",
+          "**C#**",
+          "**C++**",
+          "**Python**",
+          "**PowerShell**",
+          "**JavaScript**",
+          "**TypeScript**",
+          "**Rust**",
+          "**Go**",
+          "**Java**"
+        ],
+        "rows": [
+          [
+            "**Hello World**",
+            "`printf(\"Hello, World!\\n\");`",
+            "`Console.WriteLine(\"Hello, World!\");`",
+            "`std::cout << \"Hello, World!\\n\";`",
+            "`print(\"Hello, World!\")`",
+            "`Write-Output \"Hello, World!\"`",
+            "`console.log(\"Hello!\");`",
+            "`console.log(\"Hello!\");`",
+            "`println!(\"Hello!\");`",
+            "`fmt.Println(\"Hello!\")`",
+            "`System.out.println();`"
+          ],
+          [
+            "**Variable Declaration**",
+            "`int x = 5;`",
+            "`int x = 5;`",
+            "`int x = 5;`",
+            "`x = 5`",
+            "`$x = 5`",
+            "`let x = 5;`",
+            "`let x: number = 5;`",
+            "`let x: i32 = 5;`",
+            "`x := 5`",
+            "`int x = 5;`"
+          ],
+          [
+            "**String Declaration**",
+            "`char str[] = \"text\";`",
+            "`string str = \"text\";`",
+            "`std::string str = \"text\";`",
+            "`str = \"text\"`",
+            "`$str = \"text\"`",
+            "`let str = \"text\";`",
+            "`let str: string = \"text\";`",
+            "`let str = \"text\";`",
+            "`str := \"text\"`",
+            "`String str = \"text\";`"
+          ],
+          [
+            "**Constants**",
+            "`const int X = 5;`",
+            "`const int X = 5;`",
+            "`const int X = 5;`",
+            "`X = 5  # convention`",
+            "`$X = 5  # convention`",
+            "`const X = 5;`",
+            "`const X: number = 5;`",
+            "`const X: i32 = 5;`",
+            "`const X = 5`",
+            "`final int X = 5;`"
+          ],
+          [
+            "**Function Definition**",
+            "`int add(int a, int b)`",
+            "`int Add(int a, int b)`",
+            "`int add(int a, int b)`",
+            "`def add(a, b):`",
+            "`function Add { param($a,$b)... }`",
+            "`function add(a, b) {}`",
+            "`function add(a: number, b: number): number {}`",
+            "`fn add(a: i32, b: i32) -> i32`",
+            "`func add(a, b int) int`",
+            "`int add(int a, int b) {}`"
+          ],
+          [
+            "**Lambda/Anonymous**",
+            "Function pointers",
+            "`(x, y) => x + y`",
+            "`[](int x, int y) { return x+y; }`",
+            "`lambda x, y: x + y`",
+            "`{ param($x,$y) $x + $y }`",
+            "`(x, y) => x + y`",
+            "`(x: number, y: number): number => x + y`",
+            "`\\|x, y\\| x + y`",
+            "`func(x, y int) int { return x + y }`",
+            "`(x, y) -> x + y`"
+          ],
+          [
+            "**Memory Management**",
+            "`malloc/free`",
+            "GC handled",
+            "`new/delete`",
+            "GC handled",
+            "GC handled",
+            "GC handled",
+            "GC handled",
+            "Ownership system",
+            "GC handled",
+            "GC handled"
+          ],
+          [
+            "**File I/O**",
+            "`fopen/fread/fwrite/fclose`",
+            "`System.IO.File.*`",
+            "`fstream`",
+            "`open().read()`",
+            "`Get-Content` / `Out-File`",
+            "`fs.readFileSync()`",
+            "`fs.readFileSync()`",
+            "`std::fs::read_to_string`",
+            "`os.ReadFile()`",
+            "`Files.readAllLines()`"
+          ],
+          [
+            "**Conditionals**",
+            "`if (x > 0) {}`",
+            "`if (x > 0) {}`",
+            "`if (x > 0) {}`",
+            "`if x > 0:`",
+            "`if ($x -gt 0) {}`",
+            "`if (x > 0) {}`",
+            "`if (x > 0) {}`",
+            "`if x > 0 {}`",
+            "`if x > 0 {}`",
+            "`if (x > 0) {}`"
+          ],
+          [
+            "**Switch/Match**",
+            "`switch(x) { case 1: ... }`",
+            "`switch(x) { case 1: ... }`",
+            "`switch(x) { case 1: ... }`",
+            "`match x: case 1: ...`",
+            "`switch ($x) { 1 { ... } }`",
+            "`switch(x) { case 1: ... }`",
+            "`switch(x) { case 1: ... }`",
+            "`match x { 1 => ... }`",
+            "`switch x { case 1: ... }`",
+            "`switch(x) { case 1: ... }`"
+          ],
+          [
+            "**Loops (For)**",
+            "`for(int i=0; i<n; i++)`",
+            "`for (int i = 0; i < n; i++)`",
+            "`for (int i = 0; i < n; i++)`",
+            "`for i in range(n):`",
+            "`for ($i = 0; $i -lt $n; $i++) {}`",
+            "`for (let i=0; i<n; i++)`",
+            "`for (let i=0; i<n; i++)`",
+            "`for i in 0..n {}`",
+            "`for i := 0; i < n; i++`",
+            "`for (int i=0; i<n; i++){}`"
+          ],
+          [
+            "**Loops (While)**",
+            "`while(condition) {}`",
+            "`while(condition) {}`",
+            "`while(condition) {}`",
+            "`while condition:`",
+            "`while ($condition) {}`",
+            "`while(condition) {}`",
+            "`while(condition) {}`",
+            "`while condition {}`",
+            "`for condition {}`",
+            "`while(condition) {}`"
+          ],
+          [
+            "**Arrays**",
+            "`int arr[10]; arr[0] = 1;`",
+            "`int[] arr = new int[10];`",
+            "`int arr[10]; arr[0] = 1;`",
+            "`arr = [1, 2, 3]`",
+            "`$arr = @(1, 2, 3)`",
+            "`let arr = [1, 2, 3];`",
+            "`let arr: number[] = [1, 2, 3];`",
+            "`let arr = [1, 2, 3];`",
+            "`arr := []int{1, 2, 3}`",
+            "`int[] arr = {1, 2, 3};`"
+          ],
+          [
+            "**Hash Maps/Dictionaries**",
+            "Manual implementation",
+            "`Dictionary<K,V>`",
+            "`std::unordered_map<K,V>`",
+            "`dict = {\"key\": \"val\"}`",
+            "`$dict = @{\"key\" = \"val\"}`",
+            "`let obj = {key: \"val\"}`",
+            "`let obj: {[key: string]: string} = {key: \"val\"}`",
+            "`HashMap<K,V>`",
+            "`map[string]string{\"key\": \"val\"}`",
+            "`Map<K,V>` or `HashMap<K,V>`"
+          ],
+          [
+            "**OOP Support**",
+            "❌ Structs only",
+            "✅ Full OOP",
+            "✅ Full OOP + templates",
+            "✅ Dynamic, duck typing",
+            "✅ Class-based OOP",
+            "✅ Prototype-based",
+            "✅ Class-based + interfaces",
+            "✅ Trait-based",
+            "✅ Struct + interfaces",
+            "✅ Full OOP + generics"
+          ],
+          [
+            "**Inheritance**",
+            "❌ No",
+            "`class Child : Parent`",
+            "`class Child : public Parent`",
+            "`class Child(Parent):`",
+            "`class Child : Parent`",
+            "`class Child extends Parent`",
+            "`class Child extends Parent`",
+            "Traits/composition",
+            "Embedding structs",
+            "`class Child extends Parent`"
+          ],
+          [
+            "**Interfaces/Traits**",
+            "❌ No",
+            "`interface IFoo`",
+            "Abstract classes/concepts",
+            "Duck typing",
+            "`interface IFoo`",
+            "Duck typing",
+            "`interface IFoo`",
+            "`trait Foo`",
+            "`interface Foo`",
+            "`interface Foo`"
+          ],
+          [
+            "**Generics/Templates**",
+            "❌ No",
+            "`List<T>`",
+            "`template<typename T>`",
+            "Duck typing",
+            "Generic methods",
+            "Duck typing",
+            "`Array<T>`",
+            "`Vec<T>`",
+            "`[]T` or generics",
+            "`List<T>`"
+          ],
+          [
+            "**Error Handling**",
+            "Return codes/errno",
+            "`try/catch` exceptions",
+            "`try/catch` exceptions",
+            "`try/except`",
+            "`try/catch`",
+            "`try/catch`",
+            "`try/catch`",
+            "`Result<T, E>` type",
+            "`error` return values",
+            "`try/catch` exceptions"
+          ],
+          [
+            "**Null Safety**",
+            "Manual null checks",
+            "Nullable reference types",
+            "Manual null checks",
+            "`None` checks",
+            "`$null` checks",
+            "`undefined/null` checks",
+            "Optional types `T \\| null`",
+            "`Option<T>` type",
+            "Pointers can be nil",
+            "Optional types"
+          ],
+          [
+            "**Multithreading**",
+            "POSIX / pthreads",
+            "`System.Threading.Thread`",
+            "`std::thread`",
+            "`threading.Thread`",
+            "`Start-Job` / `Runspace`",
+            "`Worker` / `async/await`",
+            "`Worker` / `async/await`",
+            "`std::thread` / `async`",
+            "`go` routines",
+            "`Thread`/`CompletableFuture`"
+          ],
+          [
+            "**Async Programming**",
+            "Manual with callbacks",
+            "`async/await`",
+            "`std::future` / coroutines",
+            "`async/await`",
+            "Jobs / `Invoke-Command -AsJob`",
+            "`async/await` / Promises",
+            "`async/await` / Promises",
+            "`async/await`",
+            "Channels / goroutines",
+            "`CompletableFuture`"
+          ],
+          [
+            "**Package Management**",
+            "Manual / Make",
+            "NuGet",
+            "vcpkg / Conan",
+            "pip / conda",
+            "PowerShell Gallery",
+            "npm / yarn",
+            "npm / yarn",
+            "Cargo",
+            "Go modules",
+            "Maven / Gradle"
+          ],
+          [
+            "**Compilation / Run**",
+            "`gcc main.c -o main`",
+            "`dotnet build`",
+            "`g++ main.cpp -o main`",
+            "Interpreted",
+            "Interpreted",
+            "Interpreted / V8 JIT",
+            "`tsc` then node",
+            "`cargo build`",
+            "`go build`",
+            "`javac` + JVM"
+          ],
+          [
+            "**Performance**",
+            "⚡ Native, very fast",
+            "🔥 JIT compiled, fast",
+            "⚡ Native, very fast",
+            "🐌 Interpreted, slow",
+            "🐌 Interpreted, slow",
+            "🔥 JIT compiled, fast",
+            "🔥 JIT compiled, fast",
+            "⚡ Native, very fast",
+            "🔥 Compiled, fast",
+            "🔥 JIT compiled, fast"
+          ],
+          [
+            "**Memory Safety**",
+            "❌ Manual management",
+            "✅ GC + type safety",
+            "❌ Manual management",
+            "✅ GC + dynamic typing",
+            "✅ GC + type safety",
+            "✅ GC + dynamic typing",
+            "✅ GC + static typing",
+            "✅ Ownership system",
+            "✅ GC + type safety",
+            "✅ GC + type safety"
+          ],
+          [
+            "**Interop with C**",
+            "✅ Native",
+            "✅ via P/Invoke",
+            "✅ Native",
+            "✅ via ctypes / cffi",
+            "✅ via COM/Interop",
+            "✅ via N-API / FFI",
+            "✅ via N-API / FFI",
+            "✅ via extern \"C\"",
+            "✅ via cgo",
+            "✅ via JNI"
+          ],
+          [
+            "**Use Case Fit**",
+            "Embedded, perf-sensitive",
+            "Windows apps, services, APIs",
+            "Systems, games, high-perf apps",
+            "Scripts, AI, glue code",
+            "Automation, scripting, admin tasks",
+            "Web, full-stack, Node.js",
+            "Web, large applications",
+            "Systems, WebAssembly",
+            "Services, concurrent apps",
+            "Enterprise, Android apps"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ml-frameworks",
+    "title": "🔬 Table 2: AI Framework / Runtime Polyglot Table",
+    "scope": "**Repository scope:** This is an ecosystem comparison, not an inventory of runtimes implemented or validated here. Source-backed paths include ML.NET model export to ONNX with optional IPU operator-compatibility checks, ONNX Runtime inference for GraphRAG text embeddings, and managed PopART bindings. Export and compatibility checks do not establish IPU execution. Poplar.NET records qualification on the WSL IPU Model as completed, while physical-IPU and multi-IPU qualification remain open; treat other framework, runtime, and hardware entries as general reference claims.",
+    "tables": [
+      {
+        "id": "ml-frameworks-table",
+        "title": "🔬 Table 2: AI Framework / Runtime Polyglot Table",
+        "headers": [
+          "**Framework**",
+          "**Dev Language**",
+          "**Runtime Format**",
+          "**Training Support**",
+          "**Inference Support**",
+          "**Graph Optimization**",
+          "**Target Hardware**",
+          "**ONNX Support**",
+          "**Comments**"
+        ],
+        "rows": [
+          [
+            "**PyTorch**",
+            "Python / C++",
+            "TorchScript / FX IR",
+            "✅ Yes",
+            "✅ Yes",
+            "Medium (FX, TorchDynamo)",
+            "CPU, CUDA, ROCm, XPU",
+            "✅ Export to ONNX",
+            "Great for research; dynamic graph"
+          ],
+          [
+            "**TensorFlow**",
+            "Python / C++",
+            "SavedModel / GraphDef",
+            "✅ Yes",
+            "✅ Yes",
+            "✅ XLA, Grappler",
+            "CPU, CUDA, TPU",
+            "✅ Export to ONNX",
+            "Static graph optimized for deployment"
+          ],
+          [
+            "**Keras**",
+            "Python",
+            "Keras SavedModel",
+            "✅ Yes",
+            "✅ Yes",
+            "Low",
+            "CPU, GPU (via TF backend)",
+            "✅ Export to ONNX",
+            "High-level wrapper on TensorFlow"
+          ],
+          [
+            "**JAX**",
+            "Python",
+            "XLA IR",
+            "✅ Yes",
+            "✅ Yes",
+            "✅ XLA compiler",
+            "CPU, GPU, TPU",
+            "❌ Limited",
+            "Functional, autodiff, JIT compilation"
+          ],
+          [
+            "**Flax**",
+            "Python",
+            "JAX arrays",
+            "✅ Yes",
+            "✅ Yes",
+            "✅ via JAX",
+            "CPU, GPU, TPU",
+            "❌ Limited",
+            "Neural network library built on JAX"
+          ],
+          [
+            "**Haiku**",
+            "Python",
+            "JAX arrays",
+            "✅ Yes",
+            "✅ Yes",
+            "✅ via JAX",
+            "CPU, GPU, TPU",
+            "❌ Limited",
+            "DeepMind's JAX-based neural network lib"
+          ],
+          [
+            "**MLX**",
+            "Python / C++",
+            "MLX arrays",
+            "✅ Yes",
+            "✅ Yes",
+            "✅ Metal Performance",
+            "Apple Silicon (M1/M2/M3)",
+            "❌ No",
+            "Apple's ML framework for Apple Silicon"
+          ],
+          [
+            "**MXNet**",
+            "Python / C++",
+            "Symbol/NDArray",
+            "✅ Yes",
+            "✅ Yes",
+            "✅ Graph optimization",
+            "CPU, GPU",
+            "✅ Export to ONNX",
+            "Apache project, flexible imperative/symbolic"
+          ],
+          [
+            "**PaddlePaddle**",
+            "Python / C++",
+            "PaddlePaddle Model",
+            "✅ Yes",
+            "✅ Yes",
+            "✅ Graph optimization",
+            "CPU, GPU",
+            "✅ Export to ONNX",
+            "Baidu's deep learning platform"
+          ],
+          [
+            "**ONNX (MS)**",
+            "Any (via converters)",
+            "`.onnx`",
+            "❌ No",
+            "✅ Yes",
+            "✅ ONNX Runtime + ORT",
+            "CPU, GPU (CUDA, DirectML, etc.)",
+            "Native",
+            "Interop standard; origin: Microsoft"
+          ],
+          [
+            "**ONNX (Graphcore)**",
+            "ONNX + PopART",
+            "`.onnx` + POPEF",
+            "❌ No (via import)",
+            "✅ Yes",
+            "✅ PopART Graph Optimizer",
+            "IPU (GC200, etc.)",
+            "✅ Custom extensions",
+            "Must be adapted via PopART or POPXL"
+          ],
+          [
+            "**ONNX (Qualcomm)**",
+            "ONNX",
+            "`.onnx` + QNN",
+            "❌ No",
+            "✅ Yes",
+            "✅ via SNPE",
+            "DSP, GPU (mobile SoCs)",
+            "✅ Standard",
+            "Snapdragon Neural Processing Engine (SNPE)"
+          ],
+          [
+            "**ONNX (Intel)**",
+            "ONNX",
+            "`.onnx` + OpenVINO",
+            "❌ No",
+            "✅ Yes",
+            "✅ Model Optimizer",
+            "CPU, GPU, VPU, FPGA",
+            "✅ Standard",
+            "Intel OpenVINO toolkit"
+          ],
+          [
+            "**TensorRT**",
+            "C++ / Python",
+            "`.plan` / `.uff`",
+            "❌ No",
+            "✅ Yes",
+            "✅ Layer fusion, precision",
+            "NVIDIA GPU",
+            "✅ Import from ONNX",
+            "NVIDIA's high-performance inference"
+          ],
+          [
+            "**Core ML**",
+            "Swift / Obj-C",
+            "`.mlmodel`",
+            "❌ No",
+            "✅ Yes",
+            "✅ Metal Performance",
+            "iOS/macOS devices",
+            "✅ Convert from ONNX",
+            "Apple's on-device ML framework"
+          ],
+          [
+            "**TensorFlow Lite**",
+            "C++ / Python",
+            "`.tflite`",
+            "❌ No",
+            "✅ Yes",
+            "✅ Quantization, pruning",
+            "Mobile, embedded devices",
+            "✅ via conversion",
+            "Mobile/edge optimized TensorFlow"
+          ],
+          [
+            "**POPEF**",
+            "C++ (generated)",
+            "`.popef`",
+            "❌ No",
+            "✅ Yes",
+            "✅ (Serialized graph IR)",
+            "Graphcore IPU",
+            "✅ Derived from ONNX",
+            "Execution-level IR (after PopART)"
+          ],
+          [
+            "**POPC**",
+            "CLI + CMake",
+            "ELF Executable app",
+            "❌ No",
+            "✅ Yes (compiled)",
+            "✅ Full compile-time",
+            "IPU",
+            "✅ Required backend",
+            "Used to compile POPEF into binaries"
+          ],
+          [
+            "**PopXL**",
+            "Python",
+            "PopXL IR",
+            "✅ Yes",
+            "✅ Yes",
+            "✅ Manual optimization",
+            "Graphcore IPU",
+            "✅ Import capability",
+            "Lower-level PopART alternative"
+          ],
+          [
+            "**Triton (NVIDIA)**",
+            "Python",
+            "Triton IR",
+            "✅ Yes",
+            "✅ Yes",
+            "✅ Kernel fusion",
+            "NVIDIA GPU",
+            "❌ No",
+            "GPU kernel programming language"
+          ],
+          [
+            "**Triton (Inference)**",
+            "C++ / Python",
+            "Model ensemble",
+            "❌ No",
+            "✅ Yes",
+            "✅ Dynamic batching",
+            "CPU, GPU (multi-vendor)",
+            "✅ Backend support",
+            "NVIDIA's inference serving platform"
+          ],
+          [
+            "**MLIR**",
+            "C++",
+            "MLIR dialect",
+            "✅ Yes (compiler IR)",
+            "✅ Yes",
+            "✅ Multi-level optimization",
+            "CPU, GPU, accelerators",
+            "✅ ONNX dialect",
+            "Multi-Level Intermediate Representation"
+          ],
+          [
+            "**XLA**",
+            "C++",
+            "HLO (High Level Ops)",
+            "✅ Yes (via TF/JAX)",
+            "✅ Yes",
+            "✅ JIT compilation",
+            "CPU, GPU, TPU",
+            "❌ Limited",
+            "TensorFlow's JIT compilation framework"
+          ],
+          [
+            "**Glow**",
+            "C++",
+            "Glow IR",
+            "❌ No",
+            "✅ Yes",
+            "✅ Graph optimization",
+            "CPU, specialized hardware",
+            "✅ Import from ONNX",
+            "Facebook's machine learning compiler"
+          ],
+          [
+            "**TVM**",
+            "Python / C++",
+            "Relay IR",
+            "✅ Limited",
+            "✅ Yes",
+            "✅ Auto-tuning",
+            "CPU, GPU, mobile, FPGA",
+            "✅ Import from ONNX",
+            "Deep learning compiler stack"
+          ],
+          [
+            "**Caffe**",
+            "C++ / Python",
+            "`.caffemodel`",
+            "✅ Yes",
+            "✅ Yes",
+            "❌ Limited",
+            "CPU, GPU",
+            "✅ Convert to ONNX",
+            "Classic CNN framework (legacy)"
+          ],
+          [
+            "**Caffe2**",
+            "C++ / Python",
+            "`.pb`",
+            "✅ Yes",
+            "✅ Yes",
+            "✅ Graph optimization",
+            "CPU, GPU, mobile",
+            "✅ Convert to ONNX",
+            "Facebook's production ML framework"
+          ],
+          [
+            "**Torch (Lua)**",
+            "Lua / C",
+            "Torch tensors",
+            "✅ Yes",
+            "✅ Yes",
+            "❌ Limited",
+            "CPU, GPU",
+            "❌ No",
+            "Original Torch framework (legacy)"
+          ],
+          [
+            "**DL4J**",
+            "Java / Scala",
+            "DL4J Model",
+            "✅ Yes",
+            "✅ Yes",
+            "❌ Limited",
+            "CPU, GPU (via CUDA)",
+            "❌ Limited",
+            "Deep Learning for Java"
+          ],
+          [
+            "**Chainer**",
+            "Python",
+            "Chainer Model",
+            "✅ Yes",
+            "✅ Yes",
+            "❌ Limited",
+            "CPU, GPU",
+            "✅ Export to ONNX",
+            "Define-by-run framework (maintenance mode)"
+          ],
+          [
+            "**PyTorch Lightning**",
+            "Python",
+            "Lightning checkpoint",
+            "✅ Yes",
+            "✅ Yes",
+            "✅ via PyTorch",
+            "CPU, GPU, TPU",
+            "✅ via PyTorch",
+            "High-level PyTorch wrapper"
+          ],
+          [
+            "**Hugging Face**",
+            "Python",
+            "Transformers format",
+            "✅ Yes",
+            "✅ Yes",
+            "✅ Optimum integration",
+            "CPU, GPU, specialized",
+            "✅ Export support",
+            "Transformers and NLP models library"
+          ],
+          [
+            "**GGML**",
+            "C / C++",
+            "`.ggml` / `.gguf`",
+            "❌ No",
+            "✅ Yes",
+            "✅ Quantization",
+            "CPU (optimized)",
+            "❌ No",
+            "CPU-optimized LLM inference"
+          ],
+          [
+            "**llama.cpp**",
+            "C++",
+            "`.gguf`",
+            "❌ No",
+            "✅ Yes",
+            "✅ CPU optimization",
+            "CPU, Apple Silicon",
+            "❌ No",
+            "Efficient LLaMA inference on CPU"
+          ],
+          [
+            "**vLLM**",
+            "Python / C++",
+            "HuggingFace format",
+            "❌ No",
+            "✅ Yes",
+            "✅ Attention optimization",
+            "GPU (CUDA)",
+            "❌ No",
+            "High-throughput LLM serving"
+          ],
+          [
+            "**FasterTransformer**",
+            "C++ / CUDA",
+            "Custom format",
+            "❌ No",
+            "✅ Yes",
+            "✅ Kernel optimization",
+            "NVIDIA GPU",
+            "❌ No",
+            "NVIDIA's optimized transformer inference"
+          ],
+          [
+            "**DeepSpeed**",
+            "Python",
+            "PyTorch compatible",
+            "✅ Yes",
+            "✅ Yes",
+            "✅ ZeRO optimization",
+            "Multi-GPU, multi-node",
+            "✅ via PyTorch",
+            "Microsoft's distributed training library"
+          ],
+          [
+            "**Megatron-LM**",
+            "Python",
+            "PyTorch compatible",
+            "✅ Yes",
+            "✅ Yes",
+            "✅ Model parallelism",
+            "Multi-GPU",
+            "✅ via PyTorch",
+            "NVIDIA's large model training framework"
+          ],
+          [
+            "**FairScale**",
+            "Python",
+            "PyTorch compatible",
+            "✅ Yes",
+            "✅ Yes",
+            "✅ Sharding strategies",
+            "Multi-GPU",
+            "✅ via PyTorch",
+            "Facebook's PyTorch extension for scale"
+          ],
+          [
+            "**Detectron2**",
+            "Python",
+            "Detectron2 format",
+            "✅ Yes",
+            "✅ Yes",
+            "✅ via PyTorch",
+            "CPU, GPU",
+            "✅ Export support",
+            "Facebook's object detection framework"
+          ],
+          [
+            "**MMDetection**",
+            "Python",
+            "MMDet format",
+            "✅ Yes",
+            "✅ Yes",
+            "✅ via PyTorch",
+            "CPU, GPU",
+            "✅ Export support",
+            "OpenMMLab's detection toolbox"
+          ],
+          [
+            "**PaddleOCR**",
+            "Python",
+            "PaddlePaddle format",
+            "✅ Yes",
+            "✅ Yes",
+            "✅ via PaddlePaddle",
+            "CPU, GPU",
+            "✅ Export to ONNX",
+            "Baidu's OCR toolkit"
+          ],
+          [
+            "**OpenCV DNN**",
+            "C++ / Python",
+            "Various formats",
+            "❌ No",
+            "✅ Yes",
+            "❌ Limited",
+            "CPU, GPU (OpenCL, Vulkan)",
+            "✅ Import from ONNX",
+            "Computer vision inference module"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ml-patterns",
+    "title": "🧪 Table 3: ML Patterns & Concepts Polyglot Table",
+    "scope": "Repository-grounded ML.NET examples below describe the implemented tabular pipeline; the other framework snippets are illustrative API patterns, not repository implementation claims.",
+    "tables": [
+      {
+        "id": "ml-patterns-table",
+        "title": "🧪 Table 3: ML Patterns & Concepts Polyglot Table",
+        "headers": [
+          "**Concept**",
+          "**PyTorch**",
+          "**TensorFlow**",
+          "**JAX**",
+          "**ONNX**",
+          "**PopART/PopXL**",
+          "**Hugging Face**",
+          "**Comments**"
+        ],
+        "rows": [
+          [
+            "**Linear Layer**",
+            "`nn.Linear(in_features, out_features)`",
+            "`tf.keras.layers.Dense(units)`",
+            "`nn.Dense(features)`",
+            "`MatMul + Add`",
+            "`popnn.dense()`",
+            "`nn.Linear(in_features, out_features)`",
+            "Basic fully connected layer"
+          ],
+          [
+            "**Convolution 2D**",
+            "`nn.Conv2d(in_channels, out_channels, kernel_size)`",
+            "`tf.keras.layers.Conv2D(filters, kernel_size)`",
+            "`nn.Conv(features, kernel_size)`",
+            "`Conv` operator",
+            "`popnn.conv()`",
+            "`nn.Conv2d(...)`",
+            "2D convolution for image processing"
+          ],
+          [
+            "**Batch Normalization**",
+            "`nn.BatchNorm2d(num_features)`",
+            "`tf.keras.layers.BatchNormalization()`",
+            "`nn.BatchNorm()`",
+            "`BatchNormalization`",
+            "`popnn.batchNorm()`",
+            "`nn.BatchNorm2d(...)`",
+            "Normalize activations across batch"
+          ],
+          [
+            "**Activation Functions**",
+            "`nn.ReLU()`, `nn.GELU()`",
+            "`tf.nn.relu`, `tf.nn.gelu`",
+            "`jax.nn.relu`, `jax.nn.gelu`",
+            "`Relu`, `Gelu` operators",
+            "`popnn.nonlinearity()`",
+            "`F.relu`, `F.gelu`",
+            "Non-linear activation functions"
+          ],
+          [
+            "**Dropout**",
+            "`nn.Dropout(p=0.5)`",
+            "`tf.keras.layers.Dropout(rate)`",
+            "`nn.Dropout(rate)`",
+            "`Dropout` operator",
+            "`popnn.dropout()`",
+            "`nn.Dropout(p=0.5)`",
+            "Regularization technique"
+          ],
+          [
+            "**Attention Mechanism**",
+            "`nn.MultiheadAttention(embed_dim, num_heads)`",
+            "`tf.keras.layers.MultiHeadAttention()`",
+            "`nn.MultiHeadDotProductAttention()`",
+            "Custom graph pattern",
+            "Custom implementation",
+            "`nn.MultiheadAttention(...)`",
+            "Self/cross attention for transformers"
+          ],
+          [
+            "**LSTM/GRU**",
+            "`nn.LSTM(input_size, hidden_size)`",
+            "`tf.keras.layers.LSTM(units)`",
+            "`nn.LSTMCell()`",
+            "`LSTM`, `GRU` operators",
+            "`popnn.lstm()`, `popnn.gru()`",
+            "`nn.LSTM(...)`",
+            "Recurrent neural networks"
+          ],
+          [
+            "**Transformer Block**",
+            "Custom class with `nn.TransformerEncoderLayer`",
+            "`tf.keras.layers.TransformerBlock`",
+            "Custom with attention + MLP",
+            "Graph pattern",
+            "Custom PopXL implementation",
+            "`transformers.modeling_*`",
+            "Core transformer architecture"
+          ],
+          [
+            "**Embedding Layer**",
+            "`nn.Embedding(num_embeddings, embedding_dim) `",
+            "`tf.keras.layers.Embedding()`",
+            "`nn.Embed(num_embeddings, features)`",
+            "`Gather` operator",
+            "`popnn.embedding()`",
+            "`nn.Embedding(...)`",
+            "Convert tokens to dense vectors"
+          ],
+          [
+            "**Loss Functions**",
+            "`nn.CrossEntropyLoss()`, `nn.MSELoss()`",
+            "`tf.keras.losses.SparseCategoricalCrossentropy()`",
+            "`optax.softmax_cross_entropy()`",
+            "Custom graph pattern",
+            "`popnn.ctcLoss()`, custom",
+            "`F.cross_entropy()`, `F.mse_loss()`",
+            "Training objective functions"
+          ],
+          [
+            "**Optimizers**",
+            "`torch.optim.Adam(params, lr)`",
+            "`tf.keras.optimizers.Adam(learning_rate)`",
+            "`optax.adam(learning_rate)`",
+            "Not applicable (inference)",
+            "`poplar.createOptimizer()`",
+            "`torch.optim.AdamW(...)`",
+            "Parameter update algorithms"
+          ],
+          [
+            "**Learning Rate Scheduling**",
+            "`torch.optim.lr_scheduler.StepLR()`",
+            "`tf.keras.callbacks.ReduceLROnPlateau()`",
+            "`optax.exponential_decay()`",
+            "Not applicable",
+            "Custom implementation",
+            "`transformers.get_scheduler()`",
+            "Dynamic learning rate adjustment"
+          ],
+          [
+            "**Data Loading**",
+            "`torch.utils.data.DataLoader(dataset, batch_size)`",
+            "`tf.data.Dataset.from_tensor_slices().batch()`",
+            "`jax.numpy` arrays with batching",
+            "Not applicable",
+            "Custom data pipeline",
+            "`datasets.load_dataset()`",
+            "Efficient batch data feeding"
+          ],
+          [
+            "**Model Parallelism**",
+            "`nn.DataParallel()`, `nn.parallel.DistributedDataParallel()`",
+            "`tf.distribute.MirroredStrategy()`",
+            "`jax.pmap()`, `jax.sharding`",
+            "Not applicable",
+            "IPU model parallelism",
+            "`accelerate.Accelerator()`",
+            "Distribute model across devices"
+          ],
+          [
+            "**Gradient Clipping**",
+            "`torch.nn.utils.clip_grad_norm_()`",
+            "`tf.clip_by_global_norm()`",
+            "`optax.clip_by_global_norm()`",
+            "Not applicable",
+            "Built into optimizer",
+            "`transformers.Trainer` (automatic)",
+            "Prevent gradient explosion"
+          ],
+          [
+            "**Mixed Precision**",
+            "`torch.cuda.amp.autocast()`",
+            "`tf.keras.mixed_precision.Policy()`",
+            "`jax.numpy` with dtype control",
+            "`float16` tensors",
+            "`poplar.FloatToHalf()`",
+            "`accelerate` (automatic)",
+            "FP16/BF16 for memory/speed optimization"
+          ],
+          [
+            "**Checkpointing**",
+            "`torch.save(model.state_dict(), path)`",
+            "`model.save_weights(filepath)`",
+            "`checkpoints.save_checkpoint()`",
+            "Model serialization",
+            "PopXL session save/restore",
+            "`model.save_pretrained(path)`",
+            "Save/restore model state"
+          ],
+          [
+            "**Inference Mode**",
+            "`model.eval()`, `torch.no_grad()`",
+            "`model.trainable = False`",
+            "`jax.jit()` for compilation",
+            "Default mode",
+            "Inference-only graphs",
+            "`model.eval()`",
+            "Disable training-specific behaviors"
+          ],
+          [
+            "**Custom Operators**",
+            "`torch.autograd.Function`",
+            "`tf.py_function()`, `tf.custom_gradient`",
+            "`jax.custom_vjp()`, `jax.custom_jvp`",
+            "Custom operator definition",
+            "Poplar vertex/codelet",
+            "Standard PyTorch ops",
+            "Extend framework with new operations"
+          ],
+          [
+            "**Quantization**",
+            "`torch.quantization`",
+            "`tf.quantization`",
+            "JAX-Toolbox quantization",
+            "Built-in quantized types",
+            "IPU-specific precision",
+            "`transformers.BitsAndBytesConfig`",
+            "Reduce precision for efficiency"
+          ],
+          [
+            "**Dynamic Shapes**",
+            "Native support",
+            "`tf.TensorSpec(shape=[None, ...])`",
+            "Native JAX arrays",
+            "Limited support",
+            "Static shapes preferred",
+            "Dynamic sequence lengths",
+            "Handle variable input sizes"
+          ],
+          [
+            "**Gradient Accumulation**",
+            "Manual loop with `.backward()`",
+            "`tf.GradientTape()` accumulation",
+            "`jax.grad()` with accumulation",
+            "Not applicable",
+            "PopXL gradient accumulation",
+            "`Trainer(gradient_accumulation_steps)`",
+            "Simulate larger batch sizes"
+          ],
+          [
+            "**Model Compilation**",
+            "`torch.compile()` (PyTorch 2.0)",
+            "`tf.function()`, XLA JIT",
+            "`jax.jit()`",
+            "Static graph (compiled)",
+            "PopART compilation to POPEF",
+            "TorchScript compilation",
+            "Optimize execution graph"
+          ],
+          [
+            "**Distributed Training**",
+            "`torchrun`, `torch.distributed`",
+            "`tf.distribute.MultiWorkerMirroredStrategy`",
+            "`jax.distributed`",
+            "Not applicable",
+            "IPU-POD configurations",
+            "`accelerate.launch`",
+            "Scale training across multiple devices"
+          ]
+        ]
+      },
+      {
+        "id": "ml-operations",
+        "title": "ML operations across frameworks",
+        "headers": [
+          "Operation",
+          "PyTorch",
+          "Keras",
+          "TensorFlow",
+          "C++ (ML libs)",
+          "C# (ML.NET)",
+          "PowerShell (interop)"
+        ],
+        "rows": [
+          [
+            "Create Tensor",
+            "`torch.tensor([1,2,3])`",
+            "—",
+            "`tf.constant([1,2,3])`",
+            "`Eigen::Tensor<float,1>`",
+            "ML.NET consumes `IDataView` data; it does not expose a general tensor constructor in this pipeline",
+            "`[ONNXRuntime.InferenceSession]::new()`"
+          ],
+          [
+            "MatMul",
+            "`torch.matmul(a,b)`",
+            "`layers.Dot()([a,b])`",
+            "`tf.linalg.matmul(a,b)`",
+            "`cblas_sgemm(...)` / `xt::linalg`",
+            "Not exposed by the repository tabular pipeline",
+            "`Invoke-ONNXModel -MatMul $a $b`"
+          ],
+          [
+            "Define Model",
+            "`nn.Module` subclass",
+            "`Sequential([...])`",
+            "`tf.keras.Sequential([...])`",
+            "Custom class + ML library API",
+            "`MLContext` plus `IEstimator<ITransformer>` pipeline",
+            "`$model = New-MLModel ...`"
+          ],
+          [
+            "Forward Pass",
+            "`model(x)`",
+            "`model(x)`",
+            "`model(x)`",
+            "`model.forward(x)`",
+            "`ITransformer.Transform(IDataView)`",
+            "`Invoke-Model $model -Input $x`"
+          ],
+          [
+            "Backpropagation",
+            "`loss.backward()`",
+            "`model.fit(x,y)`",
+            "`tape.gradient(loss, vars)`",
+            "Library-specific",
+            "Not exposed by the repository tabular pipeline",
+            "—"
+          ],
+          [
+            "Manual compute gradients",
+            "Framework-specific",
+            "Framework-specific",
+            "Framework-specific",
+            "Library-specific",
+            "Not exposed by the repository tabular pipeline",
+            "—"
+          ],
+          [
+            "Optimizer Step",
+            "`optimizer.step()`",
+            "`optimizer.apply_gradients(...)`",
+            "`optimizer.apply_gradients(...)`",
+            "Library-specific",
+            "Performed by the selected ML.NET trainer during estimator `Fit`; no direct optimizer step in this API",
+            "`$optimizer.Apply($grads)`"
+          ],
+          [
+            "Save Model",
+            "`torch.save(model, \"m.pt\")`",
+            "`model.save(\"m.h5\")`",
+            "`model.save(\"m\")`",
+            "`serialize_model(m)`",
+            "`mlContext.Model.Save(model, schema, path)`",
+            "`Save-MLModel -Path m.onnx`"
+          ],
+          [
+            "Load Model",
+            "`torch.load(\"m.pt\")`",
+            "`keras.models.load_model(\"m.h5\")`",
+            "`tf.keras.models.load_model(\"m\")`",
+            "`deserialize_model(...)`",
+            "`mlContext.Model.Load(stream, out schema)`",
+            "`Load-MLModel -Path m.onnx`"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ml-precision",
+    "title": "📊 Table 4: Data Types & Precision Polyglot Table",
+    "scope": "This is a cross-ecosystem reference table, not a repository capability matrix. In this repository, the tabular ML.NET path handles numeric, Boolean, and string columns; its ONNX tests exercise float and string inputs, with Boolean conversion covered by model-export tests. The managed Poplar wrapper exposes Float, Half, Int, and UnsignedInt tensor types. The table's framework spellings, ranges, and precision figures are general reference entries and do not establish repository support or validation for every listed type or framework.",
+    "tables": [
+      {
+        "id": "ml-precision-table",
+        "title": "📊 Table 4: Data Types & Precision Polyglot Table",
+        "headers": [
+          "**Type**",
+          "**C/C++**",
+          "**C#**",
+          "**Python**",
+          "**PyTorch**",
+          "**TensorFlow**",
+          "**ONNX**",
+          "**PopART**",
+          "**Size (bits)**",
+          "**Range/Precision**"
+        ],
+        "rows": [
+          [
+            "**Boolean**",
+            "`bool`",
+            "`bool`",
+            "`bool`",
+            "`torch.bool`",
+            "`tf.bool`",
+            "`bool`",
+            "`bool`",
+            "1",
+            "True/False"
+          ],
+          [
+            "**8-bit Integer**",
+            "`int8_t`",
+            "`sbyte`",
+            "`numpy.int8`",
+            "`torch.int8`",
+            "`tf.int8`",
+            "`int8`",
+            "`char`",
+            "8",
+            "-128 to 127"
+          ],
+          [
+            "**8-bit Unsigned**",
+            "`uint8_t`",
+            "`byte`",
+            "`numpy.uint8`",
+            "`torch.uint8`",
+            "`tf.uint8`",
+            "`uint8`",
+            "`unsigned char`",
+            "8",
+            "0 to 255"
+          ],
+          [
+            "**16-bit Integer**",
+            "`int16_t`",
+            "`short`",
+            "`numpy.int16`",
+            "`torch.int16`",
+            "`tf.int16`",
+            "`int16`",
+            "`short`",
+            "16",
+            "-32,768 to 32,767"
+          ],
+          [
+            "**32-bit Integer**",
+            "`int32_t`",
+            "`int`",
+            "`numpy.int32`",
+            "`torch.int32`",
+            "`tf.int32`",
+            "`int32`",
+            "`int`",
+            "32",
+            "-2B to 2B"
+          ],
+          [
+            "**64-bit Integer**",
+            "`int64_t`",
+            "`long`",
+            "`numpy.int64`",
+            "`torch.int64`",
+            "`tf.int64`",
+            "`int64`",
+            "`long long`",
+            "64",
+            "-9E18 to 9E18"
+          ],
+          [
+            "**Half Precision**",
+            "`__fp16`",
+            "`Half`",
+            "`numpy.float16`",
+            "`torch.float16`",
+            "`tf.float16`",
+            "`float16`",
+            "`half`",
+            "16",
+            "±6.55e4, 3-4 digits precision"
+          ],
+          [
+            "**Single Precision**",
+            "`float`",
+            "`float`",
+            "`numpy.float32`",
+            "`torch.float32`",
+            "`tf.float32`",
+            "`float`",
+            "`float`",
+            "32",
+            "±3.4e38, 6-7 digits precision"
+          ],
+          [
+            "**Double Precision**",
+            "`double`",
+            "`double`",
+            "`numpy.float64`",
+            "`torch.float64`",
+            "`tf.float64`",
+            "`double`",
+            "`double`",
+            "64",
+            "±1.7e308, 15-17 digits precision"
+          ],
+          [
+            "**BFloat16**",
+            "`bfloat16`",
+            "N/A",
+            "Custom",
+            "`torch.bfloat16`",
+            "`tf.bfloat16`",
+            "`bfloat16`",
+            "`bfloat16`",
+            "16",
+            "±3.4e38, 2-3 digits precision"
+          ],
+          [
+            "**Complex Single**",
+            "`float _Complex`",
+            "`Complex`",
+            "`numpy.complex64`",
+            "`torch.complex64`",
+            "`tf.complex64`",
+            "`complex64`",
+            "N/A",
+            "64",
+            "Two 32-bit floats (real, imag)"
+          ],
+          [
+            "**Complex Double**",
+            "`double _Complex`",
+            "`Complex`",
+            "`numpy.complex128`",
+            "`torch.complex128`",
+            "`tf.complex128`",
+            "`complex128`",
+            "N/A",
+            "128",
+            "Two 64-bit floats (real, imag)"
+          ],
+          [
+            "**String**",
+            "`char*`/`string`",
+            "`string`",
+            "`str`",
+            "N/A",
+            "`tf.string`",
+            "`string`",
+            "N/A",
+            "Variable",
+            "UTF-8 encoded text"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ml-hardware",
+    "title": "🔧 Table 5: Hardware Accelerator Polyglot Table",
+    "scope": "Repository scope: this is a general ecosystem comparison, not a validated hardware compatibility or performance matrix. Source-backed examples here include the GraphRAG CPU SIMD vector-search implementation, an Intel Level Zero GPU vector-search backend that probes availability and can fall back, ONNX Runtime session construction for text embeddings without explicit accelerator-provider selection in this source, and managed Poplar bindings. These paths do not verify every vendor row, ONNX provider claim, power figure, or physical-device execution; Poplar wrapper and model code alone do not establish real-IPU availability.",
+    "tables": [
+      {
+        "id": "ml-hardware-table",
+        "title": "🔧 Table 5: Hardware Accelerator Polyglot Table",
+        "headers": [
+          "**Hardware**",
+          "**Vendor**",
+          "**Architecture**",
+          "**Memory**",
+          "**Programming Model**",
+          "**Primary Use Case**",
+          "**Software Stack**",
+          "**ONNX Support**",
+          "**Power Consumption**"
+        ],
+        "rows": [
+          [
+            "**CPU (x86)**",
+            "Intel/AMD",
+            "SIMD (AVX-512)",
+            "DDR4/DDR5 RAM",
+            "Threads, SIMD",
+            "General computing",
+            "Native, OpenMP, MKL",
+            "✅ ONNX Runtime",
+            "65-300W TDP"
+          ],
+          [
+            "**CPU (ARM)**",
+            "ARM/Apple/Qualcomm",
+            "NEON SIMD",
+            "LPDDR4/DDR5",
+            "Threads, NEON",
+            "Mobile, embedded",
+            "Native, NEON intrinsics",
+            "✅ ONNX Runtime",
+            "5-65W TDP"
+          ],
+          [
+            "**NVIDIA GPU (Gaming)**",
+            "NVIDIA",
+            "CUDA Cores",
+            "GDDR6/GDDR6X",
+            "CUDA, Threads/Warps",
+            "Gaming, ML inference",
+            "CUDA, cuDNN, TensorRT",
+            "✅ ONNX Runtime",
+            "200-450W TDP"
+          ],
+          [
+            "**NVIDIA GPU (Data Center)**",
+            "NVIDIA",
+            "Tensor Cores",
+            "HBM2/HBM3",
+            "CUDA, Tensor ops",
+            "ML training/inference",
+            "CUDA, cuDNN, TensorRT",
+            "✅ ONNX Runtime",
+            "300-700W TDP"
+          ],
+          [
+            "**AMD GPU (RDNA)**",
+            "AMD",
+            "Compute Units",
+            "GDDR6",
+            "ROCm, OpenCL",
+            "Gaming, compute",
+            "ROCm, MIOpen",
+            "✅ via ROCm",
+            "150-300W TDP"
+          ],
+          [
+            "**AMD GPU (CDNA)**",
+            "AMD",
+            "Matrix Engines",
+            "HBM2/HBM3",
+            "ROCm, Matrix ops",
+            "ML training/inference",
+            "ROCm, MIOpen",
+            "✅ via ROCm",
+            "300-560W TDP"
+          ],
+          [
+            "**Intel GPU (Arc)**",
+            "Intel",
+            "Xe Cores",
+            "GDDR6",
+            "OneAPI, Level Zero",
+            "Gaming, compute",
+            "OneAPI, oneDNN",
+            "✅ via OpenVINO",
+            "75-225W TDP"
+          ],
+          [
+            "**Intel GPU (Ponte Vecchio)**",
+            "Intel",
+            "Xe-HPC Cores",
+            "HBM2E",
+            "OneAPI, SYCL",
+            "HPC, ML training",
+            "OneAPI, oneDNN",
+            "✅ via OpenVINO",
+            "400-600W TDP"
+          ],
+          [
+            "**Apple Silicon (M1/M2/M3)**",
+            "Apple",
+            "Unified Memory",
+            "Unified LPDDR5",
+            "Metal, Neural Engine",
+            "Mobile, desktop ML",
+            "MLX, Core ML, Metal",
+            "✅ via Core ML",
+            "15-65W SoC"
+          ],
+          [
+            "**Google TPU v4**",
+            "Google",
+            "Systolic Array",
+            "HBM2",
+            "XLA, TPU ops",
+            "ML training (large models)",
+            "JAX, TensorFlow",
+            "❌ Limited",
+            "~200W per chip"
+          ],
+          [
+            "**Google TPU v5**",
+            "Google",
+            "Systolic Array",
+            "HBM3",
+            "XLA, TPU ops",
+            "ML training (large models)",
+            "JAX, TensorFlow",
+            "❌ Limited",
+            "~300W per chip"
+          ],
+          [
+            "**Graphcore GC200 (IPU)**",
+            "Graphcore",
+            "MIMD Processors",
+            "In-Processor Memory",
+            "PopART, PopXL",
+            "ML training/inference",
+            "PopART, PopXL, POPC",
+            "✅ Custom extensions",
+            "150W TDP"
+          ],
+          [
+            "**Graphcore GC600 (IPU)**",
+            "Graphcore",
+            "MIMD Processors",
+            "In-Processor Memory",
+            "PopART, PopXL",
+            "ML training/inference",
+            "PopART, PopXL, POPC",
+            "✅ Custom extensions",
+            "180W TDP"
+          ],
+          [
+            "**Qualcomm Hexagon DSP**",
+            "Qualcomm",
+            "VLIW Architecture",
+            "TCM + DDR",
+            "Hexagon SDK, HVX",
+            "Mobile AI inference",
+            "SNPE, QNN",
+            "✅ Standard",
+            "1-5W"
+          ],
+          [
+            "**Intel Movidius VPU**",
+            "Intel",
+            "SHAVE processors",
+            "LPDDR4",
+            "OpenVINO",
+            "Edge AI inference",
+            "OpenVINO",
+            "✅ Standard",
+            "1-2.5W"
+          ],
+          [
+            "**Habana Gaudi**",
+            "Intel (Habana)",
+            "TPC + MME",
+            "HBM2",
+            "SynapseAI",
+            "ML training",
+            "SynapseAI, PyTorch, TF",
+            "✅ via frameworks",
+            "200-400W TDP"
+          ],
+          [
+            "**Cerebras WSE**",
+            "Cerebras",
+            "Wafer-scale",
+            "On-wafer SRAM",
+            "Cerebras SDK",
+            "Large model training",
+            "Cerebras software stack",
+            "❌ No",
+            "15-20kW"
+          ],
+          [
+            "**SambaNova DataScale**",
+            "SambaNova",
+            "Reconfigurable",
+            "HBM",
+            "SambaFlow",
+            "ML training/inference",
+            "SambaFlow",
+            "❌ Limited",
+            "~300W per socket"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ml-formats",
+    "title": "📁 Table 6: ML Model Format Polyglot Table",
+    "scope": "Repository scope: this is a general format comparison, not a capability matrix for this repository. The tabular AutoML exporter writes an ML.NET `model.zip` and can export `model.onnx`; tests cover reloading the ML.NET artifact and ONNX Runtime score parity for selected models. The local L0 LLM path accepts Safetensors model directories and GGUF checkpoints, with GGUF architecture support constrained by the implemented tensor mapping. The other rows describe ecosystem formats and are not evidence of repository import, export, interoperability, or hardware support.",
+    "tables": [
+      {
+        "id": "ml-formats-table",
+        "title": "📁 Table 6: ML Model Format Polyglot Table",
+        "headers": [
+          "**Format**",
+          "**Extension**",
+          "**Framework Origin**",
+          "**Serialization**",
+          "**Metadata Support**",
+          "**Hardware Targets**",
+          "**Compression**",
+          "**Interoperability**",
+          "**Primary Use Case**"
+        ],
+        "rows": [
+          [
+            "**ONNX**",
+            "`.onnx`",
+            "Microsoft/Facebook",
+            "Protocol Buffers",
+            "✅ Rich",
+            "CPU, GPU, specialized",
+            "✅ Yes",
+            "✅ Excellent",
+            "Universal model interchange"
+          ],
+          [
+            "**TensorFlow SavedModel**",
+            "`/saved_model`",
+            "Google TensorFlow",
+            "Protocol Buffers",
+            "✅ Rich",
+            "CPU, GPU, TPU",
+            "✅ Yes",
+            "✅ Good (via ONNX)",
+            "TensorFlow deployment"
+          ],
+          [
+            "**TensorFlow Lite**",
+            "`.tflite`",
+            "Google TensorFlow",
+            "FlatBuffers",
+            "✅ Basic",
+            "Mobile, embedded",
+            "✅ Quantization",
+            "✅ Good",
+            "Mobile/edge inference"
+          ],
+          [
+            "**PyTorch**",
+            "`.pt` / `.pth`",
+            "Facebook PyTorch",
+            "Pickle + Tensors",
+            "✅ Rich",
+            "CPU, GPU",
+            "✅ Yes",
+            "✅ Good (via ONNX)",
+            "PyTorch research and development"
+          ],
+          [
+            "**TorchScript**",
+            "`.pt`",
+            "Facebook PyTorch",
+            "ZIP archive",
+            "✅ Rich",
+            "CPU, GPU",
+            "✅ Yes",
+            "✅ Good",
+            "PyTorch production deployment"
+          ],
+          [
+            "**Core ML**",
+            "`.mlmodel`",
+            "Apple",
+            "Protocol Buffers",
+            "✅ Rich",
+            "iOS, macOS devices",
+            "✅ Yes",
+            "✅ Good (import from ONNX)",
+            "Apple ecosystem deployment"
+          ],
+          [
+            "**TensorRT**",
+            "`.plan`",
+            "NVIDIA",
+            "Binary",
+            "✅ Rich",
+            "NVIDIA GPU only",
+            "✅ Optimization",
+            "✅ Good (import from ONNX)",
+            "NVIDIA GPU high-performance inference"
+          ],
+          [
+            "**OpenVINO IR**",
+            "`.xml` + `.bin`",
+            "Intel",
+            "XML + Binary",
+            "✅ Rich",
+            "Intel hardware",
+            "✅ Yes",
+            "✅ Good (import from ONNX)",
+            "Intel hardware deployment"
+          ],
+          [
+            "**POPEF**",
+            "`.popef`",
+            "Graphcore",
+            "Binary",
+            "✅ Rich",
+            "Graphcore IPU only",
+            "✅ Optimized",
+            "✅ Via PopART",
+            "Graphcore IPU deployment"
+          ],
+          [
+            "**Caffe Model**",
+            "`.caffemodel`",
+            "Berkeley Caffe",
+            "Protocol Buffers",
+            "❌ Limited",
+            "CPU, GPU",
+            "❌ No",
+            "✅ Good (convert to ONNX)",
+            "Legacy Caffe deployment"
+          ],
+          [
+            "**Keras H5**",
+            "`.h5`",
+            "Keras",
+            "HDF5",
+            "✅ Good",
+            "CPU, GPU",
+            "✅ Yes",
+            "✅ Good",
+            "Keras model storage"
+          ],
+          [
+            "**GGML/GGUF**",
+            "`.ggml` / `.gguf`",
+            "Community",
+            "Binary",
+            "✅ Basic",
+            "CPU (optimized)",
+            "✅ Quantization",
+            "❌ Limited",
+            "CPU-optimized LLM inference"
+          ],
+          [
+            "**Safetensors**",
+            "`.safetensors`",
+            "Hugging Face",
+            "Memory-mapped",
+            "✅ Basic",
+            "CPU, GPU",
+            "✅ Yes",
+            "✅ Good",
+            "Safe, fast tensor serialization"
+          ],
+          [
+            "**Hugging Face**",
+            "Various",
+            "Hugging Face",
+            "JSON + Tensors",
+            "✅ Rich",
+            "CPU, GPU",
+            "✅ Yes",
+            "✅ Excellent",
+            "Transformer model sharing"
+          ],
+          [
+            "**JAX Arrays**",
+            "`.npy` / `.npz`",
+            "Google JAX",
+            "NumPy format",
+            "❌ Limited",
+            "CPU, GPU, TPU",
+            "✅ Yes",
+            "✅ Good",
+            "JAX functional programming"
+          ],
+          [
+            "**MXNet**",
+            "`.json` + `.params`",
+            "Apache MXNet",
+            "JSON + Binary",
+            "✅ Good",
+            "CPU, GPU",
+            "✅ Yes",
+            "✅ Good (convert to ONNX)",
+            "MXNet deployment"
+          ],
+          [
+            "**PaddlePaddle**",
+            "`.pdmodel` + `.pdiparams`",
+            "Baidu PaddlePaddle",
+            "Protocol Buffers",
+            "✅ Rich",
+            "CPU, GPU",
+            "✅ Yes",
+            "✅ Good (export to ONNX)",
+            "PaddlePaddle ecosystem"
+          ]
+        ]
+      }
+    ]
+  }
+]
