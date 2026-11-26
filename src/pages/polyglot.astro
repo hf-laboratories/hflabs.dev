@@ -1,6 +1,7 @@
 ---
 // src/pages/polyglot.astro
 import Layout from '../layouts/Layout.astro';
+import MLHyperpolyglot from '../components/MLHyperpolyglot.astro';
 import polyglotData from '../data/polyglot.json';
 
 const languages = [
@@ -17,8 +18,8 @@ const categories = Array.from(new Set(polyglotData.map(d => d.category || "Gener
 ---
 
 <Layout 
-  title="Hyperpolyglot Systems Matrix • HF Labs" 
-  description="Comparative architectural matrix across 7 hardware and runtime languages: C, C++, C# .NET 10, OpenCL, PowerShell, Verilog RTL, and SystemVerilog."
+  title="Systems & ML Hyperpolyglot • HF Labs"
+  description="Explore languages, machine learning frameworks, model formats, accelerators, and systems programming side by side."
 >
   <!-- Top Breadcrumbs & Quick Bar -->
   <div class="polyglot-top-bar">
@@ -29,12 +30,11 @@ const categories = Array.from(new Set(polyglotData.map(d => d.category || "Gener
           <span class="sep">/</span>
           <a href="/wiki">Wiki</a>
           <span class="sep">/</span>
-          <span class="curr">Hyperpolyglot Systems Matrix</span>
+          <span class="curr">Systems &amp; ML Hyperpolyglot</span>
         </nav>
         <div class="stats-pills">
-          <span class="stat-pill"><strong>7</strong> Hardware &amp; Runtime Languages</span>
-          <span class="stat-pill"><strong>5</strong> Systems Domains</span>
-          <span class="stat-pill highlight">Zero-Allocation Contracts</span>
+          <span class="stat-pill">ML ecosystem reference</span>
+          <span class="stat-pill">Systems programming matrix</span>
         </div>
       </div>
     </div>
@@ -45,24 +45,37 @@ const categories = Array.from(new Set(polyglotData.map(d => d.category || "Gener
     <section class="polyglot-hero">
       <div class="container">
         <div class="hero-badge-row">
-          <span class="badge badge-purple">POLYGLOT SYSTEMS ARCHITECTURE</span>
-          <span class="badge badge-cyan">DIRECT OBJECT-LINKED COMPARISON</span>
-          <span class="badge badge-emerald">SILICON TO HIGH-LEVEL RUNTIMES</span>
+          <span class="badge badge-purple">LANGUAGES &amp; MACHINE LEARNING</span>
+          <span class="badge badge-cyan">SIDE-BY-SIDE REFERENCE</span>
         </div>
 
         <h1 class="hero-title">
           The Hyperpolyglot Matrix:<br />
-          <span class="gradient-text">7 Languages Across the Compute Stack</span>
+          <span class="gradient-text">From ML Ecosystems to Systems Code</span>
         </h1>
 
         <p class="hero-lead">
-          HFLabs systems operate from raw silicon gates and hardware supersteps up to zero-allocation managed runtimes and orchestration tooling. Explore side-by-side comparative paradigms, syntax contracts, and production snippets across our complete 7-language matrix.
+          Compare programming languages, ML tools, data types, accelerators, and model formats, then explore systems programming concepts across seven languages. These comparisons are reference material, not a claim that every tool or device is supported or tested by HF Labs.
         </p>
+
+        <nav class="reference-links" aria-label="Page sections">
+          <a href="#ml-reference">Explore the ML reference</a>
+          <a href="#systems-matrix">Explore the systems matrix</a>
+        </nav>
+      </div>
+    </section>
+
+    <MLHyperpolyglot />
+
+    <section class="systems-intro" id="systems-matrix">
+      <div class="container">
+        <h2>Systems programming matrix</h2>
+        <p>Select languages to compare across memory, concurrency, hardware, vector math, and interop. Examples are illustrative and may require adaptation.</p>
 
         <!-- Language Quick Filter Grid -->
         <div class="lang-cards-grid">
           {languages.map(l => (
-            <button class="lang-quick-card active" data-lang-id={l.id} style={`--accent:${l.color}; --bg-accent:${l.bg};`}>
+            <button class="lang-quick-card active" aria-pressed="true" data-lang-id={l.id} style={`--accent:${l.color}; --bg-accent:${l.bg};`}>
               <div class="lang-card-top">
                 <span class="lang-chip-badge">{l.badge}</span>
                 <span class="lang-card-status">Active</span>
@@ -89,6 +102,7 @@ const categories = Array.from(new Set(polyglotData.map(d => d.category || "Gener
             <input 
               type="text" 
               id="polyglot-search" 
+              aria-label="Search the systems matrix"
               placeholder="Search paradigms, intrinsics, keywords (e.g., Vector512, malloc, SYCL, DPI-C)..." 
               autocomplete="off"
             />
@@ -96,15 +110,15 @@ const categories = Array.from(new Set(polyglotData.map(d => d.category || "Gener
 
           <!-- Category Filter Chips -->
           <div class="category-filters">
-            <button class="cat-filter-btn active" data-category="all">All Domains</button>
+            <button class="cat-filter-btn active" aria-pressed="true" data-category="all">All Domains</button>
             {categories.map(cat => (
-              <button class="cat-filter-btn" data-category={cat}>{cat}</button>
+              <button class="cat-filter-btn" aria-pressed="false" data-category={cat}>{cat}</button>
             ))}
           </div>
 
           <!-- View Mode Toggle -->
           <div class="view-mode-toggle">
-            <button id="view-mode-cards" class="toggle-btn active" title="Bento Card View">
+            <button id="view-mode-cards" class="toggle-btn active" aria-pressed="true" title="Bento Card View">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="3" y="3" width="7" height="7"></rect>
                 <rect x="14" y="3" width="7" height="7"></rect>
@@ -113,7 +127,7 @@ const categories = Array.from(new Set(polyglotData.map(d => d.category || "Gener
               </svg>
               <span>Cards</span>
             </button>
-            <button id="view-mode-table" class="toggle-btn" title="Dense Table Matrix View">
+            <button id="view-mode-table" class="toggle-btn" aria-pressed="false" title="Dense Table Matrix View">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="3" y1="6" x2="21" y2="6"></line>
                 <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -127,7 +141,7 @@ const categories = Array.from(new Set(polyglotData.map(d => d.category || "Gener
         <!-- Bento Cards View Container -->
         <div id="matrix-cards-container" class="matrix-topics-container">
           {polyglotData.map(topic => (
-            <div class="topic-bento-block" data-topic-id={topic.id} data-category={topic.category || "General Architecture"}>
+            <div class="topic-bento-block" data-topic-id={topic.id} data-category={topic.category || "General Architecture"} data-topic-text={`${topic.topic} ${topic.description} ${topic.category}`.toLowerCase()}>
               <div class="topic-header-bar">
                 <div class="topic-title-group">
                   <span class="topic-domain-pill">{topic.category}</span>
@@ -188,7 +202,7 @@ const categories = Array.from(new Set(polyglotData.map(d => d.category || "Gener
                 <tr>
                   <th style="min-width: 220px;">Architectural Domain</th>
                   {languages.map(l => (
-                    <th style={`color:${l.color}; min-width: 280px;`}>
+                    <th data-lang-target={l.id} style={`color:${l.color}; min-width: 280px;`}>
                       <div class="th-lang-header">
                         <span>{l.name}</span>
                         <span class="th-badge">{l.badge}</span>
@@ -199,7 +213,7 @@ const categories = Array.from(new Set(polyglotData.map(d => d.category || "Gener
               </thead>
               <tbody>
                 {polyglotData.map(topic => (
-                  <tr data-topic-id={topic.id} data-category={topic.category || "General Architecture"}>
+                  <tr data-topic-id={topic.id} data-category={topic.category || "General Architecture"} data-topic-text={`${topic.topic} ${topic.description} ${topic.category}`.toLowerCase()}>
                     <td class="topic-td-header">
                       <span class="table-domain-tag">{topic.category}</span>
                       <strong>{topic.topic}</strong>
@@ -207,12 +221,14 @@ const categories = Array.from(new Set(polyglotData.map(d => d.category || "Gener
                     </td>
                     {languages.map(l => {
                       const entry = (topic.entries as any)[l.id];
-                      if (!entry) return <td class="empty-cell">—</td>;
+                      if (!entry) return <td class="empty-cell" data-lang-target={l.id}>—</td>;
                       return (
-                        <td class="entry-table-cell" data-lang-target={l.id}>
+                        <td class="entry-table-cell" data-lang-target={l.id} data-search-text={`${l.name} ${entry.paradigm} ${entry.notes} ${entry.snippet} ${entry.syntax}`.toLowerCase()}>
+                          <div class="table-entry-content">
                           <div class="cell-paradigm">{entry.paradigm}</div>
                           <pre class="cell-code"><code>{entry.snippet}</code></pre>
                           <div class="cell-notes">{entry.notes}</div>
+                          </div>
                         </td>
                       );
                     })}
@@ -256,6 +272,8 @@ const categories = Array.from(new Set(polyglotData.map(d => d.category || "Gener
     viewModeCards.addEventListener('click', () => {
       viewModeCards.classList.add('active');
       viewModeTable.classList.remove('active');
+      viewModeCards.setAttribute('aria-pressed', 'true');
+      viewModeTable.setAttribute('aria-pressed', 'false');
       cardsContainer.classList.remove('hidden');
       tableContainer.classList.add('hidden');
     });
@@ -263,6 +281,8 @@ const categories = Array.from(new Set(polyglotData.map(d => d.category || "Gener
     viewModeTable.addEventListener('click', () => {
       viewModeTable.classList.add('active');
       viewModeCards.classList.remove('active');
+      viewModeTable.setAttribute('aria-pressed', 'true');
+      viewModeCards.setAttribute('aria-pressed', 'false');
       tableContainer.classList.remove('hidden');
       cardsContainer.classList.add('hidden');
     });
@@ -278,12 +298,14 @@ const categories = Array.from(new Set(polyglotData.map(d => d.category || "Gener
         if (activeLanguages.size > 1) {
           activeLanguages.delete(langId);
           card.classList.remove('active');
+          card.setAttribute('aria-pressed', 'false');
           const statusEl = card.querySelector('.lang-card-status');
           if (statusEl) statusEl.textContent = 'Hidden';
         }
       } else {
         activeLanguages.add(langId);
         card.classList.add('active');
+        card.setAttribute('aria-pressed', 'true');
         const statusEl = card.querySelector('.lang-card-status');
         if (statusEl) statusEl.textContent = 'Active';
       }
@@ -295,8 +317,9 @@ const categories = Array.from(new Set(polyglotData.map(d => d.category || "Gener
   // Category Filter Buttons
   catFilterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      catFilterBtns.forEach(b => b.classList.remove('active'));
+      catFilterBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
       btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
       activeCategory = btn.getAttribute('data-category') || 'all';
       applyFilters();
     });
@@ -324,7 +347,8 @@ const categories = Array.from(new Set(polyglotData.map(d => d.category || "Gener
         const langTarget = entry.getAttribute('data-lang-target') || '';
         const isLangActive = activeLanguages.has(langTarget);
         const searchText = entry.getAttribute('data-search-text') || '';
-        const matchesSearch = searchQuery === '' || searchText.includes(searchQuery);
+        const topicText = block.getAttribute('data-topic-text') || '';
+        const matchesSearch = searchQuery === '' || searchText.includes(searchQuery) || topicText.includes(searchQuery);
 
         if (isLangActive && matchesSearch && matchesCat) {
           (entry as HTMLElement).style.display = 'flex';
@@ -342,39 +366,31 @@ const categories = Array.from(new Set(polyglotData.map(d => d.category || "Gener
       }
     });
 
-    // Also update table cells visibility
-    document.querySelectorAll('.entry-table-cell').forEach(cell => {
-      const langTarget = cell.getAttribute('data-lang-target') || '';
-      if (activeLanguages.has(langTarget)) {
-        (cell as HTMLElement).style.display = 'table-cell';
-      } else {
-        (cell as HTMLElement).style.display = 'none';
-      }
+    // Keep the table columns aligned while filtering rows and matching entries.
+    document.querySelectorAll('.dense-polyglot-table thead th[data-lang-target]').forEach(th => {
+      const lang = th.getAttribute('data-lang-target') || '';
+      (th as HTMLElement).style.display = activeLanguages.has(lang) ? 'table-cell' : 'none';
     });
 
-    // Table th visibility
-    document.querySelectorAll('.dense-polyglot-table thead th').forEach((th, idx) => {
-      if (idx > 0) {
-        const langIdx = idx - 1;
-        const allLangs = ['c', 'cpp', 'cs', 'cl', 'ps_1', 'vl', 'svl'];
-        const langId = allLangs[langIdx];
-        if (activeLanguages.has(langId)) {
-          (th as HTMLElement).style.display = 'table-cell';
-        } else {
-          (th as HTMLElement).style.display = 'none';
-        }
-      }
-    });
-
-    // Table rows category match
     tableRows.forEach(row => {
-      const cat = row.getAttribute('data-category') || '';
-      const matchesCat = activeCategory === 'all' || cat === activeCategory;
-      if (matchesCat) {
-        (row as HTMLElement).style.display = 'table-row';
-      } else {
-        (row as HTMLElement).style.display = 'none';
-      }
+      const category = row.getAttribute('data-category') || '';
+      const topicText = row.getAttribute('data-topic-text') || '';
+      const matchesCategory = activeCategory === 'all' || category === activeCategory;
+      let visibleEntries = 0;
+
+      row.querySelectorAll('td[data-lang-target]').forEach(cell => {
+        const lang = cell.getAttribute('data-lang-target') || '';
+        const active = activeLanguages.has(lang);
+        (cell as HTMLElement).style.display = active ? 'table-cell' : 'none';
+        const content = cell.querySelector('.table-entry-content') as HTMLElement | null;
+        if (!content) return;
+        const searchText = cell.getAttribute('data-search-text') || '';
+        const matchesSearch = searchQuery === '' || topicText.includes(searchQuery) || searchText.includes(searchQuery);
+        content.style.visibility = matchesSearch ? 'visible' : 'hidden';
+        if (active && matchesSearch) visibleEntries++;
+      });
+
+      (row as HTMLElement).style.display = matchesCategory && visibleEntries > 0 ? 'table-row' : 'none';
     });
 
     // Toggle No Results Banner
@@ -413,6 +429,13 @@ const categories = Array.from(new Set(polyglotData.map(d => d.category || "Gener
     min-height: calc(100vh - 70px);
     padding-bottom: 90px;
   }
+
+  .reference-links { display: flex; flex-wrap: wrap; gap: 12px; }
+  .reference-links a { color: #a5e7ff; border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 6px; padding: 10px 14px; text-decoration: none; font-weight: 600; }
+  .reference-links a:hover, .reference-links a:focus-visible { background: rgba(56, 189, 248, 0.12); }
+  .systems-intro { padding: 48px 0 32px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+  .systems-intro h2 { color: #f8fafc; font-size: 28px; margin: 0 0 12px; }
+  .systems-intro p { color: #cbd5e1; line-height: 1.6; margin: 0 0 24px; }
 
   /* Top Bar */
   .polyglot-top-bar {
